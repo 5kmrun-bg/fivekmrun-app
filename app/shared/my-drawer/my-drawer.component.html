@@ -1,0 +1,24 @@
+<!--
+The MyDrawer custom component view is where you define what will be displayed in the app drawer.
+Feel free to customize layouts and components to change how your app drawer looks.
+-->
+<StackLayout class="sidedrawer sidedrawer-left">
+    <StackLayout class="sidedrawer-header">
+        <Label class="sidedrawer-header-image fa" text="&#xf2bd;"></Label>
+        <Label class="sidedrawer-header-brand" text="User Name"></Label>
+        <Label class="footnote" text="username@mail.com"></Label>
+    </StackLayout>
+    
+    <StackLayout class="sidedrawer-content">
+        <ListView [items]="navigationItems" separatorColor="transparent" (itemTap)="onNavigationItemTap($event)">
+            <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <GridLayout columns="auto, *" rows="50"
+                    class="sidedrawer-list-item sidedrawer-list-item-{{item.name}}" 
+                    [class.selected]="isPageSelected(item.title)">
+                    <Label row="0" col="0" [text]="item.icon" class="fa"></Label>
+                    <Label row="0" col="1" [text]="item.title" textWrap="true"></Label>
+                </GridLayout>
+            </ng-template>
+        </ListView>
+    </StackLayout>
+</StackLayout>
