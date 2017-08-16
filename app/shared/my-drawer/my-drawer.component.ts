@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { RouterExtensions } from "nativescript-angular/router";
 import { ItemEventData } from "ui/list-view";
+import { User } from "../../models";
+import { UserService } from "../../services";
 
 /* ***********************************************************
 * Keep data that is displayed in your app drawer in the MyDrawer component class.
@@ -10,7 +12,8 @@ import { ItemEventData } from "ui/list-view";
     selector: "MyDrawer",
     moduleId: module.id,
     templateUrl: "./my-drawer.component.html",
-    styleUrls: ["./my-drawer.component.css"]
+    styleUrls: ["./my-drawer.component.css"],
+    providers: [UserService]
 })
 export class MyDrawerComponent implements OnInit {
     /* ***********************************************************
@@ -21,8 +24,9 @@ export class MyDrawerComponent implements OnInit {
     @Input() selectedPage: string;
 
     private _navigationItems: Array<any>;
+    private _currentUser: User;
 
-    constructor(private routerExtensions: RouterExtensions) {
+    constructor(private routerExtensions: RouterExtensions, private userService: UserService) {
 
     }
 
@@ -64,6 +68,10 @@ export class MyDrawerComponent implements OnInit {
                 icon: "\uf013"
             }
         ];
+    }
+
+    get currentUser(): User {
+        return this.userService.getCurrentUser();
     }
 
     get navigationItems(): Array<any> {

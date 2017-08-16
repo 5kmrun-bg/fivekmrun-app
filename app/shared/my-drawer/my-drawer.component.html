@@ -4,9 +4,9 @@ Feel free to customize layouts and components to change how your app drawer look
 -->
 <StackLayout class="sidedrawer sidedrawer-left">
     <StackLayout class="sidedrawer-header">
-        <Label class="sidedrawer-header-image fa" text="&#xf2bd;"></Label>
-        <Label class="sidedrawer-header-brand" text="User Name"></Label>
-        <Label class="footnote" text="username@mail.com"></Label>
+        <Image [src]="currentUser.avatarUrl"></Image>
+        <Label class="sidedrawer-header-brand" [text]="currentUser.name"></Label>
+        <Label class="footnote" [text]="currentUser.suuntoPoints"></Label>
     </StackLayout>
     
     <StackLayout class="sidedrawer-content">
