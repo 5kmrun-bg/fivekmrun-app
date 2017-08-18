@@ -13,7 +13,6 @@ import { UserService } from "../../services";
     moduleId: module.id,
     templateUrl: "./my-drawer.component.html",
     styleUrls: ["./my-drawer.component.css"],
-    providers: [UserService]
 })
 export class MyDrawerComponent implements OnInit {
     /* ***********************************************************
