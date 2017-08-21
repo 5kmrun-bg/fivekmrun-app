@@ -7,6 +7,9 @@
     "id": "org.etabakov.fivekmrunapp",
     "tns-ios": {
       "version": "3.1.0"
+    },
+    "tns-android": {
+      "version": "3.1.1"
     }
   },
   "scripts": {
@@ -21,16 +24,23 @@
     "@angular/http": "~4.1.0",
     "@angular/platform-browser": "~4.1.0",
     "@angular/router": "~4.1.0",
+    "cheerio": "0.22.0",
+    "events": "^1.1.1",
     "nativescript-angular": "~3.1.0",
     "nativescript-telerik-ui": "^3.0.0",
     "nativescript-theme-core": "~1.0.2",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~5.4.0",
+    "stream": "0.0.2",
     "tns-core-modules": "~3.1.0",
     "zone.js": "~0.8.2"
   },
   "devDependencies": {
+    "babel-traverse": "6.26.0",
+    "babel-types": "6.26.0",
+    "babylon": "6.18.0",
     "codelyzer": "^3.0.1",
+    "lazy": "1.0.11",
     "nativescript-dev-sass": "^1.2.0",
     "nativescript-dev-typescript": "~0.5.0",
     "node-sass": "*",
