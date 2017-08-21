@@ -1,11 +1,6 @@
-import { Http } from "@angular/http";
-
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-telerik-ui/sidedrawer";
 import { RadSideDrawerComponent } from "nativescript-telerik-ui/sidedrawer/angular";
-
-import * as cheerio from "cheerio";
-
 
 @Component({
     selector: "Home",
@@ -20,8 +15,6 @@ export class HomeComponent implements OnInit {
     @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
 
     private _sideDrawerTransition: DrawerTransitionBase;
-
-    constructor(private http: Http){}
 
     /* ***********************************************************
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
@@ -43,25 +36,5 @@ export class HomeComponent implements OnInit {
     }
 
     request() {
-        this.http.get("http://5kmrun.bg/usr.php?id=13731").subscribe(
-            (response) => {
-                const content = response.text();
-                console.log("------>>>>> Request finished!");
-
-                const options = {
-                    normalizeWhitespace: true,
-                    xmlMode: true
-                };
-
-                const webPage = cheerio.load(content, options);
-
-                console.log("webPage " + webPage);
-
-                console.log(webPage("h2.article-title").html());
-
-            },
-            (error) => {
-                console.log(error);
-            });
     }
 }
