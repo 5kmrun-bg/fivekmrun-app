@@ -3,6 +3,7 @@ import { RouterExtensions } from "nativescript-angular/router";
 import { ItemEventData } from "ui/list-view";
 import { User } from "../../models";
 import { UserService } from "../../services";
+import { Observable } from "rxjs/Observable";
 
 /* ***********************************************************
 * Keep data that is displayed in your app drawer in the MyDrawer component class.
@@ -23,7 +24,7 @@ export class MyDrawerComponent implements OnInit {
     @Input() selectedPage: string;
 
     private _navigationItems: Array<any>;
-    private _currentUser: User;
+    private _currentUser: Observable<User>;
 
     constructor(private routerExtensions: RouterExtensions, private userService: UserService) {
 
@@ -67,14 +68,17 @@ export class MyDrawerComponent implements OnInit {
                 icon: "\uf013"
             }
         ];
-    }
 
-    get currentUser(): User {
-        return this.userService.getCurrentUser();
+        this._currentUser = this.userService.getCurrentUser();
+        this._currentUser.subscribe();
     }
 
     get navigationItems(): Array<any> {
         return this._navigationItems;
+    }
+
+    get currentUser(): Observable<User> {
+        return this._currentUser;
     }
 
     /* ***********************************************************
