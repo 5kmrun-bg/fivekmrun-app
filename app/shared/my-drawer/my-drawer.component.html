@@ -4,9 +4,9 @@ Feel free to customize layouts and components to change how your app drawer look
 -->
 <StackLayout class="sidedrawer sidedrawer-left">
     <StackLayout class="sidedrawer-header">
-        <Label class="sidedrawer-header-brand" [text]="(currentUser$| async)?.name "></Label>
-         <Label class="footnote" [text]="(currentUser$ |async)?.suuntoPoints"></Label>
-        <Image [src]="(currentUser$ |async)?.avatarUrl"></Image>  
+        <Image [src]="(currentUser$ |async)?.avatarUrl" class="profile-pic"></Image>  
+        <Label class="sidedrawer-header-brand" [text]="(currentUser$| async)?.name"></Label>
+        <Label class="footnote" [text]="(currentUser$ |async)?.suuntoPoints"></Label>
     </StackLayout>
 
     <StackLayout class="sidedrawer-content">
