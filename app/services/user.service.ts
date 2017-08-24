@@ -9,10 +9,6 @@ import 'rxjs/Rx';
 @Injectable()
 export class UserService {
     private currentUser: User;
-    private webPage: any;
-    private name: string;
-    private avatarUrl: string;
-    private userPoints: number;
 
     constructor(private http: Http) { }
 
@@ -26,17 +22,29 @@ export class UserService {
                     xmlMode: true
                 };
 
-                this.webPage = cheerio.load(content, options);
+                const webPage = cheerio.load(content, options);
 
+                const avatarUrl = this.parseAvatarUrl(webPage);
+                const userPoints = this.parseUserPoints(webPage);
+                const name = this.parseName(webPage);
 
-                that.avatarUrl = "http://5kmrun.bg/" + this.webPage("div.row div figure img").attr("src");
-                that.userPoints = this.webPage("div.container div.col-sm-9.col-md-9 table tbody").find("td").last().text();
-                const title = this.webPage("h2.article-title").first().text();
-                that.name = title.substr(title.indexOf("-") + 2);
-
-                that.currentUser = new User(this.name, this.avatarUrl, this.userPoints);
+                that.currentUser = new User(name, avatarUrl, userPoints);
 
                 return that.currentUser;
         });
     }
+
+    private parseAvatarUrl(webPage: any) : string {
+        return "http://5kmrun.bg/" + webPage("div.row div figure img").attr("src");
+    }
+
+    private parseUserPoints(webPage: any) : number {
+        return webPage("div.container div.col-sm-9.col-md-9 table tbody").find("td").last().text();
+    }
+
+    private parseName(webPage: any) : string {
+        const title = webPage("h2.article-title").first().text();
+        return title.substr(title.indexOf("-") + 2);
+    }
+
 }
