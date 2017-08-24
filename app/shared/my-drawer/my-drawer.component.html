@@ -4,15 +4,15 @@ Feel free to customize layouts and components to change how your app drawer look
 -->
 <StackLayout class="sidedrawer sidedrawer-left">
     <StackLayout class="sidedrawer-header">
-        <Label class="sidedrawer-header-brand" [text]="currentUser.name"></Label>
-        <Label class="footnote" [text]="currentUser.suuntoPoints"></Label>
-        <Image [src]="currentUser.avatarUrl"></Image>
+        <Label class="sidedrawer-header-brand" [text]="(currentUser$| async)?.name "></Label>
+         <Label class="footnote" [text]="(currentUser$ |async)?.suuntoPoints"></Label>
+        <Image [src]="(currentUser$ |async)?.avatarUrl"></Image>  
     </StackLayout>
-    
+
     <StackLayout class="sidedrawer-content">
         <ListView [items]="navigationItems" separatorColor="transparent" (itemTap)="onNavigationItemTap($event)">
             <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                <GridLayout columns="auto, *" rows="50"
+                <GridLayout columns="auto, *" rows="50" 
                     class="sidedrawer-list-item sidedrawer-list-item-{{item.name}}" 
                     [class.selected]="isPageSelected(item.title)">
                     <Label row="0" col="0" [text]="item.icon" class="fa"></Label>
