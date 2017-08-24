@@ -38,34 +38,28 @@ export class MyDrawerComponent implements OnInit {
     ngOnInit(): void {
         this._navigationItems = [
             {
-                title: "Home",
+                title: "Начало",
                 name: "home",
                 route: "/home",
                 icon: "\uf015"
             },
             {
-                title: "Browse",
-                name: "browse",
-                route: "/browse",
-                icon: "\uf1ea"
+                title: "Бягания",
+                name: "runs",
+                route: "/runs",
+                icon: "\uf03a"
             },
             {
-                title: "Search",
-                name: "search",
-                route: "/search",
-                icon: "\uf002"
-            },
-            {
-                title: "Featured",
+                title: "Баркод",
                 name: "featured",
                 route: "/featured",
-                icon: "\uf005"
+                icon: "\uf02a"
             },
             {
-                title: "Settings",
+                title: "Изход",
                 name: "settings",
                 route: "/settings",
-                icon: "\uf013"
+                icon: "\uf08b "
             }
         ];
 

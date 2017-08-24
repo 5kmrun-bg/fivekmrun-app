@@ -3,11 +3,11 @@ import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-teler
 import { RadSideDrawerComponent } from "nativescript-telerik-ui/sidedrawer/angular";
 
 @Component({
-    selector: "Featured",
+    selector: "Barcode",
     moduleId: module.id,
-    templateUrl: "./featured.component.html"
+    templateUrl: "./barcode.component.html"
 })
-export class FeaturedComponent implements OnInit {
+export class BarcodeComponent implements OnInit {
     /* ***********************************************************
     * Use the @ViewChild decorator to get a reference to the drawer component.
     * It is used in the "onDrawerButtonTap" function below to manipulate the drawer.
