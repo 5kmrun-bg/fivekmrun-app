@@ -24,7 +24,7 @@ export class MyDrawerComponent implements OnInit {
     @Input() selectedPage: string;
 
     private _navigationItems: Array<any>;
-    private _currentUser: Observable<User>;
+    public currentUser$: Observable<User>;
 
     constructor(private routerExtensions: RouterExtensions, private userService: UserService) {
 
@@ -69,17 +69,13 @@ export class MyDrawerComponent implements OnInit {
             }
         ];
 
-        this._currentUser = this.userService.getCurrentUser();
-        this._currentUser.subscribe();
+        this.currentUser$ = this.userService.getCurrentUser();
     }
 
     get navigationItems(): Array<any> {
         return this._navigationItems;
     }
 
-    get currentUser(): Observable<User> {
-        return this._currentUser;
-    }
 
     /* ***********************************************************
     * Use the "itemTap" event handler of the <ListView> component for handling list item taps.
