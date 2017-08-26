@@ -28,7 +28,7 @@ export class UserService {
                 const userPoints = this.parseUserPoints(webPage);
                 const name = this.parseName(webPage);
 
-                that.currentUser = new User(name, avatarUrl, userPoints);
+                that.currentUser = new User(13731, name, avatarUrl, userPoints);
 
                 return that.currentUser;
         });

@@ -5,11 +5,14 @@ import { SharedModule } from "../shared/shared.module";
 import { BarcodeRoutingModule } from "./barcode-routing.module";
 import { BarcodeComponent } from "./barcode.component";
 
+import { IdFormatModule } from "../pipes/id-format.module";
+
 @NgModule({
     imports: [
         NativeScriptModule,
         BarcodeRoutingModule,
-        SharedModule
+        SharedModule,
+        IdFormatModule
     ],
     declarations: [
         BarcodeComponent
