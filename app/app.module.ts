@@ -6,7 +6,7 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
-import { UserService } from "./services";
+import { UserService, RunService } from "./services";
 
 @NgModule({
     bootstrap: [
@@ -23,6 +23,7 @@ import { UserService } from "./services";
     providers: [
         { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader },
         UserService,
+        RunService
     ],
     schemas: [
         NO_ERRORS_SCHEMA

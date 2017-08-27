@@ -9,7 +9,7 @@
     <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
         ios.position="left">
     </ActionItem>
-    <Label class="action-bar-title" text="Runs"></Label>
+    <Label class="action-bar-title" text="Бягания"></Label>
 </ActionBar>
 
 <!--
@@ -31,7 +31,13 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
     <GridLayout class="page page-content" tkMainContent>
-        <Label class="page-icon fa" text="&#xf1ea;"></Label>
-        <Label class="page-placeholder" text="<!-- Page content goes here -->"></Label>
+        <ListView [items]="runs | async">
+            <ng-template let-item="item" let-i="index">
+                <StackLayout orientation="horizontal">
+                    <Label [text]="item.place"></Label>
+                    <Label [text]='item.time'></Label>
+                </StackLayout>
+            </ng-template>
+        </ListView>
     </GridLayout>
 </RadSideDrawer>
