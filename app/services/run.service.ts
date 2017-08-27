@@ -47,7 +47,8 @@ export class RunService {
     }
 
     private extractDate(cells: any): Date {
-        return null;
+        const strMatch = cells[1].children[0].data.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+        return new Date(strMatch[3], strMatch[2]-1, strMatch[1]);
     }
 
     private extractPlace(cells: any): string {

@@ -34,7 +34,8 @@ it shouldn't have any other siblings other than the <ActionBar> component.
         <ListView [items]="runs | async">
             <ng-template let-item="item" let-i="index">
                 <StackLayout orientation="horizontal">
-                    <Label [text]="item.place"></Label>
+                    <Label [text]="item.date | date:'dd.MM.yyyy'" style="margin-right:15"></Label>
+                    <Label [text]="item.place" style="margin-right:15"></Label>
                     <Label [text]='item.time'></Label>
                 </StackLayout>
             </ng-template>
