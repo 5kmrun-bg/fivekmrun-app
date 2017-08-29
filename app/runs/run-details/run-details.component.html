@@ -15,4 +15,6 @@
     <Label [text]="'Date: ' + (run| async)?.date"></Label>
     <Label [text]="'Place: ' + (run| async)?.place"></Label>
     <Label [text]="'Time: ' + (run| async)?.time"></Label>
+    <Label [text]="'Difference from last run: ' + (run| async)?.differenceFromPrevious"></Label>
+    <Label [text]="'Difference from personal record: ' + (run| async)?.differenceFromBest"></Label>
 </StackLayout>

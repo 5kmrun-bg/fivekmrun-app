@@ -7,8 +7,8 @@ export class Run {
         public date: Date,
         public time: string,
         public place: string,
-        public differenceFromPrevious: number,
-        public differenceFromBest: number
+        public differenceFromPrevious: string,
+        public differenceFromBest: string
     ) {
         this.id = Md5.hashStr(date + "#" + time + "#" + place + "#").toString();
     }
