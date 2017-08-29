@@ -9,11 +9,11 @@
     <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
         ios.position="left">
     </ActionItem>
-    <Label class="action-bar-title" text="Бягания"></Label>
+    <Label class="action-bar-title" text="Бягания детайли"></Label>
 </ActionBar>
 
 <!--
-RadSideDrawer is a UI component part of the Progress NativeScript UI set of components.
+    RadSideDrawer is a UI component part of the Progress NativeScript UI set of components.
 Learn more about the RadSideDrawer UI component and how it can be customized in this documentation article:
 http://docs.telerik.com/devtools/nativescript-ui/Controls/Angular/SideDrawer/getting-started
 The RadSideDrawer component is designed to be used as a root element and
@@ -27,18 +27,9 @@ it shouldn't have any other siblings other than the <ActionBar> component.
         <MyDrawer [selectedPage]="'Runs'"></MyDrawer>
     </StackLayout>
     
-    <!--
+    <!-- 
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
     <GridLayout class="page page-content" tkMainContent>
-        <ListView [items]="runs | async">
-            <ng-template let-item="item" let-i="index">
-                <StackLayout orientation="horizontal" [nsRouterLink]="['/runs/1231']">
-                    <Label [text]="item.date | date:'dd.MM.yyyy'" style="margin-right:15"></Label>
-                    <Label [text]="item.place" style="margin-right:15"></Label>
-                    <Label [text]='item.time'></Label>
-                </StackLayout>
-            </ng-template>
-        </ListView>
     </GridLayout>
 </RadSideDrawer>
