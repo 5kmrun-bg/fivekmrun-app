@@ -37,7 +37,6 @@ export class RunService {
 
     private extractRun(cells: any): Run {
         return new Run(
-            1, 
             this.extractDate(cells), 
             this.extractTime(cells), 
             this.extractPlace(cells), 

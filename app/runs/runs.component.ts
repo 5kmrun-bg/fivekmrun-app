@@ -30,10 +30,6 @@ export class RunsComponent implements OnInit {
         this.runs = this.runService.getByUserId(13731);
     }
 
-    goToDetails(): void {
-        
-    }
-
     get sideDrawerTransition(): DrawerTransitionBase {
         return this._sideDrawerTransition;
     }

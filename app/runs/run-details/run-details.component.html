@@ -6,30 +6,13 @@
     <!-- 
     Use the ActionItem for IOS with position set to left. Using the NavigationButton as a side-drawer button in iOS is not possible, because its function is to always navigate back in the application.
     -->
-    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
-        ios.position="left">
+    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left">
     </ActionItem>
     <Label class="action-bar-title" text="Бягания детайли"></Label>
 </ActionBar>
 
-<!--
-    RadSideDrawer is a UI component part of the Progress NativeScript UI set of components.
-Learn more about the RadSideDrawer UI component and how it can be customized in this documentation article:
-http://docs.telerik.com/devtools/nativescript-ui/Controls/Angular/SideDrawer/getting-started
-The RadSideDrawer component is designed to be used as a root element and
-it shouldn't have any other siblings other than the <ActionBar> component.
--->
-<RadSideDrawer #drawer showOverNavigation="true" [drawerTransition]="sideDrawerTransition">
-    <!--
-    Use the tkDrawerContent directive to display the content of the app drawer on this page.
-    -->
-    <StackLayout tkDrawerContent>
-        <MyDrawer [selectedPage]="'Runs'"></MyDrawer>
-    </StackLayout>
-    
-    <!-- 
-    Use the tkMainContent directive to display the content of the page when you have an app drawer.
-    -->
-    <GridLayout class="page page-content" tkMainContent>
-    </GridLayout>
-</RadSideDrawer>
+<StackLayout class="page page-content" tkMainContent>
+    <Label [text]="'Date: ' + (run| async)?.date"></Label>
+    <Label [text]="'Place: ' + (run| async)?.place"></Label>
+    <Label [text]="'Time: ' + (run| async)?.time"></Label>
+</StackLayout>
