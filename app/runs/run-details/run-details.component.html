@@ -8,11 +8,10 @@
     -->
     <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left">
     </ActionItem>
-    <Label class="action-bar-title" text="Бягания детайли"></Label>
+    <Label class="action-bar-title" [text]="(run| async)?.date | date:'dd MMM yyyy'"></Label>
 </ActionBar>
 
 <StackLayout class="page page-content" tkMainContent>
-    <Label [text]="'Date: ' + (run| async)?.date"></Label>
     <Label [text]="'Place: ' + (run| async)?.place"></Label>
     <Label [text]="'Time: ' + (run| async)?.time"></Label>
     <Label [text]="'Difference from last run: ' + (run| async)?.differenceFromPrevious"></Label>
