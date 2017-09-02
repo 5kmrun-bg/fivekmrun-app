@@ -51,7 +51,7 @@ it shouldn't have any other siblings other than the <ActionBar> component.
         <Label text="9" col="1" row="0" style="text-align: center; vertical-align: middle"></Label>
 
         <!-- Last Run -->
-        <StackLayout col="0" row="1" class="dashboard dashboard-item">
+        <StackLayout col="0" row="1" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (lastRun$ | async)?.id]">
             <Label text="Last Run"> </Label>
             <Label [text]="(lastRun$ | async)?.date | date:'dd MMM yyyy'"></Label>
             <Label [text]="(lastRun$ | async)?.time"></Label>
