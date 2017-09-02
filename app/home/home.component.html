@@ -52,8 +52,9 @@ it shouldn't have any other siblings other than the <ActionBar> component.
 
         <!-- Time stats-->
         <RadCartesianChart col="0" colSpan="2" row="1" class="dashboard dashboard-item">
+            <RadCartesianChartGrid tkCartesianGrid horizontalLinesVisible="true" horizontalStrokeColor="#ffffcc80" horizontalStrokeWidth="1"></RadCartesianChartGrid>
             <LineSeries tkCartesianSeries [items]="runs$ | async" categoryProperty="date" valueProperty="timeInSeconds"></LineSeries>
-            <LinearAxis tkCartesianVerticalAxis majorStep="3"></LinearAxis>
+            <LinearAxis tkCartesianVerticalAxis majorStep="3" lineColor="#ffffff"></LinearAxis>
             <DateTimeCategoricalAxis tkCartesianHorizontalAxis dateFormat="dd MMM yyyy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeCategoricalAxis>
         </RadCartesianChart>
 
