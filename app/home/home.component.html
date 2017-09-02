@@ -50,15 +50,22 @@ it shouldn't have any other siblings other than the <ActionBar> component.
         </RadRadialGauge>
         <Label text="9" col="1" row="0" style="text-align: center; vertical-align: middle"></Label>
 
+        <!-- Time stats-->
+        <RadCartesianChart col="0" colSpan="2" row="1" class="dashboard dashboard-item">
+            <LineSeries tkCartesianSeries [items]="runs$ | async" categoryProperty="date" valueProperty="timeInSeconds"></LineSeries>
+            <LinearAxis tkCartesianVerticalAxis majorStep="3"></LinearAxis>
+            <DateTimeCategoricalAxis tkCartesianHorizontalAxis dateFormat="dd MMM yyyy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeCategoricalAxis>
+        </RadCartesianChart>
+
         <!-- Last Run -->
-        <StackLayout col="0" row="1" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (lastRun$ | async)?.id]">
+        <StackLayout col="0" row="2" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (lastRun$ | async)?.id]">
             <Label text="Last Run"> </Label>
             <Label [text]="(lastRun$ | async)?.date | date:'dd MMM yyyy'"></Label>
             <Label [text]="(lastRun$ | async)?.time"></Label>
         </StackLayout> 
 
         <!-- Best Run -->
-        <StackLayout col="1" row="1" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (bestRun$ | async)?.id]">
+        <StackLayout col="1" row="2" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (bestRun$ | async)?.id]">
             <Label text="Best Run"> </Label>
             <Label [text]="(bestRun$ | async)?.date | date:'dd MMM yyyy'"></Label>
             <Label [text]="(bestRun$ | async)?.time"></Label>
