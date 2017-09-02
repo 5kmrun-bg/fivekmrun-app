@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
     *************************************************************/
     ngOnInit(): void {
         this._sideDrawerTransition = new SlideInOnTopTransition();
-        this.currentUser$ = this.userService.getCurrentUser()
+        this.currentUser$ = this.userService.getCurrentUser();
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {

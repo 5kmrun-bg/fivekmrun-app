@@ -6,8 +6,7 @@
     <!-- 
     Use the ActionItem for IOS with position set to left. Using the NavigationButton as a side-drawer button in iOS is not possible, because its function is to always navigate back in the application.
     -->
-    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
-        ios.position="left">
+    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left">
     </ActionItem>
     <Label class="action-bar-title" text="Home"></Label>
 </ActionBar>
@@ -26,11 +25,26 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     <StackLayout tkDrawerContent>
         <MyDrawer [selectedPage]="'Home'"></MyDrawer>
     </StackLayout>
-    
+
     <!--
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
-    <StackLayout class="page page-content" tkMainContent>
-        <Label [text]="(currentUser$ | async)?.totalKmRan"></Label>
-    </StackLayout>
+    <GridLayout class="page page-content dashboard" tkMainContent columns="*, *" rows="175, auto">
+        <StackLayout col="0" row="0" class="dashboard dashboard-item">
+            <Label text="Total KMs"></Label>
+            <Label [text]="(currentUser$ | async)?.totalKmRan"></Label>
+        </StackLayout>
+        <RadRadialGauge col="1" row="0" class="dashboard dashboard-item">
+            <RadialScale tkRadialGaugeScales minimum="0" maximum="100" radius="0.95">
+                <ScaleStyle tkRadialScaleStyle ticksVisible="false" labelsVisible="false" lineThickness="0"></ScaleStyle>
+                <RadialBarIndicator tkRadialScaleIndicators minimum="0" maximum="100" location="0.80">
+                    <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#dddddd" barWidth="0.2"></BarIndicatorStyle>
+                </RadialBarIndicator>
+                <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="(currentUser$ | async)?.runsCount" location="0.80">
+                    <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#00ff00" barWidth="0.2"></BarIndicatorStyle>
+                </RadialBarIndicator>
+            </RadialScale>
+        </RadRadialGauge>
+        <Label text="9" col="1" row="0" style="text-align: center; vertical-align: middle"></Label>
+    </GridLayout>
 </RadSideDrawer>

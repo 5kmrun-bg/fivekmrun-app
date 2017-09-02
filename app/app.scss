@@ -65,3 +65,13 @@ ActionBar .action-bar-title {
     font-size: 60;
     transform: scaleY(2);
 }
+
+.dashboard {
+    border-width: 1;
+    border-color: black;
+}
+
+.dashboard-item {
+    margin: 10 10 10 10;
+    text-align: center;
+}
