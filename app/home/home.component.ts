@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-telerik-ui/sidedrawer";
 import { RadSideDrawerComponent } from "nativescript-telerik-ui/sidedrawer/angular";
 import { UserService } from "../services";
+import { User } from "../models";
+import { Observable } from "rxjs/Observable";
 
 @Component({
     selector: "Home",
@@ -16,6 +18,7 @@ export class HomeComponent implements OnInit {
     @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
 
     private _sideDrawerTransition: DrawerTransitionBase;
+    private currentUser$: Observable<User>;
 
     constructor(private userService: UserService) {}
 
@@ -24,6 +27,7 @@ export class HomeComponent implements OnInit {
     *************************************************************/
     ngOnInit(): void {
         this._sideDrawerTransition = new SlideInOnTopTransition();
+        this.currentUser$ = this.userService.getCurrentUser()
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {
@@ -36,9 +40,5 @@ export class HomeComponent implements OnInit {
     *************************************************************/
     onDrawerButtonTap(): void {
         this.drawerComponent.sideDrawer.showDrawer();
-    }
-
-    request() {
-        this.userService.getCurrentUser().subscribe();
     }
 }

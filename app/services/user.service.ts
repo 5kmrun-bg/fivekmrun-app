@@ -14,6 +14,7 @@ export class UserService {
 
     getCurrentUser(): Observable<User> {
         const that = this;
+
         return this.http.get("http://5kmrun.bg/usr.php?id=13731").map(response => {
                 const content = response.text();
 
@@ -27,8 +28,9 @@ export class UserService {
                 const avatarUrl = this.parseAvatarUrl(webPage);
                 const userPoints = this.parseUserPoints(webPage);
                 const name = this.parseName(webPage);
-
-                that.currentUser = new User(13731, name, avatarUrl, userPoints);
+                const runsCount = this.parseRunsCount(webPage);
+                const totalKmRan = this.parseTotalKmRan(webPage);
+                that.currentUser = new User(13731, name, avatarUrl, userPoints, runsCount, totalKmRan);
 
                 return that.currentUser;
         });
@@ -45,6 +47,14 @@ export class UserService {
     private parseName(webPage: any) : string {
         const title = webPage("h2.article-title").first().text();
         return title.substr(title.indexOf("-") + 2);
+    }
+
+    private parseRunsCount(webPage: any) : number {
+        return webPage("div.col-md-12 h2.article-title span").first().text();
+    }   
+
+    private parseTotalKmRan(webPage: any) : number {
+        return webPage("div.col-md-12 h2.article-title span").last().text();
     }
 
 }

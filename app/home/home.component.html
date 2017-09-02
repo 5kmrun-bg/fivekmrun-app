@@ -30,10 +30,7 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     <!--
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
-    <GridLayout class="page page-content" tkMainContent>
-        <Label class="page-icon fa" text="&#xf015;"></Label>
-        <Label class="page-placeholder" text="<!-- Page content goes here -->"></Label>
-        <Button text="tap" (tap)="request()"></Button>
-        
-    </GridLayout>
+    <StackLayout class="page page-content" tkMainContent>
+        <Label [text]="(currentUser$ | async)?.totalKmRan"></Label>
+    </StackLayout>
 </RadSideDrawer>
