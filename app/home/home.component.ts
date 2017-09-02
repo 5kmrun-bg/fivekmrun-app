@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-telerik-ui/sidedrawer";
 import { RadSideDrawerComponent } from "nativescript-telerik-ui/sidedrawer/angular";
-import { UserService } from "../services";
-import { User } from "../models";
+import { UserService, RunService } from "../services";
+import { User, Run } from "../models";
 import { Observable } from "rxjs/Observable";
 
 @Component({
@@ -19,8 +19,9 @@ export class HomeComponent implements OnInit {
 
     private _sideDrawerTransition: DrawerTransitionBase;
     private currentUser$: Observable<User>;
+    private lastRun$: Observable<Run>;
 
-    constructor(private userService: UserService) {}
+    constructor(private userService: UserService, private runService: RunService) { }
 
     /* ***********************************************************
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
@@ -28,6 +29,8 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
         this._sideDrawerTransition = new SlideInOnTopTransition();
         this.currentUser$ = this.userService.getCurrentUser();
+        const that = this;
+        this.lastRun$ = this.runService.getByUserId(13731).map(runs => runs.sort((a, b) => { return 0 - that.getTime(a.date) - that.getTime(b.date);})[0]);
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {
@@ -40,5 +43,9 @@ export class HomeComponent implements OnInit {
     *************************************************************/
     onDrawerButtonTap(): void {
         this.drawerComponent.sideDrawer.showDrawer();
+    }
+
+    private getTime(date?: Date) {
+        return date != null ? date.getTime() : 0;
     }
 }

@@ -29,11 +29,14 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     <!--
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
-    <GridLayout class="page page-content dashboard" tkMainContent columns="*, *" rows="175, auto">
+    <GridLayout class="page page-content dashboard" tkMainContent columns="*, *" rows="175, *, *">
+        <!-- Total KMs -->
         <StackLayout col="0" row="0" class="dashboard dashboard-item">
             <Label text="Total KMs"></Label>
             <Label [text]="(currentUser$ | async)?.totalKmRan"></Label>
         </StackLayout>
+
+        <!-- Next Goal -->
         <RadRadialGauge col="1" row="0" class="dashboard dashboard-item">
             <RadialScale tkRadialGaugeScales minimum="0" maximum="100" radius="0.95">
                 <ScaleStyle tkRadialScaleStyle ticksVisible="false" labelsVisible="false" lineThickness="0"></ScaleStyle>
@@ -46,5 +49,12 @@ it shouldn't have any other siblings other than the <ActionBar> component.
             </RadialScale>
         </RadRadialGauge>
         <Label text="9" col="1" row="0" style="text-align: center; vertical-align: middle"></Label>
+
+        <!-- Last Run -->
+        <StackLayout col="0" row="1" class="dashboard dashboard-item">
+            <Label text="Last Run"> </Label>
+            <Label [text]="(lastRun$ | async)?.date | date:'dd MMM yyyy'"></Label>
+            <Label [text]="(lastRun$ | async)?.time"></Label>
+        </StackLayout> 
     </GridLayout>
 </RadSideDrawer>
