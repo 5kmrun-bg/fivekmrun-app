@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
     private _sideDrawerTransition: DrawerTransitionBase;
     private currentUser$: Observable<User>;
     private lastRun$: Observable<Run>;
+    private bestRun$: Observable<Run>;
 
     constructor(private userService: UserService, private runService: RunService) { }
 
@@ -31,6 +32,7 @@ export class HomeComponent implements OnInit {
         this.currentUser$ = this.userService.getCurrentUser();
         const that = this;
         this.lastRun$ = this.runService.getByUserId(13731).map(runs => runs.sort((a, b) => { return 0 - that.getTime(a.date) - that.getTime(b.date);})[0]);
+        this.bestRun$ = this.runService.getByUserId(13731).map(runs => runs.sort((a, b) => { return a.time.localeCompare(b.time);})[0]);
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {

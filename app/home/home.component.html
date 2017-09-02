@@ -56,5 +56,12 @@ it shouldn't have any other siblings other than the <ActionBar> component.
             <Label [text]="(lastRun$ | async)?.date | date:'dd MMM yyyy'"></Label>
             <Label [text]="(lastRun$ | async)?.time"></Label>
         </StackLayout> 
+
+        <!-- Best Run -->
+        <StackLayout col="1" row="1" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (bestRun$ | async)?.id]">
+            <Label text="Best Run"> </Label>
+            <Label [text]="(bestRun$ | async)?.date | date:'dd MMM yyyy'"></Label>
+            <Label [text]="(bestRun$ | async)?.time"></Label>
+        </StackLayout> 
     </GridLayout>
 </RadSideDrawer>
