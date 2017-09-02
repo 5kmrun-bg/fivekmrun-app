@@ -44,10 +44,17 @@ export class MyDrawerComponent implements OnInit {
                 icon: "\uf015"
             },
             {
+                title: "Новини",
+                name: "news",
+                route: "/news",
+                icon: "\uf1ea"
+
+            },
+            {
                 title: "Бягания",
                 name: "runs",
                 route: "/runs",
-                icon: "\uf03a"
+                icon: "\uf11e"
             },
             {
                 title: "Баркод",
