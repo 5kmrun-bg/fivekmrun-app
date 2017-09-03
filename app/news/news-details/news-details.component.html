@@ -10,14 +10,6 @@
     </ActionItem>
     <Label class="action-bar-title" text="Новини"></Label>
 </ActionBar>
-
-<!--
-RadSideDrawer is a UI component part of the Progress NativeScript UI set of components.
-Learn more about the RadSideDrawer UI component and how it can be customized in this documentation article:
-http://docs.telerik.com/devtools/nativescript-ui/Controls/Angular/SideDrawer/getting-started
-The RadSideDrawer component is designed to be used as a root element and
-it shouldn't have any other siblings other than the <ActionBar> component.
--->
 <RadSideDrawer #drawer showOverNavigation="true" [drawerTransition]="sideDrawerTransition">
     <!--
     Use the tkDrawerContent directive to display the content of the app drawer on this page.
@@ -26,14 +18,7 @@ it shouldn't have any other siblings other than the <ActionBar> component.
         <MyDrawer [selectedPage]="'News'"></MyDrawer>
     </StackLayout>
 
-    <!--
-    Use the tkMainContent directive to display the content of the page when you have an app drawer.
-    -->
-    <GridLayout class="page page-content" tkMainContent>
-        <ListView [items]="news$ | async">
-            <ng-template let-item="item">
-                <Label [text]="item.title" [nsRouterLink]="['/news/' + item.id]"></Label>
-            </ng-template>
-        </ListView>
-    </GridLayout>
+<StackLayout #webViewPlaceholder tkMainContent>
+    <WebView [src]="(webViewSrc | async) ? (webViewSrc | async) : ''"></WebView>
+</StackLayout>
 </RadSideDrawer>

@@ -9,7 +9,8 @@ const routes: Routes = [
     { path: "runs/:id", loadChildren: "./runs/run-details/run-details.module#RunDetailsModule"},
     { path: "barcode", loadChildren: "./barcode/barcode.module#BarcodeModule" },
     { path: "settings", loadChildren: "./settings/settings.module#SettingsModule" },
-    { path: "news", loadChildren: "./news/news-list/news-list.module#NewsListModule"}
+    { path: "news", loadChildren: "./news/news-list/news-list.module#NewsListModule"},
+    { path: "news/:id", loadChildren: "./news/news-details/news-details.module#NewsDetailsModule"}
 ];
 
 @NgModule({

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-telerik-ui/sidedrawer";
 import { RadSideDrawerComponent } from "nativescript-telerik-ui/sidedrawer/angular";
 import { Observable } from "rxjs/Observable";
+import { NewsService } from "../../services";
+import { News } from "../../models";
 
 @Component({
     selector: "NewsList",
@@ -16,15 +18,16 @@ export class NewsListComponent implements OnInit {
     @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
 
     private _sideDrawerTransition: DrawerTransitionBase;
-    //runs: Observable<News[]>;
+    news$: Observable<News[]>;
 
-    //constructor(private newsService: NewsService) {}
+    constructor(private newsService: NewsService) {}
 
     /* ***********************************************************
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
     *************************************************************/
     ngOnInit(): void {
         this._sideDrawerTransition = new SlideInOnTopTransition();
+        this.news$ = this.newsService.getAll();
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {
