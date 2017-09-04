@@ -32,7 +32,10 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     <GridLayout class="page page-content" tkMainContent>
         <ListView [items]="news$ | async">
             <ng-template let-item="item">
-                <Label [text]="item.title" [nsRouterLink]="['/news/' + item.id]"></Label>
+                <StackLayout>
+                    <Label [text]="item.title" (onTap)="openUrl(item.url)"></Label>
+                    <WebView [src]="item.description"></WebView>
+                </StackLayout>
             </ng-template>
         </ListView>
     </GridLayout>

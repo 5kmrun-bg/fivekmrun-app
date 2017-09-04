@@ -10,7 +10,6 @@ const routes: Routes = [
     { path: "barcode", loadChildren: "./barcode/barcode.module#BarcodeModule" },
     { path: "settings", loadChildren: "./settings/settings.module#SettingsModule" },
     { path: "news", loadChildren: "./news/news-list/news-list.module#NewsListModule"},
-    { path: "news/:id", loadChildren: "./news/news-details/news-details.module#NewsDetailsModule"}
 ];
 
 @NgModule({

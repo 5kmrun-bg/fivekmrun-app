@@ -5,7 +5,8 @@ export class News {
 
     constructor(
         public title:string,
-        public url: string
+        public url: string,
+        public description: string
     ) {
         this.id = Md5.hashStr(title + "#" + url).toString();
     }

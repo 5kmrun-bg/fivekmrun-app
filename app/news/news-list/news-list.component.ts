@@ -4,6 +4,7 @@ import { RadSideDrawerComponent } from "nativescript-telerik-ui/sidedrawer/angul
 import { Observable } from "rxjs/Observable";
 import { NewsService } from "../../services";
 import { News } from "../../models";
+var utilityModule = require("utils/utils");
 
 @Component({
     selector: "NewsList",
@@ -40,5 +41,9 @@ export class NewsListComponent implements OnInit {
     *************************************************************/
     onDrawerButtonTap(): void {
         this.drawerComponent.sideDrawer.showDrawer();
+    }
+
+    openUrl(url: string): void {
+        utilityModule.openUrl(url);
     }
 }
