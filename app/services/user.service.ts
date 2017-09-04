@@ -9,6 +9,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class UserService {
     private currentUser: User;
+    private _currentUserId?: number;
 
     constructor(private http: Http) { }
 
@@ -34,6 +35,18 @@ export class UserService {
 
                 return that.currentUser;
         });
+    }
+
+    get currentUserId(): number {
+        return this._currentUserId ? this._currentUserId : 0;
+    }
+
+    set currentUserId(value: number) {
+        this._currentUserId = value;
+    }
+
+    isCurrentUserSet(): boolean {
+        return this._currentUserId != undefined;
     }
 
     private parseAvatarUrl(webPage: any) : string {
