@@ -1,1 +1,5 @@
-<Label text="login"></Label>
+<StackLayout>
+    <Label [text]="userId"></Label>
+    <TextField [(ngModel)]="userId"></TextField>
+    <Button (tap)="onTap()" text="set user"></Button>
+</StackLayout>
