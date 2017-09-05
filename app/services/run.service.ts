@@ -5,13 +5,19 @@ import { Observable } from "rxjs/Observable";
 import { Run } from "../models";
 import * as cheerio from "cheerio";
 
+import { UserService } from "../services";
+
 @Injectable()
 export class RunService {
-    constructor(private http: Http) { }
+    private _currentUserId: number;
 
-    getByUserId(userId: number): Observable<Run[]> {
+    constructor(private http: Http, private userService: UserService) {
+        this._currentUserId = userService.currentUserId;
+    }
+
+    getByCurrentUser(): Observable<Run[]> {
         const that = this;
-        return this.http.get("http://5kmrun.bg/stat.php?id=" + userId).map(response => {
+        return this.http.get("http://5kmrun.bg/stat.php?id=" + this._currentUserId).map(response => {
             const runs: Array<Run> = new Array<Run>();
 
             const content = response.text();

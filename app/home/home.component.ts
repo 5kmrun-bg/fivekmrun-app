@@ -31,9 +31,9 @@ export class HomeComponent implements OnInit {
         this._sideDrawerTransition = new SlideInOnTopTransition();
         this.currentUser$ = this.userService.getCurrentUser();
         const that = this;
-        this.lastRun$ = this.runService.getByUserId(13731).map(runs => runs.sort((a, b) => { return 0 - that.getTime(a.date) - that.getTime(b.date);})[0]);
-        this.bestRun$ = this.runService.getByUserId(13731).map(runs => runs.sort((a, b) => { return a.time.localeCompare(b.time);})[0]);
-        this.runs$ = this.runService.getByUserId(13731).map(runs => runs.reverse());
+        this.lastRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return 0 - that.getTime(a.date) - that.getTime(b.date);})[0]);
+        this.bestRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return a.time.localeCompare(b.time);})[0]);
+        this.runs$ = this.runService.getByCurrentUser().map(runs => runs.reverse());
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {

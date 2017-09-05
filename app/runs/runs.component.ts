@@ -27,7 +27,7 @@ export class RunsComponent implements OnInit {
     *************************************************************/
     ngOnInit(): void {
         this._sideDrawerTransition = new SlideInOnTopTransition();
-        this.runs = this.runService.getByUserId(13731);
+        this.runs = this.runService.getByCurrentUser();
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {
