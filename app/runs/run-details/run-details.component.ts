@@ -21,7 +21,7 @@ export class RunDetailsComponent implements OnInit {
                 .switchMap(activatedRoute => activatedRoute.params)
                 .forEach((params) => { this.id = params["id"]; });
         
-        this.run = this.runService.getByUserId(13731)
+        this.run = this.runService.getByCurrentUser()
                             .map(runs => runs.filter(r => r.id == this.id)[0]);        
     }
 

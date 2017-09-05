@@ -5,17 +5,23 @@ import { User } from "../models";
 
 import * as cheerio from "cheerio";
 import 'rxjs/Rx';
+var appSettings = require("application-settings");
 
 @Injectable()
 export class UserService {
     private currentUser: User;
+    private _currentUserId?: number;
 
-    constructor(private http: Http) { }
+    constructor(private http: Http) {
+        if (appSettings.getNumber("currentUserId") != NaN) {
+            this._currentUserId = appSettings.getNumber("currentUserId");
+        }
+     }
 
     getCurrentUser(): Observable<User> {
         const that = this;
 
-        return this.http.get("http://5kmrun.bg/usr.php?id=13731").map(response => {
+        return this.http.get("http://5kmrun.bg/usr.php?id=" + this._currentUserId).map(response => {
                 const content = response.text();
 
                 const options = {
@@ -30,10 +36,29 @@ export class UserService {
                 const name = this.parseName(webPage);
                 const runsCount = this.parseRunsCount(webPage);
                 const totalKmRan = this.parseTotalKmRan(webPage);
-                that.currentUser = new User(13731, name, avatarUrl, userPoints, runsCount, totalKmRan);
+                that.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan);
 
                 return that.currentUser;
         });
+    }
+
+    get currentUserId(): number {
+        this._currentUserId = appSettings.getNumber("currentUserId");
+        return this._currentUserId ? this._currentUserId : 0;
+    }
+
+    set currentUserId(value: number) {
+        this._currentUserId = value;
+
+        if (this._currentUserId != undefined) {
+        appSettings.setNumber("currentUserId", this._currentUserId);
+        } else {
+            appSettings.remove("currentUserId");
+        }
+    }
+
+    isCurrentUserSet(): boolean {
+        return this._currentUserId != undefined;
     }
 
     private parseAvatarUrl(webPage: any) : string {
@@ -56,5 +81,4 @@ export class UserService {
     private parseTotalKmRan(webPage: any) : number {
         return webPage("div.col-md-12 h2.article-title span").last().text();
     }
-
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-telerik-ui-pro/sidedrawer";
 import { RadSideDrawerComponent } from "nativescript-telerik-ui-pro/sidedrawer/angular";
+import { Router } from "@angular/router";
+import { UserService } from "../services";
 
 @Component({
     selector: "Settings",
@@ -16,10 +18,14 @@ export class SettingsComponent implements OnInit {
 
     private _sideDrawerTransition: DrawerTransitionBase;
 
+    constructor(private userService: UserService, private router: Router) {
+    }
     /* ***********************************************************
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
     *************************************************************/
     ngOnInit(): void {
+        this.userService.currentUserId = undefined;
+        this.router.navigate(["/login"]);
         this._sideDrawerTransition = new SlideInOnTopTransition();
     }
 
