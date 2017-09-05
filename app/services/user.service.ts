@@ -49,7 +49,12 @@ export class UserService {
 
     set currentUserId(value: number) {
         this._currentUserId = value;
+
+        if (this._currentUserId != undefined) {
         appSettings.setNumber("currentUserId", this._currentUserId);
+        } else {
+            appSettings.remove("currentUserId");
+        }
     }
 
     isCurrentUserSet(): boolean {
