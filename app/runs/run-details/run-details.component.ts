@@ -6,6 +6,7 @@ import { Run } from "../../models";
 import { Observable } from "rxjs/Observable";
 import { PageRoute } from "nativescript-angular/router";
 import "rxjs/add/operator/switchMap";
+import {RouterExtensions} from "nativescript-angular/router";
 
 @Component({
     selector: "RunsDetails",
@@ -16,7 +17,11 @@ export class RunDetailsComponent implements OnInit {
     id: string;
     private run: Observable<Run>;
 
-    constructor(private userService: UserService, private runService: RunService, private pageRoute: PageRoute) {
+    constructor(
+        private userService: UserService, 
+        private runService: RunService, 
+        private pageRoute: PageRoute, 
+        private routerExtensions: RouterExtensions) {
         this.pageRoute.activatedRoute
                 .switchMap(activatedRoute => activatedRoute.params)
                 .forEach((params) => { this.id = params["id"]; });
@@ -29,5 +34,9 @@ export class RunDetailsComponent implements OnInit {
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
     *************************************************************/
     ngOnInit(): void {
+    }
+
+    onNavBtnTap(): void {
+        this.routerExtensions.back();
     }
 }

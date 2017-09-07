@@ -1,19 +1,11 @@
 <ActionBar class="action-bar">
-    <!-- 
-    Use the NavigationButton as a side-drawer button in Android because ActionItems are shown on the right side of the ActionBar
-    -->
-    <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
-    <!-- 
-    Use the ActionItem for IOS with position set to left. Using the NavigationButton as a side-drawer button in iOS is not possible, because its function is to always navigate back in the application.
-    -->
-    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left">
-    </ActionItem>
+    <NavigationButton text="Назад" android.systemIcon="ic_menu_back" tap="onNavBtnTap"></NavigationButton>
     <Label class="action-bar-title" [text]="(run| async)?.date | date:'dd MMM yyyy'"></Label>
 </ActionBar>
 
 <StackLayout class="page page-content" tkMainContent>
-    <Label [text]="'Place: ' + (run| async)?.place"></Label>
-    <Label [text]="'Time: ' + (run| async)?.time"></Label>
-    <Label [text]="'Difference from last run: ' + (run| async)?.differenceFromPrevious"></Label>
-    <Label [text]="'Difference from personal record: ' + (run| async)?.differenceFromBest"></Label>
+    <Label [text]="'Място: ' + (run| async)?.place"></Label>
+    <Label [text]="'Време: ' + (run| async)?.time"></Label>
+    <Label [text]="'Разлика от предишното бягане: ' + (run| async)?.differenceFromPrevious"></Label>
+    <Label [text]="'Разлика от най-добро време: ' + (run| async)?.differenceFromBest"></Label>
 </StackLayout>
