@@ -11,8 +11,7 @@ const routes: Routes = [
             { path: "runs", loadChildren: "./runs/runs.module#RunsModule" },
             { path: "runs/:id", loadChildren: "./runs/run-details/run-details.module#RunDetailsModule" },
             { path: "barcode", loadChildren: "./barcode/barcode.module#BarcodeModule" },
-            { path: "settings", loadChildren: "./settings/settings.module#SettingsModule" },
-            { path: "news", loadChildren: "./news/news-list/news-list.module#NewsListModule" },
+            { path: "news", loadChildren: "./news/news-list/news-list.module#NewsListModule" }
         ]
     },
     {

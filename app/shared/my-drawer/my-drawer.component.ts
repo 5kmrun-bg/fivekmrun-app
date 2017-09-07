@@ -64,8 +64,8 @@ export class MyDrawerComponent implements OnInit {
             },
             {
                 title: "Изход",
-                name: "settings",
-                route: "/settings",
+                name: "login",
+                route: "/login",
                 icon: "\uf08b "
             }
         ];
