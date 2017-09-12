@@ -1,5 +1,5 @@
-<StackLayout>
-    <Label text="Enter your user id:"></Label>
-    <TextField [(ngModel)]="userId"></TextField>
-    <Button (tap)="onTap()" text="next"></Button>
+<StackLayout class="login">
+    <Label text="Личен Номер:"></Label>
+    <TextField [(ngModel)]="userId" keyboardType="number"  class="input-textbox"></TextField>
+    <Button (tap)="onTap()" text="Напред" class="input-button"></Button>
 </StackLayout>
