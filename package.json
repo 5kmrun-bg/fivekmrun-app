@@ -5,11 +5,11 @@
   "repository": "<fill-your-repository-here>",
   "nativescript": {
     "id": "org.etabakov.fivekmrunapp",
-    "tns-ios": {
-      "version": "3.1.0"
-    },
     "tns-android": {
-      "version": "3.1.1"
+      "version": "3.2.0"
+    },
+    "tns-ios": {
+      "version": "3.2.0"
     }
   },
   "scripts": {
@@ -32,7 +32,8 @@
     "reflect-metadata": "~0.1.8",
     "rxjs": "~5.4.0",
     "stream": "0.0.2",
-    "tns-core-modules": "~3.1.0",
+    "tns-android": "3.2.0",
+    "tns-core-modules": "^3.3.0-2017-9-9-1",
     "ts-md5": "^1.2.2",
     "zone.js": "~0.8.2"
   },
