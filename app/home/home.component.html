@@ -48,14 +48,14 @@ it shouldn't have any other siblings other than the <ActionBar> component.
                 </RadialBarIndicator>
             </RadialScale>
         </RadRadialGauge>
-        <Label text="9" col="1" row="0" style="text-align: center; vertical-align: middle"></Label>
+        <Label [text]="(currentUser$ | async)?.runsCount" col="1" row="0" style="text-align: center; vertical-align: middle"></Label>
 
         <!-- Time stats-->
         <RadCartesianChart col="0" colSpan="2" row="1" class="dashboard dashboard-item">
             <RadCartesianChartGrid tkCartesianGrid horizontalLinesVisible="true" horizontalStrokeColor="#ffffcc80" horizontalStrokeWidth="1"></RadCartesianChartGrid>
             <LineSeries tkCartesianSeries [items]="runs$ | async" categoryProperty="date" valueProperty="timeInSeconds"></LineSeries>
             <LinearAxis tkCartesianVerticalAxis majorStep="3" lineColor="#ffffff"></LinearAxis>
-            <DateTimeCategoricalAxis tkCartesianHorizontalAxis dateFormat="dd MMM yyyy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeCategoricalAxis>
+            <DateTimeContinuousAxis majorStep="Month" tkCartesianHorizontalAxis dateFormat="dd MMM yyyy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
         </RadCartesianChart>
 
         <!-- Last Run -->

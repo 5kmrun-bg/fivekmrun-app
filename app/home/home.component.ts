@@ -30,8 +30,9 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
         this._sideDrawerTransition = new SlideInOnTopTransition();
         this.currentUser$ = this.userService.getCurrentUser();
+
         const that = this;
-        this.lastRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return 0 - that.getTime(a.date) - that.getTime(b.date);})[0]);
+        this.lastRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return 0 - (that.getTime(a.date) - that.getTime(b.date));})[0]);
         this.bestRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return a.time.localeCompare(b.time);})[0]);
         this.runs$ = this.runService.getByCurrentUser().map(runs => runs.reverse());
     }
