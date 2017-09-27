@@ -5,6 +5,7 @@ import { Observable } from "rxjs/Observable";
 import { EventData } from "data/observable";
 import { Router } from "@angular/router";
 import { Page } from "ui/page";
+import { TextField } from "ui/text-field";
 
 @Component({
     selector: "Login",
@@ -20,6 +21,8 @@ export class LoginComponent implements OnInit {
      }
 
     ngOnInit(): void {
+        const userIdTextField:TextField = <TextField> this._page.getViewById("userId");
+        userIdTextField.focus();
     }
 
     onTap(): void {
