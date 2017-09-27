@@ -30,9 +30,9 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
     <GridLayout class="page page-content" tkMainContent>
-        <ListView [items]="news$ | async">
+        <ListView [items]="news$ | async" class="list">
             <ng-template let-item="item">
-                <StackLayout>
+                <StackLayout class="list-item">
                     <Label [text]="item.title" (onTap)="openUrl(item.url)"></Label>
                     <WebView [src]="item.description"></WebView>
                 </StackLayout>
