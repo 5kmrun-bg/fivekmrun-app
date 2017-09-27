@@ -43,7 +43,7 @@ it shouldn't have any other siblings other than the <ActionBar> component.
                 <RadialBarIndicator tkRadialScaleIndicators minimum="0" maximum="100" location="0.80">
                     <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#dddddd" barWidth="0.2"></BarIndicatorStyle>
                 </RadialBarIndicator>
-                <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="(currentUser$ | async)?.runsCount" location="0.80">
+                <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="50" location="0.80">
                     <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#00ff00" barWidth="0.2"></BarIndicatorStyle>
                 </RadialBarIndicator>
             </RadialScale>
@@ -52,9 +52,9 @@ it shouldn't have any other siblings other than the <ActionBar> component.
 
         <!-- Time stats-->
         <RadCartesianChart col="0" colSpan="2" row="1" class="dashboard dashboard-item">
-            <RadCartesianChartGrid tkCartesianGrid horizontalLinesVisible="true" horizontalStrokeColor="#ffffcc80" horizontalStrokeWidth="1"></RadCartesianChartGrid>
+            <RadCartesianChartGrid tkCartesianGrid horizontalLinesVisible="true" horizontalStrokeColor="#ffffcc80" horizontalStrokeWidth="1" virticalLinesVisible="false"></RadCartesianChartGrid>
             <LineSeries tkCartesianSeries [items]="runs$ | async" categoryProperty="date" valueProperty="timeInSeconds"></LineSeries>
-            <LinearAxis tkCartesianVerticalAxis majorStep="3" lineColor="#ffffff"></LinearAxis>
+            <LinearAxis tkCartesianVerticalAxis majorStep="3" lineColor="#ffffff" minimum="23" maximum="30"></LinearAxis>
             <DateTimeContinuousAxis majorStep="Month" tkCartesianHorizontalAxis dateFormat="dd MMM yyyy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
         </RadCartesianChart>
 
