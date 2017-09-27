@@ -51,7 +51,7 @@ it shouldn't have any other siblings other than the <ActionBar> component.
         <Label [text]="(currentUser$ | async)?.runsCount" col="1" row="0" style="text-align: center; vertical-align: middle"></Label>
 
         <!-- Time stats-->
-        <RadCartesianChart col="0" colSpan="2" row="1" class="dashboard dashboard-item">
+        <RadCartesianChart *ngIf="(runs$ | async)?.length > 0" col="0" colSpan="2" row="1" class="dashboard dashboard-item">
             <RadCartesianChartGrid tkCartesianGrid horizontalLinesVisible="true" horizontalStrokeColor="#ffffcc80" horizontalStrokeWidth="1" virticalLinesVisible="false"></RadCartesianChartGrid>
             <LineSeries tkCartesianSeries [items]="runs$ | async" categoryProperty="date" valueProperty="timeInSeconds"></LineSeries>
             <LinearAxis tkCartesianVerticalAxis majorStep="3" lineColor="#ffffff" minimum="23" maximum="30"></LinearAxis>
