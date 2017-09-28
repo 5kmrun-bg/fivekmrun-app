@@ -46,15 +46,6 @@ ActionBar .action-bar-title {
     color: white;
 }
 
-.profile-pic {
-    margin: 15px 0 0 15px;
-    border-radius: 30;
-    border-color: gray;
-    border-width: 0.5;
-    height: 80;
-    width: 80;
-}
-
 .barcode {
     text-align: center;
     margin: 30 0 0 0;
@@ -103,4 +94,16 @@ ActionBar .action-bar-title {
     border-radius: 5;
     width: 150;
     margin-top: 15;
+}
+
+.va-m {
+    vertical-align: middle;
+}
+
+.va-t {
+    vertical-align: top;
+}
+
+.va-b {
+    vertical-align: bottom;
 }
