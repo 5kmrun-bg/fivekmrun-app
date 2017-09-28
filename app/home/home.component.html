@@ -32,8 +32,8 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     <GridLayout class="page page-content dashboard" tkMainContent columns="*, *" rows="175, *, *">
         <!-- Total KMs -->
         <StackLayout col="0" row="0" class="dashboard dashboard-item">
-            <Label text="Total KMs"></Label>
-            <Label [text]="(currentUser$ | async)?.totalKmRan"></Label>
+            <Label text="Общо" class="tile-header"></Label>
+            <Label [text]="(currentUser$ | async)?.totalKmRan + ' км'" class="tile-value"></Label>
         </StackLayout>
 
         <!-- Next Goal -->
@@ -60,16 +60,16 @@ it shouldn't have any other siblings other than the <ActionBar> component.
 
         <!-- Last Run -->
         <StackLayout col="0" row="2" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (lastRun$ | async)?.id]">
-            <Label text="Last Run"> </Label>
+            <Label text="Последно"> </Label>
             <Label [text]="(lastRun$ | async)?.date | date:'dd MMM yyyy'"></Label>
             <Label [text]="(lastRun$ | async)?.time"></Label>
         </StackLayout> 
 
         <!-- Best Run -->
-        <StackLayout col="1" row="2" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (bestRun$ | async)?.id]">
-            <Label text="Best Run"> </Label>
-            <Label [text]="(bestRun$ | async)?.date | date:'dd MMM yyyy'"></Label>
-            <Label [text]="(bestRun$ | async)?.time"></Label>
-        </StackLayout> 
+        <GridLayout col="1" row="2" columns="auto, *" rows="*, *, *" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (bestRun$ | async)?.id]">
+            <Label text="Най-добро" col="0" row="0" colspan="2" textWrap="true"> </Label>
+            <Label col="0" row="1" text="\uf1ea" class="fa"></Label> <Label [text]="(bestRun$ | async)?.date | date:'dd MMM yyyy'" col="1" row="1"></Label>
+            <Label col="0" row="2" text="\uf017" class="fa"></Label> <Label [text]="(bestRun$ | async)?.time" col="1" row="2"></Label>
+        </GridLayout> 
     </GridLayout>
 </RadSideDrawer>
