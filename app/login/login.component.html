@@ -3,6 +3,6 @@
 
 <StackLayout class="page page-content login">
     <Label text="Личен Номер:"></Label>
-    <TextField id="userId" (returnPress)="onTap()" [(ngModel)]="userId" class="input-textbox"></TextField>
+    <TextField id="userId" (returnPress)="onTap()" [(ngModel)]="userId" class="input-textbox" keyboardType="phone"></TextField>
     <Button (tap)="onTap()" text="Напред" class="input-button"></Button>
 </StackLayout>
