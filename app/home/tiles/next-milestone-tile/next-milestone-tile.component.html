@@ -1,12 +1,12 @@
-<RadRadialGauge col="1" row="0" class="dashboard dashboard-item">
-<RadialScale tkRadialGaugeScales minimum="0" [maximum]="nextMilestone" radius="0.95">
-    <ScaleStyle tkRadialScaleStyle ticksVisible="false" labelsVisible="false" lineThickness="0"></ScaleStyle>
-    <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="nextMilestone" location="0.80">
-        <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#dddddd" barWidth="0.2"></BarIndicatorStyle>
-    </RadialBarIndicator>
-    <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="(runs$ | async)?.length" location="0.80">
-        <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#00ff00" barWidth="0.2"></BarIndicatorStyle>
-    </RadialBarIndicator>
-</RadialScale>
+<RadRadialGauge *ngIf="(runs$ | async)?.length > 0" col="1" row="0" class="dashboard dashboard-item">
+    <RadialScale tkRadialGaugeScales minimum="0" [maximum]="nextMilestone" radius="0.95">
+        <ScaleStyle tkRadialScaleStyle ticksVisible="false" labelsVisible="false" lineThickness="0" ></ScaleStyle>
+        <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="nextMilestone" location="0.80">
+            <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#dddddd" barWidth="0.2"></BarIndicatorStyle>
+        </RadialBarIndicator>
+        <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="(runs$ | async)?.length" location="0.80">
+            <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#00ff00" barWidth="0.2"></BarIndicatorStyle>
+        </RadialBarIndicator>
+    </RadialScale>
 </RadRadialGauge>
 <Label [text]="(runs$| async)?.length + ' / ' + nextMilestone" col="1" row="0" class="text-center va-m"></Label>
