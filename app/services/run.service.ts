@@ -9,15 +9,13 @@ import { UserService } from "../services";
 
 @Injectable()
 export class RunService {
-    private _currentUserId: number;
 
     constructor(private http: Http, private userService: UserService) {
-        this._currentUserId = userService.currentUserId;
     }
 
     getByCurrentUser(): Observable<Run[]> {
         const that = this;
-        return this.http.get("http://5kmrun.bg/stat.php?id=" + this._currentUserId).map(response => {
+        return this.http.get("http://5kmrun.bg/stat.php?id=" + this.userService.currentUserId).map(response => {
             const runs: Array<Run> = new Array<Run>();
 
             const content = response.text();
