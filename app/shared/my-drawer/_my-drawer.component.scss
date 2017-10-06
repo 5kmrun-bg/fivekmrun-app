@@ -27,15 +27,17 @@ $sidedrawer-list-icon-size: 20;
         }
 
         .footnote {
-            color: rgba($ab-color, 0.5);
+            color: rgba(white, 0.5);
         }
     }
 
     .sidedrawer-header {
-        background-color: #e0e0e0;
+        background-color: black;
+        color: white;
 
         .sidedrawer-header-brand {
-            color: $ab-color;
+            color: white;
+            font-size: 20;
         }
     }
 
