@@ -1,5 +1,5 @@
 <ActionBar class="action-bar">
-    <NavigationButton text="Назад" android.systemIcon="ic_menu_back" tap="onNavBtnTap"></NavigationButton>
+    <NavigationButton text="Назад" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
     <Label class="action-bar-title" [text]="(run| async)?.date | date:'dd MMM yyyy'"></Label>
 </ActionBar>
 
