@@ -59,17 +59,9 @@ it shouldn't have any other siblings other than the <ActionBar> component.
         </RadCartesianChart>
 
         <!-- Last Run -->
-        <StackLayout col="0" row="2" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (lastRun$ | async)?.id]">
-            <Label text="Последно"> </Label>
-            <Label [text]="(lastRun$ | async)?.date | date:'dd MMM yyyy'"></Label>
-            <Label [text]="(lastRun$ | async)?.time"></Label>
-        </StackLayout> 
+        <tile title="Последно" [run]="lastRun$ | async" col="0" row="2"></tile>
 
         <!-- Best Run -->
-        <GridLayout col="1" row="2" columns="auto, *" rows="*, *, *" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + (bestRun$ | async)?.id]">
-            <Label text="Най-добро" col="0" row="0" colspan="2" textWrap="true"> </Label>
-            <Label col="0" row="1" text="\uf1ea" class="fa"></Label> <Label [text]="(bestRun$ | async)?.date | date:'dd MMM yyyy'" col="1" row="1"></Label>
-            <Label col="0" row="2" text="\uf017" class="fa"></Label> <Label [text]="(bestRun$ | async)?.time" col="1" row="2"></Label>
-        </GridLayout> 
+        <tile title="Най-добро" [run]="bestRun$ | async" col="1" row="2"></tile>
     </GridLayout>
 </RadSideDrawer>

@@ -6,6 +6,7 @@ import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import { NativeScriptUIGaugesModule } from "nativescript-telerik-ui-pro/gauges/angular";
 import { NativeScriptUIChartModule } from "nativescript-telerik-ui-pro/chart/angular";
+import { TileComponent } from "./tile/tile.component";
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import { NativeScriptUIChartModule } from "nativescript-telerik-ui-pro/chart/ang
         NativeScriptUIChartModule
     ],
     declarations: [
-        HomeComponent
+        HomeComponent,
+        TileComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

@@ -1,0 +1,5 @@
+<GridLayout [col]="col" [row]="row" columns="auto, *" rows="*, *, *" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + run?.id]">
+    <Label [text]="title" col="0" row="0" colspan="2" textWrap="true"> </Label>
+    <Label col="0" row="1" [text]="'\uf073'" class="fa m-l-10"></Label> <Label class="text-left m-l-10" [text]="run?.date | date:'dd MMM yyyy'" col="1" row="1"></Label>
+    <Label col="0" row="2" [text]="'\uf017'" class="fa m-l-10"></Label> <Label class="text-left m-l-10" [text]="run?.time" col="1" row="2"></Label>
+</GridLayout> 
