@@ -37,8 +37,12 @@ export class NewsService {
     private extractRssItem(elem: any): News {
         const title = elem.children.filter(c => c.name == "title" && c.type == "tag")[0].children[0].data;
         const url = elem.children.filter(c => c.name == "guid" && c.type == "tag")[0].children[0].data;
-        const description = elem.children.filter(c => c.name == "description" && c.type == "tag")[0].children[0].children[0].data;
+        const description = this.sanitizeDescription(elem.children.filter(c => c.name == "description" && c.type == "tag")[0].children[0].children[0].data);
 
         return new News(title, url, description);
+    }
+
+    private sanitizeDescription(description: string): string {
+        return description.substring(0, description.lastIndexOf("[...]") + 5);
     }
 }
