@@ -11,3 +11,4 @@ platforms/
 tmp/
 typings/
 report/
+.vscode/settings.json
