@@ -45,7 +45,10 @@ export class RunService {
             this.extractTime(cells),
             this.extractPlace(cells),
             this.extractDifferenceToLast(cells),
-            this.extractDifferenceToBest(cells)
+            this.extractDifferenceToBest(cells),
+            this.extractPosition(cells),
+            this.extractSpeed(cells),
+            this.extractNotes(cells)
         );
     }
 
@@ -70,11 +73,27 @@ export class RunService {
         }
     }
 
+    private extractPosition(cells: any): number {
+        return +cells[2].children[0].data;
+    }
+
     private extractDifferenceToBest(cells: any): string {
         if (cells[5].children[0].data == null || cells[5].children[0].data == undefined) {
             return cells[5].children[0].children[0].data;
         } else {
             return cells[5].children[0].data;
+        }
+    }
+
+    private extractSpeed(cells: any): string {
+        return cells[6].children[0].data;
+    }
+
+    private extractNotes(cells: any): string {
+        if (cells[7].children[0].children[0].data == undefined) {
+            return cells[7].children[0].children[0].children[0].data;
+        } else {
+            return cells[7].children[0].children[0].data;
         }
     }
 }
