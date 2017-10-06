@@ -1,0 +1,8 @@
+<ActionBar class="action-bar">
+    <Label text="Грешка" class="action-bar-title"></Label>
+</ActionBar>
+
+<StackLayout class="page page-content m-t-30" width="200">
+    <Label text="Няма връзка с интернет" class="text-center h1  m-b-20" textWrap="true"></Label>
+    <Button (tap)="attemptConnectivity()" [text]="'\uf021'" class="fa btn btn-outline" style="font-size: 70; height: auto"></Button>
+</StackLayout>

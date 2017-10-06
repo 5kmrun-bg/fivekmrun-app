@@ -7,7 +7,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
 import { UserService, RunService, NewsService } from "./services";
-import { AuthenticationGuard } from "./guards";
+import { AuthenticationGuard, ConnectivityGuard } from "./guards";
 
 @NgModule({
     bootstrap: [
@@ -26,7 +26,8 @@ import { AuthenticationGuard } from "./guards";
         UserService,
         RunService,
         NewsService,
-        AuthenticationGuard
+        AuthenticationGuard,
+        ConnectivityGuard
     ],
     schemas: [
         NO_ERRORS_SCHEMA

@@ -6,8 +6,7 @@ import { UserService } from "../services";
 export class AuthenticationGuard implements CanActivate {
     constructor(private router: Router, private userService: UserService) {}
 
-    canActivate() {
-        console.log("Checking user ...");
+    canActivate(): boolean {
         if (this.userService.isCurrentUserSet()) {
             return true;
         } else {
