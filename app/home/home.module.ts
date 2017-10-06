@@ -6,7 +6,7 @@ import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import { NativeScriptUIGaugesModule } from "nativescript-telerik-ui-pro/gauges/angular";
 import { NativeScriptUIChartModule } from "nativescript-telerik-ui-pro/chart/angular";
-import { TileComponent } from "./tile/tile.component";
+import { RunDetailsTileComponent, NextMilestoneTileComponent } from "./tiles";
 
 @NgModule({
     imports: [
@@ -18,7 +18,8 @@ import { TileComponent } from "./tile/tile.component";
     ],
     declarations: [
         HomeComponent,
-        TileComponent
+        RunDetailsTileComponent,
+        NextMilestoneTileComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA
