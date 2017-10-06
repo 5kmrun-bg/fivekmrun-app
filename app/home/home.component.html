@@ -29,7 +29,7 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     <!--
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
-    <GridLayout class="page page-content dashboard" tkMainContent columns="*, *" rows="175, *, *">
+    <GridLayout class="page page-content dashboard" tkMainContent columns="*, *" rows="*, *, *">
         <!-- Total KMs -->
         <StackLayout col="0" row="0" class="dashboard dashboard-item">
             <Label text="Общо" class="h2"></Label>
@@ -41,7 +41,7 @@ it shouldn't have any other siblings other than the <ActionBar> component.
 
         <!-- Time stats-->
         <RadCartesianChart *ngIf="(runs$ | async)?.length > 0" col="0" colSpan="2" row="1" class="dashboard dashboard-item">
-            <RadCartesianChartGrid tkCartesianGrid horizontalLinesVisible="true" horizontalStrokeColor="#ffffcc80" horizontalStrokeWidth="1" virticalLinesVisible="false"></RadCartesianChartGrid>
+            <RadCartesianChartGrid tkCartesianGrid horizontalLinesVisible="true" horizontalStrokeColor="#ffffcc80" horizontalStrokeWidth="1" verticalLinesVisible="false"></RadCartesianChartGrid>
             <LineSeries tkCartesianSeries [items]="runs$ | async" categoryProperty="date" valueProperty="timeInSeconds"></LineSeries>
             <LinearAxis tkCartesianVerticalAxis majorStep="3" lineColor="#ffffff" minimum="23" maximum="30"></LinearAxis>
             <DateTimeContinuousAxis majorStep="Month" tkCartesianHorizontalAxis dateFormat="dd.MM.yyyy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
