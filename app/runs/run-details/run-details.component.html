@@ -1,11 +1,11 @@
 <ActionBar class="action-bar">
     <NavigationButton text="Назад" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
-    <Label class="action-bar-title" [text]="(run| async)?.date | date:'dd MMM yyyy'"></Label>
+    <Label class="action-bar-title" [text]="(run| async)?.date | date:'dd.MM.yyyy'"></Label>
 </ActionBar>
 
-<StackLayout class="page page-content" tkMainContent>
-    <Label [text]="'Място: ' + (run| async)?.place"></Label>
-    <Label [text]="'Време: ' + (run| async)?.time"></Label>
-    <Label [text]="'Разлика от предишното бягане: ' + (run| async)?.differenceFromPrevious"></Label>
-    <Label [text]="'Разлика от най-добро време: ' + (run| async)?.differenceFromBest"></Label>
-</StackLayout>
+<GridLayout class="page page-content" tkMainContent columns="2*, 1*" rows="auto, auto, auto, auto" class="m-l-20">
+    <Label col="0" row="0" text="Трасе: "></Label> <Label col="1" row="0" [text]="(run| async)?.place"></Label>
+    <Label col="0" row="1" text="Време: "></Label> <Label col="1" row="1" [text]="(run| async)?.time"></Label>
+    <Label col="0" row="2" text="Разлика от предишното бягане: " textWrap="true"></Label> <Label col="1" row="2" [text]="(run| async)?.differenceFromPrevious"></Label>
+    <Label col="0" row="3" text="Разлика от най-добро време: " textWrap="true"></Label> <Label col="1" row="3" [text]="(run| async)?.differenceFromBest"></Label>
+</GridLayout>
