@@ -3,10 +3,12 @@ The MyDrawer custom component view is where you define what will be displayed in
 Feel free to customize layouts and components to change how your app drawer looks.
 -->
 <StackLayout class="sidedrawer sidedrawer-left">
-    <GridLayout class="sidedrawer-header" columns="1*, 2*" rows="auto, auto">
-        <Image [src]="(currentUser$ |async)?.avatarUrl" class="img-circle" col="0" row="0" rowspan="2"></Image>  
-        <Label class="sidedrawer-header-brand m-l-20 va-m" [text]="(currentUser$| async)?.name" col="1" row="0" ></Label>
+    <GridLayout class="sidedrawer-header" columns="1*, 2*" rows="auto, auto, auto, auto">
+        <Label class="sidedrawer-header-brand m-l-20 va-m" [text]="(currentUser$| async)?.name" col="0" row="0" colspan="2"></Label>
+        <Image [src]="(currentUser$ |async)?.avatarUrl" class="img-circle" col="0" row="1" rowspan="3"></Image>  
         <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.suuntoPoints + ' SUUNTO точки'" col="1" row="1"></Label>
+        <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.runsCount + ' бягания'" col="1" row="2"></Label>
+        <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.age" col="1" row="3"></Label>
     </GridLayout>
 
     <StackLayout class="sidedrawer-content">

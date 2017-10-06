@@ -5,6 +5,7 @@ export class User {
         public avatarUrl: string,
         public suuntoPoints: number,
         public runsCount: number,
-        public totalKmRan: number
+        public totalKmRan: number,
+        public age: string
     ) { }
 }

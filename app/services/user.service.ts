@@ -36,7 +36,8 @@ export class UserService {
                 const name = this.parseName(webPage);
                 const runsCount = this.parseRunsCount(webPage);
                 const totalKmRan = this.parseTotalKmRan(webPage);
-                that.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan);
+                const age = this.parseAge(webPage);
+                that.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
 
                 return that.currentUser;
         });
@@ -80,5 +81,9 @@ export class UserService {
 
     private parseTotalKmRan(webPage: any) : number {
         return webPage("div.col-md-12 h2.article-title span").last().text();
+    }
+
+    private parseAge(webPage: any): string {
+        return webPage("div.container div.col-sm-9.col-md-9 table tbody").find("td").first().text();
     }
 }
