@@ -3,7 +3,7 @@
     <Label class="action-bar-title" [text]="(run| async)?.date | date:'dd.MM.yyyy'"></Label>
 </ActionBar>
 
-<GridLayout class="page page-content" tkMainContent columns="2*, 1*" rows="auto, auto, auto, auto, auto, auto, auto" class="m-l-20">
+<GridLayout class="page page-content" tkMainContent columns="*, *" rows="auto, auto, auto, auto, auto, auto, auto" class="m-l-20 details">
     <Label col="0" row="0" text="Трасе: "></Label> <Label col="1" row="0" [text]="(run| async)?.place"></Label>
     <Label col="0" row="1" text="Време: "></Label> <Label col="1" row="1" [text]="(run| async)?.time"></Label>
     <Label col="0" row="2" text="Позиция: "></Label> <Label col="1" row="2" [text]="(run| async)?.position"></Label>
