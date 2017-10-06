@@ -55,7 +55,7 @@ it shouldn't have any other siblings other than the <ActionBar> component.
             <RadCartesianChartGrid tkCartesianGrid horizontalLinesVisible="true" horizontalStrokeColor="#ffffcc80" horizontalStrokeWidth="1" virticalLinesVisible="false"></RadCartesianChartGrid>
             <LineSeries tkCartesianSeries [items]="runs$ | async" categoryProperty="date" valueProperty="timeInSeconds"></LineSeries>
             <LinearAxis tkCartesianVerticalAxis majorStep="3" lineColor="#ffffff" minimum="23" maximum="30"></LinearAxis>
-            <DateTimeContinuousAxis majorStep="Month" tkCartesianHorizontalAxis dateFormat="dd MMM yyyy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
+            <DateTimeContinuousAxis majorStep="Month" tkCartesianHorizontalAxis dateFormat="dd.MM.yyyy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
         </RadCartesianChart>
 
         <!-- Last Run -->
