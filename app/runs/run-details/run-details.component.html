@@ -7,7 +7,7 @@
     <Label col="0" row="0" text="Трасе: "></Label> <Label col="1" row="0" [text]="(run| async)?.place"></Label>
     <Label col="0" row="1" text="Време: "></Label> <Label col="1" row="1" [text]="(run| async)?.time"></Label>
     <Label col="0" row="2" text="Позиция: "></Label> <Label col="1" row="2" [text]="(run| async)?.position"></Label>
-    <Label col="0" row="3" text="Средна скорост: "></Label> <Label col="1" row="3" [text]="(run| async)?.speed"></Label>
+    <Label col="0" row="3" text="Средна скорост: " textWrap="true"></Label> <Label col="1" row="3" [text]="(run| async)?.speed"></Label>
     <Label col="0" row="4" text="Разлика от предишното бягане: " textWrap="true"></Label> <Label col="1" row="4" [text]="(run| async)?.differenceFromPrevious"></Label>
     <Label col="0" row="5" text="Разлика от най-добро време: " textWrap="true"></Label> <Label col="1" row="5" [text]="(run| async)?.differenceFromBest"></Label>
     <Label col="0" row="6" text="Бележки"></Label> <Label col="1" row="6" [text]="(run| async)?.notes"></Label>
