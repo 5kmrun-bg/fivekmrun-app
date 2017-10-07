@@ -34,7 +34,9 @@ it shouldn't have any other siblings other than the <ActionBar> component.
             <ng-template let-item="item">
                 <StackLayout class="list-group-item">
                     <Label [text]="item.title" class="h2" textWrap="true" (onTap)="openUrl(item.url)"></Label>
-                    <WebView [src]="item.description" (onTap)="openUrl(item.url)"></WebView>
+                    <GridLayout>
+                        <WebView [src]="item.description" (onTap)="openUrl(item.url)" minHeight="250"></WebView>
+                    </GridLayout>
                 </StackLayout>
             </ng-template>
         </ListView>
