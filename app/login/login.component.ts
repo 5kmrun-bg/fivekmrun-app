@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { UserService } from "../services";
 import { User } from "../models";
 import { Observable } from "rxjs/Observable";
@@ -23,8 +23,6 @@ export class LoginComponent implements OnInit {
      }
 
     ngOnInit(): void {
-        const userIdTextField:TextField = <TextField> this._page.getViewById("userId");
-        userIdTextField.focus();
     }
 
     loadProfile(): void {
