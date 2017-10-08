@@ -109,3 +109,14 @@ GridLayout.details Label {
     padding: 10;
     vertical-align: middle;
 }
+
+.profile-preview {
+    animation-name: example;
+    animation-duration: 0.5;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+@keyframes example {
+    from { transform: translate(-400, 0); }
+    to { transform: translate(0, 0); }
+}

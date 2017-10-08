@@ -8,7 +8,7 @@
         <Button (tap)="loadProfile()" text="Напред" class="input-button"></Button>
     </StackLayout>
 
-    <StackLayout *ngIf="isProfileLoaded && (user$ | async) != null" class="m-l-20 m-r-20">
+    <StackLayout *ngIf="isProfileLoaded && (user$ | async) != null" class="profile-preview m-l-20 m-r-20">
         <Label class="va-m m-t-10" [text]="(user$| async)?.name + ' ' + (user$| async)?.age"></Label>
         <Image [src]="(user$ |async)?.avatarUrl" class="img-circle" width="200"></Image>  
         <Label text="Това ли е твоя профил?" class="m-t-20"></Label>
