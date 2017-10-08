@@ -2,7 +2,20 @@
 </ActionBar>
 
 <StackLayout class="page page-content login">
-    <Label text="Личен Номер:"></Label>
-    <TextField id="userId" (returnPress)="onTap()" [(ngModel)]="userId" class="input-textbox" keyboardType="phone"></TextField>
-    <Button (tap)="onTap()" text="Напред" class="input-button"></Button>
+    <StackLayout *ngIf="!isProfileLoaded">
+        <Label text="Личен Номер:"></Label>
+        <TextField id="userId" (returnPress)="onTap()" [(ngModel)]="userId" class="input-textbox" keyboardType="phone"></TextField>
+        <Button (tap)="loadProfile()" text="Напред" class="input-button"></Button>
+    </StackLayout>
+
+    <StackLayout *ngIf="isProfileLoaded && (user$ | async) != null">
+        <Label class="va-m m-t-10" [text]="(user$| async)?.name"></Label>
+        <Image [src]="(user$ |async)?.avatarUrl" class="img-circle"></Image>  
+        <Label class="footnote m-l-20 va-m" [text]="(user$ |async)?.age"></Label>
+        <Label text="Това ли е твоя профил?"></Label>
+        <StackLayout orientation="horizontal">
+            <Button text="Корекция" (onTap)="goBack()" class="input-button m-r-10"></Button>
+            <Button text="Напред" (onTap)="next()" class="input-button m-l-10" style="background-color: #00ff00"></Button>
+        </StackLayout>
+    </StackLayout>
 </StackLayout>

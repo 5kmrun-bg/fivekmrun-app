@@ -14,7 +14,9 @@ import { TextField } from "ui/text-field";
 })
 export class LoginComponent implements OnInit {
     public userId = "";
-    
+    public user$: Observable<User>;
+    public isProfileLoaded = false;
+
     constructor(private _page: Page, private router: Router, private userService: UserService) {
         this._page.actionBarHidden = true;
         this.userService.currentUserId = undefined;
@@ -25,15 +27,25 @@ export class LoginComponent implements OnInit {
         userIdTextField.focus();
     }
 
-    onTap(): void {
+    loadProfile(): void {
         const numUserId = Number(this.userId);
 
         if (numUserId != NaN) {
             this.userService.currentUserId = numUserId;
-            console.log(this.userService.currentUserId);
-            this.router.navigate(["/home"]);
+            this.user$ = this.userService.getCurrentUser();
+            this.isProfileLoaded = true;
         } else {
             // handle error
         }
+    }
+
+    goBack(): void {
+        this.isProfileLoaded = false;
+        this.user$ = null;
+        this.userService.currentUserId = undefined;
+    }
+
+    next(): void {
+        this.router.navigate(["/"]);
     }
 }
