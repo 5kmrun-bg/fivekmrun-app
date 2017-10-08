@@ -8,11 +8,10 @@
         <Button (tap)="loadProfile()" text="Напред" class="input-button"></Button>
     </StackLayout>
 
-    <StackLayout *ngIf="isProfileLoaded && (user$ | async) != null">
-        <Label class="va-m m-t-10" [text]="(user$| async)?.name"></Label>
-        <Image [src]="(user$ |async)?.avatarUrl" class="img-circle"></Image>  
-        <Label class="footnote m-l-20 va-m" [text]="(user$ |async)?.age"></Label>
-        <Label text="Това ли е твоя профил?"></Label>
+    <StackLayout *ngIf="isProfileLoaded && (user$ | async) != null" class="m-l-20 m-r-20">
+        <Label class="va-m m-t-10" [text]="(user$| async)?.name + ' ' + (user$| async)?.age"></Label>
+        <Image [src]="(user$ |async)?.avatarUrl" class="img-circle" width="200"></Image>  
+        <Label text="Това ли е твоя профил?" class="m-t-20"></Label>
         <StackLayout orientation="horizontal">
             <Button text="Корекция" (onTap)="goBack()" class="input-button m-r-10"></Button>
             <Button text="Напред" (onTap)="next()" class="input-button m-l-10" style="background-color: #00ff00"></Button>
