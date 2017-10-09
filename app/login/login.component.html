@@ -4,7 +4,7 @@
 <StackLayout class="page page-content login">
     <StackLayout *ngIf="!isProfileLoaded">
         <Label text="Личен номер"></Label> 
-        <TextField (returnPress)="loadProfile()" [(ngModel)]="userId" class="input-textbox" keyboardType="phone"></TextField>
+        <TextField #txtUserId (returnPress)="loadProfile()" [(ngModel)]="userId" class="input-textbox" keyboardType="phone"></TextField>
         <Button (tap)="loadProfile()" text="Напред" class="input-button"></Button>
     </StackLayout>
 

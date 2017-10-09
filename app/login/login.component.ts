@@ -17,6 +17,8 @@ export class LoginComponent implements OnInit {
     public user$: Observable<User>;
     public isProfileLoaded = false;
 
+    @ViewChild("txtUserId") txtUserId: ElementRef;
+
     constructor(private _page: Page, private router: Router, private userService: UserService) {
         this._page.actionBarHidden = true;
         this.userService.currentUserId = undefined;
@@ -35,6 +37,10 @@ export class LoginComponent implements OnInit {
         } else {
             // handle error
         }
+    }
+
+    ngAfterViewInit(): void {
+        setTimeout(() => this.txtUserId.nativeElement.focus(), 600);
     }
 
     goBack(): void {
