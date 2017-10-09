@@ -21,9 +21,12 @@
 // Font icon class
 .fa {
    font-family: "FontAwesome";
+   color: black;
 }
 // Common page class
 .page-content {
+    font-family: 'Roboto-Regular';
+
     .page-placeholder {
         color: $page-icon-color;
         font-size: $page-content-placeholder-font-size;
@@ -119,4 +122,16 @@ GridLayout.details Label {
 @keyframes example {
     from { transform: translate(-400, 0); }
     to { transform: translate(0, 0); }
+}
+
+.tile-header {
+    font-family: 'Roboto-Light';
+    color: black;
+    font-size: 14;
+}
+
+.tile-value {
+    font-family: 'Roboto-Regular';
+    color: black;
+    font-size: 18;
 }

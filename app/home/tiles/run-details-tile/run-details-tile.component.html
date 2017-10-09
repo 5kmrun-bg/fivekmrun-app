@@ -1,12 +1,12 @@
 <GridLayout [col]="col" [row]="row" columns="auto, *" rows="auto, *, *, *" class="dashboard dashboard-item" [nsRouterLink]="['/runs/' + run?.id]">
-    <Label [text]="title" col="0" row="0" colSpan="2" class="h2 m-t-10"> </Label>
+    <Label [text]="title" col="0" row="0" colSpan="2" class="m-t-10 tile-header"> </Label>
 
-    <Label col="0" row="1" [text]="'\uf073'" class="fa m-l-10 va-m"></Label> 
-    <Label class="text-left m-l-10 va-m" [text]="run?.date | date:'dd.MM.yyyy'" col="1" row="1"></Label>
+    <Label col="0" row="1" [text]="'\uf073'" class="fa m-l-10 va-m text-center"></Label> 
+    <Label class="text-left m-l-10 va-m tile-value" [text]="run?.date | date:'dd.MM.yyyy'" col="1" row="1"></Label>
     
-    <Label col="0" row="2" [text]="'\uf091'" class="fa m-l-10 va-m"></Label> 
-    <Label class="text-left m-l-10 va-m" [text]="run?.position" col="1" row="2"></Label>
+    <Label col="0" row="2" [text]="'\uf091'" class="fa m-l-10 va-m text-center"></Label> 
+    <Label class="text-left m-l-10 va-m tile-value" [text]="run?.position" col="1" row="2"></Label>
     
-    <Label col="0" row="3" [text]="'\uf017'" class="fa m-l-10 va-m"></Label> 
-    <Label class="text-left m-l-10 va-m" [text]="run?.time" col="1" row="3"></Label>
+    <Label col="0" row="3" [text]="'\uf017'" class="fa m-l-10 va-m text-center"></Label> 
+    <Label class="text-left m-l-10 va-m tile-value" [text]="run?.time" col="1" row="3"></Label>
 </GridLayout> 

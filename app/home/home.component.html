@@ -32,8 +32,8 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     <GridLayout class="page page-content dashboard" tkMainContent columns="*, *" rows="*, *, *">
         <!-- Total KMs -->
         <StackLayout col="0" row="0" class="dashboard dashboard-item">
-            <Label text="Общо" class="h2" style="font-size: 30"></Label>
-            <Label [text]="(currentUser$ | async)?.totalKmRan + ' км'" style="font-size: 30"></Label>
+            <Label text="Общо" class="tile-header va-t"></Label>
+            <Label [text]="(currentUser$ | async)?.totalKmRan + ' км'" class="tile-value m-t-20" style="font-size: 30"></Label>
         </StackLayout>
 
         <!-- Next Goal -->
