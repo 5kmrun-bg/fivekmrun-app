@@ -25,7 +25,7 @@
 }
 // Common page class
 .page-content {
-    font-family: 'Roboto-Regular';
+    font-family: 'SourceSansPro-Light';
 
     .page-placeholder {
         color: $page-icon-color;
@@ -62,8 +62,7 @@ ActionBar .action-bar-title {
 }
 
 .dashboard {
-    border-width: 0.5;
-    border-color: rgba(0, 0, 0, 0.5);
+    background-color: #fafafa;
 }
 
 .dashboard-item {
@@ -72,6 +71,8 @@ ActionBar .action-bar-title {
     height: 100%;
     background-color: #FFFFFF;
     font-size: 20;
+    border-width: 0.5;
+    border-color: rgba(0, 0, 0, 0.5);
 }
 
 .login {
@@ -125,13 +126,24 @@ GridLayout.details Label {
 }
 
 .tile-header {
-    font-family: 'Roboto-Light';
-    color: black;
+    background-color: #00aeef;
+    color: #ffffff;
     font-size: 14;
+    text-align: center;
+    padding-top: 5;
+    padding-bottom: 5;
 }
 
 .tile-value {
-    font-family: 'Roboto-Regular';
-    color: black;
+    color: #00aeef;
     font-size: 18;
+}
+
+.dashboard-icon {
+    font-family: 'FontAwesome';
+    font-size: 14;
+    color: #aaaaaa;
+    text-align: center;
+    margin-left: 10;
+    vertical-align: middle;
 }
