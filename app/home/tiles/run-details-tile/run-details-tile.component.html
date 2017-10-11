@@ -1,5 +1,5 @@
 <CardView [col]="col" [row]="row" class="cardStyle" margin="5" elevation="0" radius="0" shadowOffsetWidth="0" shadowOffsetHeight="0" shadowRadius="0">
-    <GridLayout columns="auto, *" rows="auto, *, *, *" class="dashboard-item" [nsRouterLink]="['/runs/' + run?.id]">
+    <GridLayout columns="auto, *" rows="auto, *, *, *" class="dashboard-item" [nsRouterLink]="['/runs/' + run?.id]" verticalAlignment="stretch">
         <Label [text]="title" col="0" row="0" colSpan="2" class="tile-header"> </Label>
 
         <Label col="0" row="1" [text]="'\uf073'" class="dashboard-icon"></Label> 

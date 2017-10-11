@@ -1,5 +1,5 @@
 <CardView col="1" row="0" class="cardStyle" margin="5" elevation="0" radius="0" shadowOffsetWidth="0" shadowOffsetHeight="0" shadowRadius="0">
-    <GridLayout columns="*" rows="auto, *" class="dashboard-item">
+    <GridLayout columns="*" rows="auto, *" class="dashboard-item" verticalAlignment="stretch">
         <Label col="0" row="0" text="Следваща цел" class="tile-header"></Label>
         <RadRadialGauge *ngIf="(runs$ | async)?.length > 0" col="0" row="1">
             <RadialScale tkRadialGaugeScales minimum="0" [maximum]="nextMilestone" radius="0.95">
