@@ -8,13 +8,13 @@
         <Button (tap)="loadProfile()" text="Напред" class="input-button"></Button>
     </StackLayout>
 
-    <StackLayout *ngIf="isProfileLoaded && (user$ | async) != null" class="profile-preview m-l-20 m-r-20">
+    <StackLayout *ngIf="isProfileLoaded" class="profile-preview m-l-20 m-r-20">
+        <Label class="va-m m-t-10" text="Влез като" style="font-weight: 300"></Label>
         <Label class="va-m m-t-10" [text]="(user$| async)?.name + ' ' + (user$| async)?.age"></Label>
-        <Image [src]="(user$ |async)?.avatarUrl" class="img-circle" width="200"></Image>  
-        <Label text="Това ли е твоя профил?" class="m-t-20"></Label>
+        <Image class="va-m m-t-10 profile-preview-img" [src]="(user$ |async)?.avatarUrl"></Image>  
         <StackLayout orientation="horizontal">
-            <Button text="Корекция" (onTap)="goBack()" class="input-button m-r-10"></Button>
-            <Button text="Напред" (onTap)="next()" class="input-button m-l-10" style="background-color: #00ff00"></Button>
+            <Button [text]="'\uf040'" (onTap)="goBack()" class="fa input-button-red"></Button>
+            <Button text="Напред" (onTap)="next()" class="input-button m-l-10"></Button>
         </StackLayout>
     </StackLayout>
 </StackLayout>

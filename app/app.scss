@@ -82,18 +82,26 @@ ActionBar .action-bar-title {
 }
 
 .input-button {
-    background-color: #f23401;
+    background-color: #00aeef;
     color: #ffffff;
     width: 150;
-    border-radius: 5;
+    height: 50;
+    margin-top: 15;
+}
+
+.input-button-red {
+    background-color: #ff6060;
+    color: #ffffff;
+    width: 50;
+    height: 50;
     margin-top: 15;
 }
 
 .input-textbox {
     border-width: 1;
     border-color: #000000;
-    border-radius: 5;
     width: 150;
+    height: 50;
     margin-top: 15;
 }
 
@@ -119,6 +127,15 @@ GridLayout.details Label {
     animation-duration: 0.5;
     animation-timing-function: ease-in;
     animation-fill-mode: forwards;
+
+    Image {
+        border-radius: 100;
+        border-width: 2;
+        border-color: #00aeef;
+        width: 200;
+        height: 200;
+        margin-top: 10;
+    }
 }
 @keyframes example {
     from { transform: translate(-400, 0); }
@@ -135,7 +152,7 @@ GridLayout.details Label {
 }
 
 .tile-value {
-    color: #00aeef;
+    color: #343434;
     font-size: 18;
 }
 
