@@ -35,7 +35,7 @@ it shouldn't have any other siblings other than the <ActionBar> component.
                 <StackLayout class="list-group-item">
                     <Label [text]="item.title" class="h2" textWrap="true" (onTap)="openUrl(item.url)"></Label>
                     <GridLayout>
-                        <WebView [src]="item.description" (onTap)="openUrl(item.url)" minHeight="250"></WebView>
+                        <HtmlView [html]="item.description" (onTap)="openUrl(item.url)" minHeight="50"></HtmlView>
                     </GridLayout>
                 </StackLayout>
             </ng-template>
