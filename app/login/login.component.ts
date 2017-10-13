@@ -56,6 +56,8 @@ export class LoginComponent implements OnInit {
             this.userService.currentUserId = numUserId;
             this.user$ = this.userService.getCurrentUser();
             this.isProfileLoaded = true;
+
+            this.txtUserId.nativeElement.dismissSoftInput();
         } else {
             // handle error
         }
