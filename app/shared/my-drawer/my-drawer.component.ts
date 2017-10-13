@@ -4,6 +4,7 @@ import { ItemEventData } from "ui/list-view";
 import { User } from "../../models";
 import { UserService } from "../../services";
 import { Observable } from "rxjs/Observable";
+import { RadSideDrawerComponent } from "nativescript-telerik-ui-pro/sidedrawer/angular";
 
 /* ***********************************************************
 * Keep data that is displayed in your app drawer in the MyDrawer component class.
@@ -26,8 +27,9 @@ export class MyDrawerComponent implements OnInit {
     private _navigationItems: Array<any>;
     public currentUser$: Observable<User>;
 
-    constructor(private routerExtensions: RouterExtensions, private userService: UserService) {
-
+    constructor(private routerExtensions: RouterExtensions, private userService: UserService,
+        private drawer: RadSideDrawerComponent) {
+        
     }
 
     /* ***********************************************************
@@ -83,15 +85,18 @@ export class MyDrawerComponent implements OnInit {
     * The "itemTap" event handler of the app drawer <ListView> is used to navigate the app
     * based on the tapped navigationItem's route.
     *************************************************************/
-    onNavigationItemTap(args: ItemEventData): void {
-        const navigationItemView = args.view;
-        const navigationItemRoute = navigationItemView.bindingContext.route;
-
-        this.routerExtensions.navigate([navigationItemRoute], {
-            transition: {
-                name: "slide"
-            }
-        });
+    onNavigationItemTap(item: any): void {
+        console.log("Drawer: " + this.drawer)
+        this.drawer.nativeElement.closeDrawer();
+        this.drawer.nativeElement.gesturesEnabled = false;
+        setTimeout(() => {
+            this.routerExtensions.navigate([item.route], {
+                transition: {
+                    name: "fade",
+                },
+                clearHistory: true
+            }); 
+        }, 100);
     }
 
     /* ***********************************************************
