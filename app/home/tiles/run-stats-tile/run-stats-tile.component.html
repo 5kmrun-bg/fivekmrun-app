@@ -1,11 +1,15 @@
-<CardView col="0" colSpan="2" row="1" margin="5" elevation="0" radius="0" shadowOffsetWidth="0" shadowOffsetHeight="0" shadowRadius="0">
+<CardView col="0" colSpan="2" row="1" margin="5" elevation="0" radius="0" shadowOffsetWidth="0"
+    shadowOffsetHeight="0" shadowRadius="0">
     <GridLayout columns="*" rows="auto, *" class="dashboard-item" verticalAlignment="stretch">
         <Label col="0" row="0" class="tile-header" text="Статистика"></Label>
-        <RadCartesianChart *ngIf="(runs$ | async)?.length > 0" col="0" row="1">
-            <RadCartesianChartGrid tkCartesianGrid horizontalLinesVisible="true" horizontalStrokeColor="#ffffcc80" horizontalStrokeWidth="1" verticalLinesVisible="false"></RadCartesianChartGrid>
-            <LineSeries tkCartesianSeries [items]="runs$ | async" categoryProperty="date" valueProperty="timeInSeconds"></LineSeries>
-            <LinearAxis tkCartesianVerticalAxis majorStep="3" lineColor="#ffffff" minimum="23" maximum="30"></LinearAxis>
-            <DateTimeContinuousAxis majorStep="Month" tkCartesianHorizontalAxis dateFormat="dd.MM.yyyy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
+        <RadCartesianChart *ngIf="(runs$ | async)" col="0" row="1">
+            <LinearAxis tkCartesianVerticalAxis [minimum]="min" [maximum]="max" [majorStep]="step"></LinearAxis>
+
+            <DateTimeContinuousAxis majorStep="Month" tkCartesianHorizontalAxis dateFormat="MMM-dd"
+                labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
+
+            <SplineSeries tkCartesianSeries [items]="(runs$ | async) ? (runs$ | async) : []"
+                categoryProperty="date" valueProperty="timeInSeconds"></SplineSeries>
         </RadCartesianChart>
     </GridLayout>
 </CardView>
