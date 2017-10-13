@@ -9,7 +9,8 @@ import { Observable } from "rxjs/Observable";
 })
 export class NextMilestoneTileComponent implements OnInit {
     @Input() runs$: Observable<Run[]>;
-    nextMilestone: number;
+    nextMilestone: number = 0;
+    currentRuns: number = 0;
 
     ngOnInit(): void {
         this.runs$.do(runs => {
@@ -22,6 +23,8 @@ export class NextMilestoneTileComponent implements OnInit {
             } else {
                 this.nextMilestone = 500;
             }
+
+            this.currentRuns = runs.length;
         }).subscribe();
     }
 }

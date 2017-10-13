@@ -7,11 +7,11 @@
                 <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="nextMilestone" location="0.80">
                     <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#dddddd" barWidth="0.2"></BarIndicatorStyle>
                 </RadialBarIndicator>
-                <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="(runs$ | async)?.length" location="0.80">
-                    <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#00ff00" barWidth="0.2"></BarIndicatorStyle>
+                <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="currentRuns" location="0.80" isAnimated="true">
+                    <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#00aeef" barWidth="0.2"></BarIndicatorStyle>
                 </RadialBarIndicator>
             </RadialScale>
         </RadRadialGauge>
-        <Label col="0" row="1" [text]="(runs$| async)?.length + ' / ' + nextMilestone" class="text-center va-m tile-value"></Label>
+        <Label col="0" row="1" [text]="currentRuns + ' / ' + nextMilestone" class="text-center va-m tile-value"></Label>
     </GridLayout>
 </CardView>
