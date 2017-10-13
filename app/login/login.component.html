@@ -1,14 +1,14 @@
 <ActionBar class="action-bar">
 </ActionBar>
 
-<StackLayout class="page page-content login">
-    <StackLayout *ngIf="!isProfileLoaded">
+<GridLayout class="page page-content login">
+    <StackLayout [@login]="isProfileLoaded ? 'hidden' : 'shown'" verticalAlignment="center">
         <Label text="Личен номер"></Label> 
         <TextField #txtUserId (returnPress)="loadProfile()" [(ngModel)]="userId" class="input-textbox" keyboardType="phone"></TextField>
         <Button (tap)="loadProfile()" text="Напред" class="input-button"></Button>
     </StackLayout>
 
-    <StackLayout *ngIf="isProfileLoaded" class="profile-preview m-l-20 m-r-20" horizontalAlignment="center">
+    <StackLayout [@confirm]="isProfileLoaded ? 'shown' : 'hidden'" class="profile-preview m-l-20 m-r-20" horizontalAlignment="center" verticalAlignment="center">
         <Label class="va-m m-t-10" text="Влез като" style="font-weight: 300"></Label>
         <Label class="va-m m-t-10" [text]="(user$| async)?.name + ' ' + (user$| async)?.age"></Label>
         <Image class="va-m m-t-10 profile-preview-img" [src]="(user$ |async)?.avatarUrl"></Image>  
@@ -17,4 +17,4 @@
             <Button text="Напред" (onTap)="next()" class="input-button m-l-10"></Button>
         </StackLayout>
     </StackLayout>
-</StackLayout>
+</GridLayout>

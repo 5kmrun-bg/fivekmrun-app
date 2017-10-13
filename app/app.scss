@@ -123,11 +123,6 @@ GridLayout.details Label {
 }
 
 .profile-preview {
-    animation-name: example;
-    animation-duration: 0.5;
-    animation-timing-function: ease-in;
-    animation-fill-mode: forwards;
-
     Image {
         border-radius: 100;
         border-width: 2;

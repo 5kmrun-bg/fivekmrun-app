@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, trigger, state, style, transition, animate } from "@angular/core";
 import { UserService } from "../services";
 import { User } from "../models";
 import { Observable } from "rxjs/Observable";
@@ -10,7 +10,29 @@ import { TextField } from "ui/text-field";
 @Component({
     selector: "Login",
     moduleId: module.id,
-    templateUrl: "./login.component.html"
+    templateUrl: "./login.component.html",
+    animations: [
+        trigger('login', [
+            state('hidden', style({
+                transform: 'translateX(-400)'
+            })),
+            state('shown', style({
+                transform: 'translateX(0)'
+            })),
+            transition('hidden => shown', animate('200ms ease-in')),
+            transition('shown => hidden', animate('200ms ease-out'))
+        ]),
+        trigger('confirm', [
+            state('hidden', style({
+                transform: 'translateX(400)'
+            })),
+            state('shown', style({
+                transform: 'translateX(0)'
+            })),
+            transition('hidden => shown', animate('200ms ease-in')),
+            transition('shown => hidden', animate('200ms ease-out'))
+        ])
+    ]
 })
 export class LoginComponent implements OnInit {
     public userId = "";
@@ -22,7 +44,7 @@ export class LoginComponent implements OnInit {
     constructor(private _page: Page, private router: Router, private userService: UserService) {
         this._page.actionBarHidden = true;
         this.userService.currentUserId = undefined;
-     }
+    }
 
     ngOnInit(): void {
     }
@@ -50,6 +72,6 @@ export class LoginComponent implements OnInit {
     }
 
     next(): void {
-        this.router.navigate(["/"]);
+        this.router.navigate([ "/" ]);
     }
 }
