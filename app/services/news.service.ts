@@ -8,30 +8,35 @@ import 'rxjs/Rx';
 
 @Injectable()
 export class NewsService {
+    private lastNews: Observable<News[]>;
 
     constructor(private http: Http) { }
 
     getAll(): Observable<News[]> {
-        return this.http.get("http://info-5kmrun.bg/feed/")
-            .map(response => {
-                const news = new Array<News>();
+        if (this.lastNews != null) {
+            return this.lastNews;
+        } else {
+            return this.lastNews = this.http.get("http://info-5kmrun.bg/feed/")
+                .map(response => {
+                    const news = new Array<News>();
 
-                const content = response.text();
+                    const content = response.text();
 
-                const options = {
-                    normalizeWhitespace: true,
-                    xmlMode: true
-                };
+                    const options = {
+                        normalizeWhitespace: true,
+                        xmlMode: true
+                    };
 
-                const rssFeed = cheerio.load(content, options);
-                const feedItems = rssFeed("rss channel item");
+                    const rssFeed = cheerio.load(content, options);
+                    const feedItems = rssFeed("rss channel item");
 
-                feedItems.each((index, elem) => {
-                    news.push(this.extractRssItem(elem));
+                    feedItems.each((index, elem) => {
+                        news.push(this.extractRssItem(elem));
+                    });
+
+                    return news;
                 });
-
-                return news;
-            });
+        }
     }
 
     private extractRssItem(elem: any): News {

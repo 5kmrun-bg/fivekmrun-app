@@ -11,17 +11,23 @@ var appSettings = require("application-settings");
 export class UserService {
     private currentUser: User;
     private _currentUserId?: number;
+    private lastLoadedUser: Observable<User>;
+    private lastLoadedUserId: number;
 
     constructor(private http: Http) {
         if (appSettings.getNumber("currentUserId") != NaN) {
             this._currentUserId = appSettings.getNumber("currentUserId");
         }
-     }
+    }
 
     getCurrentUser(): Observable<User> {
-        const that = this;
-
-        return this.http.get("http://5km.5kmrun.bg/usr.php?id=" + this._currentUserId).map(response => {
+        if (this.lastLoadedUser != null && this.lastLoadedUserId == this.currentUserId) {
+            return this.lastLoadedUser;
+        } else {
+            console.log("Getting user ...");
+            const that = this;
+            this.lastLoadedUserId = this.currentUserId;
+            return this.lastLoadedUser = this.http.get("http://5km.5kmrun.bg/usr.php?id=" + this._currentUserId).map(response => {
                 const content = response.text();
 
                 const options = {
@@ -40,7 +46,8 @@ export class UserService {
                 that.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
 
                 return that.currentUser;
-        });
+            });
+        }
     }
 
     get currentUserId(): number {
@@ -52,7 +59,7 @@ export class UserService {
         this._currentUserId = value;
 
         if (this._currentUserId != undefined) {
-        appSettings.setNumber("currentUserId", this._currentUserId);
+            appSettings.setNumber("currentUserId", this._currentUserId);
         } else {
             appSettings.remove("currentUserId");
         }
@@ -62,24 +69,24 @@ export class UserService {
         return this._currentUserId != undefined;
     }
 
-    private parseAvatarUrl(webPage: any) : string {
+    private parseAvatarUrl(webPage: any): string {
         return webPage("div.row div figure img").attr("src");
     }
 
-    private parseUserPoints(webPage: any) : number {
+    private parseUserPoints(webPage: any): number {
         return webPage("div.container div.col-sm-9.col-md-9 table tbody").find("td").last().text();
     }
 
-    private parseName(webPage: any) : string {
+    private parseName(webPage: any): string {
         const title = webPage("h2.article-title").first().text();
         return title.substr(title.indexOf("-") + 2);
     }
 
-    private parseRunsCount(webPage: any) : number {
+    private parseRunsCount(webPage: any): number {
         return webPage("div.col-md-12 h2.article-title span").first().text();
-    }   
+    }
 
-    private parseTotalKmRan(webPage: any) : number {
+    private parseTotalKmRan(webPage: any): number {
         return webPage("div.col-md-12 h2.article-title span").last().text();
     }
 

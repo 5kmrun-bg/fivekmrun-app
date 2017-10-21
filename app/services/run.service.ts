@@ -9,34 +9,42 @@ import { UserService } from "../services";
 
 @Injectable()
 export class RunService {
+    private lastUserId: number;
+    private lastRuns: Observable<Run[]>;
 
     constructor(private http: Http, private userService: UserService) {
     }
 
     getByCurrentUser(): Observable<Run[]> {
-        const that = this;
-        return this.http.get("http://5km.5kmrun.bg/stat.php?id=" + this.userService.currentUserId).map(response => {
-            const runs: Array<Run> = new Array<Run>();
+        if (this.lastRuns != null && this.lastUserId == this.userService.currentUserId) {
+            return this.lastRuns;
+        } else {
+            console.log("Getting runs ...");
+            const that = this;
+            this.lastUserId = this.userService.currentUserId;
+            return this.lastRuns = this.http.get("http://5km.5kmrun.bg/stat.php?id=" + this.userService.currentUserId).map(response => {
+                const runs: Array<Run> = new Array<Run>();
 
-            const content = response.text();
+                const content = response.text();
 
-            const options = {
-                normalizeWhitespace: true,
-                xmlMode: true
-            };
+                const options = {
+                    normalizeWhitespace: true,
+                    xmlMode: true
+                };
 
-            const webPage = cheerio.load(content, options);
-            const rows = webPage("table tbody tr");
+                const webPage = cheerio.load(content, options);
+                const rows = webPage("table tbody tr");
 
-            rows.each((index, elem) => {
-                const cells = elem.children.filter(c => c.type == "tag" && c.name == "td");
-                if (cells.length == 9) {
-                    runs.push(this.extractRun(cells));
-                }
+                rows.each((index, elem) => {
+                    const cells = elem.children.filter(c => c.type == "tag" && c.name == "td");
+                    if (cells.length == 9) {
+                        runs.push(this.extractRun(cells));
+                    }
+                });
+
+                return runs;
             });
-
-            return runs;
-        });
+        }
     }
 
     private extractRun(cells: any): Run {
