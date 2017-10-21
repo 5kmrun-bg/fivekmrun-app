@@ -1,14 +1,17 @@
 <CardView [col]="col" [row]="row" class="cardStyle" margin="5" elevation="0" radius="0" shadowOffsetWidth="0" shadowOffsetHeight="0" shadowRadius="0">
-    <GridLayout columns="auto, *" rows="auto, *, *, *" class="dashboard-item" [nsRouterLink]="['/runs/' + run?.id]" verticalAlignment="stretch">
+    <GridLayout columns="auto, *" rows="auto, *, *, *, *" class="dashboard-item" [nsRouterLink]="['/runs/' + run?.id]" verticalAlignment="stretch">
         <Label [text]="title" col="0" row="0" colSpan="2" class="tile-header"> </Label>
 
-        <Label col="0" row="1" [text]="'\uf073'" class="dashboard-icon"></Label> 
-        <Label class="text-left m-l-10 va-m tile-value" [text]="run?.date | date:'dd.MM.yyyy'" col="1" row="1"></Label>
+        <Label col="0" row="1" text="Дата: " class="dashboard-icon"></Label> 
+        <Label class="text-left m-l-5 va-m tile-value" [text]="run?.date | date:'dd.MM.yyyy'" col="1" row="1"></Label>
         
-        <Label col="0" row="2" [text]="'\uf091'" class="dashboard-icon "></Label> 
-        <Label class="text-left m-l-10 va-m tile-value" [text]="run?.position" col="1" row="2"></Label>
+        <Label col="0" row="2" text="Темпо: " class="dashboard-icon "></Label> 
+        <Label class="text-left m-l-5 va-m tile-value" [text]="run?.pace" col="1" row="2"></Label>
         
-        <Label col="0" row="3" [text]="'\uf017'" class="dashboard-icon "></Label> 
-        <Label class="text-left m-l-10 va-m tile-value" [text]="run?.time" col="1" row="3"></Label>
+        <Label col="0" row="3" text="Време: " class="dashboard-icon "></Label> 
+        <Label class="text-left m-l-5 va-m tile-value" [text]="run?.time" col="1" row="3"></Label>
+        
+        <Label col="0" row="4" text="Място: " class="dashboard-icon "></Label> 
+        <Label class="text-left m-l-5 va-m tile-value" [text]="run?.position" col="1" row="4"></Label>        
     </GridLayout> 
 </CardView>
