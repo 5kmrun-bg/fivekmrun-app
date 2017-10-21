@@ -21,7 +21,7 @@ export class UserService {
     getCurrentUser(): Observable<User> {
         const that = this;
 
-        return this.http.get("http://5kmrun.bg/usr.php?id=" + this._currentUserId).map(response => {
+        return this.http.get("http://5km.5kmrun.bg/usr.php?id=" + this._currentUserId).map(response => {
                 const content = response.text();
 
                 const options = {
@@ -63,7 +63,7 @@ export class UserService {
     }
 
     private parseAvatarUrl(webPage: any) : string {
-        return "http://5kmrun.bg/" + webPage("div.row div figure img").attr("src");
+        return webPage("div.row div figure img").attr("src");
     }
 
     private parseUserPoints(webPage: any) : number {

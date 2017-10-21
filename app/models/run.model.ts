@@ -11,7 +11,8 @@ export class Run {
         public differenceFromBest: string,
         public position: number,
         public speed: string,
-        public notes: string
+        public notes: string,
+        public pace: string
     ) {
         this.id = Md5.hashStr(date + "#" + time + "#" + place + "#").toString();
         const timeParts = time.split(':');

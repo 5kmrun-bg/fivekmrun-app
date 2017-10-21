@@ -15,7 +15,7 @@ export class RunService {
 
     getByCurrentUser(): Observable<Run[]> {
         const that = this;
-        return this.http.get("http://5kmrun.bg/stat.php?id=" + this.userService.currentUserId).map(response => {
+        return this.http.get("http://5km.5kmrun.bg/stat.php?id=" + this.userService.currentUserId).map(response => {
             const runs: Array<Run> = new Array<Run>();
 
             const content = response.text();
@@ -26,11 +26,11 @@ export class RunService {
             };
 
             const webPage = cheerio.load(content, options);
-            const rows = webPage("table tr");
+            const rows = webPage("table tbody tr");
 
             rows.each((index, elem) => {
                 const cells = elem.children.filter(c => c.type == "tag" && c.name == "td");
-                if (cells.length == 8) {
+                if (cells.length == 9) {
                     runs.push(this.extractRun(cells));
                 }
             });
@@ -48,7 +48,8 @@ export class RunService {
             this.extractDifferenceToBest(cells),
             this.extractPosition(cells),
             this.extractSpeed(cells),
-            this.extractNotes(cells)
+            this.extractNotes(cells),
+            this.extractPage(cells)
         );
     }
 
@@ -90,10 +91,14 @@ export class RunService {
     }
 
     private extractNotes(cells: any): string {
-        if (cells[7].children[0].children[0].data == undefined) {
-            return cells[7].children[0].children[0].children[0].data;
+        if (cells[8].children[0].children[0].data == undefined) {
+            return cells[8].children[0].children[0].children[0].data;
         } else {
-            return cells[7].children[0].children[0].data;
+            return cells[8].children[0].children[0].data;
         }
+    }
+
+    private extractPage(cells: any): string {
+        return cells[7].children[0].data;
     }
 }
