@@ -15,7 +15,7 @@ import {RouterExtensions} from "nativescript-angular/router";
 })
 export class RunDetailsComponent implements OnInit {
     id: string;
-    private run: Observable<Run>;
+    private run: Run;
 
     constructor(
         private userService: UserService, 
@@ -25,9 +25,11 @@ export class RunDetailsComponent implements OnInit {
         this.pageRoute.activatedRoute
                 .switchMap(activatedRoute => activatedRoute.params)
                 .forEach((params) => { this.id = params["id"]; });
-        
-        this.run = this.runService.getByCurrentUser()
-                            .map(runs => runs.filter(r => r.id == this.id)[0]);        
+
+        this.runService.getByCurrentUser()
+                        .map(runs => runs.filter(r => r.id == this.id)[0])
+                        .do(run$ => this.run = run$)
+                        .subscribe();        
     }
 
     /* ***********************************************************

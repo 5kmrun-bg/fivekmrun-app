@@ -13,13 +13,15 @@ export class RunStatsTileComponent implements OnInit {
     min: number;
     max: number;
     step: number;
+    runs: Run[] = [];
 
     ngOnInit(): void {
-        this.runs$.do((runs) => {
-            const times = runs.map(r => r.timeInSeconds);
+        this.runs$.do((runsResults) => {
+            const times = runsResults.map(r => r.timeInSeconds);
             this.max = Math.ceil(Math.max(...times));
             this.min = Math.floor(Math.min(...times));
             this.step = Math.round((this.max - this.min) / 4);
+            this.runs = runsResults;
         }).subscribe();
     }
 }

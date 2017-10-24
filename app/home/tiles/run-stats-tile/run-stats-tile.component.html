@@ -2,13 +2,13 @@
     shadowOffsetHeight="0" shadowRadius="0">
     <GridLayout columns="*" rows="auto, *" class="dashboard-item" verticalAlignment="stretch">
         <Label col="0" row="0" class="tile-header" text="Статистика"></Label>
-        <RadCartesianChart *ngIf="(runs$ | async)" col="0" row="1">
+        <RadCartesianChart *ngIf="runs.length > 0" col="0" row="1">
             <LinearAxis tkCartesianVerticalAxis [minimum]="min" [maximum]="max" [majorStep]="step"></LinearAxis>
 
             <DateTimeContinuousAxis majorStep="Month" tkCartesianHorizontalAxis dateFormat="MMM-dd"
                 labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
 
-            <SplineSeries tkCartesianSeries [items]="(runs$ | async) ? (runs$ | async) : []"
+            <SplineSeries tkCartesianSeries [items]="runs ? runs : []"
                 categoryProperty="date" valueProperty="timeInSeconds"></SplineSeries>
         </RadCartesianChart>
     </GridLayout>
