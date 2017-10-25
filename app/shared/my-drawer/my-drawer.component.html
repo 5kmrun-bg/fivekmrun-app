@@ -12,7 +12,7 @@ Feel free to customize layouts and components to change how your app drawer look
     </GridLayout>
 
     <StackLayout class="sidedrawer-content">
-        <GridLayout *ngFor="let item of navigationItems" (tap)="onNavigationItemTap(item)" columns="auto, *" rows="50" class="sidedrawer-list-item sidedrawer-list-item-{{item.name}}"
+        <GridLayout *ngFor="let item of navigationItems" (tap)="onNavigationItemTap(item)" columns="auto, *" rows="50" class="sidedrawer-list-item"
             [class.selected]="isPageSelected(item.title)">
             <Label row="0" col="0" [text]="item.icon" class="fa"></Label>
             <Label row="0" col="1" [text]="item.title" textWrap="true"></Label>

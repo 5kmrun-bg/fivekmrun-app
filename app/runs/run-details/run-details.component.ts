@@ -15,7 +15,7 @@ import {RouterExtensions} from "nativescript-angular/router";
 })
 export class RunDetailsComponent implements OnInit {
     id: string;
-    private run: Run;
+    run: Run;
 
     constructor(
         private userService: UserService, 

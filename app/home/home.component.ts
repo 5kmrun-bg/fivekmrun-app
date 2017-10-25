@@ -18,10 +18,10 @@ export class HomeComponent implements OnInit {
     @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
 
     private _sideDrawerTransition: DrawerTransitionBase;
-    private currentUser$: Observable<User>;
-    private lastRun$: Observable<Run>;
-    private bestRun$: Observable<Run>;
-    private runs$: Observable<Run[]>;
+    currentUser$: Observable<User>;
+    lastRun$: Observable<Run>;
+    bestRun$: Observable<Run>;
+    runs$: Observable<Run[]>;
     constructor(private userService: UserService, private runService: RunService) { }
 
     /* ***********************************************************

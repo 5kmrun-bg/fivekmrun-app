@@ -14,7 +14,7 @@ export class NoInternetComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    private attemptConnectivity() {
+    attemptConnectivity() {
         this.router.navigate(["/"]);
     }
 }
