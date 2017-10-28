@@ -14,23 +14,23 @@ import { TextField } from "ui/text-field";
     animations: [
         trigger('login', [
             state('hidden', style({
-                transform: 'translateX(-400)'
+                transform: 'translateX(-800)'
             })),
             state('shown', style({
                 transform: 'translateX(0)'
             })),
-            transition('hidden => shown', animate('200ms ease-in')),
-            transition('shown => hidden', animate('200ms ease-out'))
+            transition('hidden => shown', animate('400ms ease-in')),
+            transition('shown => hidden', animate('400ms ease-out'))
         ]),
         trigger('confirm', [
             state('hidden', style({
-                transform: 'translateX(400)'
+                transform: 'translateX(800)'
             })),
             state('shown', style({
                 transform: 'translateX(0)'
             })),
-            transition('hidden => shown', animate('200ms ease-in')),
-            transition('shown => hidden', animate('200ms ease-out'))
+            transition('hidden => shown', animate('400ms ease-in')),
+            transition('shown => hidden', animate('400ms ease-out'))
         ])
     ]
 })
