@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Run } from "../../../models";
+import { User } from "../../../models";
 import { Observable } from "rxjs/Observable";
 
 @Component({ 
@@ -8,23 +8,23 @@ import { Observable } from "rxjs/Observable";
     templateUrl: "./next-milestone-tile.component.html"
 })
 export class NextMilestoneTileComponent implements OnInit {
-    @Input() runs$: Observable<Run[]>;
+    @Input() currentUser$: Observable<User>;
     nextMilestone: number = 0;
     currentRuns: number = 0;
 
     ngOnInit(): void {
-        this.runs$.do(runs => {
-            if (runs.length < 50) {
+        this.currentUser$.do(user => {
+            if (user.runsCount <= 50) {
                 this.nextMilestone = 50;
-            } else if (runs.length < 100) {
+            } else if (user.runsCount <= 100) {
                 this.nextMilestone = 100;
-            } else if (runs.length < 250) {
+            } else if (user.runsCount <= 250) {
                 this.nextMilestone = 250;
             } else {
                 this.nextMilestone = 500;
             }
 
-            this.currentRuns = runs.length;
+            this.currentRuns = user.runsCount;
         }).subscribe();
     }
 }

@@ -34,7 +34,7 @@ it shouldn't have any other siblings other than the <ActionBar> component.
         <total-distance-tile [distance]="(currentUser$ | async)?.totalKmRan"></total-distance-tile>
 
         <!-- Next Goal -->
-        <next-milestone-tile [runs$]="runs$"></next-milestone-tile>
+        <next-milestone-tile [currentUser$]="currentUser$"></next-milestone-tile>
 
         <!-- Time stats-->
         <run-stats-tile [runs$]="runs$"></run-stats-tile>
