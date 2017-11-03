@@ -55,5 +55,25 @@
 		<false />
 		<key>NSCalendarsUsageDescription</key>
 		<string>Calendar is not used, probably referenced by a dependency that the app uses.</string>
+		<key>Fabric</key>
+		<dict>
+			<key>APIKey</key>
+			<string>9878b46e0f01bd8474cbf1b9c51a4a52cb2c94b0</string>
+			<key>Kits</key>
+			<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Answers</string>
+			</dict>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+			</array>
+		</dict>
 	</dict>
 </plist>

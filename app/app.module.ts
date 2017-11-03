@@ -8,6 +8,7 @@ import { AppComponent } from "./app.component";
 
 import { UserService, RunService, NewsService } from "./services";
 import { AuthenticationGuard, ConnectivityGuard } from "./guards";
+import { FabricModule } from 'nativescript-fabric/angular';
 
 @NgModule({
     bootstrap: [
@@ -16,7 +17,8 @@ import { AuthenticationGuard, ConnectivityGuard } from "./guards";
     imports: [
         NativeScriptModule,
         NativeScriptHttpModule,
-        AppRoutingModule
+        AppRoutingModule,
+        FabricModule.forRoot()
     ],
     declarations: [
         AppComponent
