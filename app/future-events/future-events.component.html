@@ -30,6 +30,10 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
     <GridLayout class="page page-content" tkMainContent>
-        <Label text="test"></Label>
+        <ListView [items]="events | async" class="list-group">
+            <ng-template let-item="item" let-i="index">
+                <Label [text]="item.title"></Label>
+            </ng-template>
+        </ListView>
     </GridLayout>
 </RadSideDrawer>

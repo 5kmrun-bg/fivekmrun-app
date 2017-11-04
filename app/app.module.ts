@@ -6,7 +6,7 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
-import { UserService, RunService, NewsService } from "./services";
+import { UserService, RunService, NewsService, EventService } from "./services";
 import { AuthenticationGuard, ConnectivityGuard } from "./guards";
 import { FabricModule } from 'nativescript-fabric/angular';
 
@@ -28,6 +28,7 @@ import { FabricModule } from 'nativescript-fabric/angular';
         UserService,
         RunService,
         NewsService,
+        EventService,
         AuthenticationGuard,
         ConnectivityGuard
     ],
