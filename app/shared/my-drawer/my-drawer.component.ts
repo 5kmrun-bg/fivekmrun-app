@@ -53,9 +53,15 @@ export class MyDrawerComponent implements OnInit {
 
             },
             {
-                title: "Бягания",
+                title: "Твоите Бягания",
                 name: "runs",
                 route: "/runs",
+                icon: "\uf11e"
+            },
+            {
+                title: "Предстоящи Събития",
+                name: "future-events",
+                route: "/future-events",
                 icon: "\uf11e"
             },
             {
@@ -86,7 +92,6 @@ export class MyDrawerComponent implements OnInit {
     * based on the tapped navigationItem's route.
     *************************************************************/
     onNavigationItemTap(item: any): void {
-        console.log("Drawer: " + this.drawer)
         this.drawer.nativeElement.closeDrawer();
         this.drawer.nativeElement.gesturesEnabled = false;
         setTimeout(() => {
