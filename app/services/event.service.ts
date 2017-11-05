@@ -23,14 +23,37 @@ export class EventService {
                 };
 
                 const webPage = cheerio.load(content, options);
-                const rows = webPage("div#5km table tr td.td_20 a.cal_ev");
+                const rows = webPage("div#5km table tr");
+                rows.splice(-1, 1);
+                rows.each((index, row) => {
+                    const cells = row.children.filter(c => c.type == "tag" && c.name=="td");
+                    let date: Date;
+                    for (let i = 0; i < cells.length; ++i) {
+                        if (i == 0) {
+                            let parts = cells[0].children[1].children[0].data.match(/(\d+)/g)
+                            date = new Date(parts[2], parts[1] - 1, parts[0]);
+                        } else {
 
-                rows.each((index, elem) => {
-                    const title = elem.children[1].children[0].data;
-                    const link = elem.attribs["href"];
-                    const imageUrl = elem.children[3].attribs.src;
+                            const cell = cells[i].children[1];
 
-                    events.push(new Event(title, title, null, imageUrl, null));
+                            if (cell && cell.type == "tag" && cell.name == "a") {
+                                let title;
+                                if (cell.children[1].children[0]) {
+                                    title = cell.children[1].children[0].data;
+                                } 
+                                const link = cell.attribs["href"];
+                                let imageUrl = cell.children[3].attribs.src;
+
+                                if (!imageUrl.startsWith("http")) {
+                                    imageUrl = "http://5km.5kmrun.bg/" + imageUrl;
+                                }
+
+                                const location = cell.children[3].children[1].children[0].data;
+
+                                events.push(new Event(title, title, date, imageUrl, location));
+                            }
+                        }
+                    }
                 });
 
                 return events;

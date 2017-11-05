@@ -62,7 +62,7 @@ export class MyDrawerComponent implements OnInit {
                 title: "Предстоящи Събития",
                 name: "future-events",
                 route: "/future-events",
-                icon: "\uf11e"
+                icon: "\uf073"
             },
             {
                 title: "Баркод",

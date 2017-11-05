@@ -29,11 +29,16 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     <!--
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
-    <GridLayout class="page page-content" tkMainContent>
-        <ListView [items]="events | async" class="list-group">
+    <StackLayout class="page page-content" tkMainContent>
+        <ListView [items]="events | async" class="list-group" >
             <ng-template let-item="item" let-i="index">
-                <Label [text]="item.title"></Label>
+                <GridLayout columns="1*, 2*" rows="auto, auto, auto" class="list-group-item" height="auto" style="padding: 10 10 10 10">
+                    <Image [src]="item.imageUrl" col="0" row="0" class="img-circle" rowSpan="3"></Image>
+                    <Label [text]="item.date | date:' dd.MM.yyyy'" col="1" row="0"  class="tile-header m-l-10" style="text-align: left; font-size: 20"></Label>
+                    <Label [text]="item.location" col="1" row="1" class="m-l-10"></Label>
+                    <Label [text]="item.title" col="1" row="2" class="m-l-10"></Label>
+                </GridLayout>
             </ng-template>
         </ListView>
-    </GridLayout>
+    </StackLayout>
 </RadSideDrawer>
