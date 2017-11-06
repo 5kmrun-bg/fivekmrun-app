@@ -11,7 +11,9 @@ const routes: Routes = [
             { path: "runs", loadChildren: "./runs/runs.module#RunsModule" },
             { path: "runs/:id", loadChildren: "./runs/run-details/run-details.module#RunDetailsModule" },
             { path: "barcode", loadChildren: "./barcode/barcode.module#BarcodeModule" },
-            { path: "news", loadChildren: "./news/news-list/news-list.module#NewsListModule", canActivate: [ConnectivityGuard] }
+            { path: "news", loadChildren: "./news/news-list/news-list.module#NewsListModule", canActivate: [ConnectivityGuard] },
+            { path: "future-events", loadChildren: "./future-events/future-events.module#FutureEventsModule", canActivate: [ConnectivityGuard] },
+            { path: "results", loadChildren: "./results/results.module#ResultsModule", canActivate: [ConnectivityGuard]}
         ]
     },
     {
