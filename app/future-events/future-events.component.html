@@ -30,14 +30,15 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
     <StackLayout class="page page-content" tkMainContent>
-        <ListView [items]="events | async" class="list-group" >
+        <ListView [items]="events | async" class="list-group" height="100%">
             <ng-template let-item="item" let-i="index">
-                <GridLayout columns="1*, 2*" rows="auto, auto, auto" class="list-group-item" height="auto" style="padding: 10 10 10 10">
-                    <Image [src]="item.imageUrl" col="0" row="0" class="img-circle" rowSpan="3"></Image>
-                    <Label [text]="item.date | date:' dd.MM.yyyy'" col="1" row="0"  class="tile-header m-l-10" style="text-align: left; font-size: 20"></Label>
-                    <Label [text]="item.location" col="1" row="1" class="m-l-10"></Label>
-                    <Label [text]="item.title" col="1" row="2" class="m-l-10"></Label>
-                </GridLayout>
+                <GridLayout columns="auto, *, auto" rows="auto, *, *" class="list-group-item">
+                    <Label col="0" row="0" [text]="'\uf073'" class="h2 fa va-m"></Label> <Label class="h2 text-left m-l-10 va-m" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="0"></Label>
+                    <Image [src]="item.imageUrl" col="2" row="0" rowSpan="3" width="80" height="80"></Image>
+                    <Label col="0" row="1" [text]="'\uf041'" class="fa va-m"></Label> <Label [text]="item.location" col="1" row="1" class="subtitle"> </Label>
+                    <Label [text]="'\uf14b'" class="fa" col="0" row="2" *ngIf="item.title"></Label> 
+                    <Label class="subtitle" [text]="item.title" col="1" row="2" textWrap="true"></Label>
+                </GridLayout> 
             </ng-template>
         </ListView>
     </StackLayout>
