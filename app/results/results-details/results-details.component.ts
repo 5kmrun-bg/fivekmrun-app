@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-telerik-ui-pro/sidedrawer";
 import { RadSideDrawerComponent } from "nativescript-telerik-ui-pro/sidedrawer/angular";
 import { EventService } from "../../services";
-import { Event } from "../../models";
+import { Event, Result } from "../../models";
 import { Observable } from "rxjs/Observable";
 import { PageRoute } from "nativescript-angular/router";
 import "rxjs/add/operator/switchMap";
@@ -16,6 +16,7 @@ import { RouterExtensions } from "nativescript-angular/router";
 export class ResultsDetailsComponent implements OnInit {
     private id: string;
     private event$: Event;
+    private results$: Observable<Result[]>;
 
     constructor(
         private eventService: EventService,
@@ -31,10 +32,10 @@ export class ResultsDetailsComponent implements OnInit {
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
     *************************************************************/
     ngOnInit(): void {
-        console.log('id: ' + this.id);
         this.eventService.getAllPastEvents()
                 .map(events => events.filter(e => e.id == this.id)[0])
                 .do(event => this.event$ = event)
+                .do(event => this.results$ = this.eventService.getResultsDetails(event.eventDetailsUrl))
                 .subscribe();
     }
 

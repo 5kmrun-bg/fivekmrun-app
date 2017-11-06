@@ -7,7 +7,8 @@ export class Event {
         public title: string,
         public date: Date,
         public imageUrl: string,
-        public location: string
+        public location: string,
+        public eventDetailsUrl: string
     ) {
         this.id = Md5.hashStr(date + "#" + location + "#" + title + "#").toString();
     }

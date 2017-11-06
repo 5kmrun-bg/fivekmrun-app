@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
 import { Observable } from "rxjs/Observable";
-import { Event } from "../models";
+import { Event, Result } from "../models";
 
 import * as cheerio from "cheerio";
 import 'rxjs/Rx';
@@ -23,6 +23,41 @@ export class EventService {
             .map(response => {
                 return this.parseEventsResponse(response);
             });
+    }
+
+    getResultsDetails(eventDetailUrl: string) : Observable<Result[]> {
+        return this.http.get(eventDetailUrl)
+            .map(response => {
+                return this.parseResultsDetails(response);
+            });
+    }
+
+    private parseResultsDetails(response: any) : Result[] {
+        const results = Array<Result>();
+        const content = response.text();
+
+        const options = {
+            normalizeWhitespace: true,
+            xmlMode: true
+        };
+
+        const webPage = cheerio.load(content, options);
+        const rows = webPage("div.table-responsive1 table tbody tr")
+
+        rows.each((index, row) => {
+            let name: string;
+            if (!row.children[5].children[0].data) {
+                name = row.children[5].children[0].children[0].data;
+            } else {
+                name = row.children[5].children[0].data
+            }
+            const time = row.children[7].children[0].data;
+            const position = row.children[1].children[0].data;
+
+            results.push(new Result(name, time, position));
+        })
+
+        return results;
     }
 
     private parseEventsResponse(response: any, topNWeeks: number = 0) : Event[] {
@@ -57,16 +92,25 @@ export class EventService {
                     if (cell && cell.type == "tag" && cell.name == "a") {
                         const title = this.parseTitle(cell);
                         const imageUrl = this.parseImageUrl(cell);
-                        const link = cell.attribs["href"];
+                        const link = this.parseLink(cell);
                         const location = this.parseLocation(cell);
 
-                        events.push(new Event(title, date, imageUrl, location));
+                        events.push(new Event(title, date, imageUrl, location, link));
                     }
                 }
             }
         });
 
         return events;
+    }
+
+    private parseLink(cell: any) : string {
+        let url = cell.attribs["href"];
+        if (!url.startsWith("http")) {
+            url = "http://5km.5kmrun.bg/" + url;
+        }
+
+        return url;
     }
 
     private parseLocation(cell: any) : string {
