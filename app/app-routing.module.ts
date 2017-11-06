@@ -13,7 +13,8 @@ const routes: Routes = [
             { path: "barcode", loadChildren: "./barcode/barcode.module#BarcodeModule" },
             { path: "news", loadChildren: "./news/news-list/news-list.module#NewsListModule", canActivate: [ConnectivityGuard] },
             { path: "future-events", loadChildren: "./future-events/future-events.module#FutureEventsModule", canActivate: [ConnectivityGuard] },
-            { path: "results", loadChildren: "./results/results.module#ResultsModule", canActivate: [ConnectivityGuard]}
+            { path: "results", loadChildren: "./results/results.module#ResultsModule", canActivate: [ConnectivityGuard]},
+            { path: "results/:id", loadChildren: "./results/results-details/results-details.module#ResultsDetailsModule", canActivate: [ConnectivityGuard]}
         ]
     },
     {

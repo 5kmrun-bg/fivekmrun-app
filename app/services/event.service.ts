@@ -60,7 +60,7 @@ export class EventService {
                         const link = cell.attribs["href"];
                         const location = this.parseLocation(cell);
 
-                        events.push(new Event(title, title, date, imageUrl, location));
+                        events.push(new Event(title, date, imageUrl, location));
                     }
                 }
             }

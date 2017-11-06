@@ -1,0 +1,5 @@
+<ActionBar class="action-bar">
+    <NavigationButton text="Назад" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
+    <Label class="action-bar-title" [text]="event$?.date | date:'dd.MM.yyyy'"></Label>
+</ActionBar>
+
