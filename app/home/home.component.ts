@@ -4,6 +4,7 @@ import { RadSideDrawerComponent } from "nativescript-telerik-ui-pro/sidedrawer/a
 import { UserService, RunService } from "../services";
 import { User, Run } from "../models";
 import { Observable } from "rxjs/Observable";
+import { Ratings } from "nativescript-ratings";
 
 @Component({
     selector: "Home",
@@ -35,6 +36,8 @@ export class HomeComponent implements OnInit {
         this.lastRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return 0 - (that.getTime(a.date) - that.getTime(b.date));})[0]);
         this.bestRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return a.time.localeCompare(b.time);})[0]);
         this.runs$ = this.runService.getByCurrentUser().map(runs => runs.reverse());
+
+        this.initializeRatingPlugin();
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {
@@ -51,5 +54,21 @@ export class HomeComponent implements OnInit {
 
     private getTime(date?: Date) {
         return date != null ? date.getTime() : 0;
+    }
+
+    private initializeRatingPlugin() {
+        let ratings = new Ratings({
+            id: "bg.5kmpark.5kmrun",
+            showOnCount: 5,
+            title: "Харесвате ли приложението?",
+            text: "Помогнете ни да го направим още по-добро, като оставите вашето мнение",
+            agreeButtonText: "Да, разбира се",
+            remindButtonText: "Напомни ми по-късно",
+            declineButtonText: "Не, благодаря",
+            iTunesAppId: "1299888204"
+        });
+
+        ratings.init();
+        ratings.prompt();
     }
 }
