@@ -86,22 +86,24 @@ export class EventService {
                     let parts = cells[0].children[1].children[0].data.match(/(\d+)/g)
                     date = new Date(parts[2], parts[1] - 1, parts[0]);
                 } else {
-
-                    const cell = cells[i].children[1];
-
-                    if (cell && cell.type == "tag" && cell.name == "a") {
-                        const title = this.parseTitle(cell);
-                        const imageUrl = this.parseImageUrl(cell);
-                        const link = this.parseLink(cell);
-                        const location = this.parseLocation(cell);
-
-                        events.push(new Event(title, date, imageUrl, location, link));
-                    }
+                    this.parseCell(cells[i].children[1], date, events);
+                    this.parseCell(cells[i].children[3], date, events);
                 }
             }
         });
 
         return events;
+    }
+
+    private parseCell(cell: any, date: Date, events: Array<Event>) {
+        if (cell && cell.type == "tag" && cell.name == "a") {
+            const title = this.parseTitle(cell);
+            const imageUrl = this.parseImageUrl(cell);
+            const link = this.parseLink(cell);
+            const location = this.parseLocation(cell);
+
+            events.push(new Event(title, date, imageUrl, location, link));
+        }
     }
 
     private parseLink(cell: any) : string {
