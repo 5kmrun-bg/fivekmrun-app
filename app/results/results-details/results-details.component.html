@@ -1,0 +1,14 @@
+<ActionBar class="action-bar">
+    <NavigationButton text="Назад" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
+    <Label class="action-bar-title" [text]="event$?.date | date:'dd.MM.yyyy'"></Label>
+</ActionBar>
+
+<ListView [items]="results$ | async" class="list-group" height="100%">
+    <ng-template let-item="item" let-i="index">
+        <GridLayout columns="auto, *" rows="auto, auto, auto" class="list-group-item">
+            <Label text="Име: " col="0" row="0" class="text-right"></Label><Label [text]="item.name" col="1" row="0" class="m-l-20"></Label>
+            <Label text="Време: " col="0" row="1" class="text-right"></Label><Label [text]="item.time" col="1" row="1" class="m-l-20"></Label>
+            <Label text="Позиция: " col="0" row="2" class="text-right"></Label><Label [text]="item.position" col="1" row="2" class="m-l-20"></Label>
+        </GridLayout>
+    </ng-template>
+</ListView>

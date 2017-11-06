@@ -1,35 +1,45 @@
 <ActionBar class="action-bar">
-        <!-- 
-        Use the NavigationButton as a side-drawer button in Android because ActionItems are shown on the right side of the ActionBar
-        -->
-        <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
-        <!-- 
-        Use the ActionItem for IOS with position set to left. Using the NavigationButton as a side-drawer button in iOS is not possible, because its function is to always navigate back in the application.
-        -->
-        <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left">
-        </ActionItem>
-        <Label class="action-bar-title" text="Резултати"></Label>
-    </ActionBar>
-    
-    <!--
-    RadSideDrawer is a UI component part of the Progress NativeScript UI set of components.
-    Learn more about the RadSideDrawer UI component and how it can be customized in this documentation article:
-    http://docs.telerik.com/devtools/nativescript-ui/Controls/Angular/SideDrawer/getting-started
-    The RadSideDrawer component is designed to be used as a root element and
-    it shouldn't have any other siblings other than the <ActionBar> component.
+    <!-- 
+    Use the NavigationButton as a side-drawer button in Android because ActionItems are shown on the right side of the ActionBar
     -->
-    <RadSideDrawer #drawer showOverNavigation="true" [drawerTransition]="sideDrawerTransition">
-        <!--
-        Use the tkDrawerContent directive to display the content of the app drawer on this page.
-        -->
-        <StackLayout tkDrawerContent>
-            <MyDrawer [selectedPage]="'Results'"></MyDrawer>
-        </StackLayout>
+    <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
+    <!-- 
+    Use the ActionItem for IOS with position set to left. Using the NavigationButton as a side-drawer button in iOS is not possible, because its function is to always navigate back in the application.
+    -->
+    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left">
+    </ActionItem>
+    <Label class="action-bar-title" text="Резултати"></Label>
+</ActionBar>
     
-        <!--
-        Use the tkMainContent directive to display the content of the page when you have an app drawer.
-        -->
-        <GridLayout class="page page-content" tkMainContent>
-            <Label text="test"></Label>
-        </GridLayout>
-    </RadSideDrawer>
+<!--
+RadSideDrawer is a UI component part of the Progress NativeScript UI set of components.
+Learn more about the RadSideDrawer UI component and how it can be customized in this documentation article:
+http://docs.telerik.com/devtools/nativescript-ui/Controls/Angular/SideDrawer/getting-started
+The RadSideDrawer component is designed to be used as a root element and
+it shouldn't have any other siblings other than the <ActionBar> component.
+-->
+<RadSideDrawer #drawer showOverNavigation="true" [drawerTransition]="sideDrawerTransition">
+    <!--
+    Use the tkDrawerContent directive to display the content of the app drawer on this page.
+    -->
+    <StackLayout tkDrawerContent>
+        <MyDrawer [selectedPage]="'Results'"></MyDrawer>
+    </StackLayout>
+
+    <!--
+    Use the tkMainContent directive to display the content of the page when you have an app drawer.
+    -->
+    <StackLayout class="page page-content" tkMainContent>
+        <ListView [items]="events | async" class="list-group" height="100%">
+            <ng-template let-item="item" let-i="index">
+                <GridLayout columns="auto, *, auto" rows="auto, *, *" class="list-group-item"  [nsRouterLink]="['/results/' + item.id]">
+                    <Label col="0" row="0" [text]="'\uf073'" class="h2 fa va-m"></Label> <Label class="h2 text-left m-l-10 va-m" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="0"></Label>
+                    <Image [src]="item.imageUrl" col="2" row="0" rowSpan="3" width="80" height="80" class="img-circle"></Image>
+                    <Label col="0" row="1" [text]="'\uf041'" class="fa va-m"></Label> <Label [text]="item.location" col="1" row="1" class="subtitle"> </Label>
+                    <Label [text]="'\uf14b'" class="fa" col="0" row="2" *ngIf="item.title"></Label> 
+                    <Label class="subtitle" [text]="item.title" col="1" row="2" textWrap="true"></Label>
+                </GridLayout> 
+            </ng-template>
+        </ListView>
+    </StackLayout>
+</RadSideDrawer>
