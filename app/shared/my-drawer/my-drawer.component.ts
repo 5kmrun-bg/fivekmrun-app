@@ -71,6 +71,12 @@ export class MyDrawerComponent implements OnInit {
                 icon: "\uf0cb"
             },
             {
+                title: "Статистика",
+                name: "statistics",
+                route: "/statistics",
+                icon: "\uf080"                
+            },
+            {
                 title: "Баркод",
                 name: "barcode",
                 route: "/barcode",
