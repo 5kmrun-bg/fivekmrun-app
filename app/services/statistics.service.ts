@@ -37,12 +37,14 @@ export class StatisticsService {
     }
 
     getRunsByMonth() : Observable<{Date, RunsCount}[]> {
-        return this.runService.getByCurrentUser()
-                                .map(runs => {
-                                    const groupedRuns = (new List(runs)).GroupBy(r => new Date(r.date.getFullYear(), r.date.getMonth(), 1, 0 ,0 ,0), r => 1);
-                                    const runsByMonth = Object.keys(groupedRuns).map(k => {return {Date: k, RunsCount: groupedRuns[k].length}});
+        return this.runService
+                    .getByCurrentUser()
+                    .map(runs => {
+                            const groupedRuns = (new List(runs)).GroupBy(r => new Date(r.date.getFullYear(), r.date.getMonth(), 1, 0 ,0 ,0), r => 1);
+                            
+                            const runsByMonth = Object.keys(groupedRuns).map(k => {return {Date:  new Date(k), RunsCount: groupedRuns[k].length}});
 
-                                    return runsByMonth;
-                                })
+                            return runsByMonth;
+                        });
     }
 }
