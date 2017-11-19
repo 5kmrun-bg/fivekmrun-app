@@ -29,14 +29,50 @@ it shouldn't have any other siblings other than the <ActionBar> component.
     <!--
     Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
-    <GridLayout class="page page-content dashboard" tkMainContent height="100%" width="100%" columns="*" rows="auto">
-        <GridLayout col="0" row="0" columns="*" rows="auto, auto" class="dashboard-item m-l-5 m-b-5 m-r-5 m-t-5" verticalAlignment="stretch">
-            <Label col="0" row="0" class="tile-header" text="Брой бягане по трасета"></Label>
+    <ScrollView class="page page-content" tkMainContent>
+        <GridLayout class="dashboard" tkMainContent height="175%" width="100%" columns="*" rows="10, *, 10, *, 10, *, 10, *, 10">
+            <GridLayout col="0" row="1" columns="*" rows="auto, auto" class="dashboard-item stat-box" verticalAlignment="stretch">
+                <Label col="0" row="0" class="tile-header" text="Резултати от бягания"></Label>
 
-            <RadPieChart height="300" allowAnimation="true" row="1" col="0">
-                    <PieSeries tkPieSeries selectionMode="DataPoint" expandRadius="0.2" outerRadiusFactor="0.7" [items]="citiesParticipationSource | async" valueProperty="RunsCount" legendLabel="City"></PieSeries>
-                    <RadLegendView tkPieLegend position="Right" title="Трасета" offsetOrigin="TopRight" width="110" enableSelection="true"></RadLegendView>
-            </RadPieChart>
+                <RadCartesianChart col="0" row="1" height="90%">
+                    <LinearAxis tkCartesianVerticalAxis labelFormat="%.2f мин" [maximum]="runsStatsMax" minumum="0"></LinearAxis>
+                    <DateTimeContinuousAxis [majorStep]="runsStatsMajorStep" tkCartesianHorizontalAxis dateFormat="MMM-yy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
+                    <LineSeries tkCartesianSeries [items]="runsStatistics$ | async"
+                        categoryProperty="Date" valueProperty="Time"></LineSeries>
+                </RadCartesianChart>
+            </GridLayout>
+
+            <GridLayout col="0" row="3" columns="*" rows="auto, auto" class="dashboard-item stat-box" verticalAlignment="stretch">
+                <Label col="0" row="0" class="tile-header" text="Брой бягания по месеци"></Label>
+
+                <RadCartesianChart col="0" row="1" height="90%">
+                    <LinearAxis tkCartesianVerticalAxis maximum="6" minumum="0"></LinearAxis>
+                    <!-- <DateTimeContinuousAxis [majorStep]="runsStatsMajorStep" tkCartesianHorizontalAxis dateFormat="MMM-yy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis> -->
+                    <CategoricalAxis tkCartesianHorizontalAxis></CategoricalAxis>
+                    <BarSeries tkCartesianSeries [items]="runsByMonth$ | async"
+                        categoryProperty="Date" valueProperty="RunsCount"></BarSeries>
+                </RadCartesianChart>
+            </GridLayout>
+
+            <GridLayout col="0" row="5" columns="*" rows="auto, auto" class="dashboard-item stat-box" verticalAlignment="stretch">
+                <Label col="0" row="0" class="tile-header" text="Рекорди по трасета"></Label>
+
+                <RadCartesianChart height="90%" tkExampleTitle tkToggleNavButton col="0" row="1" class="m-t-10">
+                        <CategoricalAxis tkCartesianHorizontalAxis></CategoricalAxis>
+                        <LinearAxis tkCartesianVerticalAxis labelFormat="%.2f мин"></LinearAxis>
+                    
+                        <BarSeries tkCartesianSeries [items]="citiesBestTimesSource$ | async" categoryProperty="City" valueProperty="BestTime" showLabels="true"></BarSeries>
+                </RadCartesianChart>
+            </GridLayout>
+
+            <GridLayout col="0" row="7" columns="*" rows="auto, auto" class="dashboard-item stat-box" verticalAlignment="stretch">
+                <Label col="0" row="0" class="tile-header" text="Брой бягане по трасета"></Label>
+
+                <RadPieChart height="100%" allowAnimation="true" row="1" col="0">
+                        <PieSeries tkPieSeries selectionMode="DataPoint" expandRadius="0.2" outerRadiusFactor="0.7" [items]="citiesParticipationSource$ | async" valueProperty="RunsCount" legendLabel="City" showLabels="true"></PieSeries>
+                        <RadLegendView tkPieLegend position="Right" title="Трасета" offsetOrigin="TopRight" width="110" enableSelection="true"></RadLegendView>
+                </RadPieChart>
+            </GridLayout>
         </GridLayout>
-    </GridLayout>
+    </ScrollView>
 </RadSideDrawer>
