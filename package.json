@@ -33,6 +33,7 @@
     "@angular/router": "~4.1.0",
     "cheerio": "0.22.0",
     "events": "^1.1.1",
+    "linqts": "^1.10.0",
     "nativescript-angular": "~3.1.0",
     "nativescript-cardview": "^2.0.3",
     "nativescript-fabric": "^1.0.6",

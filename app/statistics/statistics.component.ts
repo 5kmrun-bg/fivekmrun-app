@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-telerik-ui-pro/sidedrawer";
 import { RadSideDrawerComponent } from "nativescript-telerik-ui-pro/sidedrawer/angular";
-import { RunService } from "../services";
-import { Run } from "../models";
+import { StatisticsService } from "../services";
 import { Observable } from "rxjs/Observable";
 
 @Component({
@@ -18,16 +17,17 @@ export class StatisticsComponent implements OnInit {
     @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
 
     private _sideDrawerTransition: DrawerTransitionBase;
-    runs: Observable<Run[]>;
-
-    constructor(private runService: RunService) {}
+    private citiesParticipationSource: Observable<{City, RunsCount}[]>;
+    
+    constructor(private statisticsService: StatisticsService) {
+     }
 
     /* ***********************************************************
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
     *************************************************************/
     ngOnInit(): void {
         this._sideDrawerTransition = new SlideInOnTopTransition();
-        this.runs = this.runService.getByCurrentUser();
+        this.citiesParticipationSource = this.statisticsService.getRunsByCity();
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {

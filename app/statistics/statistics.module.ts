@@ -5,11 +5,14 @@ import { SharedModule } from "../shared/shared.module";
 import { StatisticsRoutingModule } from "./statistics-routing.module";
 import { StatisticsComponent } from "./statistics.component";
 
+import { NativeScriptUIChartModule } from "nativescript-telerik-ui-pro/chart/angular";
+
 @NgModule({
     imports: [
         NativeScriptModule,
         StatisticsRoutingModule,
-        SharedModule
+        SharedModule,
+        NativeScriptUIChartModule
     ],
     declarations: [
         StatisticsComponent
