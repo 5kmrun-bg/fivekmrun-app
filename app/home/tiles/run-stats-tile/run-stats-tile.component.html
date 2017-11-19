@@ -1,6 +1,6 @@
 <CardView col="0" colSpan="2" row="1" margin="5" elevation="0" radius="0" shadowOffsetWidth="0"
     shadowOffsetHeight="0" shadowRadius="0">
-    <GridLayout columns="*" rows="auto, *" class="dashboard-item" verticalAlignment="stretch" [nsRouterLink]="['/statistics']">
+    <GridLayout columns="*" rows="auto, *" class="dashboard-item" verticalAlignment="stretch" >
         <Label col="0" row="0" class="tile-header" text="Статистика"></Label>
         <RadCartesianChart *ngIf="runs.length > 0" col="0" row="1">
             <LinearAxis tkCartesianVerticalAxis [minimum]="min" [maximum]="max" [majorStep]="step"  labelFormat="%.2f мин"></LinearAxis>
