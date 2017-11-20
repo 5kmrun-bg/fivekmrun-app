@@ -14,8 +14,8 @@
     </StackLayout>
 
     <ScrollView class="page page-content" tkMainContent>
-        <GridLayout class="dashboard" tkMainContent height="175%" width="100%" columns="*" rows="10, *, 10, *, 10, *, 10, *, 10">
-            <GridLayout col="0" row="1" columns="*" rows="auto, auto" class="dashboard-item stat-box" verticalAlignment="stretch">
+         <GridLayout class="dashboard" tkMainContent height="175%" width="100%" columns="*" rows="10, *, 10, *, 10, *, 10, *, 10">
+            <GridLayout col="0" row="1" columns="*" rows="auto, auto" class="dashboard-item stat-box" verticalAlignment="stretch" *ngIf="(runsStatistics$ | async)?.length > 0">
                 <Label col="0" row="0" class="tile-header" text="Резултати от бягания"></Label>
 
                 <RadCartesianChart col="0" row="1" height="90%">
@@ -29,14 +29,14 @@
             <GridLayout col="0" row="3" columns="*" rows="auto, auto" class="dashboard-item stat-box" verticalAlignment="stretch">
                 <Label col="0" row="0" class="tile-header" text="Брой бягания по месеци"></Label>
 
-                <RadCartesianChart col="0" row="1" height="90%">
+                <RadCartesianChart col="0" row="1" height="90%" *ngIf="(runsByMonth$ | async)?.length > 0">
                     <LinearAxis tkCartesianVerticalAxis majorStep="2" maximum="6" minimum="0"></LinearAxis>
                     <DateTimeContinuousAxis [majorStep]="runsStatsMajorStep" tkCartesianHorizontalAxis dateFormat="MMM-yy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
                     <AreaSeries tkCartesianSeries [items]="runsByMonth$ | async"
                         categoryProperty="Date" valueProperty="RunsCount"></AreaSeries>
                 </RadCartesianChart>
             </GridLayout>
-
+        
             <GridLayout col="0" row="5" columns="*" rows="auto, auto" class="dashboard-item stat-box" verticalAlignment="stretch">
                 <Label col="0" row="0" class="tile-header" text="Рекорди по трасета"></Label>
 
