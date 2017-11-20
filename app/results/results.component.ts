@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-telerik-ui-pro/sidedrawer";
-import { RadSideDrawerComponent } from "nativescript-telerik-ui-pro/sidedrawer/angular";
+import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-pro-ui/sidedrawer";
+import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 import { EventService } from "../services";
 import { Event } from "../models";
 import { Observable } from "rxjs/Observable";

@@ -9,6 +9,5 @@ export class TotalDistanceTileComponent implements OnInit {
     @Input() distance: string;
     
     ngOnInit(): void {
-        console.log('test')
     }
 }

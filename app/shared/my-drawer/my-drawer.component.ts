@@ -4,7 +4,7 @@ import { ItemEventData } from "ui/list-view";
 import { User } from "../../models";
 import { UserService } from "../../services";
 import { Observable } from "rxjs/Observable";
-import { RadSideDrawerComponent } from "nativescript-telerik-ui-pro/sidedrawer/angular";
+import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
 /* ***********************************************************
 * Keep data that is displayed in your app drawer in the MyDrawer component class.
@@ -69,6 +69,12 @@ export class MyDrawerComponent implements OnInit {
                 name: "results",
                 route: "/results",
                 icon: "\uf0cb"
+            },
+            {
+                title: "Статистика",
+                name: "statistics",
+                route: "/statistics",
+                icon: "\uf080"                
             },
             {
                 title: "Баркод",
