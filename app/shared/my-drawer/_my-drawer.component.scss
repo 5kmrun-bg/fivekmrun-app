@@ -6,7 +6,7 @@
 @import '../../app-variables';
 
 // Drawer navigation custom styles
-$sidedrawer-header-image-size: 60;
+$sidedrawer-header-image-size: 80;
 $sidedrawer-header-image-offset-top: 10;
 $sidedrawer-header-image-offset-bottom: 5;
 $sidedrawer-list-item-offset-left: 15;
@@ -54,7 +54,6 @@ $sidedrawer-list-icon-size: 20;
 
     .sidedrawer-list-item {
         padding-left: $sidedrawer-list-item-offset-left;
-
         Label {
             vertical-align: center;
             color: $blue-dark;
