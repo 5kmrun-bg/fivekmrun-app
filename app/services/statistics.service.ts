@@ -23,7 +23,7 @@ export class StatisticsService {
         return this.runService.getByCurrentUser()
                                 .map(runs => {
                                     const cityRuns = (new List(runs)).GroupBy(r => r.place, r => r.timeInSeconds);
-                                    const result = Object.keys(cityRuns).map(k => {return {City:k, BestTime: Math.round(Math.min.apply(null, cityRuns[k]) * 100)/100}});
+                                    const result = Object.keys(cityRuns).map(k => {return {City:this.trimCityName(k), BestTime: Math.round(Math.min.apply(null, cityRuns[k]) * 100)/100}});
 
                                     return result;
                                 })
@@ -46,5 +46,17 @@ export class StatisticsService {
 
                             return runsByMonth;
                         });
+    }
+
+    private trimCityName(fullName: string) : string {
+        if (fullName.includes("Бургас")) {
+            return "Бургас";
+        } else if (fullName.includes("Варна")) {
+            return "Варна";
+        } else if (fullName.includes("Пловдив")) {
+            return "Пловдив";
+        } else {
+            return fullName;
+        }
     }
 }

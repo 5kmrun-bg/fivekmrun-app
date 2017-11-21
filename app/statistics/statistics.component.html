@@ -14,12 +14,12 @@
     </StackLayout>
 
     <ScrollView class="page page-content" tkMainContent>
-         <GridLayout class="dashboard" tkMainContent height="175%" width="100%" columns="*" rows="10, *, 10, *, 10, *, 10, *, 10">
+         <GridLayout class="dashboard" tkMainContent height="190%" width="100%" columns="*" rows="10, 3*, 10, 3*, 10, 3*, 10, 2*, 10">
             <GridLayout col="0" row="1" columns="*" rows="auto, auto" class="dashboard-item stat-box" verticalAlignment="stretch" *ngIf="(runsStatistics$ | async)?.length > 0">
                 <Label col="0" row="0" class="tile-header" text="Резултати от бягания"></Label>
 
                 <RadCartesianChart col="0" row="1" height="90%">
-                    <LinearAxis tkCartesianVerticalAxis labelFormat="%.2f мин" [maximum]="runsStatsMax" minumum="0"></LinearAxis>
+                    <LinearAxis tkCartesianVerticalAxis labelFormat="%.0fмин" [maximum]="runsStatsMax" minumum="0"></LinearAxis>
                     <DateTimeContinuousAxis [majorStep]="runsStatsMajorStep" tkCartesianHorizontalAxis dateFormat="MMM-yy" labelFitMode="Rotate" labelRotationAngle="1.2"></DateTimeContinuousAxis>
                     <LineSeries tkCartesianSeries [items]="runsStatistics$ | async"
                         categoryProperty="Date" valueProperty="Time"></LineSeries>
@@ -40,9 +40,9 @@
             <GridLayout col="0" row="5" columns="*" rows="auto, auto" class="dashboard-item stat-box" verticalAlignment="stretch">
                 <Label col="0" row="0" class="tile-header" text="Рекорди по трасета"></Label>
 
-                <RadCartesianChart height="90%" tkExampleTitle tkToggleNavButton col="0" row="1" class="m-t-10">
+                <RadCartesianChart height="85%" tkExampleTitle tkToggleNavButton col="0" row="1" class="m-t-10">
                         <CategoricalAxis tkCartesianHorizontalAxis></CategoricalAxis>
-                        <LinearAxis tkCartesianVerticalAxis labelFormat="%.2f мин"></LinearAxis>
+                        <LinearAxis tkCartesianVerticalAxis labelFormat="%.0fмин"  [maximum]="runsStatsMax + 3"></LinearAxis>
                     
                         <BarSeries tkCartesianSeries [items]="citiesBestTimesSource$ | async" categoryProperty="City" valueProperty="BestTime" showLabels="true"></BarSeries>
                 </RadCartesianChart>

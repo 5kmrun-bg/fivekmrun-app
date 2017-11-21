@@ -18,7 +18,7 @@ export class StatisticsComponent implements OnInit {
     private citiesBestTimesSource$: Observable<{City, BestTime}[]>;
     private runsStatistics$: Observable<{Date, Time}[]>;
     private runsStatsMajorStep: string;
-    private runsStatsMax: number;
+    private runsStatsMax: number = 30;
     private runsByMonth$: Observable<{Date, RunsCount}[]>;
 
     constructor(private statisticsService: StatisticsService) {
