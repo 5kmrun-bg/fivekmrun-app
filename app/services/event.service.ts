@@ -83,8 +83,12 @@ export class EventService {
             let date: Date;
             for (let i = 0; i < cells.length; ++i) {
                 if (i == 0) {
-                    let parts = cells[0].children[1].children[0].data.match(/(\d+)/g)
-                    date = new Date(parts[2], parts[1] - 1, parts[0]);
+                    if (cells[0].children[1] != undefined) {
+                        let parts = cells[0].children[1].children[0].data.match(/(\d+)/g)
+                        date = new Date(parts[2], parts[1] - 1, parts[0]);
+                    } else {
+                        break;
+                    }
                 } else {
                     this.parseCell(cells[i].children[1], date, events);
                     this.parseCell(cells[i].children[3], date, events);
