@@ -53,8 +53,6 @@
 		<string>UIStatusBarStyleLightContent</string>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false />
-		<key>NSCalendarsUsageDescription</key>
-		<string>Calendar is not used, probably referenced by a dependency that the app uses.</string>
 		<key>Fabric</key>
 		<dict>
 			<key>APIKey</key>
