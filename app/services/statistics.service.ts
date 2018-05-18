@@ -3,6 +3,7 @@ import { Observable } from "rxjs/Observable";
 import { RunService } from "./run.service";
 import { Run } from "../models";
 import { List } from "linqts";
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class StatisticsService {

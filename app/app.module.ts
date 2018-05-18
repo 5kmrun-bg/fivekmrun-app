@@ -1,6 +1,5 @@
-import { NgModule, NgModuleFactoryLoader, NO_ERRORS_SCHEMA } from "@angular/core";
+import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-import { NSModuleFactoryLoader } from "nativescript-angular/router";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -9,6 +8,7 @@ import { AppComponent } from "./app.component";
 import { UserService, RunService, NewsService, EventService, StatisticsService } from "./services";
 import { AuthenticationGuard, ConnectivityGuard } from "./guards";
 import { FabricModule } from 'nativescript-fabric/angular';
+import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 
 @NgModule({
     bootstrap: [
@@ -18,13 +18,13 @@ import { FabricModule } from 'nativescript-fabric/angular';
         NativeScriptModule,
         NativeScriptHttpModule,
         AppRoutingModule,
+        NativeScriptAnimationsModule,
         FabricModule.forRoot()
     ],
     declarations: [
         AppComponent
     ],
     providers: [
-        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader },
         UserService,
         RunService,
         NewsService,

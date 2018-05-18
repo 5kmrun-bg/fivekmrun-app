@@ -4,6 +4,7 @@ import { RadSideDrawerComponent } from "nativescript-ui-sidedrawer/angular";
 import { UserService, RunService } from "../services";
 import { User, Run } from "../models";
 import { Observable } from "rxjs/Observable";
+import 'rxjs/add/operator/map';
 import { Ratings } from "nativescript-ratings";
 
 @Component({

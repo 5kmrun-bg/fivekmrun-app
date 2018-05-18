@@ -1,15 +1,16 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-
+import { CommonModule } from "@angular/common";
+import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { SharedModule } from "../shared/shared.module";
 import { FutureEventsRoutingModule } from "./future-events-routing.module";
 import { FutureEventsComponent } from "./future-events.component";
 
 @NgModule({
     imports: [
-        NativeScriptModule,
         FutureEventsRoutingModule,
-        SharedModule
+        SharedModule,
+        CommonModule,
+        NativeScriptCommonModule
     ],
     declarations: [
         FutureEventsComponent

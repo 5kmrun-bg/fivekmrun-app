@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { User } from "../../../models";
 import { Observable } from "rxjs/Observable";
+import 'rxjs/add/operator/do';
 
 @Component({ 
     selector: "next-milestone-tile",
