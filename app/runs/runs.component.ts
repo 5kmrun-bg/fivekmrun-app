@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
-import { RadSideDrawerComponent } from "nativescript-ui-sidedrawer/angular";
 import { RunService } from "../services";
 import { Run } from "../models";
 import { Observable } from "rxjs/Observable";
+import * as app from "application";
+import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 
 @Component({
     selector: "Runs",
@@ -12,23 +12,16 @@ import { Observable } from "rxjs/Observable";
 })
 export class RunsComponent implements OnInit {
 
-    @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
-
-    private _sideDrawerTransition: DrawerTransitionBase;
     runs: Observable<Run[]>;
 
     constructor(private runService: RunService) {}
 
     ngOnInit(): void {
-        this._sideDrawerTransition = new SlideInOnTopTransition();
         this.runs = this.runService.getByCurrentUser();
     }
 
-    get sideDrawerTransition(): DrawerTransitionBase {
-        return this._sideDrawerTransition;
-    }
-
     onDrawerButtonTap(): void {
-        this.drawerComponent.sideDrawer.showDrawer();
+        const sideDrawer = <RadSideDrawer>app.getRootView();
+        sideDrawer.showDrawer();
     }
 }

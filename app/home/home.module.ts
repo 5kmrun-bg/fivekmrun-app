@@ -1,7 +1,6 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NativeScriptCommonModule } from "nativescript-angular/common";
-import { SharedModule } from "../shared/shared.module";
 import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import { NativeScriptUIGaugeModule } from "nativescript-ui-gauge/angular";
@@ -11,7 +10,6 @@ import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileC
 @NgModule({
     imports: [
         HomeRoutingModule,
-        SharedModule,
         NativeScriptUIGaugeModule,
         NativeScriptUIChartModule,
         CommonModule,

@@ -11,37 +11,18 @@
     <Label class="action-bar-title" text="Начало"></Label>
 </ActionBar>
 
-<!--
-RadSideDrawer is a UI component part of the Progress NativeScript UI set of components.
-Learn more about the RadSideDrawer UI component and how it can be customized in this documentation article:
-http://docs.telerik.com/devtools/nativescript-ui/Controls/Angular/SideDrawer/getting-started
-The RadSideDrawer component is designed to be used as a root element and
-it shouldn't have any other siblings other than the <ActionBar> component.
--->
-<RadSideDrawer #drawer showOverNavigation="true" [drawerTransition]="sideDrawerTransition">
-    <!--
-    Use the tkDrawerContent directive to display the content of the app drawer on this page.
-    -->
-    <StackLayout tkDrawerContent>
-        <MyDrawer [selectedPage]="'Начало'"></MyDrawer>
-    </StackLayout>
+<GridLayout class="page page-content dashboard" columns="*, *" rows="*, *, *">
+    <!-- Total KMs -->
+    <total-distance-tile [distance]="(currentUser$ | async)?.totalKmRan"></total-distance-tile>
 
-    <!--
-    Use the tkMainContent directive to display the content of the page when you have an app drawer.
-    -->
-    <GridLayout class="page page-content dashboard" tkMainContent columns="*, *" rows="*, *, *">
-        <!-- Total KMs -->
-        <total-distance-tile [distance]="(currentUser$ | async)?.totalKmRan"></total-distance-tile>
+    <!-- Next Goal -->
+    <next-milestone-tile [currentUser$]="currentUser$"></next-milestone-tile>
 
-        <!-- Next Goal -->
-        <next-milestone-tile [currentUser$]="currentUser$"></next-milestone-tile>
+    <!-- Time stats-->
+    <run-stats-tile [runs$]="runs$"></run-stats-tile>
+    <!-- Last Run -->
+    <run-details-tile title="Последно" [run]="lastRun$ | async" col="0" row="2"></run-details-tile>
 
-        <!-- Time stats-->
-        <run-stats-tile [runs$]="runs$"></run-stats-tile>
-        <!-- Last Run -->
-        <run-details-tile title="Последно" [run]="lastRun$ | async" col="0" row="2"></run-details-tile>
-
-        <!-- Best Run -->
-        <run-details-tile title="Най-бързо" [run]="bestRun$ | async" col="1" row="2"></run-details-tile>
-    </GridLayout>
-</RadSideDrawer>
+    <!-- Best Run -->
+    <run-details-tile title="Най-бързо" [run]="bestRun$ | async" col="1" row="2"></run-details-tile>
+</GridLayout>

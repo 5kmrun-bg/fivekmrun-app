@@ -1,14 +1,12 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NativeScriptCommonModule } from "nativescript-angular/common";
-import { SharedModule } from "../../shared/shared.module";
 import { NewsListRoutingModule } from "./news-list-routing.module";
 import { NewsListComponent } from "./news-list.component";
 
 @NgModule({
     imports: [
         NewsListRoutingModule,
-        SharedModule,
         CommonModule,
         NativeScriptCommonModule
     ],

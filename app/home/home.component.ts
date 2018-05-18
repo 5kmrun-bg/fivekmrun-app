@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
-import { RadSideDrawerComponent } from "nativescript-ui-sidedrawer/angular";
 import { UserService, RunService } from "../services";
 import { User, Run } from "../models";
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 import { Ratings } from "nativescript-ratings";
+import * as app from "application";
+import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 
 @Component({
     selector: "Home",
@@ -13,24 +13,14 @@ import { Ratings } from "nativescript-ratings";
     templateUrl: "./home.component.html"
 })
 export class HomeComponent implements OnInit {
-    /* ***********************************************************
-    * Use the @ViewChild decorator to get a reference to the drawer component.
-    * It is used in the "onDrawerButtonTap" function below to manipulate the drawer.
-    *************************************************************/
-    @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
 
-    private _sideDrawerTransition: DrawerTransitionBase;
     currentUser$: Observable<User>;
     lastRun$: Observable<Run>;
     bestRun$: Observable<Run>;
     runs$: Observable<Run[]>;
     constructor(private userService: UserService, private runService: RunService) { }
 
-    /* ***********************************************************
-    * Use the sideDrawerTransition property to change the open/close animation of the drawer.
-    *************************************************************/
     ngOnInit(): void {
-        this._sideDrawerTransition = new SlideInOnTopTransition();
         this.currentUser$ = this.userService.getCurrentUser();
 
         const that = this;
@@ -39,18 +29,6 @@ export class HomeComponent implements OnInit {
         this.runs$ = this.runService.getByCurrentUser().map(runs => runs.reverse());
 
         this.initializeRatingPlugin();
-    }
-
-    get sideDrawerTransition(): DrawerTransitionBase {
-        return this._sideDrawerTransition;
-    }
-
-    /* ***********************************************************
-    * According to guidelines, if you have a drawer on your page, you should always
-    * have a button that opens it. Use the showDrawer() function to open the app drawer section.
-    *************************************************************/
-    onDrawerButtonTap(): void {
-        this.drawerComponent.sideDrawer.showDrawer();
     }
 
     private getTime(date?: Date) {
@@ -71,5 +49,10 @@ export class HomeComponent implements OnInit {
 
         ratings.init();
         ratings.prompt();
+    }
+
+    onDrawerButtonTap(): void {
+        const sideDrawer = <RadSideDrawer>app.getRootView();
+        sideDrawer.showDrawer();
     }
 }
