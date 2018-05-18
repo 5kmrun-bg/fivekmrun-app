@@ -4,7 +4,6 @@ import { Observable } from "rxjs/Observable";
 import { News } from "../models";
 
 import * as cheerio from "cheerio";
-import 'rxjs/Rx';
 
 @Injectable()
 export class NewsService {

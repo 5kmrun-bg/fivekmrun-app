@@ -1,13 +1,15 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { CommonModule } from "@angular/common";
+import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
 
 import { MyDrawerComponent } from "./my-drawer/my-drawer.component";
 
 @NgModule({
     imports: [
-        NativeScriptModule,
-        NativeScriptUISideDrawerModule
+        NativeScriptUISideDrawerModule,
+        CommonModule,
+        NativeScriptCommonModule
     ],
     declarations: [
         MyDrawerComponent

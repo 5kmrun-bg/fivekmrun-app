@@ -4,7 +4,6 @@ import { Observable } from "rxjs/Observable";
 import { User } from "../models";
 
 import * as cheerio from "cheerio";
-import 'rxjs/Rx';
 var appSettings = require("application-settings");
 
 @Injectable()

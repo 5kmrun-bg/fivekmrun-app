@@ -1,6 +1,6 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-
+import { CommonModule } from "@angular/common";
+import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { SharedModule } from "../shared/shared.module";
 import { BarcodeRoutingModule } from "./barcode-routing.module";
 import { BarcodeComponent } from "./barcode.component";
@@ -9,10 +9,11 @@ import { IdFormatModule } from "../pipes/id-format.module";
 
 @NgModule({
     imports: [
-        NativeScriptModule,
         BarcodeRoutingModule,
         SharedModule,
-        IdFormatModule
+        IdFormatModule,
+        CommonModule,
+        NativeScriptCommonModule
     ],
     declarations: [
         BarcodeComponent

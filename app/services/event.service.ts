@@ -4,7 +4,6 @@ import { Observable } from "rxjs/Observable";
 import { Event, Result } from "../models";
 
 import * as cheerio from "cheerio";
-import 'rxjs/Rx';
 
 @Injectable()
 export class EventService {
