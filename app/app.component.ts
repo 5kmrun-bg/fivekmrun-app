@@ -6,6 +6,7 @@ import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from "nat
 import { filter } from "rxjs/operators";import { Observable } from "rxjs/Observable";
 import { User } from "./models";
 import { UserService } from "./services";
+import firebase = require("nativescript-plugin-firebase");
 
 @Component({
     selector: "ns-app",
@@ -22,6 +23,34 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        firebase.init({
+            // Optionally pass in properties for database, authentication and cloud messaging,
+            // see their respective docs.\
+
+          }).then(
+            instance => {
+              console.log("firebase.init done");
+            },
+            error => {
+              console.log(`firebase.init error: ${error}`);
+            }
+          );
+          firebase.analytics.logEvent({
+            key: "add_to_cart",
+            parameters: [ // optional
+              {
+                key: "item_id",
+                value: "p7654"
+              },
+              {
+                key: "item_name",
+                value: "abc"
+              }]
+          }).then(
+              function () {
+                console.log("Firebase Analytics event logged");
+              }
+          );
         this._activatedUrl = "/home";
         this._sideDrawerTransition = new SlideInOnTopTransition();
         this._navigationItems = [
