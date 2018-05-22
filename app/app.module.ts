@@ -1,4 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
 
@@ -7,7 +8,6 @@ import { AppComponent } from "./app.component";
 
 import { UserService, RunService, NewsService, EventService, StatisticsService } from "./services";
 import { AuthenticationGuard, ConnectivityGuard } from "./guards";
-import { FabricModule } from 'nativescript-fabric/angular';
 import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
 
@@ -21,7 +21,7 @@ import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angul
         AppRoutingModule,
         NativeScriptAnimationsModule,
         NativeScriptUISideDrawerModule,
-        FabricModule.forRoot()
+        CommonModule
     ],
     declarations: [
         AppComponent
