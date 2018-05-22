@@ -9,6 +9,7 @@ import { UserService, RunService, NewsService, EventService, StatisticsService }
 import { AuthenticationGuard, ConnectivityGuard } from "./guards";
 import { FabricModule } from 'nativescript-fabric/angular';
 import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
+import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
 
 @NgModule({
     bootstrap: [
@@ -19,6 +20,7 @@ import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
         NativeScriptHttpModule,
         AppRoutingModule,
         NativeScriptAnimationsModule,
+        NativeScriptUISideDrawerModule,
         FabricModule.forRoot()
     ],
     declarations: [

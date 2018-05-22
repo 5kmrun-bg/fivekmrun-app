@@ -171,3 +171,78 @@ GridLayout.details Label {
     text-align: left;
     margin-left: 10;
 }
+
+
+// Drawer navigation custom styles
+$sidedrawer-header-image-size: 80;
+$sidedrawer-header-image-offset-top: 10;
+$sidedrawer-header-image-offset-bottom: 5;
+$sidedrawer-list-item-offset-left: 15;
+$sidedrawer-list-icon-offset: 5;
+$sidedrawer-list-icon-size: 20;
+
+
+.sidedrawer {
+    &.sidedrawer-left {
+        .sidedrawer-header-image {
+            color: $background-dark;
+            height: $sidedrawer-header-image-size;
+            width: $sidedrawer-header-image-size;
+            font-size: $sidedrawer-header-image-size;
+            padding: 0;
+            margin-bottom: $sidedrawer-header-image-offset-top;
+            margin-top: $sidedrawer-header-image-offset-top;
+        }
+
+        .footnote {
+            color: rgba(white, 0.5);
+        }
+    }
+
+    .sidedrawer-header {
+        background-color: black;
+        color: white;
+        height: auto;
+        padding-bottom: 20;
+        .sidedrawer-header-brand {
+            color: white;
+            font-size: 20;
+            padding-bottom: 10;
+        }
+    }
+
+    .sidedrawer-content {
+        background-color: $side-drawer-background;
+        height: 100%;
+
+        ListView {
+            height: 100%;
+        }
+    }
+
+    .sidedrawer-list-item {
+        padding-left: $sidedrawer-list-item-offset-left;
+        Label {
+            vertical-align: center;
+            color: $blue-dark;
+        }
+
+        .fa {
+            width: $sidedrawer-list-icon-size;
+            margin-right: $sidedrawer-list-icon-offset;
+        }
+
+        &.selected {
+            background-color: $item-active-background;
+
+            Label {
+                color: $item-active-color;
+            }
+        }
+
+        &.sidedrawer-list-item-settings {
+            border-top-width: 1px;
+            border-top-color: $blue-50;
+        }
+    }
+}

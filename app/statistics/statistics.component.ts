@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
-import { RadSideDrawerComponent } from "nativescript-ui-sidedrawer/angular";
 import { StatisticsService } from "../services";
 import { Observable } from "rxjs/Observable";
+import * as app from "application";
+import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 
 @Component({
     selector: "Statistics",
@@ -11,9 +11,6 @@ import { Observable } from "rxjs/Observable";
 })
 export class StatisticsComponent implements OnInit {
 
-    @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
-
-    private _sideDrawerTransition: DrawerTransitionBase;
     private citiesParticipationSource$: Observable<{City, RunsCount}[]>;
     private citiesBestTimesSource$: Observable<{City, BestTime}[]>;
     private runsStatistics$: Observable<{Date, Time}[]>;
@@ -25,8 +22,6 @@ export class StatisticsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this._sideDrawerTransition = new SlideInOnTopTransition();
-
         this.citiesParticipationSource$ = this.statisticsService.getRunsByCity();
         this.citiesBestTimesSource$ = this.statisticsService.getBestTimesByCity();
         this.runsStatistics$ = this.statisticsService.getRunsTimes();
@@ -45,11 +40,8 @@ export class StatisticsComponent implements OnInit {
         }).subscribe();
     }
 
-    get sideDrawerTransition(): DrawerTransitionBase {
-        return this._sideDrawerTransition;
-    }
-
     onDrawerButtonTap(): void {
-        this.drawerComponent.sideDrawer.showDrawer();
+        const sideDrawer = <RadSideDrawer>app.getRootView();
+        sideDrawer.showDrawer();
     }
 }

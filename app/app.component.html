@@ -1,1 +1,22 @@
-<page-router-outlet></page-router-outlet>
+<RadSideDrawer [drawerTransition]="sideDrawerTransition">
+    <GridLayout tkDrawerContent rows="auto, *" class="sidedrawer sidedrawer-left">
+        <GridLayout class="sidedrawer-header" row="0" columns="1*, 2*" rows="auto, auto, auto, auto">
+            <Label class="sidedrawer-header-brand va-m m-t-10" [text]="(currentUser$| async)?.name" col="0" row="0" colSpan="2"></Label>
+            <Image [src]="(currentUser$ |async)?.avatarUrl" class="img-circle sidedrawer-header-image" col="0" row="1" rowSpan="3"></Image>
+            <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.suuntoPoints + ' SUUNTO точки'" col="1" row="1"></Label>
+            <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.runsCount + ' участия'" col="1" row="2"></Label>
+            <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.age" col="1" row="3"></Label>
+        </GridLayout>
+        
+        <ScrollView row="1">
+            <StackLayout class="sidedrawer-content">
+                <GridLayout *ngFor="let item of navigationItems" (tap)="onNavigationItemTap(item.route)" columns="auto, *" rows="50" class="sidedrawer-list-item"
+                    [class.selected]="isPageSelected(item.title)">
+                    <Label row="0" col="0" [text]="item.icon" class="fa"></Label>
+                    <Label row="0" col="1" [text]="item.title" textWrap="true"></Label>
+                </GridLayout>
+            </StackLayout>
+        </ScrollView>
+    </GridLayout>
+    <page-router-outlet tkMainContent class="page page-content"></page-router-outlet>
+</RadSideDrawer>
