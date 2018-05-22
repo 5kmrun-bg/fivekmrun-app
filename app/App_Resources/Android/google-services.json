@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "766608951702",
+    "firebase_url": "https://testproject-15b4c.firebaseio.com",
+    "project_id": "testproject-15b4c",
+    "storage_bucket": "testproject-15b4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766608951702:android:c651658a245607ee",
+        "android_client_info": {
+          "package_name": "bg.fivekmpark.fivekmrun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "766608951702-hmnc3d8fa53o442k4t786s9008d3c9sm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZZTZUe-NLT10JTn8l0ikiG3se4qhUdko"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
