@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, trigger, state, style, transition, animate } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef} from "@angular/core";
+import { trigger, state, style, transition, animate } from "@angular/animations";
 import { UserService } from "../services";
 import { User } from "../models";
 import { Observable } from "rxjs/Observable";
