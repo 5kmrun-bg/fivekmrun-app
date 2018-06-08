@@ -13,19 +13,18 @@
         ],
         "baseUrl": ".",
         "paths": {
-            "~/*": [
-                "app/*"
-            ],
             "*": [
                 "./node_modules/tns-core-modules/*",
-                "./node_modules/*",
-                "./node_modules/emitter-component/*"
+                "./node_modules/*"
+            ],
+            "~/*": [
+                "app/*"
             ]
         }
     },
     "exclude": [
-        "e2e",
         "node_modules",
-        "platforms"
+        "platforms",
+        "**/*.aot.ts"
     ]
 }
