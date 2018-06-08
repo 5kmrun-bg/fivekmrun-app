@@ -13,6 +13,14 @@ task replaceSettings {
         String settingsGradleTemplate = """android {
             defaultConfig {
                 applicationId = "__appId__"
+
+                if (__minSdkVersion__) {
+                    minSdkVersion = __minSdkVersion__
+                }
+
+                if (__targetSdkVersion__) {
+                    targetSdkVersion = __targetSdkVersion__
+                }
             }
         }"""
 
@@ -21,7 +29,13 @@ task replaceSettings {
 
         for ( setting in settingsMap ) {
             def placeholder = "__${setting.key}__";
-            settingsGradleTemplate = settingsGradleTemplate.replaceAll( placeholder, setting.value as String);
+            def settingValue = setting.value;
+
+            if (settingValue == null) {
+                settingValue = false
+            }
+
+            settingsGradleTemplate = settingsGradleTemplate.replaceAll( placeholder, settingValue as String);
         }
 
         new File( './temp_setting.gradle' ).write( settingsGradleTemplate, 'UTF-8');
