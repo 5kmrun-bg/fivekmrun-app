@@ -95,7 +95,18 @@ export class AppComponent implements OnInit {
 
         this.router.events
         .pipe(filter((event: any) => event instanceof NavigationEnd))
-        .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects);
+        .subscribe((event: NavigationEnd) => {
+            this._activatedUrl = event.urlAfterRedirects;
+            firebase.analytics.logEvent({
+                key: "page_view",
+                parameters: [
+                    {
+                        key: "page_id",
+                        value: this._activatedUrl
+                    }
+                ]
+            });
+        });
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {
