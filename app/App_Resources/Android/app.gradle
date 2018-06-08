@@ -8,7 +8,7 @@
 android {  
   defaultConfig {  
     generatedDensities = []
-    applicationId = "bg.fivekmpark.fivekmrun"  
+    applicationId = "bg.5kmpark.5kmrun"  
   }  
   aaptOptions {  
     additionalParameters "--no-version-vectors"  

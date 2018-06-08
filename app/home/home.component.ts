@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
 
     private initializeRatingPlugin() {
         let ratings = new Ratings({
-            id: "bg.fivekmpark.fivekmrun",
+            id: "bg.5kmpark.5kmrun",
             showOnCount: 5,
             title: "Харесвате ли приложението?",
             text: "Помогнете ни да го направим още по-добро, като оставите вашето мнение",
