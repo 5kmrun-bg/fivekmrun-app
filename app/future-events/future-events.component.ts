@@ -12,12 +12,12 @@ import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 })
 export class FutureEventsComponent implements OnInit {
 
-    private events: Observable<Event[]>;
+    events$: Observable<Event[]>;
 
     constructor(private eventService: EventService) {}
 
     ngOnInit(): void {
-        this.events = this.eventService.getAllFutureEvents();
+        this.events$ = this.eventService.getAllFutureEvents();
     }
 
     onDrawerButtonTap(): void {

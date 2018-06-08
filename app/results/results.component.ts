@@ -12,7 +12,7 @@ import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 })
 export class ResultsComponent implements OnInit {
 
-    private events: Observable<Event[]>;
+    events: Observable<Event[]>;
 
     constructor(private eventService: EventService) {}
 
