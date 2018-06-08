@@ -8,7 +8,7 @@
 </ActionBar>
 
 <StackLayout>
-    <ListView [items]="events | async" class="list-group" height="100%">
+    <ListView [items]="events$ | async" class="list-group" height="100%">
         <ng-template let-item="item" let-i="index">
             <GridLayout columns="auto, *, auto" rows="auto, *, *" class="list-group-item">
                 <Label col="0" row="0" [text]="'\uf073'" class="h2 fa va-m"></Label> <Label class="h2 text-left m-l-10 va-m" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="0"></Label>

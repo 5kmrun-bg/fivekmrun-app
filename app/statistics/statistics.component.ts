@@ -11,12 +11,12 @@ import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 })
 export class StatisticsComponent implements OnInit {
 
-    private citiesParticipationSource$: Observable<{City, RunsCount}[]>;
-    private citiesBestTimesSource$: Observable<{City, BestTime}[]>;
-    private runsStatistics$: Observable<{Date, Time}[]>;
-    private runsStatsMajorStep: string;
-    private runsStatsMax: number = 30;
-    private runsByMonth$: Observable<{Date, RunsCount}[]>;
+    citiesParticipationSource$: Observable<{City, RunsCount}[]>;
+    citiesBestTimesSource$: Observable<{City, BestTime}[]>;
+    runsStatistics$: Observable<{Date, Time}[]>;
+    runsStatsMajorStep: string;
+    runsStatsMax: number = 30;
+    runsByMonth$: Observable<{Date, RunsCount}[]>;
 
     constructor(private statisticsService: StatisticsService) {
     }

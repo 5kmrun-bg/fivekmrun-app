@@ -6,7 +6,7 @@ import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from "nat
 import { filter } from "rxjs/operators";import { Observable } from "rxjs/Observable";
 import { User } from "./models";
 import { UserService } from "./services";
-import firebase = require("nativescript-plugin-firebase");
+import * as firebase from "nativescript-plugin-firebase";
 
 @Component({
     selector: "ns-app",

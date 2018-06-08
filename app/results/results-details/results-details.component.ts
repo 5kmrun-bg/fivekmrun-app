@@ -15,8 +15,8 @@ import { RouterExtensions } from "nativescript-angular/router";
 })
 export class ResultsDetailsComponent implements OnInit {
     private id: string;
-    private event$: Event;
-    private results$: Observable<Result[]>;
+    event$: Event;
+    results$: Observable<Result[]>;
 
     constructor(
         private eventService: EventService,
