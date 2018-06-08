@@ -3,8 +3,8 @@ import { Http } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import { User } from "../models";
 
+import * as appSettings from "application-settings";
 import * as cheerio from "cheerio";
-var appSettings = require("application-settings");
 
 @Injectable()
 export class UserService {

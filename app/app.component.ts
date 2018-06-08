@@ -2,24 +2,28 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
 import * as app from "application";
 import { RouterExtensions } from "nativescript-angular/router";
+import * as firebase from "nativescript-plugin-firebase";
 import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
-import { filter } from "rxjs/operators";import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs/Observable";
+import { filter } from "rxjs/operators";
 import { User } from "./models";
 import { UserService } from "./services";
-import * as firebase from "nativescript-plugin-firebase";
 
 @Component({
     selector: "ns-app",
     templateUrl: "app.component.html"
 })
 export class AppComponent implements OnInit {
+    currentUser$: Observable<User>;
+
     private _activatedUrl: string;
-    private _sideDrawerTransition: DrawerTransitionBase;   
+    private _sideDrawerTransition: DrawerTransitionBase;
     private _navigationItems: Array<any>;
-    public currentUser$: Observable<User>;
- 
-    constructor(private router: Router, private routerExtensions: RouterExtensions,private userService: UserService) {
-        // Use the component constructor to inject services.
+
+    constructor(
+        private router: Router,
+        private routerExtensions: RouterExtensions,
+        private userService: UserService) {
     }
 
     ngOnInit(): void {
@@ -89,7 +93,7 @@ export class AppComponent implements OnInit {
                 title: "Статистика",
                 name: "statistics",
                 route: "/statistics",
-                icon: "\uf080"                
+                icon: "\uf080"
             },
             {
                 title: "Баркод",
@@ -104,9 +108,9 @@ export class AppComponent implements OnInit {
                 icon: "\uf08b "
             }
         ];
- 
+
         this.currentUser$ = this.userService.getCurrentUser();
-        
+
         this.router.events
         .pipe(filter((event: any) => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects);
