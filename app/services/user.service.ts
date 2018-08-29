@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 import { Http } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import { User } from "../models";
@@ -13,13 +13,15 @@ export class UserService {
     private lastLoadedUser: Observable<User>;
     private lastLoadedUserId: number;
 
+    userChanged: EventEmitter<void> = new EventEmitter();
+
     constructor(private http: Http) {
         if (appSettings.getNumber("currentUserId") != NaN) {
             this._currentUserId = appSettings.getNumber("currentUserId");
         }
     }
 
-    getCurrentUser(): Observable<User> {
+    getCurrentUser(): Observable<User> {        
         if (this.lastLoadedUser != null && this.lastLoadedUserId == this.currentUserId) {
             return this.lastLoadedUser;
         } else {
@@ -44,6 +46,7 @@ export class UserService {
                 const age = this.parseAge(webPage);
                 that.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
 
+                this.userChanged.next();
                 return that.currentUser;
             });
         }
