@@ -22,7 +22,9 @@ export class RunStatsTileComponent implements OnInit {
             this.max = Math.ceil(Math.max(...times));
             this.min = Math.floor(Math.min(...times));
             this.step = Math.round((this.max - this.min) / 4);
-            this.runs = runsResults;
+                                    // v Items are sorted because of a bug in the Chart component
+            this.runs = runsResults.sort((r1, r2) => {return (r1.date < r2.date) ? -1 : (r1.date > r2.date) ? 1 : 0});
         }).subscribe();
+
     }
 }

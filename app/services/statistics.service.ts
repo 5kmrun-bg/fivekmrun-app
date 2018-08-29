@@ -32,8 +32,8 @@ export class StatisticsService {
 
     getRunsTimes() : Observable<{Date, Time}[]> {
         return this.runService.getByCurrentUser()
-                                .map(runs => {
-                                    return runs.map(r => {return {Date: r.date, Time: r.timeInSeconds}});
+                                .map(runs => {                                                          // v Items are sorted because of a bug in the Chart component
+                                    return runs.map(r => {return {Date: r.date, Time: r.timeInSeconds}}).sort((i1, i2) => {return (i1.Date < i2.Date) ? -1 : (i1.Date > i2.Date) ? 1 : 0});
                                 });
     }
 
@@ -44,8 +44,8 @@ export class StatisticsService {
                             const groupedRuns = (new List(runs)).GroupBy(r => new Date(r.date.getFullYear(), r.date.getMonth(), 1, 0 ,0 ,0), r => 1);
                             
                             const runsByMonth = Object.keys(groupedRuns).map(k => {return {Date:  new Date(k), RunsCount: groupedRuns[k].length}});
-
-                            return runsByMonth;
+                                                // v Items are sorted because of a bug in the Chart component
+                            return runsByMonth.sort((i1, i2) => {return (i1.Date < i2.Date) ? -1 : (i1.Date > i2.Date) ? 1 : 0});
                         });
     }
 
