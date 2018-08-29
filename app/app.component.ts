@@ -107,6 +107,10 @@ export class AppComponent implements OnInit {
                 ]
             });
         });
+
+        this.userService.userChanged.subscribe(value => {
+            this.currentUser$ = this.userService.getCurrentUser();
+        });
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {
