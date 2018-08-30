@@ -33,7 +33,6 @@
     "@angular/platform-browser-dynamic": "~6.0.0",
     "@angular/router": "~6.0.0",
     "cheerio": "0.22.0",
-    "events": "^1.1.1",
     "linqts": "^1.10.0",
     "nativescript-angular": "^6.0.0",
     "nativescript-cardview": "^2.0.3",
@@ -46,7 +45,6 @@
     "reflect-metadata": "~0.1.8",
     "rxjs": "^6.2.0",
     "rxjs-compat": "^6.2.0",
-    "stream": "0.0.2",
     "tns-core-modules": "^4.1.0",
     "ts-md5": "^1.2.2",
     "zone.js": "^0.8.26"
