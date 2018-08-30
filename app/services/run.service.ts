@@ -41,8 +41,8 @@ export class RunService {
                         runs.push(this.extractRun(cells));
                     }
                 });
-
-                return runs;
+                
+                return runs.sort((a, b) => (a.date < b.date) ? 1 : (a.date > b.date) ? -1 : 0);
             });
         }
     }
