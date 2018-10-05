@@ -172,6 +172,24 @@ GridLayout.details Label {
     margin-left: 10;
 }
 
+.results {
+    border-width: 1;
+    border-color: #00aeef;
+    border-radius: 5;
+    margin: 10 10 10 10;
+    padding: 10 10 10 10;
+}
+
+.resultsView {
+    background-color: #00aeef;
+}
+
+.resultsFilter {
+    background-color: white;
+    border-radius: 5;
+    margin: 10 10 10 10;
+    padding: 5 5 5 5;
+}
 
 // Drawer navigation custom styles
 $sidedrawer-header-image-size: 80;
