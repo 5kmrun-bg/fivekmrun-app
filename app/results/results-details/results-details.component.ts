@@ -1,6 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
-import { RadSideDrawerComponent } from "nativescript-ui-sidedrawer/angular";
+import { Component, OnInit } from "@angular/core";
 import { EventService } from "../../services";
 import { Event, Result } from "../../models";
 import { Observable } from "rxjs/Observable";
@@ -16,7 +14,9 @@ import { RouterExtensions } from "nativescript-angular/router";
 export class ResultsDetailsComponent implements OnInit {
     private id: string;
     event$: Event;
-    results$: Observable<Result[]>;
+    unfilteredResults: Result[];
+    results: Result[];
+    nameFilter = "";
 
     constructor(
         private eventService: EventService,
@@ -35,11 +35,24 @@ export class ResultsDetailsComponent implements OnInit {
         this.eventService.getAllPastEvents()
                 .map(events => events.filter(e => e.id == this.id)[0])
                 .do(event => this.event$ = event)
-                .do(event => this.results$ = this.eventService.getResultsDetails(event.eventDetailsUrl))
+                .do(event => this.eventService.getResultsDetails(event.eventDetailsUrl)
+                                                .do(r => this.results = this.unfilteredResults = r)
+                                                .subscribe())
                 .subscribe();
     }
 
     onNavBtnTap(): void {
         this.routerExtensions.back();
+    }
+
+    reFilter(args): void {
+        const filterString = args.value.toLowerCase().trim();
+
+        if (this.nameFilter.length > 0) {
+            this.results = this.unfilteredResults.filter(r => r.name.toLowerCase().includes(filterString));
+        }
+        else {
+            this.results = this.unfilteredResults;
+        }
     }
 }

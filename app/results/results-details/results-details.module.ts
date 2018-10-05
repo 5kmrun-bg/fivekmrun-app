@@ -3,9 +3,11 @@ import { CommonModule } from "@angular/common";
 import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { ResultsDetailsRoutingModule } from "./results-details-routing.module";
 import { ResultsDetailsComponent } from "./results-details.component";
+import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
 @NgModule({
     imports: [
+        NativeScriptFormsModule,
         ResultsDetailsRoutingModule,
         CommonModule,
         NativeScriptCommonModule
