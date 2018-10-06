@@ -4,6 +4,7 @@ import { Event, Result } from "../../models";
 import { PageRoute } from "nativescript-angular/router";
 import "rxjs/add/operator/switchMap";
 import { RouterExtensions } from "nativescript-angular/router";
+import * as firebase from "nativescript-plugin-firebase";
 
 @Component({
     selector: "ResultsDetails",
@@ -12,6 +13,7 @@ import { RouterExtensions } from "nativescript-angular/router";
 })
 export class ResultsDetailsComponent implements OnInit {
     private id: string;
+    private isSearchTracked: boolean = false;
     event$: Event;
     unfilteredResults: Result[];
     results: Result[];
@@ -44,6 +46,11 @@ export class ResultsDetailsComponent implements OnInit {
     }
 
     reFilter(args): void {
+        if (!this.isSearchTracked) {
+            this.isSearchTracked = true;
+            firebase.analytics.logEvent({ key: "results_filtered" });
+        }
+
         const filterString = args.value.toLowerCase().trim();
 
         if (filterString.length > 0) {

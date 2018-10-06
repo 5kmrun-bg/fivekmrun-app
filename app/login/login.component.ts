@@ -7,6 +7,7 @@ import { EventData } from "data/observable";
 import { Router } from "@angular/router";
 import { Page } from "ui/page";
 import { TextField } from "ui/text-field";
+import * as firebase from "nativescript-plugin-firebase";
 
 @Component({
     selector: "Login",
@@ -75,6 +76,7 @@ export class LoginComponent implements OnInit {
     }
 
     next(): void {
+        firebase.analytics.logEvent({ key: "login"});
         this.router.navigate([ "/" ]);
     }
 }
