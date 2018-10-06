@@ -2,19 +2,11 @@
     <NavigationButton text="Назад" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
     <Label class="action-bar-title" [text]="event$?.date | date:'dd.MM.yyyy'"></Label>
 </ActionBar>
-<<<<<<< HEAD
 <StackLayout class="resultsView">
     <TextField hint="търсене ..." (textChange)="reFilter($event)" class="resultsFilter"></TextField>
     <ListView #lvResults [items]="results" class="list-group" height="100%">
         <ng-template let-item="item" let-i="index">
             <GridLayout columns="auto, *" rows="auto, auto, auto" class="results">
-=======
-<StackLayout>
-    <TextField hint="търсене ..." [(ngModel)]="nameFilter" (textChange)="reFilter($event)"></TextField>
-    <ListView #lvResults [items]="results" class="list-group" height="100%">
-        <ng-template let-item="item" let-i="index">
-            <GridLayout columns="auto, *" rows="auto, auto, auto" class="list-group-item">
->>>>>>> 765165a0de5d0db76f382f8e59bf4c98ae30268e
                 <Label text="Име: " col="0" row="0" class="text-right"></Label><Label [text]="item.name" col="1" row="0"
                     class="m-l-20"></Label>
                 <Label text="Време: " col="0" row="1" class="text-right"></Label><Label [text]="item.time" col="1" row="1"
