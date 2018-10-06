@@ -15,6 +15,10 @@ export class ResultsDetailsComponent implements OnInit {
     event$: Event;
     unfilteredResults: Result[];
     results: Result[];
+<<<<<<< HEAD
+=======
+    nameFilter = "";
+>>>>>>> 765165a0de5d0db76f382f8e59bf4c98ae30268e
 
     constructor(
         private eventService: EventService,
@@ -46,7 +50,11 @@ export class ResultsDetailsComponent implements OnInit {
     reFilter(args): void {
         const filterString = args.value.toLowerCase().trim();
 
+<<<<<<< HEAD
         if (filterString.length > 0) {
+=======
+        if (this.nameFilter.length > 0) {
+>>>>>>> 765165a0de5d0db76f382f8e59bf4c98ae30268e
             this.results = this.unfilteredResults.filter(r => r.name.toLowerCase().includes(filterString));
         }
         else {
