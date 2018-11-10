@@ -4,7 +4,7 @@
   "readme": "NativeScript Application",
   "repository": "https://github.com/etabakov/fivekmrun-app",
   "nativescript": {
-    "id": "bg.5kmpark.5kmrun",
+    "id": "bg.fivekmpark.fivekmrun",
     "tns-android": {
       "version": "5.0.0"
     },
@@ -36,7 +36,7 @@
     "linqts": "^1.10.0",
     "nativescript-angular": "^6.2.0",
     "nativescript-cardview": "^2.0.3",
-    "nativescript-plugin-firebase": "^6.1.0",
+    "nativescript-plugin-firebase": "^7.4.0",
     "nativescript-ratings": "^1.0.1",
     "nativescript-theme-core": "~1.0.4",
     "nativescript-ui-chart": "^3.9.1",
