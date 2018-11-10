@@ -27,16 +27,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        firebase.init({
-          }).then(
-            (instance) => {
-              console.log("firebase.init done");
-            },
-            (error) => {
-              console.log(`firebase.init error: ${error}`);
-            }
-          );
-
         this._activatedUrl = "/home";
         this._sideDrawerTransition = new SlideInOnTopTransition();
         this._navigationItems = [
