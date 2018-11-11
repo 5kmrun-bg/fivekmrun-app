@@ -4,7 +4,10 @@
   "readme": "NativeScript Application",
   "repository": "https://github.com/etabakov/fivekmrun-app",
   "nativescript": {
-    "id": "bg.fivekmpark.fivekmrun",
+    "id": {
+      "ios":"bg.5kmpark.5kmrun",
+      "android":"bg.fivekmpark.fivekmrun"
+    },
     "tns-android": {
       "version": "5.0.0"
     },
