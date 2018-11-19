@@ -4,6 +4,10 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { RunsRoutingModule } from "./runs-routing.module";
 import { RunsComponent } from "./runs.component";
 
+if (module['hot']) {
+    module['hot'].accept();
+}
+
 @NgModule({
     imports: [
         RunsRoutingModule,
