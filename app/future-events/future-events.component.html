@@ -10,13 +10,15 @@
 <StackLayout>
     <ListView [items]="events$ | async" height="100%">
         <ng-template let-item="item" let-i="index">
-            <GridLayout columns="auto, *, auto" rows="auto, *, *" class="results">
-                <Label col="0" row="0" [text]="'\uf073'" class="h2 fa va-m"></Label> <Label class="h2 text-left m-l-10 va-m" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="0"></Label>
-                <Image [src]="item.imageUrl" col="2" row="0" rowSpan="3" width="80" height="80"  class="img-circle"></Image>
-                <Label col="0" row="1" [text]="'\uf041'" class="fa va-m"></Label> <Label [text]="item.location" col="1" row="1" class="subtitle"> </Label>
-                <Label [text]="'\uf14b'" class="fa" col="0" row="2" *ngIf="item.title"></Label> 
-                <Label class="subtitle" [text]="item.title" col="1" row="2" textWrap="true"></Label>
-            </GridLayout> 
+            <StackLayout>
+                <GridLayout columns="auto, *, auto" rows="auto, *, *" class="results">
+                    <Label col="0" row="0" [text]="'\uf073'" class="h2 fa va-m"></Label> <Label class="h2 text-left m-l-10 va-m" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="0"></Label>
+                    <Image [src]="item.imageUrl" col="2" row="0" rowSpan="3" width="80" height="80"  class="img-circle"></Image>
+                    <Label col="0" row="1" [text]="'\uf041'" class="fa va-m"></Label> <Label [text]="item.location" col="1" row="1" class="subtitle"> </Label>
+                    <Label [text]="'\uf14b'" class="fa" col="0" row="2" *ngIf="item.title"></Label> 
+                    <Label class="subtitle" [text]="item.title" col="1" row="2" textWrap="true"></Label>
+                </GridLayout>
+            </StackLayout> 
         </ng-template>
     </ListView>
 </StackLayout>

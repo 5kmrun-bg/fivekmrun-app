@@ -6,6 +6,10 @@ import { StatisticsComponent } from "./statistics.component";
 
 import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
 
+if (module['hot']) {
+    module['hot'].accept();
+}
+
 @NgModule({
     imports: [
         StatisticsRoutingModule,
