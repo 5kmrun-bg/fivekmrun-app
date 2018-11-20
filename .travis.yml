@@ -58,6 +58,9 @@ android:
     - android-28
     - extra-android-m2repository
 
+licenses:
+    - 'android-sdk-license-.+'
+
 before_cache:
     - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 
