@@ -19,6 +19,7 @@ matrix:
       node_js: "8"
       jdk: oraclejdk8
       script:
+        - pod repo update
         - tns build ios --bundle
         - cd $IOS_PACKAGE_FOLDER && zip -r $IOS_PACKAGE $IOS_APP_NAME
         - "curl -u $SAUCE_USER:$SAUCE_KEY -X POST -H 'Content-Type: application/octet-stream' $IOS_SAUCE_STORAGE --data-binary @$IOS_PACKAGE_FOLDER/$IOS_PACKAGE"
@@ -72,7 +73,6 @@ cache:
 
 install:
     - pip install six
-    - pod repo update
     - echo no | npm install -g nativescript@next --ignore-scripts
     - tns usage-reporting disable
     - tns error-reporting disable
