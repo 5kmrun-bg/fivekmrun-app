@@ -32,28 +32,13 @@ matrix:
       script:
         - tns build android --bundle --env.snapshot
         - "curl -u $SAUCE_USER:$SAUCE_KEY -X POST -H 'Content-Type: application/octet-stream' $ANDROID_SAUCE_STORAGE --data-binary @$ANDROID_PACKAGE_FOLDER/app-debug.apk"
-    - stage: "UI Tests"
-      env:
-        - AndroidEmulator="23"
-      language: node_js
-      os: linux
-      node_js: "8"
-      script:
-      #  - npm i -g appium@1.8.0
-        - npm i
-        - travis_retry npm run e2e -- --runType android23 --sauceLab --appPath $ANDROID_PACKAGE
-    - os: linux
-      env: 
-        - iOS="11"
-      language: node_js 
-      node_js: "8"
-      script: 
-      #  - npm i -g appium@1.8.0
-        - npm i
-        - travis_wait travis_retry npm run e2e -- --runType sim.iPhone8 --sauceLab --appPath $IOS_PACKAGE
+        
 android:
   components:
     - tools
+    - platform-tools
+    - build-tools-28.0.2
+    - android-28
     - extra-android-m2repository
   licenses:
       - 'android-sdk-license-.+'
@@ -67,8 +52,6 @@ cache:
         - .nvm
         - $HOME/.gradle/caches/
         - $HOME/.gradle/wrapper/
-before_install:
-    - yes | sdkmanager "build-tools-28.0.2;platform-tools,android-28"
     
 install:
     - pip install six
