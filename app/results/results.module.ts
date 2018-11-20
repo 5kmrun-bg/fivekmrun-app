@@ -4,6 +4,10 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { ResultsRoutingModule } from "./results-routing.module";
 import { ResultsComponent } from "./results.component";
 
+if (module['hot']) {
+    module['hot'].accept();
+}
+
 @NgModule({
     imports: [
         ResultsRoutingModule,
