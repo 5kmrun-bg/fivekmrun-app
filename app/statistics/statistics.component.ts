@@ -17,6 +17,7 @@ export class StatisticsComponent implements OnInit {
     runsStatsMajorStep: string;
     runsStatsMax: number = 30;
     runsByMonth$: Observable<{Date, RunsCount}[]>;
+    dataLoaded: boolean = false;
 
     constructor(private statisticsService: StatisticsService) {
     }
@@ -37,6 +38,7 @@ export class StatisticsComponent implements OnInit {
             }
 
             this.runsStatsMax = Math.max.apply(null, stats.map(s => s.Time)) + 2;
+            this.dataLoaded = true;
         }).subscribe();
     }
 

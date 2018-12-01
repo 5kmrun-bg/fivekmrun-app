@@ -7,6 +7,10 @@ import { NativeScriptUIGaugeModule } from "nativescript-ui-gauge/angular";
 import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
 import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent } from "./tiles";
 
+if (module['hot']) {
+    module['hot'].accept();
+}
+
 @NgModule({
     imports: [
         HomeRoutingModule,
