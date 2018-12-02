@@ -2,8 +2,15 @@ import groovy.json.JsonSlurper
 
 task replaceSettings {
     description "Replaces configuration settings."
-    def jsonSlurper = new JsonSlurper();
-    def pathToSettingsJson = "$projectDir/../../app/App_Resources/Android/settings.json";
+    def jsonSlurper = new JsonSlurper()
+    def pathToSettingsJson
+
+    if (project.hasProperty("appResourcesPath")) {
+        pathToSettingsJson = "$project.appResourcesPath/Android/settings.json";
+    } else {
+        pathToSettingsJson = "$rootDir/../../app/App_Resources/Android/settings.json";
+    }
+
     def settingsJsonFile = file(pathToSettingsJson);
     def settingsResolvedPath = settingsJsonFile.getAbsolutePath();
 
@@ -38,7 +45,7 @@ task replaceSettings {
             settingsGradleTemplate = settingsGradleTemplate.replaceAll( placeholder, settingValue as String);
         }
 
-        new File( './temp_setting.gradle' ).write( settingsGradleTemplate, 'UTF-8');
-        apply from: './temp_setting.gradle';
+        new File( "$rootDir/temp_setting.gradle" ).write( settingsGradleTemplate, 'UTF-8');
+        apply from: "$rootDir/temp_setting.gradle";
     }
 }
