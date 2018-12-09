@@ -1,23 +1,20 @@
 {
     "local.android26": {
         "platformName": "Android",
-        "platformVersion": "8.0",
-        "deviceName": "Nexus_5X_API_26",
-        "avd": "Nexus_5X_API_26",
-        "lt": 60000,
-        "newCommandTimeout": 720,
-        "noReset": true,
-        "fullReset": false,
+        "platformVersion": "6.0",
+        "deviceName": "Android Emulator",
         "appiumVersion": "1.8.0",
+        "relaxed-security": true,
+        "noReset": true,
+        "resetKeyboard": true,
         "app": ""
     },
     "local.iPhoneX": {
         "platformName": "iOS",
-        "platformVersion": "12.0",
-        "deviceName": "iPhone X",
+        "platformVersion": "11.2",
+        "deviceName": "iPhone 8",
         "noReset": true,
         "fullReset": false,
-        "appiumVersion": "1.8.0",
         "app": ""
     }
 }
