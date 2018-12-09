@@ -41,7 +41,7 @@
                     <CategoricalAxis tkCartesianHorizontalAxis></CategoricalAxis>
                     <LinearAxis tkCartesianVerticalAxis labelFormat="%.0fмин" [maximum]="runsStatsMax + 3"></LinearAxis>
 
-                    <BarSeries tkCartesianSeries [items]="citiesBestTimesSource$ | async" categoryProperty="City" valueProperty="BestTime" showLabels="true">
+                    <BarSeries tkCartesianSeries [items]="citiesBestTimesSource$ | async" categoryProperty="City" valueProperty="BestTime" showLabels="true" paletteMode="Item">
                         <PointLabelStyle tkBarLabelStyle fontStyle="Bold" fillColor="#ff6060" textSize="13" textColor="White"></PointLabelStyle>
                     </BarSeries>
                 </RadCartesianChart>
