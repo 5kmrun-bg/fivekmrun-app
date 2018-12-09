@@ -39,7 +39,7 @@ matrix:
       os: linux
       node_js: "8"
       script:
-        - npm i -g appium@1.8.0
+      #  - npm i -g appium@1.8.0
         - npm i
         - travis_retry npm run e2e -- --runType local.android26 --sauceLab --appPath $ANDROID_PACKAGE
     - os: linux
@@ -48,7 +48,7 @@ matrix:
       language: node_js 
       node_js: "8"
       script: 
-        - npm i -g appium@1.8.0
+      #  - npm i -g appium@1.8.0
         - npm i
         - travis_wait travis_retry npm run e2e -- --runType local.iPhoneX --sauceLab --appPath $IOS_PACKAGE      
 android:
