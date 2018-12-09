@@ -38,6 +38,7 @@
     "cheerio": "0.22.0",
     "linqts": "^1.10.0",
     "nativescript-angular": "^6.2.0",
+    "nativescript-brightness": "^1.0.0",
     "nativescript-cardview": "^2.0.3",
     "nativescript-plugin-firebase": "^7.4.2",
     "nativescript-ratings": "^1.0.1",

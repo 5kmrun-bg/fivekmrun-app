@@ -6,6 +6,10 @@ import { BarcodeComponent } from "./barcode.component";
 
 import { IdFormatModule } from "../pipes/id-format.module";
 
+if (module['hot']) {
+    module['hot'].accept();
+}
+
 @NgModule({
     imports: [
         BarcodeRoutingModule,
