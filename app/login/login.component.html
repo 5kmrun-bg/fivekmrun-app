@@ -4,8 +4,8 @@
 <GridLayout class="page page-content login">
     <StackLayout [@login]="isProfileLoaded ? 'hidden' : 'shown'" verticalAlignment="center">
         <Label text="Личен номер"></Label> 
-        <TextField #txtUserId (returnPress)="loadProfile()" [(ngModel)]="userId" class="input-textbox" keyboardType="number"></TextField>
-        <Button (tap)="loadProfile()" text="Напред" class="input-button"></Button>
+        <TextField #txtUserId (returnPress)="loadProfile()" [(ngModel)]="userId" class="input-textbox" keyboardType="number" automationText="txtLoginId"></TextField>
+        <Button (tap)="loadProfile()" text="Напред" class="input-button" automationText="btnLoginNext"></Button>
     </StackLayout>
 
     <StackLayout [@confirm]="isProfileLoaded ? 'shown' : 'hidden'" class="profile-preview m-l-20 m-r-20" horizontalAlignment="center" verticalAlignment="center">
@@ -13,8 +13,8 @@
         <Label class="va-m m-t-10" [text]="(user$| async)?.name + ' ' + (user$| async)?.age"></Label>
         <Image class="va-m m-t-10 profile-preview-img" [src]="(user$ |async)?.avatarUrl"></Image>  
         <StackLayout orientation="horizontal" class="m-t-10">
-            <Button [text]="'\uf040'" (onTap)="goBack()" class="fa input-button-red"></Button>
-            <Button text="Напред" (onTap)="next()" class="input-button m-l-10"></Button>
+            <Button [text]="'\uf040'" (onTap)="goBack()" class="fa input-button-red" automationText="btnLoginBack"></Button>
+            <Button text="Напред" (onTap)="next()" class="input-button m-l-10" automationText="btnLoginConfirm"></Button>
         </StackLayout>
     </StackLayout>
 </GridLayout>
