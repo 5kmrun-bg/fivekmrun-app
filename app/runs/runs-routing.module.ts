@@ -5,7 +5,8 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { RunsComponent } from "./runs.component";
 
 const routes: Routes = [
-    { path: "", component: RunsComponent }
+    { path: "", redirectTo: "default"},
+    { path: "default", component: RunsComponent }
 ];
 
 @NgModule({

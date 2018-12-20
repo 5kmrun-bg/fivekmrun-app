@@ -61,18 +61,11 @@ ActionBar .action-bar-title {
     transform: scaleY(2);
 }
 
-.dashboard {
-    background-color: #fafafa;
-}
-
 .dashboard-item {
     text-align: center;
     vertical-align: middle;
-    height: 100%;
-    background-color: #FFFFFF;
     font-size: 20;
-    border-width: 0.5;
-    border-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
 }
 
 .stat-box {
@@ -145,7 +138,6 @@ GridLayout.details Label {
 }
 
 .tile-header {
-    background-color: #00aeef;
     color: #ffffff;
     font-size: 14;
     text-align: center;
@@ -154,7 +146,7 @@ GridLayout.details Label {
 }
 
 .tile-value {
-    color: #343434;
+    color: #ffffff;
     font-size: 16;
 }
 

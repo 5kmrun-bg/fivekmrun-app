@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import { Ratings } from "nativescript-ratings";
 import * as app from "application";
 import { RadSideDrawer } from "nativescript-ui-sidedrawer";
+import { Page } from "tns-core-modules/ui/page/page";
 
 @Component({
     selector: "Home",
@@ -18,7 +19,9 @@ export class HomeComponent implements OnInit {
     lastRun$: Observable<Run>;
     bestRun$: Observable<Run>;
     runs$: Observable<Run[]>;
-    constructor(private userService: UserService, private runService: RunService) { }
+    constructor(private userService: UserService, private runService: RunService, private page: Page) {
+        this.page.actionBarHidden = true;
+     }
 
     ngOnInit(): void {
         this.currentUser$ = this.userService.getCurrentUser();

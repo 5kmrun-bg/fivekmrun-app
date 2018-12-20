@@ -1,6 +1,4 @@
-<CardView col="0" row="0" class="cardStyle" margin="5" elevation="0" radius="0" shadowOffsetWidth="0" shadowOffsetHeight="0" shadowRadius="0">
-    <GridLayout rows="auto, *" columns="*" class="dashboard-item" verticalAlignment="stretch" [nsRouterLink]="['/runs']">
-        <Label text="Общо (км)" col="0" row="0" class="tile-header"></Label>
-        <Label [text]="distance" class="tile-value va-m" style="font-size: 60" col="0" row="1"></Label>
-    </GridLayout>
-</CardView>
+<GridLayout col="0" row="1" rows="auto, auto" columns="*" class="dashboard-item" [nsRouterLink]="['/runs']">
+    <Label [text]="distance" class="tile-value va-m" style="font-size: 30" col="0" row="0"></Label>
+    <Label text="Пробягано разстояние" col="0" row="1" class="tile-header" textWrap="true"></Label>
+</GridLayout>

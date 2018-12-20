@@ -8,6 +8,7 @@ import { Observable } from "rxjs/Observable";
 import { filter } from "rxjs/operators";
 import { User } from "./models";
 import { UserService } from "./services";
+import { isAndroid } from "tns-core-modules/platform/platform";
 
 @Component({
     selector: "ns-app",
@@ -37,60 +38,7 @@ export class AppComponent implements OnInit {
             }
           );
 
-        this._activatedUrl = "/home";
-        this._sideDrawerTransition = new SlideInOnTopTransition();
-        this._navigationItems = [
-            {
-                title: "Начало",
-                name: "home",
-                route: "/home",
-                icon: "\uf015"
-            },
-            {
-                title: "Новини",
-                name: "news",
-                route: "/news",
-                icon: "\uf1ea"
- 
-            },
-            {
-                title: "Твоите Бягания",
-                name: "runs",
-                route: "/runs",
-                icon: "\uf11e"
-            },
-            {
-                title: "Предстоящи Събития",
-                name: "future-events",
-                route: "/future-events",
-                icon: "\uf073"
-            },
-            {
-                title: "Резултати",
-                name: "results",
-                route: "/results",
-                icon: "\uf0cb"
-            },
-            {
-                title: "Статистика",
-                name: "statistics",
-                route: "/statistics",
-                icon: "\uf080"
-            },
-            {
-                title: "Баркод",
-                name: "barcode",
-                route: "/barcode",
-                icon: "\uf02a"
-            },
-            {
-                title: "Изход",
-                name: "login",
-                route: "/login",
-                icon: "\uf08b "
-            }
-        ];
-
+       this._activatedUrl = "/home";
         this.currentUser$ = this.userService.getCurrentUser();
 
         this.router.events
@@ -111,32 +59,5 @@ export class AppComponent implements OnInit {
         this.userService.userChanged.subscribe(value => {
             this.currentUser$ = this.userService.getCurrentUser();
         });
-    }
-
-    get sideDrawerTransition(): DrawerTransitionBase {
-        return this._sideDrawerTransition;
-    }
-
-    isComponentSelected(url: string): boolean {
-        return this._activatedUrl === url;
-    }
-
-    onNavigationItemTap(navItemRoute: string): void {
-        this.routerExtensions.navigate([navItemRoute], {
-            transition: {
-                name: "fade"
-            }
-        });
-
-        const sideDrawer = <RadSideDrawer>app.getRootView();
-        sideDrawer.closeDrawer();
-    }
-
-    get navigationItems(): Array<any> {
-        return this._navigationItems;
-    }
-
-    isPageSelected(pageTitle: string): boolean {
-        return false;
     }
 }

@@ -5,7 +5,8 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { ResultsComponent } from "./results.component";
 
 const routes: Routes = [
-    { path: "", component: ResultsComponent }
+    { path: "", redirectTo: "default"},
+    { path: "default", component: ResultsComponent }
 ];
 
 @NgModule({
