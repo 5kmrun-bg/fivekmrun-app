@@ -10,7 +10,6 @@ import { UserService, RunService, NewsService, EventService, StatisticsService }
 import { AuthenticationGuard, ConnectivityGuard } from "./guards";
 import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
-import { NSModuleFactoryLoader } from "nativescript-angular/router";
 
 export class LoggerErrorHandler implements ErrorHandler {
     handleError(error) {
@@ -42,8 +41,7 @@ export class LoggerErrorHandler implements ErrorHandler {
         StatisticsService,
         AuthenticationGuard,
         { provide: ErrorHandler, useClass: LoggerErrorHandler },
-        ConnectivityGuard,
-        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader }
+        ConnectivityGuard
     ],
     schemas: [
         NO_ERRORS_SCHEMA
