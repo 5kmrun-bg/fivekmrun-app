@@ -5,6 +5,10 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { TabsComponent } from "./tabs.component";
 import { ConnectivityGuard } from "~/guards";
 
+if (module['hot']) {
+    module['hot'].accept();
+}
+
 @NgModule({
     imports: [            
         NativeScriptCommonModule,

@@ -138,7 +138,7 @@ GridLayout.details Label {
     to { transform: translate(0, 0); }
 }
 
-.tile-header {
+.tile-header-dark {
     color: #ffffff;
     font-size: 14;
     text-align: center;
@@ -146,7 +146,21 @@ GridLayout.details Label {
     padding-bottom: 5;
 }
 
-.tile-value {
+.tile-header-white {
+    color: #000000;
+    font-size: 14;
+    text-align: center;
+    padding-top: 5;
+    padding-bottom: 5;
+}
+
+.tile-value-white {
+    color: #000000;
+    font-size: 16;
+    text-align: left;
+}
+
+.tile-value-dark {
     color: #ffffff;
     font-size: 16;
 }

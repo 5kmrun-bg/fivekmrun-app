@@ -1,22 +1,24 @@
-<GridLayout class="page page-content dashboard" height="100%" rows="*, *" columns="*">
+<GridLayout class="page page-content dashboard" height="100%" rows="auto, auto" columns="*">
 <GridLayout  columns="*, *, *, *" rows="auto, *, *" style="background-color: #252525" col="0" row="0">
-    <Label row="0" col="0" [text]="'\uf02a'" class="fa tile-header text-left" style="font-size: 40;"></Label>
-    <Label row="0" col="3" [text]="'\uf2f5'" class="fa tile-header text-right" style="font-size: 40;"></Label>
+    <Label row="0" col="0" [text]="'\uf02a'" class="fa tile-header-dark text-left" style="font-size: 40;"></Label>
+    <Label row="0" col="3" [text]="'\uf2f5'" class="fa tile-header-dark text-right" style="font-size: 40;"></Label>
 
     <total-distance-tile [distance]="(currentUser$ | async)?.totalKmRan" col="0" row="1"></total-distance-tile>
     <StackLayout col="1" row="1" colSpan="2">
         <Image [src]="(currentUser$ |async)?.avatarUrl" class="img-circle"></Image>
-        <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.suuntoPoints + ' SUUNTO точки'" class="tile-header"></Label>
-        <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.runsCount + ' участия'" class="tile-header"></Label>
-        <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.age" class="tile-header"></Label>
+        <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.suuntoPoints + ' SUUNTO точки'" class="tile-header-dark"></Label>
+        <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.runsCount + ' участия'" class="tile-header-dark"></Label>
+        <Label class="footnote m-l-20 va-m" [text]="(currentUser$ |async)?.age" class="tile-header-dark"></Label>
     </StackLayout>
     <next-milestone-tile [currentUser$]="currentUser$" col="3" row="1"></next-milestone-tile>
 </GridLayout>
-<GridLayout columns="*, *, *, *" rows="*" style="background-color: white;" col="0" row="1">
+<GridLayout columns="*, *, *, *" rows="100, 100" style="background-color: white; padding: 20 20 20 20;" col="0" row="1">
     <!-- Last Run -->
-    <run-details-tile title="Последно" [run]="lastRun$ | async" col="0" row="0" colSpan="2" style="background-color: white"></run-details-tile>
+    <run-details-tile title="Последно участие" [run]="lastRun$ | async" col="0" row="0" colSpan="2" style="background-color: white"></run-details-tile>
 
     <!-- Best Run -->
-    <run-details-tile title="Най-бързо" [run]="bestRun$ | async" col="2" row="0" colSpan="2" style="background-color: white"></run-details-tile>
+    <run-details-tile title="Най-добро участие" [run]="bestRun$ | async" col="2" row="0" colSpan="2" style="background-color: white"></run-details-tile>
+
+    <run-stats-tile [runs$]="runs$"></run-stats-tile>
 </GridLayout>
 </GridLayout>

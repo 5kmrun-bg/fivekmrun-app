@@ -1,17 +1,12 @@
-<CardView [col]="col" [row]="row" colSpan="2" class="cardStyle" margin="5" elevation="0" radius="0" shadowOffsetWidth="0" shadowOffsetHeight="0" shadowRadius="0"  style="background-color: white">
-    <GridLayout columns="auto, *" rows="auto, *, *, *, *" class="dashboard-item" [nsRouterLink]="['/runs/' + run?.id]" verticalAlignment="stretch">
-        <Label [text]="title" col="0" row="0" colSpan="2" class="tile-header"> </Label>
+<CardView [col]="col" [row]="row" colSpan="2" class="cardStyle" margin="5" elevation="5" radius="5" shadowOffsetWidth="5" shadowOffsetHeight="5" shadowRadius="5">
+    <GridLayout columns="auto, *" rows="auto, auto, auto, auto" class="dashboard-item" [nsRouterLink]="['/runs/' + run?.id]" verticalAlignment="stretch">
+        <Label [text]="title" col="0" row="0" colSpan="2" class="tile-header-white"> </Label>
 
-        <Label col="0" row="1" text="Дата: " class="dashboard-icon"></Label> 
-        <Label class="text-left m-l-5 va-m tile-value" [text]="run?.date | date:'dd.MM.yyyy'" col="1" row="1"></Label>
-        
-        <Label col="0" row="2" text="Темпо: " class="dashboard-icon "></Label> 
-        <Label class="text-left m-l-5 va-m tile-value" [text]="run?.pace" col="1" row="2"></Label>
-        
-        <Label col="0" row="3" text="Време: " class="dashboard-icon "></Label> 
-        <Label class="text-left m-l-5 va-m tile-value" [text]="run?.time" col="1" row="3"></Label>
-        
-        <Label col="0" row="4" text="Място: " class="dashboard-icon "></Label> 
-        <Label class="text-left m-l-5 va-m tile-value" [text]="run?.position" col="1" row="4"></Label>        
+        <Label text="33" col="0" row="1" rowSpan="2" class="va-m"></Label>
+        <Label text="място" col="0" row="2" class="va-m"></Label>
+
+        <Label col="1" row="1" [text]="'Дата: ' + (run?.date | date:'dd.MM.yyyy')" class="va-m tile-value-white"></Label> 
+        <Label col="1" row="2" [text]="'Темпо: ' + run?.pace.toString()" class="va-m tile-value-white"></Label> 
+        <Label col="1" row="3" [text]="'Време: ' + run?.time.toString()" class="va-m tile-value-white"></Label> 
     </GridLayout> 
 </CardView>
