@@ -1,4 +1,4 @@
-<CardView [col]="col" [row]="row" class="cardStyle" margin="5" elevation="0" radius="0" shadowOffsetWidth="0" shadowOffsetHeight="0" shadowRadius="0">
+<CardView [col]="col" [row]="row" colSpan="2" class="cardStyle" margin="5" elevation="0" radius="0" shadowOffsetWidth="0" shadowOffsetHeight="0" shadowRadius="0"  style="background-color: white">
     <GridLayout columns="auto, *" rows="auto, *, *, *, *" class="dashboard-item" [nsRouterLink]="['/runs/' + run?.id]" verticalAlignment="stretch">
         <Label [text]="title" col="0" row="0" colSpan="2" class="tile-header"> </Label>
 
