@@ -13,7 +13,7 @@
         <Label class="va-m m-t-10" [text]="(user$| async)?.name + ' ' + (user$| async)?.age"></Label>
         <Image class="va-m m-t-10 profile-preview-img" [src]="(user$ |async)?.avatarUrl"></Image>  
         <StackLayout orientation="horizontal" class="m-t-10">
-            <Button [text]="'\uf040'" (onTap)="goBack()" class="fa input-button-red" automationText="btnLoginBack"></Button>
+            <Button [text]="'\uf303'" (onTap)="goBack()" class="fa input-button-red" automationText="btnLoginBack"></Button>
             <Button text="Напред" (onTap)="next()" class="input-button m-l-10" automationText="btnLoginConfirm"></Button>
         </StackLayout>
     </StackLayout>
