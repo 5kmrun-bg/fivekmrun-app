@@ -3,41 +3,46 @@ import { NativeScriptRouterModule, NSEmptyOutletComponent } from "nativescript-a
 import { NativeScriptCommonModule } from "nativescript-angular/common";
 
 import { TabsComponent } from "./tabs.component";
+import { ConnectivityGuard } from "~/guards";
 
 @NgModule({
-    imports: [
+    imports: [            
         NativeScriptCommonModule,
         NativeScriptRouterModule,
         NativeScriptRouterModule.forChild([
-            { path: "", redirectTo:"default", pathMatch: "full" },
             {
                 path: "default", component: TabsComponent, children: [
+                    
                     {
                         path: "home",
                         outlet: "homeTab",
                         component: NSEmptyOutletComponent,
                         loadChildren: "../home/home.module#HomeModule",
+                        canActivate: [ConnectivityGuard]
                     },
                     {
                         path: "results",
                         outlet: "resultsTab",
                         component: NSEmptyOutletComponent,
-                        loadChildren: "../results/results.module#ResultsModule"
+                        loadChildren: "../results/results.module#ResultsModule",
+                        canActivate: [ConnectivityGuard]
                     },
                     {
                         path: "runs",
                         outlet: "runsTab",
                         component: NSEmptyOutletComponent,
-                        loadChildren: "../runs/runs.module#RunsModule"
+                        loadChildren: "../runs/runs.module#RunsModule",
+                        canActivate: [ConnectivityGuard]
                     },
                     {
                         path: "future-events",
                         outlet: "eventsTab",
                         component: NSEmptyOutletComponent,
-                        loadChildren: "../future-events/future-events.module#FutureEventsModule"
+                        loadChildren: "../future-events/future-events.module#FutureEventsModule",
+                        canActivate: [ConnectivityGuard]
                     }                    
                 ]
-           }
+            }
         ])
     ],
     declarations: [
