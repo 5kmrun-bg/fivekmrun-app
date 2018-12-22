@@ -29,6 +29,11 @@ const routes: Routes = [
         canActivate: [ConnectivityGuard]
     },
     {
+        path: "barcode",
+        loadChildren: "./barcode/barcode.module#BarcodeModule",
+        canActivate: [ConnectivityGuard]
+    },
+    {
         path: "tabs",
         loadChildren: "./tabs/tabs.module#TabsModule",
         canActivate: [AuthenticationGuard, ConnectivityGuard]
