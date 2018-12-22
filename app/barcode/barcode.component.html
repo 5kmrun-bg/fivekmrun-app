@@ -11,7 +11,7 @@
     </ActionItem>
     <Label class="action-bar-title" text="Баркод"></Label>
 </ActionBar>
-<StackLayout #imgPlaceholder>
+<StackLayout>
     <Label [text]="(currentUser$| async)?.name" class="barcode"></Label>
     <Label [text]="(currentUser$| async)?.id | idFormat" class="barcode barcode-text"></Label>
     <Label [text]="(currentUser$| async)?.id" class="barcode"></Label>
