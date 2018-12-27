@@ -12,7 +12,7 @@
     </StackLayout>
     <next-milestone-tile [currentUser$]="currentUser$" col="3" row="1"></next-milestone-tile>
 </GridLayout>
-<GridLayout columns="*, *, *, *" rows="100, 100" style="background-color: white; padding: 20 20 20 20;" col="0" row="1">
+<GridLayout columns="*, *, *, *" rows="100, 100, 200" style="background-color: white; padding: 20 20 20 20;" col="0" row="1">
     <!-- Last Run -->
     <run-details-tile title="Последно участие" [run]="lastRun$ | async" col="0" row="0" colSpan="2" style="background-color: white"></run-details-tile>
 
@@ -20,5 +20,8 @@
     <run-details-tile title="Най-добро участие" [run]="bestRun$ | async" col="2" row="0" colSpan="2" style="background-color: white"></run-details-tile>
 
     <run-stats-tile [runs$]="runs$"></run-stats-tile>
+
+    <runs-by-route-tile></runs-by-route-tile>
+
 </GridLayout>
 </GridLayout>

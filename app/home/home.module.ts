@@ -5,7 +5,7 @@ import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import { NativeScriptUIGaugeModule } from "nativescript-ui-gauge/angular";
 import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
-import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent } from "./tiles";
+import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent, RunsByRouteComponent } from "./tiles";
 
 if (module['hot']) {
     module['hot'].accept();
@@ -13,7 +13,7 @@ if (module['hot']) {
 
 @NgModule({
     imports: [
-        HomeRoutingModule,
+        HomeRoutingModule,  
         NativeScriptUIGaugeModule,
         NativeScriptUIChartModule,
         CommonModule,
@@ -24,7 +24,8 @@ if (module['hot']) {
         RunDetailsTileComponent,
         NextMilestoneTileComponent,
         TotalDistanceTileComponent,
-        RunStatsTileComponent
+        RunStatsTileComponent,
+        RunsByRouteComponent
 
     ],
     schemas: [

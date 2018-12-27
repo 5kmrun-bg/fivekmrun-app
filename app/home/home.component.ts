@@ -4,8 +4,6 @@ import { User, Run } from "../models";
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 import { Ratings } from "nativescript-ratings";
-import * as app from "application";
-import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import { Page } from "tns-core-modules/ui/page/page";
 
 @Component({
@@ -52,10 +50,5 @@ export class HomeComponent implements OnInit {
 
         ratings.init();
         ratings.prompt();
-    }
-
-    onDrawerButtonTap(): void {
-        const sideDrawer = <RadSideDrawer>app.getRootView();
-        sideDrawer.showDrawer();
     }
 }
