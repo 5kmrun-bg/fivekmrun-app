@@ -1,12 +1,17 @@
 <CardView [col]="col" [row]="row" colSpan="2" class="cardStyle" margin="5" elevation="5" radius="5" shadowOffsetWidth="5" shadowOffsetHeight="5" shadowRadius="5">
-    <GridLayout columns="auto, *" rows="auto, auto, auto, auto" class="dashboard-item" [nsRouterLink]="['/runs/' + run?.id]" verticalAlignment="stretch">
-        <Label [text]="title" col="0" row="0" colSpan="2" class="tile-header-white"> </Label>
+    <GridLayout columns="auto, auto, auto" rows="auto, auto, auto, auto" class="dashboard-item" [nsRouterLink]="['/runs/' + run?.id]" verticalAlignment="stretch">
+        <Label [text]="title" col="0" row="0" colSpan="3" class="tile-header-white"> </Label>
 
-        <Label text="33" col="0" row="1" rowSpan="2" class="va-m"></Label>
-        <Label text="място" col="0" row="2" class="va-m"></Label>
+        <Label [text]="run?.position" col="0" row="1" rowSpan="2" style="font-size: 30; color: #fb5a2e; margin-right: 10; margin-left: 10;" class="va-m"></Label>
+        <Label text="място" col="0" row="3" class="va-m" style="font-size: 20;"></Label>
 
-        <Label col="1" row="1" [text]="'Дата: ' + (run?.date | date:'dd.MM.yyyy')" class="va-m tile-value-white"></Label> 
-        <Label col="1" row="2" [text]="'Темпо: ' + run?.pace.toString()" class="va-m tile-value-white"></Label> 
-        <Label col="1" row="3" [text]="'Време: ' + run?.time.toString()" class="va-m tile-value-white"></Label> 
+        <Label col="1" row="1" text="Дата: " class="tile-value-tooltip"></Label>
+        <Label col="2" row="1" [text]="run?.date | date:'dd.MM.yyyy'" class="va-m tile-value-white"></Label> 
+        
+        <Label col="1" row="2" text="Темпо: " class="tile-value-tooltip"></Label> 
+        <Label col="2" row="2" [text]="run?.pace.toString()" class="va-m tile-value-white"></Label> 
+
+        <Label col="1" row="3" text="Време: " class="tile-value-tooltip"></Label>
+        <Label col="2" row="3" [text]="run?.time.toString()" class="va-m tile-value-white"></Label> 
     </GridLayout> 
 </CardView>
