@@ -3,7 +3,7 @@
 
     <RadCartesianChart height="85%" tkExampleTitle tkToggleNavButton col="0" row="1" class="m-t-10">
         <CategoricalAxis tkCartesianHorizontalAxis></CategoricalAxis>
-        <LinearAxis tkCartesianVerticalAxis labelFormat="%.0fмин" [maximum]="runsStatsMax + 3"></LinearAxis>
+        <LinearAxis tkCartesianVerticalAxis labelFormat="%.0fмин" [maximum]="60"></LinearAxis>
 
         <BarSeries tkCartesianSeries [items]="citiesBestTimesSource$ | async" categoryProperty="City" valueProperty="BestTime" showLabels="true" paletteMode="Item">
             <PointLabelStyle tkBarLabelStyle fontStyle="Bold" fillColor="#ff6060" textSize="13" textColor="White"></PointLabelStyle>

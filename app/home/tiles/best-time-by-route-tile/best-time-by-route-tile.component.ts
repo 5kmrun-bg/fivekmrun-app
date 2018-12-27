@@ -10,7 +10,7 @@ import { StatisticsService } from "../../../services";
 export class BestTimeByRouteComponent implements OnInit {
 
     citiesBestTimesSource$: Observable<{City, BestTime}[]>;
-
+    
     constructor(private statisticsService: StatisticsService) {
     }
 

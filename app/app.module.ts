@@ -9,7 +9,6 @@ import { AppComponent } from "./app.component";
 import { UserService, RunService, NewsService, EventService, StatisticsService } from "./services";
 import { AuthenticationGuard, ConnectivityGuard } from "./guards";
 import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
-import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
 
 export class LoggerErrorHandler implements ErrorHandler {
     handleError(error) {
@@ -27,7 +26,6 @@ export class LoggerErrorHandler implements ErrorHandler {
         NativeScriptHttpModule,
         AppRoutingModule,
         NativeScriptAnimationsModule,
-        NativeScriptUISideDrawerModule,
         CommonModule
     ],
     declarations: [
