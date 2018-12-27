@@ -5,7 +5,7 @@ import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import { NativeScriptUIGaugeModule } from "nativescript-ui-gauge/angular";
 import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
-import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent, RunsByRouteComponent } from "./tiles";
+import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent, RunsByRouteComponent, BestTimeByRouteComponent } from "./tiles";
 
 if (module['hot']) {
     module['hot'].accept();
@@ -25,7 +25,8 @@ if (module['hot']) {
         NextMilestoneTileComponent,
         TotalDistanceTileComponent,
         RunStatsTileComponent,
-        RunsByRouteComponent
+        RunsByRouteComponent,
+        BestTimeByRouteComponent
 
     ],
     schemas: [
