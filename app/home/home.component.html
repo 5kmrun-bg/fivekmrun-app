@@ -1,9 +1,8 @@
 <ScrollView class="page page-content dashboard">
     <GridLayout height="200%" rows="auto, *" columns="*">
         <GridLayout columns="*, *, *, *" rows="auto, *, *" style="background-color: #252525" col="0" row="0">
-            <Label row="0" col="0" [text]="'\uf02a'" class="fa tile-header-dark text-left" style="font-size: 40;"
-                [nsRouterLink]="['/barcode']"></Label>
-            <Label row="0" col="3" [text]="'\uf2f5'" class="fa tile-header-dark text-right" style="font-size: 40;"></Label>
+            <Label row="0" col="0" [text]="'\uf02a'" class="fa tile-header-dark text-left" style="font-size: 40;" [nsRouterLink]="['/barcode']"></Label>
+            <Label row="0" col="3" [text]="'\uf2f5'" class="fa tile-header-dark text-right" style="font-size: 40;" [nsRouterLink]="['/login']"></Label>
 
             <total-distance-tile [distance]="(currentUser$ | async)?.totalKmRan" col="0" row="1"></total-distance-tile>
             <StackLayout col="1" row="1" colSpan="2">
@@ -15,7 +14,7 @@
             </StackLayout>
             <next-milestone-tile [currentUser$]="currentUser$" col="3" row="1"></next-milestone-tile>
         </GridLayout>
-        <GridLayout col="0" row="1" columns="*, *, *, *" rows="100, 100, 100, 200" style="background-color: white; padding: 20 20 20 20;">
+        <GridLayout col="0" row="1" columns="*, *, *, *" rows="100, 200, 200, 200" style="background-color: white; padding: 20 20 20 20;">
             <!-- Last Run -->
             <run-details-tile title="Последно участие" [run]="lastRun$ | async" col="0" row="0" colSpan="2" style="background-color: white"></run-details-tile>
 
