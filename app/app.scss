@@ -193,11 +193,23 @@ GridLayout.details Label {
 }
 
 .results {
-    border-width: 1;
-    border-color: #00aeef;
-    border-radius: 5;
+    background-color: white;
     margin: 10 10 10 10;
     padding: 10 10 10 10;
+}
+
+.list-icon {
+    font-family: "Font Awesome 5 Free";
+    vertical-align: middle;
+    text-align: center;
+    color: #fb5a2e;
+}
+
+.list-details {
+    text-align: left;
+    margin-left: 10;
+    vertical-align: middle;
+    font-size: 14;
 }
 
 .resultsView {

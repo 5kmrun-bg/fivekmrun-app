@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { EventService } from "../services";
 import { Event } from "../models";
 import { Observable } from "rxjs/Observable";
+import { isIOS } from 'tns-core-modules/platform';
+declare var UITableViewCellSelectionStyle;
 
 @Component({
     selector: "FutureEvents",
@@ -17,4 +19,11 @@ export class FutureEventsComponent implements OnInit {
     ngOnInit(): void {
         this.events$ = this.eventService.getAllFutureEvents();
     }
+
+    onItemLoading(args) {
+        if (isIOS) {
+          const iosCell = args.ios;
+          iosCell.selectionStyle = UITableViewCellSelectionStyle.None;
+        }
+      }
 }
