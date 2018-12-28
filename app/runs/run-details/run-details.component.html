@@ -3,7 +3,42 @@
     <Label class="action-bar-title" [text]="run?.date | date:'dd.MM.yyyy'"></Label>
 </ActionBar>
 
-<GridLayout columns="*, *" rows="auto, auto, auto, auto, auto, auto, auto, auto" class="m-l-20 details">
+<GridLayout columns="auto, *, auto" rows="*, 120, auto, *, *, *, *, *" style="background-color: #252525">
+    <Label row="0" text="t"></Label>
+    <StackLayout col="0" row="1" class="round-tile">
+        <Label [text]="run?.pace"></Label>
+        <Label text="мин/км"></Label>
+    </StackLayout>
+
+    <Label col="1" row="1" [text]="run?.position" class="round-tile"></Label>
+
+    <StackLayout col="2" row="1" class="round-tile">
+        <Label [text]="run?.speed"></Label>
+        <Label text="км/ч"></Label>
+    </StackLayout>
+
+    <Label col="0" row="2" text="Темпо" class="tile-header-dark"></Label>
+    <Label col="1" row="2" text="Позиция" class="tile-header-dark font-weight-bold"></Label>
+    <Label col="2" row="2" text="Скорост" class="tile-header-dark"></Label>
+
+    <StackLayout colSpan="3" col="0" row="3" orientation="horizontal" width="100%" style="border-color:#ffffff; border-width: 1">
+        <Label [text]="'\uf073'" class="list-icon tile-value-dark"></Label>
+        <Label [text]="run?.date | date:'dd.MM.yyyy'" class="tile-value-dark"></Label>
+        <Label [text]="'\uf3c5'" class="list-icon tile-value-dark"></Label>
+        <Label [text]="run?.place" class="tile-value-dark"></Label>
+    </StackLayout>
+
+    <StackLayout colSpan="3" col="0" row="4" orientation="horizontal">
+        <Label [text]="'\uf017'" class="list-icon tile-value-dark"></Label> 
+        <Label [text]="run?.time"  class="tile-value-dark"></Label>
+    </StackLayout>
+
+    <Label colSpan="3" col="0" row="5" [text]="'Предишно бягане: ' + run?.differenceFromPrevious"></Label>
+    <Label colSpan="3" col="0" row="6" [text]="'Най-добро бягане: ' + run?.differenceFromBest"></Label>
+
+</GridLayout>
+
+<!-- <GridLayout columns="*, *" rows="auto, auto, auto, auto, auto, auto, auto, auto" class="m-l-20 details">
     <Label col="0" row="0" text="Трасе: "></Label> <Label col="1" row="0" [text]="run?.place" textWrap="true" class="tile-value"></Label>
     <Label col="0" row="1" text="Време: "></Label> <Label col="1" row="1" [text]="run?.time" class="tile-value"></Label>
     <Label col="0" row="2" text="Позиция: "></Label> <Label col="1" row="2" [text]="run?.position" class="tile-value"></Label>
@@ -12,4 +47,4 @@
     <Label col="0" row="5" text="Разлика от предишното бягане: " textWrap="true"></Label> <Label col="1" row="5" [text]="run?.differenceFromPrevious" class="tile-value"></Label>
     <Label col="0" row="6" text="Разлика от най-добро време: " textWrap="true"></Label> <Label col="1" row="6" [text]="run?.differenceFromBest" class="tile-value"></Label>
     <Label col="0" row="7" text="Бележки: "></Label> <Label col="1" row="7" [text]="run?.notes" class="tile-value"></Label>
-</GridLayout>
+</GridLayout> -->

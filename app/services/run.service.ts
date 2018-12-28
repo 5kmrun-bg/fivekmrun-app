@@ -95,7 +95,8 @@ export class RunService {
     }
 
     private extractSpeed(cells: any): string {
-        return cells[6].children[0].data;
+        var untrimmedSpeed = cells[6].children[0].data;
+        return untrimmedSpeed.substring(0, untrimmedSpeed.length - 5);
     }
 
     private extractNotes(cells: any): string {
