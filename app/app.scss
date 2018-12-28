@@ -154,27 +154,28 @@ GridLayout.details Label {
 
 .tile-header-white {
     color: #000000;
-    font-size: 18;
+    font-size: 16;
     text-align: center;
-    padding-top: 5;
-    padding-bottom: 5;
+    padding: 5 5 5 5;
 }
 
 .tile-value-white {
     color: #000000;
     font-size: 12;
     text-align: left;
+    vertical-align: middle;
 }
 
 .tile-value-tooltip {
     color: #aaaaaa;
     font-size: 12;
     text-align: left;
+    vertical-align: middle;
 }
 
 .tile-value-dark {
     color: #ffffff;
-    font-size: 16;
+    font-size: 14;
 }
 
 .dashboard-icon {

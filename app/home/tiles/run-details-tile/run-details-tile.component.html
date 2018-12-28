@@ -2,16 +2,16 @@
     <GridLayout columns="auto, auto, auto" rows="auto, auto, auto, auto" class="dashboard-item-light" [nsRouterLink]="['/runs/' + run?.id]">
         <Label [text]="title" col="0" row="0" colSpan="3" class="tile-header-white"> </Label>
 
-        <Label [text]="run?.position" col="0" row="1" rowSpan="2" style="font-size: 30; color: #fb5a2e; margin-right: 10; margin-left: 10;" class="va-m font-weight-bold"></Label>
-        <Label text="място" col="0" row="3" class="va-m" style="font-size: 20;"></Label>
+        <Label [text]="run?.position" col="0" row="1" rowSpan="2" style="font-size: 22; color: #fb5a2e;" class="font-weight-bold m-r-10 m-l-10"></Label>
+        <Label text="място" col="0" row="3" class="tile-header-white"></Label>
 
         <Label col="1" row="1" text="Дата: " class="tile-value-tooltip"></Label>
-        <Label col="2" row="1" [text]="run?.date | date:'dd.MM.yyyy'" class="va-m tile-value-white"></Label> 
+        <Label col="2" row="1" [text]="run?.date | date:'dd.MM.yyyy'" class="tile-value-white"></Label> 
         
         <Label col="1" row="2" text="Темпо: " class="tile-value-tooltip"></Label> 
-        <Label col="2" row="2" [text]="run?.pace.toString()" class="va-m tile-value-white"></Label> 
+        <Label col="2" row="2" [text]="run?.pace.toString()" class="tile-value-white"></Label> 
 
         <Label col="1" row="3" text="Време: " class="tile-value-tooltip"></Label>
-        <Label col="2" row="3" [text]="run?.time.toString()" class="va-m tile-value-white"></Label> 
+        <Label col="2" row="3" [text]="run?.time.toString()" class="tile-value-white"></Label> 
     </GridLayout> 
 </CardView>
