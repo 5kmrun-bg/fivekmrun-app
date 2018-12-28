@@ -48,6 +48,7 @@
 ActionBar .action-bar-title {
     horizontal-align: center;
     color: white;
+    background-color: #252525;
 }
 
 .barcode {
@@ -213,14 +214,14 @@ GridLayout.details Label {
 }
 
 .resultsView {
-    background-color: #00aeef;
-}
+    background-color: #252525;
+    color: #ffffff;
 
-.resultsFilter {
-    background-color: white;
-    border-radius: 5;
-    margin: 10 10 10 10;
-    padding: 5 5 5 5;
+    TextField {
+        placeholder-color: white;
+        padding: 5 5 5 5;
+        margin: 10 10 10 10;
+    }
 }
 
 .round-tile {
@@ -231,4 +232,23 @@ GridLayout.details Label {
     height: 100;
     vertical-align: middle;
     text-align: center;
+}
+
+.red-number {
+    font-size: 22;
+    color: #fb5a2e;
+    font-weight: bold;
+    margin-right: 10;
+    margin-left: 10;
+}
+
+.red-number-big {
+    font-size: 30;
+    font-weight: bold;
+    color: #fb5a2e;
+    font-weight: bold;
+    margin-right: 5;
+    margin-left: 5;
+    margin-bottom: 5;
+    text-align: center
 }
