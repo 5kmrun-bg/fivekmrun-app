@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { RunsRoutingModule } from "./runs-routing.module";
 import { RunsComponent } from "./runs.component";
+import { RunDetailsModule } from "./run-details/run-details.module";
 
 if (module['hot']) {
     module['hot'].accept();
@@ -12,7 +13,8 @@ if (module['hot']) {
     imports: [
         RunsRoutingModule,
         CommonModule,
-        NativeScriptCommonModule
+        NativeScriptCommonModule,
+        RunDetailsModule
     ],
     declarations: [
         RunsComponent
