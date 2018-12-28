@@ -69,6 +69,14 @@ ActionBar .action-bar-title {
     height: 100%;
 }
 
+.dashboard-item-light {
+    background-color: #ffffff;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20;
+    height: 100%;
+}
+
 .stat-box {
     margin-top: 10;
     margin-bottom: 10;
@@ -126,10 +134,10 @@ GridLayout.details Label {
 .profile-preview {
     Image {
         border-radius: 100;
-        border-width: 2;
-        border-color: #00aeef;
-        width: 200;
-        height: 200;
+        border-width: 1;
+        border-color: #fb5a2e;
+        width: 150;
+        height: 150;
         margin-top: 10;
     }
 }
@@ -142,8 +150,6 @@ GridLayout.details Label {
     color: #ffffff;
     font-size: 14;
     text-align: center;
-    padding-top: 5;
-    padding-bottom: 5;
 }
 
 .tile-header-white {

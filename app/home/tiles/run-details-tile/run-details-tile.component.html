@@ -1,8 +1,8 @@
 <CardView [col]="col" [row]="row" colSpan="2" class="cardStyle" margin="5" elevation="5" radius="5" shadowOffsetWidth="5" shadowOffsetHeight="5" shadowRadius="5">
-    <GridLayout columns="auto, auto, auto" rows="auto, auto, auto, auto" class="dashboard-item" [nsRouterLink]="['/runs/' + run?.id]" verticalAlignment="stretch">
+    <GridLayout columns="auto, auto, auto" rows="auto, auto, auto, auto" class="dashboard-item-light" [nsRouterLink]="['/runs/' + run?.id]">
         <Label [text]="title" col="0" row="0" colSpan="3" class="tile-header-white"> </Label>
 
-        <Label [text]="run?.position" col="0" row="1" rowSpan="2" style="font-size: 30; color: #fb5a2e; margin-right: 10; margin-left: 10;" class="va-m"></Label>
+        <Label [text]="run?.position" col="0" row="1" rowSpan="2" style="font-size: 30; color: #fb5a2e; margin-right: 10; margin-left: 10;" class="va-m font-weight-bold"></Label>
         <Label text="място" col="0" row="3" class="va-m" style="font-size: 20;"></Label>
 
         <Label col="1" row="1" text="Дата: " class="tile-value-tooltip"></Label>
