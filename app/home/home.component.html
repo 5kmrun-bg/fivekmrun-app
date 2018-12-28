@@ -1,7 +1,7 @@
 <ScrollView class="page page-content dashboard">
     <StackLayout>
         <GridLayout columns="*, *, *, *" rows="auto, auto, 50" style="background-color: #252525">
-            <Label row="0" col="0" [text]="'\uf02a'" class="fa tile-header-dark text-left" style="font-size: 30;" [nsRouterLink]="['/barcode']"></Label>
+            <Label row="0" col="0" [text]="'\uf02a'" class="fa tile-header-dark text-left" style="font-size: 30;" [nsRouterLink]="['../barcode']"></Label>
             <Label row="0" col="3" [text]="'\uf2f5'" class="fa tile-header-dark text-right" style="font-size: 30;" [nsRouterLink]="['/login']"></Label>
 
             <total-distance-tile [distance]="(currentUser$ | async)?.totalKmRan" col="0" row="1"></total-distance-tile>
