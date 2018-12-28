@@ -25,12 +25,8 @@ export class ResultsDetailsComponent implements OnInit {
         this.pageRoute.activatedRoute
                 .switchMap(activatedRoute => activatedRoute.params)
                 .forEach((params) => { this.id = params["id"]; });
-      
     }
 
-    /* ***********************************************************
-    * Use the sideDrawerTransition property to change the open/close animation of the drawer.
-    *************************************************************/
     ngOnInit(): void {
         this.eventService.getAllPastEvents()
                 .map(events => events.filter(e => e.id == this.id)[0])
