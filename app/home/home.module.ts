@@ -6,6 +6,7 @@ import { HomeComponent } from "./home.component";
 import { NativeScriptUIGaugeModule } from "nativescript-ui-gauge/angular";
 import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
 import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent, RunsByRouteComponent, BestTimeByRouteComponent } from "./tiles";
+import { BarcodeModule } from "../barcode/barcode.module";
 
 if (module['hot']) {
     module['hot'].accept();
@@ -17,7 +18,8 @@ if (module['hot']) {
         NativeScriptUIGaugeModule,
         NativeScriptUIChartModule,
         CommonModule,
-        NativeScriptCommonModule
+        NativeScriptCommonModule,
+        BarcodeModule
     ],
     declarations: [
         HomeComponent,
