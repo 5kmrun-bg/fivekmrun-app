@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { RunService, UserService } from "../../services";
 import { Run } from "../../models";
-import { Observable } from "rxjs/Observable";
 import { PageRoute } from "nativescript-angular/router";
 import "rxjs/add/operator/switchMap";
 import {RouterExtensions} from "nativescript-angular/router";
@@ -16,7 +15,6 @@ export class RunDetailsComponent implements OnInit {
     run: Run;
 
     constructor(
-        private userService: UserService, 
         private runService: RunService, 
         private pageRoute: PageRoute, 
         private routerExtensions: RouterExtensions) {
