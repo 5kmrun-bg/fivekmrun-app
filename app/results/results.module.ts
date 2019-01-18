@@ -5,10 +5,6 @@ import { ResultsRoutingModule } from "./results-routing.module";
 import { ResultsComponent } from "./results.component";
 import { ResultsDetailsModule } from "./results-details/results-details.module";
 
-if (module['hot']) {
-    module['hot'].accept();
-}
-
 @NgModule({
     imports: [
         ResultsRoutingModule,

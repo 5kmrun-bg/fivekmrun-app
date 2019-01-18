@@ -5,10 +5,6 @@ import { RunsRoutingModule } from "./runs-routing.module";
 import { RunsComponent } from "./runs.component";
 import { RunDetailsModule } from "./run-details/run-details.module";
 
-if (module['hot']) {
-    module['hot'].accept();
-}
-
 @NgModule({
     imports: [
         RunsRoutingModule,

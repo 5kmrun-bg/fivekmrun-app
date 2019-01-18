@@ -5,10 +5,6 @@ import { ResultsDetailsRoutingModule } from "./results-details-routing.module";
 import { ResultsDetailsComponent } from "./results-details.component";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
-if (module['hot']) {
-    module['hot'].accept();
-}
-
 @NgModule({
     imports: [
         NativeScriptFormsModule,

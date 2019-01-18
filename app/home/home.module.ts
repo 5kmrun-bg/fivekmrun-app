@@ -8,10 +8,6 @@ import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
 import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent, RunsByRouteComponent, BestTimeByRouteComponent } from "./tiles";
 import { BarcodeModule } from "../barcode/barcode.module";
 
-if (module['hot']) {
-    module['hot'].accept();
-}
-
 @NgModule({
     imports: [
         HomeRoutingModule,  
