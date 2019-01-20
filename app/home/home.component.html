@@ -14,7 +14,7 @@
             <next-milestone-tile [currentUser$]="currentUser$" col="3" row="1"></next-milestone-tile>
             <StackLayout row="3" col="0" colSpan="4"></StackLayout>
         </GridLayout>
-        <GridLayout columns="*, *, *, *" rows="100, 200, 200, 200" style="background-color: #f2f2f2; padding: 10 10 10 10;">
+        <GridLayout columns="*, *, *, *" rows="100, 200, 200, auto" style="background-color: #f2f2f2; padding: 10 10 10 10;">
             <!-- Last Run -->
             <run-details-tile title="Последно участие" [run]="lastRun$ | async" col="0" row="0" colSpan="2"></run-details-tile>
 

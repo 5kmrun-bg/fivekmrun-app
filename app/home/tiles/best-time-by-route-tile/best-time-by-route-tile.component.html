@@ -3,7 +3,7 @@
     <GridLayout columns="*" rows="auto, auto" class="dashboard-item-light">
         <Label col="0" row="0" class="tile-header-white" text="Рекорди по трасета"></Label>
 
-        <StackLayout col="0" row="1" orientation="vertical"  class="list-group-item">
+        <StackLayout col="0" row="1">
             <StackLayout *ngFor="let bestTimeEntry of (citiesBestTimesSource$ | async)">
                 <bar-component [barTitle]="bestTimeEntry.City" [barValue]="bestTimeEntry.BestTime" [barMaximumValue]="maxBarValue"></bar-component>
             </StackLayout>
