@@ -7,6 +7,7 @@ import { NativeScriptUIGaugeModule } from "nativescript-ui-gauge/angular";
 import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
 import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent, RunsByRouteComponent, BestTimeByRouteComponent } from "./tiles";
 import { BarcodeModule } from "../barcode/barcode.module";
+import { BarComponent } from "./components/bar.component";
 
 @NgModule({
     imports: [
@@ -24,7 +25,8 @@ import { BarcodeModule } from "../barcode/barcode.module";
         TotalDistanceTileComponent,
         RunStatsTileComponent,
         RunsByRouteComponent,
-        BestTimeByRouteComponent
+        BestTimeByRouteComponent,
+        BarComponent
 
     ],
     schemas: [
