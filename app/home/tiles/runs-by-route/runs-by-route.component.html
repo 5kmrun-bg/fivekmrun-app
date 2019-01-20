@@ -4,7 +4,7 @@
         <Label col="0" row="0" class="tile-header-white" text="Брой бягания по трасета"></Label>
 
         <RadPieChart height="100%" allowAnimation="true" row="1" col="0">
-            <DonutSeries tkPieSeries selectionMode="DataPoint" outerRadiusFactor="0.9" expandRadius="0.4"
+            <DonutSeries tkPieSeries selectionMode="DataPoint" outerRadiusFactor="0.9" expandRadius="0.2"
                 outerRadiusFactor="0.7" innerRadiusFactor="0.4" [items]="citiesParticipationSource$ | async"
                 valueProperty="RunsCount" legendLabel="City" showLabels="true">
                 <Palette tkPiePalette>
@@ -14,6 +14,7 @@
                     <PaletteEntry tkPiePaletteEntry fillColor="#542415"></PaletteEntry>
                 </Palette>
             </DonutSeries>
+            <RadLegendView tkPieLegend position="Right" offsetOrigin="TopRight" enableSelection="true" width="150"></RadLegendView>
         </RadPieChart>
     </GridLayout>
 </CardView>
