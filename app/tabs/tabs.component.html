@@ -1,21 +1,23 @@
-<TabView androidTabsPosition="bottom" class="fa">
-    <page-router-outlet
-        *tabItem="{title: '\uf007'}"
-        name="homeTab">
-    </page-router-outlet>
-
-    <page-router-outlet
-        *tabItem="{title: '\uf70c'}"
-        name="runsTab">
-    </page-router-outlet>
-
-    <page-router-outlet
-        *tabItem="{title: '\uf2f2'}"
-        name="resultsTab">
-    </page-router-outlet>
+<StackLayout class="va-m" height="100%">
+    <TabView androidTabsPosition="bottom" class="fa tab-icons" tabBackgroundColor="#ffffff" selectedTabTextColor="#000000" height="150">
+        <page-router-outlet
+            *tabItem="{title: '\uf007'}"
+            name="homeTab">
+        </page-router-outlet>
     
-    <page-router-outlet
-        *tabItem="{title: '\uf073'}"
-        name="eventsTab">
-    </page-router-outlet>
-</TabView>
+        <page-router-outlet
+            *tabItem="{title: '\uf70c'}"
+            name="runsTab">
+        </page-router-outlet>
+    
+        <page-router-outlet
+            *tabItem="{title: '\uf2f2'}"
+            name="resultsTab">
+        </page-router-outlet>
+        
+        <page-router-outlet
+            *tabItem="{title: '\uf073'}"
+            name="eventsTab">
+        </page-router-outlet>
+    </TabView>
+</StackLayout>

@@ -269,8 +269,21 @@ GridLayout.details Label {
 
 .color-red {
     color: #FA3C37;
+    font-size: 18;
 }
 
 .color-green {
     color: #AAD278;
+    font-size: 18;
+}
+
+.tab-icons {
+    font-size: 30;
+    padding: 20 20 20 20;
+    margin: 20 20 20 20;
+    vertical-align: middle;
+}
+
+TabView {
+    vertical-align: middle;
 }
