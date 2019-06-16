@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     public user$: Observable<User>;
     public isProfileLoaded = false;
 
-    @ViewChild("txtUserId") txtUserId: ElementRef;
+    @ViewChild("txtUserId", {static: false}) txtUserId: ElementRef;
 
     constructor(private _page: Page, private router: Router, private userService: UserService) {
         this._page.actionBarHidden = true;

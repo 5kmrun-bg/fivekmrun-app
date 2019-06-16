@@ -9,10 +9,10 @@
       "android": "bg.fivekmpark.fivekmrun"
     },
     "tns-android": {
-      "version": "5.1.0"
+      "version": "5.4.0"
     },
     "tns-ios": {
-      "version": "5.1.0"
+      "version": "5.4.2"
     }
   },
   "scripts": {
@@ -28,21 +28,21 @@
     "e2e-watch": "tsc -p e2e --watch"
   },
   "dependencies": {
-    "@angular/animations": "~7.1.0",
-    "@angular/common": "~7.1.0",
-    "@angular/compiler": "~7.1.0",
-    "@angular/core": "~7.1.0",
-    "@angular/forms": "~7.1.0",
-    "@angular/http": "~7.1.0",
-    "@angular/platform-browser": "~7.1.0",
-    "@angular/platform-browser-dynamic": "~7.1.0",
-    "@angular/router": "~7.1.0",
+    "@angular/animations": "8.0.0",
+    "@angular/common": "8.0.0",
+    "@angular/compiler": "8.0.0",
+    "@angular/core": "8.0.0",
+    "@angular/forms": "8.0.0",
+    "@angular/http": "8.0.0-beta.10",
+    "@angular/platform-browser": "8.0.0",
+    "@angular/platform-browser-dynamic": "8.0.0",
+    "@angular/router": "8.0.0",
     "cheerio": "0.22.0",
     "linqts": "^1.10.0",
-    "nativescript-angular": "^7.1.0",
+    "nativescript-angular": "^8.0.0",
     "nativescript-brightness": "^1.0.0",
     "nativescript-cardview": "^2.0.3",
-    "nativescript-plugin-firebase": "^7.6.1",
+    "nativescript-plugin-firebase": "^8.3.2",
     "nativescript-ratings": "^1.0.1",
     "nativescript-theme-core": "~1.0.4",
     "nativescript-ui-chart": "^3.11.0",
@@ -50,7 +50,7 @@
     "reflect-metadata": "~0.1.8",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.2.0",
-    "tns-core-modules": "^5.1.1",
+    "tns-core-modules": "^5.4.2",
     "ts-md5": "^1.2.2",
     "zone.js": "^0.8.4"
   },
@@ -69,11 +69,13 @@
     "nativescript-dev-appium": "^4.0.9",
     "nativescript-dev-sass": "^1.5.0",
     "nativescript-dev-typescript": "^0.7.8",
-    "nativescript-dev-webpack": "^0.19.0",
+    "nativescript-dev-webpack": "0.24.1",
     "node-sass": "*",
     "tslint": "^5.4.3",
     "typescript": "~3.1.1"
   },
   "name": "fivekmrun-app",
-  "author": "etabakov"
+  "author": "etabakov",
+  "version": "2.0.0",
+  "displayName": "5kmRun.bg"
 }
