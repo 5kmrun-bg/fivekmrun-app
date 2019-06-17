@@ -1,8 +1,7 @@
-
+import { NgZone } from "@angular/core";
 import { Router } from "@angular/router";
 import { onBeforeLivesync, onAfterLivesync } from "nativescript-angular/platform-common";
 import { RouterExtensions } from "nativescript-angular/router";
-import { NgZone } from "@angular/core";
 
 let cachedUrl: string;
 onBeforeLivesync.subscribe(moduleRef => {

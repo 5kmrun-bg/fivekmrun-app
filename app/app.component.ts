@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
             });
         });
 
-        this.userService.userChanged.subscribe(value => {
+        this.userService.userChanged.subscribe(() => {
             this.currentUser$ = this.userService.getCurrentUser();
         });
     }
