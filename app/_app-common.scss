@@ -27,14 +27,7 @@
 // Common page class
 .page-content {
     font-family: 'Helvetica Neue';
-
-    .page-placeholder {
-        color: $page-icon-color;
-        font-size: $page-content-placeholder-font-size;
-        vertical-align: center;
-        horizontal-align: center;
-    }
-
+    
     .page-icon {
         font-size: 72;
         vertical-align: top;
@@ -281,9 +274,7 @@ GridLayout.details Label {
     font-size: 30;
     padding: 20 20 20 20;
     margin: 20 20 20 20;
-    vertical-align: middle;
 }
 
 TabView {
-    vertical-align: middle;
 }
