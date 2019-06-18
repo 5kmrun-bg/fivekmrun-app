@@ -1,8 +1,10 @@
 import { Md5 } from "ts-md5/dist/md5";
+import { RunDetails } from "./run-details.model";
 
 export class Run {
     public id: string;
     public timeInSeconds: number;
+    public runDetails: RunDetails;
     constructor(
         public date: Date,
         public time: string,
