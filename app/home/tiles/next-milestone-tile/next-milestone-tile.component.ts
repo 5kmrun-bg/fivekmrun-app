@@ -3,6 +3,10 @@ import { User } from "../../../models";
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/do';
 
+import { registerElement } from "nativescript-angular/element-registry";
+import { ContentView } from "tns-core-modules/ui/page/page";
+
+registerElement("next-milestone-tile", () => { return ContentView })
 @Component({ 
     selector: "next-milestone-tile",
     moduleId: module.id,

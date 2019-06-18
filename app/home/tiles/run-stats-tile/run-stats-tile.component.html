@@ -4,7 +4,7 @@
         <Label col="0" row="0" class="tile-header-white" text="Статистика"></Label>
         <RadCartesianChart *ngIf="runs.length > 0" col="0" row="1">
             <LinearAxis tkCartesianVerticalAxis [minimum]="min" [maximum]="max" [majorStep]="step" hidden="true"></LinearAxis>
-
+            <Trackball tkCartesianTrackball></Trackball> 
             <DateTimeContinuousAxis majorStep="Month" tkCartesianHorizontalAxis hidden="true"></DateTimeContinuousAxis>
 
             <LineSeries tkCartesianSeries [items]="runs ? runs : []" categoryProperty="date" valueProperty="timeInSeconds"></LineSeries>
@@ -12,9 +12,6 @@
             <Palette tkCartesianPalette>
                 <PaletteEntry tkCartesianPaletteEntry strokeColor="#fb5a2e" strokeWidth="1"></PaletteEntry>
             </Palette>
-
-            <Trackball tkCartesianTrackball snapMode="AllClosestPoints" showIntersectionPoints="true"
-                (trackBallContentRequested)="console.log('test')"></Trackball>
 
             <RadCartesianChartGrid tkCartesianGrid horizontalLinesVisible="false" verticalLinesVisible="false"
                 horizontalStripLinesVisible="false" verticalStripLinesVisible="false"></RadCartesianChartGrid>

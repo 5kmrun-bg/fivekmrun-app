@@ -4,15 +4,16 @@
             <Label row="0" col="0" [text]="'\uf02a'" class="fa tile-header-dark text-left m-t-10 va-t" style="font-size: 30;" [nsRouterLink]="['../barcode']"></Label>
             <Label row="0" col="3" [text]="'\uf2f5'" class="fa tile-header-dark text-right m-t-10 va-t" style="font-size: 30;" [nsRouterLink]="['/login']"></Label>
 
-            <total-distance-tile [distance]="(currentUser$ | async)?.totalKmRan" col="0" row="1"></total-distance-tile>
+            <total-distance-tile [distance]="(currentUser$ | async)?.totalKmRan" col="0" row="1" verticalAlignment="middle"></total-distance-tile>
             <StackLayout col="1" row="0" colSpan="2" rowSpan="2" class="profile-preview m-t-10">
                 <Image [src]="(currentUser$ |async)?.avatarUrl"></Image>
                 <Label [text]="(currentUser$ |async)?.name" class="tile-header-dark font-weight-bold m-t-5"></Label>
                 <Label [text]="(currentUser$ |async)?.age" class="tile-header-dark"></Label>
                 <Label [text]="(currentUser$ |async)?.suuntoPoints + ' SUUNTO точки'" class="tile-header-dark"></Label>
             </StackLayout>
-            <next-milestone-tile [currentUser$]="currentUser$" col="3" row="1"></next-milestone-tile>
-            <StackLayout row="3" col="0" colSpan="4"></StackLayout>
+            <next-milestone-tile [currentUser$]="currentUser$" col="3" row="1"
+            verticalAlignment="middle"></next-milestone-tile>
+            
         </GridLayout>
         <GridLayout columns="*, *, *, *" rows="100, 200, 200, auto" style="background-color: #f2f2f2; padding: 10 10 10 10;">
             <!-- Last Run -->
