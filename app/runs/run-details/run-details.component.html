@@ -9,27 +9,27 @@
         <Label text="мин/км" class="round-tile-value"></Label>
     </StackLayout>
 
-    <Label col="1" row="0" [text]="run?.position" class="round-tile-big" style="vertical-align: middle"></Label>
+    <Label col="1" row="0" [text]="run?.position" class="" style="font-size: 46; color: #fb5a2e; text-align: center;vertical-align: middle"></Label>
 
     <StackLayout col="2" row="0" class="round-tile">
         <Label [text]="run?.speed" class="round-tile-value"></Label>
         <Label text="км/ч" class="round-tile-value"></Label>
     </StackLayout>
 
-    <Label col="0" row="1" text="Темпо" class="tile-header-dark m-t-25"></Label>
-    <Label col="1" row="1" text="Позиция" class="tile-header-dark font-weight-bold m-t-25"></Label>
-    <Label col="2" row="1" text="Скорост" class="tile-header-dark m-t-25"></Label>
+    <Label col="0" row="1" text="Темпо" class="tile-header-dark m-t-10"></Label>
+    <Label col="1" row="1" text="Позиция" class="tile-header-dark font-weight-bold m-t-10"></Label>
+    <Label col="2" row="1" text="Скорост" class="tile-header-dark m-t-10"></Label>
 
     <StackLayout colSpan="3" col="0" row="2" orientation="horizontal" width="100%" style="horizontal-align: center" class="text-center va-middle m-t-25">
         <Label [text]="'\uf073'" class="list-icon tile-value-dark"></Label>
         <Label [text]="run?.date | date:'dd.MM.yyyy'" class="tile-value-dark m-r-25 m-l-5" style="font-size: 20;"></Label>
-        <Label [text]="'\uf3c5'" class="list-icon tile-value-dark m-l-25 m-r-5"></Label>
-        <Label [text]="run?.place" class="tile-value-dark" style="font-size: 20;"></Label>
+        <Label [text]="'\uf017'" class="list-icon tile-value-dark"></Label> 
+        <Label [text]="run?.time + ' мин.'"  class="tile-value-dark m-l-5"  style="font-size: 20;"></Label>
     </StackLayout>
 
     <StackLayout colSpan="3" col="0" row="3" orientation="horizontal" class="m-t-25" style="horizontal-align: center;">
-        <Label [text]="'\uf017'" class="list-icon tile-value-dark"></Label> 
-        <Label [text]="run?.time + ' мин.'"  class="tile-value-dark m-l-5"  style="font-size: 20;"></Label>
+        <Label [text]="'\uf3c5'" class="list-icon tile-value-dark m-r-5"></Label>
+        <Label [text]="run?.place" class="tile-value-dark" style="font-size: 20;"></Label>
     </StackLayout>
 
     <StackLayout colSpan="3" col="0" row="4" orientation="horizontal" class="m-t-25" style="horizontal-align: center;">

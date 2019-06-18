@@ -1,4 +1,16 @@
-<GridLayout rows="auto, auto" columns="*" class="dashboard-item" [nsRouterLink]="['/runs']">
-    <Label [text]="distance" class="tile-value-dark va-m" style="font-size: 30" col="0" row="0"></Label>
-    <Label text="Пробягано разстояние" col="0" row="1" class="tile-header-dark" textWrap="true"></Label>
+<GridLayout columns="*" rows="auto, auto" class="dashboard-item" [nsRouterLink]="['/runs']">
+    <RadRadialGauge *ngIf="currentDistance > 0" col="0" row="0" height="100" style="margin-bottom: 0">
+        <RadialScale tkRadialGaugeScales minimum="0" [maximum]="nextMilestone" radius="0.95">
+            <ScaleStyle tkRadialScaleStyle ticksVisible="false" labelsVisible="false" lineThickness="0" ></ScaleStyle>
+            <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="nextMilestone" location="0.9">
+                <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#903f27" barWidth="0.2"></BarIndicatorStyle>
+            </RadialBarIndicator>
+            <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="currentDistance" location="0.9" isAnimated="true">
+                <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#fb5a2e" barWidth="0.2"></BarIndicatorStyle>
+            </RadialBarIndicator>
+        </RadialScale>
+    </RadRadialGauge>
+    <Label col="0" row="0" [text]="currentDistance" class="va-m tile-value-dark font-weight-bold" style="margin-bottom: 20; font-size: 20"></Label>
+    <Label col="0" row="0" [text]="nextMilestone" class="va-m tile-value-dark" style="margin-top: 20;"></Label>
+    <Label col="0" row="1" text="Пробягано разстояние" class="tile-header-dark" style="margin-top: -10" textWrap="true"></Label>
 </GridLayout>

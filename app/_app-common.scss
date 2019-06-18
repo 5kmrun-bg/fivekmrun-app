@@ -41,7 +41,6 @@
 ActionBar .action-bar-title {
     horizontal-align: center;
     color: white;
-    background-color: #252525;
 }
 
 .barcode {
@@ -142,7 +141,7 @@ GridLayout.details Label {
 
 .tile-header-dark {
     color: #ffffff;
-    font-size: 18;
+    font-size: 16;
     text-align: center;
 }
 
@@ -163,7 +162,7 @@ GridLayout.details Label {
 .tile-value-tooltip {
     color: #aaaaaa;
     font-size: 12;
-    text-align: left;
+    text-align: center;
     vertical-align: middle;
 }
 
