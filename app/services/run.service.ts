@@ -10,12 +10,11 @@ import { UserService } from "../services";
 @Injectable()
 export class RunService {
     private lastUserId: number;
-    private lastRuns: Observable<Run[]>;
+    private lastRuns: Observable < Run[] > ;
 
-    constructor(private http: Http, private userService: UserService) {
-    }
+    constructor(private http: Http, private userService: UserService) {}
 
-    getByCurrentUser(): Observable<Run[]> {
+    getByCurrentUser(): Observable < Run[] > {
         if (this.lastRuns != null && this.lastUserId == this.userService.currentUserId) {
             return this.lastRuns;
         } else {
@@ -23,7 +22,7 @@ export class RunService {
             const that = this;
             this.lastUserId = this.userService.currentUserId;
             return this.lastRuns = this.http.get("http://5km.5kmrun.bg/stat.php?id=" + this.userService.currentUserId).map(response => {
-                const runs: Array<Run> = new Array<Run>();
+                const runs: Array < Run > = new Array < Run > ();
 
                 const content = response.text();
 
@@ -41,44 +40,48 @@ export class RunService {
                         runs.push(this.extractRun(cells));
                     }
                 });
-                
-                this.http.get("http://5km.5kmrun.bg/user.php?id=" + this.userService.currentUserId)
-                .map(response => {
-                    console.log("get details ...");
-                    const content = response.text();
-
-                    const options = {
-                        normalizeWhitespace: true,
-                        xmlMode: true
-                    };
-
-                    const webPage = cheerio.load(content, options);
-                    const rows = webPage(".accordion table tbody tr");
-
-                    rows.each((index, elem) => {
-                        const cells = elem.children.filter(c => c.type == "tag" && c.name == "td");
-                        var rDetails = this.extractRunDetails(cells);
-
-                        var run = runs.find(x => x.id == rDetails.id);
-                        if (run != null) {
-                            run.runDetails = rDetails.runDetails;
-                            console.log("eventID: " + run.runDetails.eventId);
-                        }
-                    })
-
-                }).subscribe();
 
                 return runs.sort((a, b) => (a.date < b.date) ? 1 : (a.date > b.date) ? -1 : 0);
             });
         }
     }
 
+    public getRunDetails(runId: string): Observable < RunDetails > {
+        return this.http.get("http://5km.5kmrun.bg/user.php?id=" + this.userService.currentUserId)
+            .map(response => {
+
+                console.log("get details ...");
+                const content = response.text();
+
+                const options = {
+                    normalizeWhitespace: true,
+                    xmlMode: true
+                };
+
+                const webPage = cheerio.load(content, options);
+                const rows = webPage(".accordion table tbody tr");
+
+                var result = null
+
+                rows.each((index, elem) => {
+                    const cells = elem.children.filter(c => c.type == "tag" && c.name == "td");
+                    var rDetails = this.extractRunDetails(cells);
+
+                    if (rDetails != null && rDetails.id == runId && result == null) {
+                        result = rDetails.runDetails;
+                    }
+                });
+
+                return result;
+            });
+    }
+
     private extractRunDetails(cells: any): Run {
         const run = new Run(
             this.extractDate(cells[2]),
-            this.extractTime(cells[4]), 
-            this.extractPlace(cells[0]), 
-            "", "", 0 ,"","",""
+            this.extractTime(cells[4]),
+            this.extractPlace(cells[0]),
+            "", "", 0, "", "", ""
         );
 
         const runDetails = new RunDetails();

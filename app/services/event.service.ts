@@ -17,6 +17,10 @@ export class EventService {
             });
     }
 
+    getResultsDetailsById(eventId: string): Observable<Result[]> {
+        return this.getResultsDetails("http://5km.5kmrun.bg/results.php?event=" + eventId + "&type=1");
+    }
+
     getAllFutureEvents(): Observable<Event[]> {
         return this.http.get("http://5km.5kmrun.bg/calendar.php")
             .map(response => {
