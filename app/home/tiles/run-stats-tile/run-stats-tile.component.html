@@ -1,11 +1,12 @@
 <CardView col="0" colSpan="4" row="1" class="cardStyle" margin="5" elevation="5" radius="5" shadowOffsetWidth="5"
     shadowOffsetHeight="5" shadowRadius="5">
-    <GridLayout columns="*" rows="auto, *" class="dashboard-item-light" verticalAlignment="stretch">
+    <GridLayout columns="*" rows="auto, auto, *" class="dashboard-item-light" verticalAlignment="stretch">
         <Label col="0" row="0" class="tile-header-white" text="Статистика"></Label>
-        <RadCartesianChart *ngIf="runs.length > 0" col="0" row="1">
+        <Label col="0" row="1" class="tile-header-white" style="font-size: 10" text="(задръжте върху графиката за повече информация)"></Label>
+        <RadCartesianChart *ngIf="runs.length > 0" col="0" row="2">
             <LinearAxis tkCartesianVerticalAxis [minimum]="min" [maximum]="max" [majorStep]="step" hidden="true"></LinearAxis>
             <Trackball tkCartesianTrackball></Trackball> 
-            <DateTimeContinuousAxis majorStep="Month" tkCartesianHorizontalAxis hidden="true"></DateTimeContinuousAxis>
+            <DateTimeContinuousAxis majorStep="Day" tkCartesianHorizontalAxis hidden="true"></DateTimeContinuousAxis>
 
             <LineSeries tkCartesianSeries [items]="runs ? runs : []" categoryProperty="date" valueProperty="timeInSeconds"></LineSeries>
 
