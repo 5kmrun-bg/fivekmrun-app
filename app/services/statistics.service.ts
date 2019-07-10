@@ -40,7 +40,7 @@ export class StatisticsService {
         return this.runService
                     .getByCurrentUser()
                     .map(runs => {
-                            const groupedRuns = (new List(runs)).GroupBy(r => new Date(r.date.getFullYear(), r.date.getMonth(), 1, 0 ,0 ,0), r => 1);
+                            const groupedRuns = (new List(runs)).GroupBy(r => new Date(r.date.getFullYear(), r.date.getMonth(), 1, 0 ,0 ,0).toString(), r => 1);
                             
                             const runsByMonth = Object.keys(groupedRuns).map(k => {return {Date:  new Date(k), RunsCount: groupedRuns[k].length}});
                                                 // v Items are sorted because of a bug in the Chart component
