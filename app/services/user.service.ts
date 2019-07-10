@@ -21,7 +21,7 @@ export class UserService {
         }
     }
 
-    getCurrentUser(): Observable<User> {        
+    getCurrentUser(): Observable<User> {
         if (this.lastLoadedUser != null && this.lastLoadedUserId == this.currentUserId) {
             return this.lastLoadedUser;
         } else {
@@ -80,8 +80,11 @@ export class UserService {
     }
 
     private parseName(webPage: any): string {
-        const title = webPage("h2.article-title").first().text();
-        return title.substr(title.indexOf("-") + 2);
+        let title = webPage("h2.article-title").first().text();
+        if (title.indexOf("-") > 0) {
+            title = title.substr(title.indexOf("-") + 2);
+        }
+        return title;
     }
 
     private parseRunsCount(webPage: any): number {
