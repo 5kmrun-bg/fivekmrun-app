@@ -42,7 +42,7 @@
     "nativescript-angular": "^8.0.0",
     "nativescript-brightness": "^1.0.0",
     "nativescript-cardview": "3.2.0",
-    "nativescript-plugin-firebase": "9.0.1",
+    "nativescript-plugin-firebase": "9.0.3",
     "nativescript-ratings": "^1.0.1",
     "nativescript-theme-core": "~1.0.4",
     "nativescript-ui-chart": "5.0.0-androidx-110619",
@@ -69,7 +69,7 @@
     "nativescript-dev-webpack": "rc",
     "node-sass": "4.12.0",
     "tslint": "^5.4.3",
-    "typescript": "3.4.1"
+    "typescript": "3.4.5"
   },
   "name": "fivekmrun-app",
   "author": "etabakov",

@@ -84,7 +84,7 @@ ActionBar .action-bar-title {
 }
 
 .input-button {
-    background-color: #00aeef;
+    background-color: #fb5a2e;
     color: #ffffff;
     width: 150;
     height: 50;
@@ -92,7 +92,7 @@ ActionBar .action-bar-title {
 }
 
 .input-button-red {
-    background-color: #ff6060;
+    background-color: #fb5a2e;
     color: #ffffff;
     width: 50;
     height: 50;
@@ -101,7 +101,7 @@ ActionBar .action-bar-title {
 
 .input-textbox {
     border-width: 1;
-    border-color: #000000;
+    border-color: #ffffff;
     width: 150;
     height: 50;
     margin-top: 15;
@@ -275,5 +275,11 @@ GridLayout.details Label {
     margin: 20 20 20 20;
 }
 
-TabView {
+.grey-background {
+    background-color: #f0f0f0;
+}
+
+.dark-page {
+    background-color: #252525;
+    color: #ffffff;
 }

@@ -2,11 +2,11 @@
     <Label class="action-bar-title" text="Предстоящи Събития"></Label>
 </ActionBar>
 
-<StackLayout class="page page-content" style="background-color: #a0a0a0;">
-    <ListView [items]="events$ | async" height="100%" (itemLoading)="onItemLoading($event)">
+<StackLayout class="page page-content">
+    <ListView [items]="events$ | async" height="100%" (itemLoading)="onItemLoading($event)" class="grey-background">
         <ng-template let-item="item" let-i="index">
-            <CardView class="cardStyle" margin="5" elevation="5" radius="5" shadowOffsetWidth="5" shadowOffsetHeight="5"
-                shadowRadius="5">
+            <CardView class="cardStyle" margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
+            shadowRadius="3">
                 <GridLayout columns="auto, *, auto" rows="auto, *, *" class="results">
                     <Label col="0" row="0" [text]="'\uf3c5'" class="list-icon"></Label>
                     <Label [text]="item.location" col="1" row="0" class="list-details"> </Label>

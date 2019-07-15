@@ -2,15 +2,15 @@
     <NavigationButton text="Назад" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
     <Label class="action-bar-title" [text]="event$?.title || event$?.location"></Label>
 </ActionBar>
-<StackLayout style="background-color: #aaaaaa;">
+<StackLayout>
     <StackLayout class="resultsView" orientation="horizontal">
         <Label [text]="'\uf002'" class="fa m-l-10" style="color: white"></Label>
         <TextField hint="Търсене ..." (textChange)="reFilter($event)"></TextField>
     </StackLayout>
-    <ListView #lvResults [items]="results" class="list-group" height="100%">
+    <ListView #lvResults [items]="results" class="grey-background" height="100%">
         <ng-template let-item="item" let-i="index">
-            <CardView class="cardStyle" margin="5" elevation="5" radius="5" shadowOffsetWidth="5" shadowOffsetHeight="5"
-                shadowRadius="5">
+            <CardView class="cardStyle" margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
+                shadowRadius="3">
                 <GridLayout columns="auto, auto, *" rows="auto, auto" class="results">
                     <StackLayout col="0" row="0" rowSpan="2" class="m-r-10 text-center">
                         <Label [text]="item.position" class="red-number-big text-center" style="font-size: 50"></Label>

@@ -2,17 +2,17 @@
     <Label class="action-bar-title" text="Твоите Бягания"></Label>
 </ActionBar>
 
-<StackLayout class="page page-content" style="background-color: #252525;">
-    <ListView [items]="runs | async">
+<StackLayout class="page page-content">
+    <ListView [items]="runs | async" class="grey-background">
         <ng-template let-item="item" let-i="index">
-            <CardView class="cardStyle" margin="5" elevation="5" radius="5" shadowOffsetWidth="5" shadowOffsetHeight="5"
-                shadowRadius="5">
+            <CardView margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
+            shadowRadius="3">
                 <GridLayout columns="auto, *" rows="auto, *, *" class="results" [nsRouterLink]="['../', item.id]">
-                    <Label col="0" row="0" [text]="'\uf3c5'" class="list-icon text-center"></Label> 
-                    <Label [text]="item.place" col="1" row="0" class="list-details"> </Label>
+                    <Label col="0" row="0" [text]="'\uf3c5'" class="list-icon text-center m-b-10"></Label> 
+                    <Label [text]="item.place" col="1" row="0" class="list-details m-b-10"> </Label>
 
-                    <Label col="0" row="1" [text]="'\uf073'" class="list-icon"></Label> 
-                    <Label class="list-details" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="1"></Label>
+                    <Label col="0" row="1" [text]="'\uf073'" class="list-icon m-b-10"></Label> 
+                    <Label class="list-details m-b-10" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="1"></Label>
 
                     <Label col="0" row="2" [text]="'\uf017'" class="list-icon"></Label> 
                     <Label class="list-details" [text]="item.time" col="1" row="2"></Label>
