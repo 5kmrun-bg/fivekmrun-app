@@ -9,10 +9,10 @@
       "android": "bg.fivekmpark.fivekmrun"
     },
     "tns-android": {
-      "version": "6.0.0-rc-2019-06-27-172817-03"
+      "version": "6.0.0"
     },
     "tns-ios": {
-      "version": "6.0.0-rc-2019-06-28-105002-01"
+      "version": "6.0.1"
     }
   },
   "scripts": {
@@ -45,8 +45,8 @@
     "nativescript-plugin-firebase": "9.0.3",
     "nativescript-ratings": "^1.0.1",
     "nativescript-theme-core": "~1.0.4",
-    "nativescript-ui-chart": "5.0.0-androidx-110619",
-    "nativescript-ui-gauge": "5.0.0-androidx",
+    "nativescript-ui-chart": "5.0.0",
+    "nativescript-ui-gauge": "5.0.0",
     "reflect-metadata": "~0.1.8",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.2.0",
