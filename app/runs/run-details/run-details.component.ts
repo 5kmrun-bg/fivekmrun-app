@@ -1,10 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { RunService, EventService } from "../../services";
-import { Run, Result, RunDetails } from "../../models";
-import { PageRoute } from "nativescript-angular/router";
-import "rxjs/add/operator/switchMap";
+import { ActivatedRoute } from "@angular/router";
 import { RouterExtensions } from "nativescript-angular/router";
+
 import { Observable } from "rxjs/Observable";
+import { map, switchMap } from "rxjs/operators";
+
+import { Result, Run } from "../../models";
+import { EventService, RunService } from "../../services";
 
 @Component({
     selector: "RunsDetails",
@@ -12,35 +14,33 @@ import { Observable } from "rxjs/Observable";
     templateUrl: "./run-details.component.html"
 })
 export class RunDetailsComponent implements OnInit {
-    id: string;
-    run: Run;
-    runDetails$: Observable<RunDetails>;
+    run$: Observable<Run>;
     results$: Observable<Result[]>;
 
     constructor(
         private runService: RunService,
         private eventService: EventService,
-        private pageRoute: PageRoute,
+        private route: ActivatedRoute,
         private routerExtensions: RouterExtensions) {
-        this.pageRoute.activatedRoute
-            .switchMap(activatedRoute => activatedRoute.params)
-            .forEach((params) => { this.id = params["id"]; });
-
-        this.runService.getByCurrentUser()
-            .map(runs => runs.filter(r => r.id === this.id)[0])
-            .do(run$ => {
-                this.run = run$;
-            })
-            .subscribe();
-
-        this.runService.getRunDetails(this.id)
-            .do(rDetails => this.results$ = this.eventService.getResultsDetailsById(rDetails.eventId)).subscribe();
     }
 
-    /* ***********************************************************
-    * Use the sideDrawerTransition property to change the open/close animation of the drawer.
-    *************************************************************/
     ngOnInit(): void {
+        const id$: Observable<string> = this.route.params.pipe(
+            map(params => params["id"])
+        );
+
+        this.run$ = id$.pipe(
+            switchMap(runId => this.runService.getByCurrentUser()
+                .pipe(
+                    map(runs => runs.filter(r => r.id === runId)[0])
+                )
+            )
+        );
+
+        this.results$ = id$.pipe(
+            switchMap(runId => this.runService.getRunDetails(runId)),
+            switchMap(rDetails => this.eventService.getResultsDetailsById(rDetails.eventId))
+        );
     }
 
     onNavBtnTap(): void {
