@@ -3,7 +3,7 @@ import { Observable } from "rxjs/Observable";
 import { StatisticsService } from "../../../services";
 import { List } from "linqts";
 
-@Component({ 
+@Component({
     selector: "best-time-by-route-tile",
     moduleId: module.id,
     templateUrl: "./best-time-by-route-tile.component.html"
@@ -19,7 +19,7 @@ export class BestTimeByRouteComponent implements OnInit {
     ngOnInit(): void {
         this.citiesBestTimesSource$ = this.statisticsService.getBestTimesByCity();
         this.citiesBestTimesSource$.subscribe((bestTimeEntries) => {
-            this.maxBarValue = (new List(bestTimeEntries)).Select(e => e.BestTime).Max()*1.3;
+            this.maxBarValue = (new List(bestTimeEntries)).Select(e => e.BestTime).Max() * 1.4;
         });
     }
 }
