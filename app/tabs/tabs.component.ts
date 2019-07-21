@@ -14,6 +14,13 @@ export class TabsComponent {
     }
 
     ngOnInit() {
-         this.routerExtension.navigate([{ outlets: { homeTab: ["home"], runsTab: ["runs"], eventsTab: ["future-events"], resultsTab: ["results"] } }], { relativeTo: this.activeRoute });
+        this.routerExtension.navigate([{
+            outlets: {
+                homeTab: ["home"],
+                runsTab: ["runs"],
+                eventsTab: ["future-events"],
+                resultsTab: ["results"]
+            }
+        }], { relativeTo: this.activeRoute });
     }
 }

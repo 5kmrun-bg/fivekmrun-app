@@ -6,11 +6,11 @@ import * as connectivity from "tns-core-modules/connectivity";
 export class ConnectivityGuard implements CanActivate {
     constructor(private router: Router) {
     }
-    
+
     canActivate(): boolean {
         console.log("Checking connectivity ... " + connectivity.getConnectionType());
 
-        if (connectivity.getConnectionType() == connectivity.connectionType.none) {
+        if (connectivity.getConnectionType() === connectivity.connectionType.none) {
             this.router.navigate(["/errors/no-internet"]);
             return false;
         }

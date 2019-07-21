@@ -28,14 +28,14 @@ export class EventService {
             });
     }
 
-    getResultsDetails(eventDetailUrl: string) : Observable<Result[]> {
+    getResultsDetails(eventDetailUrl: string): Observable<Result[]> {
         return this.http.get(eventDetailUrl)
             .map(response => {
                 return this.parseResultsDetails(response);
             });
     }
 
-    private parseResultsDetails(response: any) : Result[] {
+    private parseResultsDetails(response: any): Result[] {
         const results = Array<Result>();
         const content = response.text();
 
@@ -63,7 +63,7 @@ export class EventService {
         return results;
     }
 
-    private parseEventsResponse(response: any, topNWeeks: number = 0) : Event[] {
+    private parseEventsResponse(response: any, topNWeeks: number = 0): Event[] {
         const events = Array<Event>();
         const content = response.text();
 
@@ -76,13 +76,13 @@ export class EventService {
         const rows = webPage("div.table-responsive table tr");
 
         if (topNWeeks > 0) {
-            rows.splice(topNWeeks, rows.length-topNWeeks);
+            rows.splice(topNWeeks, rows.length - topNWeeks);
         } else {
             rows.splice(-1, 1);
         }
 
         rows.each((index, row) => {
-            const cells = row.children.filter(c => c.type == "tag" && c.name=="td");
+            const cells = row.children.filter(c => c.type == "tag" && c.name == "td");
             let date: Date;
             for (let i = 0; i < cells.length; ++i) {
                 if (i == 0) {
@@ -113,7 +113,7 @@ export class EventService {
         }
     }
 
-    private parseLink(cell: any) : string {
+    private parseLink(cell: any): string {
         let url = cell.attribs["href"];
         if (!url.startsWith("http")) {
             url = "http://5km.5kmrun.bg/" + url;
@@ -122,11 +122,11 @@ export class EventService {
         return url;
     }
 
-    private parseLocation(cell: any) : string {
+    private parseLocation(cell: any): string {
         return cell.children[3].children[1].children[0].data;
     }
 
-    private parseImageUrl(cell: any) : string {
+    private parseImageUrl(cell: any): string {
         let imageUrl = cell.children[3].attribs.src;
         if (!imageUrl.startsWith("http")) {
             imageUrl = "http://5km.5kmrun.bg/" + imageUrl;
@@ -135,7 +135,7 @@ export class EventService {
         return imageUrl;
     }
 
-    private parseTitle(cell: any) : string {
+    private parseTitle(cell: any): string {
         if (cell.children[1].children[0]) {
             return cell.children[1].children[0].data;
         } else {
