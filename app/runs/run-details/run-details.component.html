@@ -9,20 +9,20 @@
         <Label text="мин/км" class="round-tile-value"></Label>
     </StackLayout>
 
-    <GridLayout columns="*" rows="auto" class="dashboard-item"  col="1" row="0">
-        <RadRadialGauge *ngIf="run?.position > -1 && (results$ | async)?.length > -1" col="0" row="0" height="100" style="margin-bottom: 0">
-            <RadialScale tkRadialGaugeScales minimum="0" [maximum]="(results$ | async)?.length" radius="0.95">
+    <GridLayout columns="*" rows="auto" class="dashboard-item"  col="1" row="0" *ngIf="results$ | async as results">
+        <RadRadialGauge *ngIf="run?.position > -1 && results.length > -1" col="0" row="0" height="100" style="margin-bottom: 0">
+            <RadialScale tkRadialGaugeScales minimum="0" [maximum]="results.length" radius="0.95">
                 <ScaleStyle tkRadialScaleStyle ticksVisible="false" labelsVisible="false" lineThickness="0" ></ScaleStyle>
-                <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="(results$ | async)?.length" location="0.9">
+                <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="results.length" location="0.9">
                     <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#903f27" barWidth="0.2"></BarIndicatorStyle>
                 </RadialBarIndicator>
-                <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="(results$ | async)?.length - run?.position" location="0.9" isAnimated="true">
+                <RadialBarIndicator tkRadialScaleIndicators minimum="0" [maximum]="results.length - run?.position" location="0.9" isAnimated="true">
                     <BarIndicatorStyle tkRadialBarIndicatorStyle fillColor="#fb5a2e" barWidth="0.2"></BarIndicatorStyle>
                 </RadialBarIndicator>
             </RadialScale>
         </RadRadialGauge>
         <Label col="0" row="0" [text]="run?.position" class="va-m tile-value-dark font-weight-bold" style="margin-bottom: 20; font-size: 20"></Label>
-        <Label col="0" row="0" [text]="(results$ | async)?.length" class="va-m tile-value-dark" style="margin-top: 20;"></Label>
+        <Label col="0" row="0" [text]="results.length" class="va-m tile-value-dark" style="margin-top: 20;"></Label>
     </GridLayout>
 
     <StackLayout col="2" row="0" class="round-tile">
