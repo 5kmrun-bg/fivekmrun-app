@@ -39,7 +39,7 @@
     "@angular/router": "8.0.0",
     "cheerio": "0.22.0",
     "linqts": "^1.10.0",
-    "nativescript-angular": "^8.0.0",
+    "nativescript-angular": "^8.0.2",
     "nativescript-brightness": "^1.0.0",
     "nativescript-cardview": "3.2.0",
     "nativescript-plugin-firebase": "9.0.3",
@@ -50,7 +50,7 @@
     "reflect-metadata": "~0.1.8",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.2.0",
-    "tns-core-modules": "rc",
+    "tns-core-modules": "~6.0.1",
     "ts-md5": "^1.2.2",
     "zone.js": "^0.8.4"
   },
@@ -66,7 +66,7 @@
     "lazy": "1.0.11",
     "codelyzer": "^3.0.1",
     "nativescript-dev-appium": "^4.0.9",
-    "nativescript-dev-webpack": "rc",
+    "nativescript-dev-webpack": "~1.0.1",
     "node-sass": "4.12.0",
     "tslint": "^5.4.3",
     "typescript": "3.4.5"
