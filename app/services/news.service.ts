@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
+import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import { News } from "../models";
 
@@ -9,17 +9,17 @@ import * as cheerio from "cheerio";
 export class NewsService {
     private lastNews: Observable<News[]>;
 
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 
     getAll(): Observable<News[]> {
         if (this.lastNews != null) {
             return this.lastNews;
         } else {
-            return this.lastNews = this.http.get("http://info-5kmrun.bg/feed/")
+            return this.lastNews = this.http.get("http://info-5kmrun.bg/feed/", { responseType: "text" })
                 .map(response => {
                     const news = new Array<News>();
 
-                    const content = response.text();
+                    const content = response;
 
                     const options = {
                         normalizeWhitespace: true,

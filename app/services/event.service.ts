@@ -1,17 +1,17 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
-import { Observable } from "rxjs/Observable";
-import { Event, Result } from "../models";
-
 import * as cheerio from "cheerio";
+import { Observable } from "rxjs/Observable";
+
+import { Event, Result } from "../models";
 
 @Injectable()
 export class EventService {
 
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 
     getAllPastEvents(): Observable<Event[]> {
-        return this.http.get("http://5km.5kmrun.bg/calendar-a.php")
+        return this.http.get("http://5km.5kmrun.bg/calendar-a.php", { responseType: "text" })
             .map(response => {
                 return this.parseEventsResponse(response, 4);
             });
@@ -22,29 +22,28 @@ export class EventService {
     }
 
     getAllFutureEvents(): Observable<Event[]> {
-        return this.http.get("http://5km.5kmrun.bg/calendar.php")
+        return this.http.get("http://5km.5kmrun.bg/calendar.php", { responseType: "text" })
             .map(response => {
                 return this.parseEventsResponse(response);
             });
     }
 
     getResultsDetails(eventDetailUrl: string): Observable<Result[]> {
-        return this.http.get(eventDetailUrl)
+        return this.http.get(eventDetailUrl, { responseType: "text" })
             .map(response => {
                 return this.parseResultsDetails(response);
             });
     }
 
-    private parseResultsDetails(response: any): Result[] {
+    private parseResultsDetails(response: string): Result[] {
         const results = Array<Result>();
-        const content = response.text();
 
         const options = {
             normalizeWhitespace: true,
             xmlMode: true
         };
 
-        const webPage = cheerio.load(content, options);
+        const webPage = cheerio.load(response, options);
         const rows = webPage("div.table-responsive1 table tbody tr")
 
         rows.each((index, row) => {
@@ -52,7 +51,7 @@ export class EventService {
             if (!row.children[5].children[0].data) {
                 name = row.children[5].children[0].children[0].data;
             } else {
-                name = row.children[5].children[0].data
+                name = row.children[5].children[0].data;
             }
             const time = row.children[7].children[0].data;
             const position = row.children[1].children[0].data;
@@ -63,16 +62,15 @@ export class EventService {
         return results;
     }
 
-    private parseEventsResponse(response: any, topNWeeks: number = 0): Event[] {
+    private parseEventsResponse(response: string, topNWeeks: number = 0): Event[] {
         const events = Array<Event>();
-        const content = response.text();
 
         const options = {
             normalizeWhitespace: true,
             xmlMode: true
         };
 
-        const webPage = cheerio.load(content, options);
+        const webPage = cheerio.load(response, options);
         const rows = webPage("div.table-responsive table tr");
 
         if (topNWeeks > 0) {
@@ -87,7 +85,7 @@ export class EventService {
             for (let i = 0; i < cells.length; ++i) {
                 if (i == 0) {
                     if (cells[0].children[1] != undefined) {
-                        let parts = cells[0].children[1].children[0].data.match(/(\d+)/g)
+                        const parts = cells[0].children[1].children[0].data.match(/(\d+)/g)
                         date = new Date(parts[2], parts[1] - 1, parts[0]);
                     } else {
                         break;

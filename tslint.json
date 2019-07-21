@@ -10,6 +10,7 @@
     "component-class-suffix": true,
     "directive-class-suffix": true,
     "invoke-injectable": true,
+    "max-classes-per-file": false,
     "member-access": false,
     "no-access-missing-member": true,
     "no-angle-bracket-type-assertion": false,

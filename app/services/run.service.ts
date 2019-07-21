@@ -1,10 +1,9 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
+import * as cheerio from "cheerio";
 import { Observable } from "rxjs/Observable";
 
 import { Run, RunDetails } from "../models";
-import * as cheerio from "cheerio";
-
 import { UserService } from "../services";
 
 @Injectable()
@@ -12,7 +11,7 @@ export class RunService {
     private lastUserId: number;
     private lastRuns: Observable<Run[]>;
 
-    constructor(private http: Http, private userService: UserService) { }
+    constructor(private http: HttpClient, private userService: UserService) { }
 
     getByCurrentUser(): Observable<Run[]> {
         if (this.lastRuns != null && this.lastUserId === this.userService.currentUserId) {
@@ -20,11 +19,13 @@ export class RunService {
         } else {
             console.log("Getting runs ...");
             this.lastUserId = this.userService.currentUserId;
-            return this.lastRuns = this.http.get("http://5km.5kmrun.bg/stat.php?id=" + this.userService.currentUserId)
+            return this.lastRuns = this.http.get(
+                "http://5km.5kmrun.bg/stat.php?id=" + this.userService.currentUserId,
+                { responseType: "text" })
                 .map(response => {
                     const runs: Array<Run> = new Array<Run>();
 
-                    const content = response.text();
+                    const content = response;
 
                     const options = {
                         normalizeWhitespace: true,
@@ -47,11 +48,13 @@ export class RunService {
     }
 
     public getRunDetails(runId: string): Observable<RunDetails> {
-        return this.http.get("http://5km.5kmrun.bg/user.php?id=" + this.userService.currentUserId)
+        return this.http.get(
+            "http://5km.5kmrun.bg/user.php?id=" + this.userService.currentUserId,
+            { responseType: "text" })
             .map(response => {
 
                 console.log("get details ...");
-                const content = response.text();
+                const content = response;
 
                 const options = {
                     normalizeWhitespace: true,
@@ -61,11 +64,11 @@ export class RunService {
                 const webPage = cheerio.load(content, options);
                 const rows = webPage(".accordion table tbody tr");
 
-                var result = null
+                let result = null;
 
                 rows.each((index, elem) => {
                     const cells = elem.children.filter(c => c.type == "tag" && c.name == "td");
-                    var rDetails = this.extractRunDetails(cells);
+                    let rDetails = this.extractRunDetails(cells);
 
                     if (rDetails != null && rDetails.id == runId && result == null) {
                         result = rDetails.runDetails;
@@ -143,7 +146,7 @@ export class RunService {
     }
 
     private extractSpeed(cell: any): string {
-        var untrimmedSpeed = cell.children[0].data;
+        let untrimmedSpeed = cell.children[0].data;
         return untrimmedSpeed.substring(0, untrimmedSpeed.length - 5);
     }
 
