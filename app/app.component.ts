@@ -5,6 +5,7 @@ import { Observable } from "rxjs/Observable";
 import { filter } from "rxjs/operators";
 import { User } from "./models";
 import { UserService } from "./services";
+import { HttpLoaderService } from "./services/http-loader.service";
 
 @Component({
     selector: "ns-app",
@@ -17,7 +18,8 @@ export class AppComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private userService: UserService) {
+        private userService: UserService,
+        public loaderService: HttpLoaderService) {
     }
 
     ngOnInit(): void {

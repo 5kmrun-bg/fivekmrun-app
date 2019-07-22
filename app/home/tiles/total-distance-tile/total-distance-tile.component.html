@@ -1,4 +1,4 @@
-<GridLayout columns="*" rows="auto, auto" class="dashboard-item" [nsRouterLink]="['/runs']">
+<GridLayout columns="*" rows="auto, auto" class="dashboard-item">
     <RadRadialGauge *ngIf="currentDistance > 0" col="0" row="0" height="100" style="margin-bottom: 0">
         <RadialScale tkRadialGaugeScales minimum="0" [maximum]="nextMilestone" radius="0.95">
             <ScaleStyle tkRadialScaleStyle ticksVisible="false" labelsVisible="false" lineThickness="0" ></ScaleStyle>

@@ -2,7 +2,7 @@
     <Label class="action-bar-title" text="Твоите Бягания"></Label>
 </ActionBar>
 
-<StackLayout class="page page-content">
+<GridLayout class="page page-content">
     <ListView [items]="runs | async" class="grey-background">
         <ng-template let-item="item" let-i="index">
             <CardView margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
@@ -20,4 +20,4 @@
             </CardView> 
         </ng-template>
     </ListView>
-</StackLayout>
+</GridLayout>

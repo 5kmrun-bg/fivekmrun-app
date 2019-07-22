@@ -1,20 +1,28 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
-@Component({ 
+@Component({
     selector: "bar-component",
     moduleId: module.id,
     templateUrl: "./bar.component.html"
 })
-export class BarComponent implements OnInit {
+export class BarComponent {
     @Input() barTitle: string;
     @Input() barValue: number;
     @Input() barMaximumValue: number;
 
-    emptyBarWidth: number;
-    fullBarWidth: number;
+    get emptyBarWidth(): number {
+        if (isNaN(this.barMaximumValue) || isNaN(this.barValue)) {
+            return 50;
+        }
 
-    ngOnInit(): void {
-        this.fullBarWidth = this.barValue * (100 / this.barMaximumValue);
-        this.emptyBarWidth = (this.barMaximumValue - this.barValue) * (100 / this.barMaximumValue);
+        return (this.barMaximumValue - this.barValue) * (100 / this.barMaximumValue);
+    }
+    
+    get fullBarWidth(): number {
+        if (isNaN(this.barMaximumValue) || isNaN(this.barValue)) {
+            return 50;
+        }
+
+        return this.barValue * (100 / this.barMaximumValue);
     }
 }

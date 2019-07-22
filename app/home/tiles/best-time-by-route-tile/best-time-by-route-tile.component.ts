@@ -10,7 +10,7 @@ import { List } from "linqts";
 })
 export class BestTimeByRouteComponent implements OnInit {
 
-    citiesBestTimesSource$: Observable<{City, BestTime}[]>;
+    citiesBestTimesSource$: Observable<{ City, BestTime }[]>;
     maxBarValue: number;
 
     constructor(private statisticsService: StatisticsService) {

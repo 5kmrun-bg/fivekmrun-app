@@ -6,13 +6,13 @@ import { TabsComponent } from "./tabs.component";
 import { ConnectivityGuard } from "~/guards";
 
 @NgModule({
-    imports: [            
+    imports: [
         NativeScriptCommonModule,
         NativeScriptRouterModule,
         NativeScriptRouterModule.forChild([
             {
                 path: "default", component: TabsComponent, children: [
-                    
+
                     {
                         path: "home",
                         outlet: "homeTab",
@@ -40,7 +40,7 @@ import { ConnectivityGuard } from "~/guards";
                         component: NSEmptyOutletComponent,
                         loadChildren: "../future-events/future-events.module#FutureEventsModule",
                         canActivate: [ConnectivityGuard]
-                    }                    
+                    }
                 ]
             }
         ])
