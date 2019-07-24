@@ -14,7 +14,7 @@ export class StatisticsService {
         return this.runService.getByCurrentUser()
             .map(runs => {
                 const cityRuns = (new List(runs)).GroupBy(r => r.place, r => 1);
-                const result = Object.keys(cityRuns).map(k => ({ City: k, RunsCount: cityRuns[k].length }));
+                const result = Object.keys(cityRuns).map(k => ({ City: this.trimCityName(k), RunsCount: cityRuns[k].length }));
                 return result;
             });
     }
@@ -24,7 +24,7 @@ export class StatisticsService {
             .map(runs => {
                 const cityRuns = (new List(runs)).GroupBy(r => r.place, r => r.timeInSeconds);
                 const result = Object.keys(cityRuns)
-                    .map(k => ({ City: k, BestTime: Math.round(Math.min.apply(null, cityRuns[k]) * 100) / 100 }));
+                    .map(k => ({ City: this.trimCityName(k), BestTime: Math.round(Math.min.apply(null, cityRuns[k]) * 100) / 100 }));
 
                 return result;
             });
@@ -58,8 +58,12 @@ export class StatisticsService {
             return "Бургас";
         } else if (fullName.includes("Варна")) {
             return "Варна";
-        } else if (fullName.includes("Пловдив")) {
-            return "Пловдив";
+        } else if (fullName.includes("Гребен канал 2")) {
+            return "Гребен канал 2";
+        } else if (fullName.includes("Гребен канал")) {
+                return "Гребен канал";
+        } else if (fullName.includes("Борисова градина")) {
+            return "Борисова градина"
         } else {
             return fullName;
         }
