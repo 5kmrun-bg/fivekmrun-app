@@ -1,5 +1,5 @@
 <ActionBar class="action-bar">
-    <Label class="action-bar-title" text="Баркод"></Label>
+    <Label class="action-bar-title" text="Баркод" flat="true"></Label>
 </ActionBar>
 <StackLayout *ngIf="currentUser$ | async as user">
     <Label [text]="user.name" class="barcode"></Label>
