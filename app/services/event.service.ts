@@ -75,9 +75,7 @@ export class EventService {
 
         if (topNWeeks > 0) {
             rows.splice(topNWeeks, rows.length - topNWeeks);
-        } else {
-            rows.splice(-1, 1);
-        }
+        } 
 
         rows.each((index, row) => {
             const cells = row.children.filter(c => c.type == "tag" && c.name == "td");
