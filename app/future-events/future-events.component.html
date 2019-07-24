@@ -3,7 +3,7 @@
 </ActionBar>
 
 <StackLayout class="page page-content">
-    <ListView [items]="events$ | async" height="100%" (itemLoading)="onItemLoading($event)" class="grey-background">
+    <ListView [items]="events$ | async" height="100%" (itemLoading)="onItemLoading($event)" class="grey-background" (itemLoading)="onItemLoading($event)">
         <ng-template let-item="item" let-i="index">
             <CardView class="cardStyle" margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
             shadowRadius="3">

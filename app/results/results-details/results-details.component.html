@@ -7,7 +7,7 @@
         <Label [text]="'\uf002'" class="fa m-l-10" style="color: white"></Label>
         <TextField hint="Търсене ..." (textChange)="reFilter($event)"></TextField>
     </StackLayout>
-    <ListView #lvResults [items]="results" class="grey-background" height="100%">
+    <ListView #lvResults [items]="results" class="grey-background" height="100%" (itemLoading)="onItemLoading($event)">
         <ng-template let-item="item" let-i="index">
             <CardView class="cardStyle" margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
                 shadowRadius="3">

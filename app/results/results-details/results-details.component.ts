@@ -5,6 +5,9 @@ import { PageRoute } from "nativescript-angular/router";
 import "rxjs/add/operator/switchMap";
 import { RouterExtensions } from "nativescript-angular/router";
 import * as firebase from "nativescript-plugin-firebase";
+import { isIOS } from 'tns-core-modules/platform';
+declare var UITableViewCellSelectionStyle;
+import { ItemEventData } from "tns-core-modules/ui/list-view";
 
 @Component({
     selector: "ResultsDetails",
@@ -54,6 +57,13 @@ export class ResultsDetailsComponent implements OnInit {
         }
         else {
             this.results = this.unfilteredResults;
+        }
+    }
+
+    onItemLoading(args: ItemEventData) {
+        if (isIOS) {
+          const iosCell = args.ios;
+          iosCell.selectionStyle = UITableViewCellSelectionStyle.None;
         }
     }
 }
