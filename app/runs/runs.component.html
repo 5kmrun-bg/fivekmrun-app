@@ -8,11 +8,11 @@
             <CardView margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
             shadowRadius="3">
                 <GridLayout columns="auto, *" rows="auto, *, *" class="results" [nsRouterLink]="['../', item.id]">
-                    <Label col="0" row="0" [text]="'\uf3c5'" class="list-icon text-center m-b-10"></Label> 
-                    <Label [text]="item.place" col="1" row="0" class="list-details m-b-10"> </Label>
+                    <Label col="0" row="0" [text]="'\uf073'" class="list-icon m-b-10"></Label> 
+                    <Label class="list-details m-b-10" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="0"></Label>
 
-                    <Label col="0" row="1" [text]="'\uf073'" class="list-icon m-b-10"></Label> 
-                    <Label class="list-details m-b-10" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="1"></Label>
+                    <Label col="0" row="1" [text]="'\uf3c5'" class="list-icon text-center m-b-10"></Label> 
+                    <Label [text]="item.place" col="1" row="1" class="list-details m-b-10"> </Label>
 
                     <Label col="0" row="2" [text]="'\uf017'" class="list-icon"></Label> 
                     <Label class="list-details" [text]="item.time" col="1" row="2"></Label>
