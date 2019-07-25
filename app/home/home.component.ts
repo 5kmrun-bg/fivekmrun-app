@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { UserService, RunService } from "../services";
 import { User, Run } from "../models";
-import { Observable } from "rxjs/Observable";
-import 'rxjs/add/operator/map';
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+
 import { Ratings } from "nativescript-ratings";
 import { Page } from "tns-core-modules/ui/page/page";
 
@@ -25,9 +26,9 @@ export class HomeComponent implements OnInit {
         this.currentUser$ = this.userService.getCurrentUser();
 
         const that = this;
-        this.lastRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return 0 - (that.getTime(a.date) - that.getTime(b.date));})[0]);
-        this.bestRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return a.time.localeCompare(b.time);})[0]);
-        this.runs$ = this.runService.getByCurrentUser().map(runs => runs.reverse());
+        this.lastRun$ = this.runService.getByCurrentUser().pipe(map(runs => runs.sort((a, b) => { return 0 - (that.getTime(a.date) - that.getTime(b.date));})[0]));
+        this.bestRun$ = this.runService.getByCurrentUser().pipe(map(runs => runs.sort((a, b) => { return a.time.localeCompare(b.time);})[0]));
+        this.runs$ = this.runService.getByCurrentUser().pipe(map(runs => runs.reverse()));
 
         this.initializeRatingPlugin();
     }

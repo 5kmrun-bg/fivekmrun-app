@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { RouterExtensions } from "nativescript-angular/router";
 
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
 import { Result, Run } from "../../models";

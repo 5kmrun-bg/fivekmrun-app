@@ -1,10 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import * as cheerio from "cheerio";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 
 import { Run, RunDetails } from "../models";
 import { UserService } from "../services";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class RunService {
@@ -22,28 +23,30 @@ export class RunService {
             return this.lastRuns = this.http.get(
                 "http://5km.5kmrun.bg/stat.php?id=" + this.userService.currentUserId,
                 { responseType: "text" })
-                .map(response => {
-                    const runs: Array<Run> = new Array<Run>();
+                .pipe(
+                    map(response => {
+                        const runs: Array<Run> = new Array<Run>();
 
-                    const content = response;
+                        const content = response;
 
-                    const options = {
-                        normalizeWhitespace: true,
-                        xmlMode: true,
-                    };
+                        const options = {
+                            normalizeWhitespace: true,
+                            xmlMode: true,
+                        };
 
-                    const webPage = cheerio.load(content, options);
-                    const rows = webPage("table tbody tr");
+                        const webPage = cheerio.load(content, options);
+                        const rows = webPage("table tbody tr");
 
-                    rows.each((index, elem) => {
-                        const cells = elem.children.filter(c => c.type === "tag" && c.name === "td");
-                        if (cells.length === 9) {
-                            runs.push(this.extractRun(cells));
-                        }
-                    });
+                        rows.each((index, elem) => {
+                            const cells = elem.children.filter(c => c.type === "tag" && c.name === "td");
+                            if (cells.length === 9) {
+                                runs.push(this.extractRun(cells));
+                            }
+                        });
 
-                    return runs.sort((a, b) => (a.date < b.date) ? 1 : (a.date > b.date) ? -1 : 0);
-                });
+                        return runs.sort((a, b) => (a.date < b.date) ? 1 : (a.date > b.date) ? -1 : 0);
+                    })
+                );
         }
     }
 
@@ -51,32 +54,34 @@ export class RunService {
         return this.http.get(
             "http://5km.5kmrun.bg/user.php?id=" + this.userService.currentUserId,
             { responseType: "text" })
-            .map(response => {
+            .pipe(
+                map(response => {
 
-                console.log("get details ...");
-                const content = response;
+                    console.log("get details ...");
+                    const content = response;
 
-                const options = {
-                    normalizeWhitespace: true,
-                    xmlMode: true
-                };
+                    const options = {
+                        normalizeWhitespace: true,
+                        xmlMode: true
+                    };
 
-                const webPage = cheerio.load(content, options);
-                const rows = webPage(".accordion table tbody tr");
+                    const webPage = cheerio.load(content, options);
+                    const rows = webPage(".accordion table tbody tr");
 
-                let result = null;
+                    let result = null;
 
-                rows.each((index, elem) => {
-                    const cells = elem.children.filter(c => c.type == "tag" && c.name == "td");
-                    let rDetails = this.extractRunDetails(cells);
+                    rows.each((index, elem) => {
+                        const cells = elem.children.filter(c => c.type == "tag" && c.name == "td");
+                        let rDetails = this.extractRunDetails(cells);
 
-                    if (rDetails != null && rDetails.id == runId && result == null) {
-                        result = rDetails.runDetails;
-                    }
-                });
+                        if (rDetails != null && rDetails.id == runId && result == null) {
+                            result = rDetails.runDetails;
+                        }
+                    });
 
-                return result;
-            });
+                    return result;
+                })
+            );
     }
 
     private extractRunDetails(cells: any): Run {

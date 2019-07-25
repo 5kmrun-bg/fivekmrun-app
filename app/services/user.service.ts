@@ -1,10 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { EventEmitter, Injectable } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { User } from "../models";
 
 import * as appSettings from "application-settings";
 import * as cheerio from "cheerio";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class UserService {
@@ -29,28 +30,30 @@ export class UserService {
             this.lastLoadedUserId = this.currentUserId;
             return this.lastLoadedUser = this.http.get(
                 "http://5km.5kmrun.bg/usr.php?id=" + this._currentUserId,
-                { responseType: "text"}
-            ).map(response => {
-                const content = response;
+                { responseType: "text" })
+                .pipe(
+                    map(response => {
+                        const content = response;
 
-                const options = {
-                    normalizeWhitespace: true,
-                    xmlMode: true
-                };
+                        const options = {
+                            normalizeWhitespace: true,
+                            xmlMode: true
+                        };
 
-                const webPage = cheerio.load(content, options);
+                        const webPage = cheerio.load(content, options);
 
-                const avatarUrl = this.parseAvatarUrl(webPage);
-                const userPoints = this.parseUserPoints(webPage);
-                const name = this.parseName(webPage);
-                const runsCount = this.parseRunsCount(webPage);
-                const totalKmRan = this.parseTotalKmRan(webPage);
-                const age = this.parseAge(webPage);
-                this.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
+                        const avatarUrl = this.parseAvatarUrl(webPage);
+                        const userPoints = this.parseUserPoints(webPage);
+                        const name = this.parseName(webPage);
+                        const runsCount = this.parseRunsCount(webPage);
+                        const totalKmRan = this.parseTotalKmRan(webPage);
+                        const age = this.parseAge(webPage);
+                        this.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
 
-                this.userChanged.next();
-                return this.currentUser;
-            });
+                        this.userChanged.next();
+                        return this.currentUser;
+                    })
+                );
         }
     }
 

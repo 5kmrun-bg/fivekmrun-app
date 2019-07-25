@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import * as cheerio from "cheerio";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 
 import { Event, Result } from "../models";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class EventService {
@@ -11,10 +12,11 @@ export class EventService {
     constructor(private http: HttpClient) { }
 
     getAllPastEvents(): Observable<Event[]> {
-        return this.http.get("http://5km.5kmrun.bg/calendar-a.php", { responseType: "text" })
-            .map(response => {
+        return this.http.get("http://5km.5kmrun.bg/calendar-a.php", { responseType: "text" }).pipe(
+            map(response => {
                 return this.parseEventsResponse(response, 4);
-            });
+            })
+        );
     }
 
     getResultsDetailsById(eventId: string): Observable<Result[]> {
@@ -22,17 +24,19 @@ export class EventService {
     }
 
     getAllFutureEvents(): Observable<Event[]> {
-        return this.http.get("http://5km.5kmrun.bg/calendar.php", { responseType: "text" })
-            .map(response => {
+        return this.http.get("http://5km.5kmrun.bg/calendar.php", { responseType: "text" }).pipe(
+            map(response => {
                 return this.parseEventsResponse(response);
-            });
+            })
+        );
     }
 
     getResultsDetails(eventDetailUrl: string): Observable<Result[]> {
-        return this.http.get(eventDetailUrl, { responseType: "text" })
-            .map(response => {
+        return this.http.get(eventDetailUrl, { responseType: "text" }).pipe(
+            map(response => {
                 return this.parseResultsDetails(response);
-            });
+            })
+        );
     }
 
     private parseResultsDetails(response: string): Result[] {
@@ -75,7 +79,7 @@ export class EventService {
 
         if (topNWeeks > 0) {
             rows.splice(topNWeeks, rows.length - topNWeeks);
-        } 
+        }
 
         rows.each((index, row) => {
             const cells = row.children.filter(c => c.type == "tag" && c.name == "td");
