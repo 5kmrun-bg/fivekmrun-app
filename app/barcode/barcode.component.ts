@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { UserService } from "../services/user.service";
 import { User } from "../models/user.model";
 import { Brightness } from "nativescript-brightness";

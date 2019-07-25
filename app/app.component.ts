@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
 import * as firebase from "nativescript-plugin-firebase";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { filter } from "rxjs/operators";
 import { User } from "./models";
 import { UserService } from "./services";

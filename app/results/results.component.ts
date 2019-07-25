@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { EventService } from "../services";
 import { Event } from "../models";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "Results",

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { RunService } from "../services";
 import { Run } from "../models";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "Runs",

@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { News } from "../models";
 
 import * as cheerio from "cheerio";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class NewsService {
@@ -15,8 +16,8 @@ export class NewsService {
         if (this.lastNews != null) {
             return this.lastNews;
         } else {
-            return this.lastNews = this.http.get("http://info-5kmrun.bg/feed/", { responseType: "text" })
-                .map(response => {
+            return this.lastNews = this.http.get("http://info-5kmrun.bg/feed/", { responseType: "text" }).pipe(
+                map(response => {
                     const news = new Array<News>();
 
                     const content = response;
@@ -34,7 +35,8 @@ export class NewsService {
                     });
 
                     return news;
-                });
+                })
+            );
         }
     }
 
