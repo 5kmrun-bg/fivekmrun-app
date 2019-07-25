@@ -5,26 +5,28 @@ import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import { NativeScriptUIGaugeModule } from "nativescript-ui-gauge/angular";
 import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
-import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent } from "./tiles";
-
-if (module['hot']) {
-    module['hot'].accept();
-}
+import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent, RunsByRouteComponent, BestTimeByRouteComponent } from "./tiles";
+import { BarcodeModule } from "../barcode/barcode.module";
+import { BarComponent } from "./components/bar.component";
 
 @NgModule({
     imports: [
-        HomeRoutingModule,
+        HomeRoutingModule,  
         NativeScriptUIGaugeModule,
         NativeScriptUIChartModule,
         CommonModule,
-        NativeScriptCommonModule
+        NativeScriptCommonModule,
+        BarcodeModule
     ],
     declarations: [
         HomeComponent,
         RunDetailsTileComponent,
         NextMilestoneTileComponent,
         TotalDistanceTileComponent,
-        RunStatsTileComponent
+        RunStatsTileComponent,
+        RunsByRouteComponent,
+        BestTimeByRouteComponent,
+        BarComponent
 
     ],
     schemas: [

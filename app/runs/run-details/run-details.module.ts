@@ -3,12 +3,16 @@ import { CommonModule } from "@angular/common";
 import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { RunDetailsRoutingModule } from "./run-details-routing.module";
 import { RunDetailsComponent } from "./run-details.component";
+import { TimeDifferenceColorModule } from "../../pipes/time-difference-color.module";
+import { NativeScriptUIGaugeModule } from "nativescript-ui-gauge/angular";
 
 @NgModule({
     imports: [
         RunDetailsRoutingModule,
         CommonModule,
-        NativeScriptCommonModule
+        NativeScriptCommonModule,
+        TimeDifferenceColorModule,
+        NativeScriptUIGaugeModule
     ],
     declarations: [
         RunDetailsComponent

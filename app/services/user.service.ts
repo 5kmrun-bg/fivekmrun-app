@@ -1,5 +1,5 @@
-import { Injectable, EventEmitter } from "@angular/core";
-import { Http } from "@angular/http";
+import { HttpClient } from "@angular/common/http";
+import { EventEmitter, Injectable } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { User } from "../models";
 
@@ -15,21 +15,23 @@ export class UserService {
 
     userChanged: EventEmitter<void> = new EventEmitter();
 
-    constructor(private http: Http) {
+    constructor(private http: HttpClient) {
         if (appSettings.getNumber("currentUserId") != NaN) {
             this._currentUserId = appSettings.getNumber("currentUserId");
         }
     }
 
-    getCurrentUser(): Observable<User> {        
+    getCurrentUser(): Observable<User> {
         if (this.lastLoadedUser != null && this.lastLoadedUserId == this.currentUserId) {
             return this.lastLoadedUser;
         } else {
             console.log("Getting user ...");
-            const that = this;
             this.lastLoadedUserId = this.currentUserId;
-            return this.lastLoadedUser = this.http.get("http://5km.5kmrun.bg/usr.php?id=" + this._currentUserId).map(response => {
-                const content = response.text();
+            return this.lastLoadedUser = this.http.get(
+                "http://5km.5kmrun.bg/usr.php?id=" + this._currentUserId,
+                { responseType: "text"}
+            ).map(response => {
+                const content = response;
 
                 const options = {
                     normalizeWhitespace: true,
@@ -44,10 +46,10 @@ export class UserService {
                 const runsCount = this.parseRunsCount(webPage);
                 const totalKmRan = this.parseTotalKmRan(webPage);
                 const age = this.parseAge(webPage);
-                that.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
+                this.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
 
                 this.userChanged.next();
-                return that.currentUser;
+                return this.currentUser;
             });
         }
     }
@@ -80,8 +82,11 @@ export class UserService {
     }
 
     private parseName(webPage: any): string {
-        const title = webPage("h2.article-title").first().text();
-        return title.substr(title.indexOf("-") + 2);
+        let title = webPage("h2.article-title").first().text();
+        if (title.indexOf("-") > 0) {
+            title = title.substr(title.indexOf("-") + 2);
+        }
+        return title;
     }
 
     private parseRunsCount(webPage: any): number {

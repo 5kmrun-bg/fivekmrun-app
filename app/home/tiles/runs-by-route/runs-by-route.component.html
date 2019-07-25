@@ -1,0 +1,26 @@
+<CardView col="0" row="2" colSpan="4" class="cardStyle m-t-30" margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
+shadowRadius="3" style="margin-top: 15">
+    <GridLayout columns="*" rows="auto, *" class="dashboard-item-light">
+        <Label col="0" row="0" class="tile-header-white" text="Брой бягания по трасета"></Label>
+
+        <RadPieChart height="100%" allowAnimation="true" row="1" col="0">
+            <DonutSeries tkPieSeries selectionMode="DataPoint" outerRadiusFactor="0.9" expandRadius="0.2"
+                outerRadiusFactor="0.7" innerRadiusFactor="0.4" [items]="citiesParticipationSource$ | async"
+                valueProperty="RunsCount" legendLabel="City" showLabels="false" seriesName="donutSeries">
+                <Palette tkPiePalette seriesName="donutSeries">
+                    <PaletteEntry tkPiePaletteEntry fillColor="#fb5a2e" strokeColor="#000000"></PaletteEntry>
+                    <PaletteEntry tkPiePaletteEntry fillColor="#ae3e1f" strokeColor="#000000"></PaletteEntry>
+                    <PaletteEntry tkPiePaletteEntry fillColor="#7b2a16" strokeColor="#000000"></PaletteEntry>
+                    <PaletteEntry tkPiePaletteEntry fillColor="#542415" strokeColor="#000000"></PaletteEntry>
+                </Palette>
+                <Palette tkPiePalette seriesState="Selected" seriesName="donutSeries">
+                    <PaletteEntry tkPiePaletteEntry fillColor="#0065ff" strokeColor="#000000"></PaletteEntry>
+                    <PaletteEntry tkPiePaletteEntry fillColor="#0065ff" strokeColor="#000000"></PaletteEntry>
+                    <PaletteEntry tkPiePaletteEntry fillColor="#0065ff" strokeColor="#000000"></PaletteEntry>
+                    <PaletteEntry tkPiePaletteEntry fillColor="#0065ff" strokeColor="#000000"></PaletteEntry>
+                </Palette>
+            </DonutSeries>
+            <RadLegendView tkPieLegend position="Right" offsetOrigin="TopRight" enableSelection="true" width="150"></RadLegendView>
+        </RadPieChart>
+    </GridLayout>
+</CardView>

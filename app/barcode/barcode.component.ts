@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { UserService } from "../services/user.service";
 import { User } from "../models/user.model";
-import * as app from "application";
-import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import { Brightness } from "nativescript-brightness";
 import { Page } from "tns-core-modules/ui/page/page";
 
@@ -32,14 +30,6 @@ export class BarcodeComponent implements OnInit {
         })
     }
 
-    ngOnInit(): void {
-
-
-        
-    }
-
-    onDrawerButtonTap(): void {
-        const sideDrawer = <RadSideDrawer>app.getRootView();
-        sideDrawer.showDrawer();
+    ngOnInit(): void {   
     }
 }
