@@ -1,25 +1,24 @@
-import { TabView } from "tns-core-modules/ui/tab-view";
 import { Injectable } from "@angular/core";
 import { RouterExtensions } from "nativescript-angular/router";
-import { ActivatedRoute } from "@angular/router";
+import { BottomNavigation } from "tns-core-modules/ui/bottom-navigation/bottom-navigation";
 
 @Injectable({
     providedIn: "root"
 })
 export class NavigationService {
-    private tabView: TabView;
+    private bottomNavigation: BottomNavigation;
 
     constructor(private routerEx: RouterExtensions) {
 
     }
 
-    initTabView(tabView: TabView) {
-        this.tabView = tabView;
+    initTabView(bottomNavigation: BottomNavigation) {
+        this.bottomNavigation = bottomNavigation;
     }
 
     selectRunsTab() {
-        if (this.tabView) {
-            this.tabView.selectedIndex = 1;
+        if (this.bottomNavigation) {
+            this.bottomNavigation.selectedIndex = 1;
         }
     }
 
