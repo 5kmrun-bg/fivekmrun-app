@@ -1,13 +1,24 @@
-<TabView #tabView androidTabsPosition="bottom" class="fa" tabBackgroundColor="#ffffff" selectedTabTextColor="#fb5a2e">
-    <page-router-outlet *tabItem="{title: '\uf007'}" name="homeTab">
-    </page-router-outlet>
-
-    <page-router-outlet *tabItem="{title: '\uf70c'}" name="runsTab">
-    </page-router-outlet>
-
-    <page-router-outlet *tabItem="{title: '\uf2f2'}" name="resultsTab">
-    </page-router-outlet>
-
-    <page-router-outlet *tabItem="{title: '\uf073'}" name="eventsTab">
-    </page-router-outlet>
-</TabView>
+<BottomNavigation #tabView class="fa" style="font-size:14;">
+    <TabStrip>
+        <TabStripItem iconSource="font://&#xf007;" name="profileTab" title="Профил"></TabStripItem>
+        <TabStripItem iconSource="font://&#xf70c;" name="runsTab" title="Бягания"></TabStripItem>
+        <TabStripItem iconSource="font://&#xf2f2;" name="resultsTab" title="Резултати"></TabStripItem>
+        <TabStripItem iconSource="font://&#xf073;" name="eventsTab" title="Събития"></TabStripItem>
+    </TabStrip>
+    <TabContentItem name="homeTab">
+        <page-router-outlet name="homeTab">
+        </page-router-outlet>
+    </TabContentItem>
+    <TabContentItem name="runsTab">
+        <page-router-outlet name="runsTab">
+        </page-router-outlet>
+    </TabContentItem>
+    <TabContentItem name="resultsTab">
+        <page-router-outlet name="resultsTab">
+        </page-router-outlet>
+    </TabContentItem>
+    <TabContentItem name="eventsTab">
+        <page-router-outlet name="eventsTab">
+        </page-router-outlet>
+    </TabContentItem>
+</BottomNavigation>

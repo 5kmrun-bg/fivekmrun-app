@@ -2,7 +2,7 @@ import { Component, ViewChild, AfterViewInit, ElementRef, OnInit } from "@angula
 import { RouterExtensions } from "nativescript-angular/router";
 import { ActivatedRoute } from "@angular/router";
 import { NavigationService } from "../services/navigation.service";
-import { TabView } from "tns-core-modules/ui/tab-view";
+import { BottomNavigation } from "tns-core-modules/ui/bottom-navigation";
 
 @Component({
     moduleId: module.id,
@@ -11,7 +11,7 @@ import { TabView } from "tns-core-modules/ui/tab-view";
 })
 export class TabsComponent implements OnInit, AfterViewInit {
     @ViewChild("tabView", { static: true })
-    tabElementRef: ElementRef<TabView>;
+    tabElementRef: ElementRef<BottomNavigation>;
 
     constructor(
         private routerExtension: RouterExtensions,
