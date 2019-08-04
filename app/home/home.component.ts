@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { UserService, RunService } from "../services";
 import { User, Run } from "../models";
 import { Observable } from "rxjs";
