@@ -1,9 +1,10 @@
 <ActionBar class="action-bar" flat="true">
     <NavigationButton text="Назад" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
     <Label class="action-bar-title" [text]="(run$ | async)?.date | date:'dd.MM.yyyy'"></Label>
+    <ActionItem icon="font://&#xf14d;" class="fa" ios.position="right" style="font-size: 14;" (tap)="onTapShareBtn($event)"></ActionItem>
 </ActionBar>
 
-<GridLayout columns="auto, *, auto" rows="110, auto, auto, auto, auto, auto, *"
+<GridLayout #detailsView columns="auto, *, auto" rows="110, auto, auto, auto, auto, auto, *"
     style="background-color: #252525; vertical-align: top;"
     *ngIf="run$ | async as run">
     <StackLayout col="0" row="0" class="round-tile">

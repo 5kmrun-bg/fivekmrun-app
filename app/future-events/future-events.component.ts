@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { EventService } from "../services";
 import { Event } from "../models";
 import { Observable } from "rxjs";
