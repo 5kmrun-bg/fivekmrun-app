@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { RouterExtensions } from "nativescript-angular/router";
 
@@ -8,6 +8,11 @@ import { map, switchMap } from "rxjs/operators";
 import { Result, Run } from "../../models";
 import { EventService, RunService } from "../../services";
 
+import * as SocialShare from "nativescript-social-share";
+import { Image } from "ui/image";
+
+var plugin = require("nativescript-screenshot");
+
 @Component({
     selector: "RunsDetails",
     moduleId: module.id,
@@ -16,6 +21,7 @@ import { EventService, RunService } from "../../services";
 export class RunDetailsComponent implements OnInit {
     run$: Observable<Run>;
     results$: Observable<Result[]>;
+    @ViewChild("detailsView", {static: false}) detailsView: ElementRef;
 
     constructor(
         private runService: RunService,
@@ -45,5 +51,12 @@ export class RunDetailsComponent implements OnInit {
 
     onNavBtnTap(): void {
         this.routerExtensions.back();
+    }
+
+    onTapShareBtn(args): void {
+        console.log("share button tapped");
+        const screenshotImage = new Image();
+        screenshotImage.imageSource = plugin.getImage(this.detailsView.nativeElement);
+        SocialShare.shareImage(screenshotImage.imageSource);
     }
 }
