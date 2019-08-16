@@ -1,7 +1,7 @@
 <ActionBar class="action-bar" flat="true">
 </ActionBar>
 
-<GridLayout class="page page-content login" style="height: 100%; background-color: #252525; color: #ffffff;">
+<GridLayout class="page page-content login dark-page" style="height: 100%;">
     <StackLayout [@login]="isProfileLoaded ? 'hidden' : 'shown'" verticalAlignment="center">
         <Label text="Личен номер"></Label> 
         <TextField #txtUserId (returnPress)="loadProfile()" [(ngModel)]="userId" keyboardType="number" automationText="txtLoginId"></TextField>

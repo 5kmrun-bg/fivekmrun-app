@@ -1,7 +1,7 @@
 @import '~nativescript-theme-core/scss/variables';
 
 // Custom colors
-$background-dark: #F8F8F8 !default;
+$background-dark: #252525 !default;
 $background-light: #FFFFFF !default;
 
 $blue-dark: #022734 !default;
@@ -61,7 +61,7 @@ $side-drawer-header-brand: #737373;
 $side-drawer-background: #FFFFFF;
 
 // ActionBar
-$ab-background: #252525;
+$ab-background: $background-dark;
 $ab-color: $white;
 
 // Buttons

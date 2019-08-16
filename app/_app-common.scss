@@ -185,7 +185,7 @@ GridLayout.details Label {
 }
 
 .resultsView {
-    background-color: #252525;
+    background-color: $background-dark;
     color: $white;
 
     TextField {
@@ -266,4 +266,12 @@ ListView { separator-color: transparent; }
 
 .no-border {
     border-width: 0 0 0 0;
+}
+
+.dark-page {
+    background-color: $background-dark; 
+
+    Label {
+        color: #ffffff;
+    }
 }
