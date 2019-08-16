@@ -62,19 +62,21 @@
     font-size: 20;
 }
 
-.input-button {
+%input-button {
     background-color: $accent;
     color: $white;
     width: 150;
     height: 50;
     margin-top: 15;
 }
-.input-button-red {
-    background-color: $accent;
-    color: $white;
+
+.input-button-wide {
+    @extend %input-button;
+    width: 150;
+}
+.input-button-narrow {
+    @extend %input-button;
     width: 50;
-    height: 50;
-    margin-top: 15;
 }
 
 TextField {
