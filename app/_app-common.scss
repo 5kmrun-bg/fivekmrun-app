@@ -1,24 +1,10 @@
-// Import the theme’s variables. If you’re using a color scheme
-// other than “light”, switch the path to the alternative scheme,
-// for example '~nativescript-theme-core/scss/dark'.
-@import '~nativescript-theme-core/scss/light';
+@import "~nativescript-theme-core/core";
+
 
 // Start custom common variables
-@import 'app-variables';
+ @import 'app-variables';
 // End custom common variables
 
-// Customize any of the theme’s variables here, for instance $btn-color: red;
-// https://github.com/NativeScript/theme/blob/master/app/scss/_variables.scss
-
-// Import the theme’s main ruleset.
-@import '~nativescript-theme-core/scss/index';
-
-// Import the platform specific ruleset.
-// @import url('~/platform.css');
-
-// Place any CSS rules you want to apply on both iOS and Android here.
-// This is where the vast majority of your CSS code goes.
-// Font icon class
 .fa {
    font-family: "Font Awesome 5 Free";
 }
@@ -34,12 +20,6 @@
         color: $page-icon-color;
         margin-top: 20%;
     }
-}
-
-//Action bar
-ActionBar .action-bar-title {
-    horizontal-align: center;
-    color: white;
 }
 
 .barcode {
@@ -62,7 +42,7 @@ ActionBar .action-bar-title {
 }
 
 .dashboard-item-light {
-    background-color: #ffffff;
+    background-color: $white;
     text-align: center;
     vertical-align: middle;
     font-size: 20;
@@ -83,24 +63,24 @@ ActionBar .action-bar-title {
 }
 
 .input-button {
-    background-color: #fb5a2e;
-    color: #ffffff;
+    background-color: $accent;
+    color: $white;
     width: 150;
     height: 50;
     margin-top: 15;
 }
-
 .input-button-red {
-    background-color: #fb5a2e;
-    color: #ffffff;
+    background-color: $accent;
+    color: $white;
     width: 50;
     height: 50;
     margin-top: 15;
 }
 
-.input-textbox {
+TextField {
+    color: $white;
     border-width: 1;
-    border-color: #ffffff;
+    border-color: $white;
     width: 150;
     height: 50;
     margin-top: 15;
@@ -127,7 +107,7 @@ GridLayout.details Label {
     Image {
         border-radius: 100;
         border-width: 1;
-        border-color: #fb5a2e;
+        border-color: $accent;
         width: 150;
         height: 150;
         margin-top: 10;
@@ -139,7 +119,7 @@ GridLayout.details Label {
 }
 
 .tile-header-dark {
-    color: #ffffff;
+    color: $white;
     font-size: 14;
     text-align: center;
 }
@@ -166,7 +146,7 @@ GridLayout.details Label {
 }
 
 .tile-value-dark {
-    color: #ffffff;
+    color: $white;
     font-size: 14;
 }
 
@@ -185,7 +165,7 @@ GridLayout.details Label {
 }
 
 .results {
-    background-color: white;
+    background-color: $white;
     margin: 10 10 10 10;
     padding: 10 10 10 10;
 }
@@ -194,7 +174,7 @@ GridLayout.details Label {
     font-family: "Font Awesome 5 Free";
     vertical-align: middle;
     text-align: center;
-    color: #fb5a2e;
+    color: $accent;
 }
 
 .list-details {
@@ -206,7 +186,7 @@ GridLayout.details Label {
 
 .resultsView {
     background-color: #252525;
-    color: #ffffff;
+    color: $white;
 
     TextField {
         placeholder-color: white;
@@ -217,7 +197,7 @@ GridLayout.details Label {
 
 .round-tile {
     border-radius: 100;
-    background-color: #ffffff;
+    background-color: $white;
     margin: 20 20 20 20;
     width: 80;
     height: 80;
@@ -227,7 +207,7 @@ GridLayout.details Label {
 
 .round-tile-big {
     border-radius: 100;
-    background-color: #ffffff;
+    background-color: $white;
     margin: 20 20 20 20;
     width: 110;
     height: 110;
@@ -241,7 +221,7 @@ GridLayout.details Label {
 
 .red-number {
     font-size: 18;
-    color: #fb5a2e;
+    color: $accent;
     font-weight: bold;
     margin-right: 10;
     margin-left: 10;
@@ -250,7 +230,7 @@ GridLayout.details Label {
 .red-number-big {
     font-size: 30;
     font-weight: bold;
-    color: #fb5a2e;
+    color: $accent;
     font-weight: bold;
     margin-right: 5;
     margin-left: 5;
@@ -259,7 +239,7 @@ GridLayout.details Label {
 }
 
 .color-red {
-    color: #FA3C37;
+    color: $accent;
     font-size: 18;
 }
 
@@ -282,4 +262,8 @@ ListView { separator-color: transparent; }
 
 .loader-overlay {
     background-color: #33252525
+}
+
+.no-border {
+    border-width: 0 0 0 0;
 }

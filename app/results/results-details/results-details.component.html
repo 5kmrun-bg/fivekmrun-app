@@ -5,7 +5,7 @@
 <StackLayout>
     <StackLayout class="resultsView" orientation="horizontal">
         <Label [text]="'\uf002'" class="fa m-l-10" style="color: white"></Label>
-        <TextField hint="Търсене ..." (textChange)="reFilter($event)"></TextField>
+        <TextField hint="Търсене ..." (textChange)="reFilter($event)" class="no-border"></TextField>
     </StackLayout>
     <ListView #lvResults [items]="results" class="grey-background" height="100%" (itemLoading)="onItemLoading($event)">
         <ng-template let-item="item" let-i="index">

@@ -230,11 +230,20 @@ module.exports = env => {
                     ]
                 },
                 {
-                    test: /[\/|\\]app\.scss$/,
+                    test: /\.scss$/,
                     use: [
-                        "nativescript-dev-webpack/style-hot-loader",
-                        { loader: "css-loader", options: { url: false } },
-                        "sass-loader"
+                        {
+                            loader: "css-loader",
+                            options: {
+                                url: false
+                            }
+                        },
+                        {
+                            loader: "sass-loader",
+                            options: {
+                                implementation: require("sass")
+                            }
+                        }
                     ]
                 },
 

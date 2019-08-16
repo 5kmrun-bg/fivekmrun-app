@@ -4,7 +4,7 @@
 <GridLayout class="page page-content login" style="height: 100%; background-color: #252525; color: #ffffff;">
     <StackLayout [@login]="isProfileLoaded ? 'hidden' : 'shown'" verticalAlignment="center">
         <Label text="Личен номер"></Label> 
-        <TextField #txtUserId (returnPress)="loadProfile()" [(ngModel)]="userId" class="input-textbox" keyboardType="number" automationText="txtLoginId"></TextField>
+        <TextField #txtUserId (returnPress)="loadProfile()" [(ngModel)]="userId" keyboardType="number" automationText="txtLoginId"></TextField>
         <Button (tap)="loadProfile()" text="Напред" class="input-button" automationText="btnLoginNext"></Button>
     </StackLayout>
 
