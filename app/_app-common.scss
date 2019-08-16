@@ -275,3 +275,7 @@ ListView { separator-color: transparent; }
         color: #ffffff;
     }
 }
+
+TabStripItem:active {
+    color: $accent;
+}
