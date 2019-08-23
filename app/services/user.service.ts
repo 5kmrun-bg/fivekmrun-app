@@ -5,13 +5,13 @@ import { User } from "../models";
 
 import * as appSettings from "application-settings";
 import * as cheerio from "cheerio";
-import { map } from "rxjs/operators";
+import { map, share } from "rxjs/operators";
 
 @Injectable()
 export class UserService {
     private currentUser: User;
     private _currentUserId?: number;
-    private lastLoadedUser: Observable<User>;
+    private lastLoadedUser$: Observable<User>;
     private lastLoadedUserId: number;
 
     userChanged: EventEmitter<void> = new EventEmitter();
@@ -23,12 +23,12 @@ export class UserService {
     }
 
     getCurrentUser(): Observable<User> {
-        if (this.lastLoadedUser != null && this.lastLoadedUserId == this.currentUserId) {
-            return this.lastLoadedUser;
+        if (this.lastLoadedUserId === this.currentUserId && this.lastLoadedUser$) {
+            return this.lastLoadedUser$;
         } else {
             console.log("Getting user ...");
             this.lastLoadedUserId = this.currentUserId;
-            return this.lastLoadedUser = this.http.get(
+            return this.lastLoadedUser$ = this.http.get(
                 "http://5km.5kmrun.bg/usr.php?id=" + this._currentUserId,
                 { responseType: "text" })
                 .pipe(
@@ -52,7 +52,8 @@ export class UserService {
 
                         this.userChanged.next();
                         return this.currentUser;
-                    })
+                    }),
+                    share() // Share the Observable to avoid multiple requests
                 );
         }
     }
@@ -65,7 +66,7 @@ export class UserService {
     set currentUserId(value: number) {
         this._currentUserId = value;
 
-        if (this._currentUserId != undefined) {
+        if (this._currentUserId) {
             appSettings.setNumber("currentUserId", this._currentUserId);
         } else {
             appSettings.remove("currentUserId");
@@ -73,7 +74,7 @@ export class UserService {
     }
 
     isCurrentUserSet(): boolean {
-        return this._currentUserId != undefined;
+        return !!this._currentUserId;
     }
 
     private parseAvatarUrl(webPage: any): string {
