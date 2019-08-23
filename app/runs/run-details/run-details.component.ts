@@ -10,6 +10,7 @@ import { EventService, RunService } from "../../services";
 
 import * as SocialShare from "nativescript-social-share";
 import { Image } from "ui/image";
+import * as firebase from "nativescript-plugin-firebase";
 
 var plugin = require("nativescript-screenshot");
 
@@ -55,6 +56,7 @@ export class RunDetailsComponent implements OnInit {
 
     onTapShareBtn(args): void {
         console.log("share button tapped");
+        firebase.analytics.logEvent({ key: "page_runDetails_share" });
         const screenshotImage = new Image();
         screenshotImage.imageSource = plugin.getImage(this.detailsView.nativeElement);
         SocialShare.shareImage(screenshotImage.imageSource);
