@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
-import { NativeScriptRouterModule, NSEmptyOutletComponent } from "nativescript-angular/router";
+import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { AuthenticationGuard, ConnectivityGuard } from "./guards";
 
 const routes: Routes = [
