@@ -3,24 +3,24 @@ import { Injectable } from "@angular/core";
 import * as cheerio from "cheerio";
 import { Observable } from "rxjs";
 
-import { map } from "rxjs/operators";
+import { map, share } from "rxjs/operators";
 import { Run, RunDetails } from "../models";
 import { UserService } from "../services";
 
 @Injectable()
 export class RunService {
     private lastUserId: number;
-    private lastRuns: Observable<Run[]>;
+    private lastRuns$: Observable<Run[]>;
 
     constructor(private http: HttpClient, private userService: UserService) { }
 
     getByCurrentUser(): Observable<Run[]> {
-        if (this.lastRuns != null && this.lastUserId === this.userService.currentUserId) {
-            return this.lastRuns;
+        if (this.lastRuns$ && this.lastUserId === this.userService.currentUserId) {
+            return this.lastRuns$;
         } else {
             console.log("Getting runs ...");
             this.lastUserId = this.userService.currentUserId;
-            return this.lastRuns = this.http.get(
+            return this.lastRuns$ = this.http.get(
                 "http://5km.5kmrun.bg/stat.php?id=" + this.userService.currentUserId,
                 { responseType: "text" })
                 .pipe(
@@ -45,7 +45,8 @@ export class RunService {
                         });
 
                         return runs.sort((a, b) => (a.date < b.date) ? 1 : (a.date > b.date) ? -1 : 0);
-                    })
+                    }),
+                    share()
                 );
         }
     }

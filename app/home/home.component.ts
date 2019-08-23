@@ -1,11 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { UserService, RunService } from "../services";
-import { User, Run } from "../models";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, share } from "rxjs/operators";
 
 import { Ratings } from "nativescript-ratings";
 import { Page } from "tns-core-modules/ui/page/page";
+
+import { Run, User } from "../models";
+import { RunService, UserService } from "../services";
 
 @Component({
     selector: "Home",
@@ -20,25 +21,24 @@ export class HomeComponent implements OnInit {
     runs$: Observable<Run[]>;
     constructor(private userService: UserService, private runService: RunService, private page: Page) {
         this.page.actionBarHidden = true;
-     }
+    }
 
     ngOnInit(): void {
         this.currentUser$ = this.userService.getCurrentUser();
 
-        const that = this;
-        this.lastRun$ = this.runService.getByCurrentUser().pipe(map(runs => runs.sort((a, b) => { return 0 - (that.getTime(a.date) - that.getTime(b.date));})[0]));
-        this.bestRun$ = this.runService.getByCurrentUser().pipe(map(runs => runs.sort((a, b) => { return a.time.localeCompare(b.time);})[0]));
-        this.runs$ = this.runService.getByCurrentUser().pipe(map(runs => runs.reverse()));
+        const runs$ = this.runService.getByCurrentUser();
+
+        this.runs$ = runs$.pipe(map(runs => runs.reverse()));
+        this.lastRun$ = runs$.pipe(map(runs => runs.reduce((a, b) => (getTime(a.date) - getTime(b.date)) > 0 ? a : b)));
+        this.bestRun$ = runs$.pipe(map(runs => runs.reduce((a, b) => a.time.localeCompare(b.time) < 0 ? a : b)));
 
         this.initializeRatingPlugin();
     }
 
-    private getTime(date?: Date) {
-        return date != null ? date.getTime() : 0;
-    }
+
 
     private initializeRatingPlugin() {
-        let ratings = new Ratings({
+        const ratings = new Ratings({
             id: "bg.5kmpark.5kmrun",
             showOnCount: 5,
             title: "Харесвате ли приложението?",
@@ -52,4 +52,8 @@ export class HomeComponent implements OnInit {
         ratings.init();
         ratings.prompt();
     }
+}
+
+function getTime(date?: Date) {
+    return date != null ? date.getTime() : 0;
 }
