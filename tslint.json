@@ -30,6 +30,7 @@
     "object-literal-sort-keys": false,
     "one-variable-per-declaration": [true, "ignore-for-loop"],
     "pipe-naming": [true, "camelCase", "sg"],
+    "prefer-conditional-expression": false,
     "trailing-comma": false,
     "use-host-property-decorator": true,
     "use-input-property-decorator": true,

@@ -3,9 +3,9 @@ import { Injectable } from "@angular/core";
 import * as cheerio from "cheerio";
 import { Observable } from "rxjs";
 
+import { map } from "rxjs/operators";
 import { Run, RunDetails } from "../models";
 import { UserService } from "../services";
-import { map } from "rxjs/operators";
 
 @Injectable()
 export class RunService {
@@ -72,7 +72,7 @@ export class RunService {
 
                     rows.each((index, elem) => {
                         const cells = elem.children.filter(c => c.type == "tag" && c.name == "td");
-                        let rDetails = this.extractRunDetails(cells);
+                        const rDetails = this.extractRunDetails(cells);
 
                         if (rDetails != null && rDetails.id == runId && result == null) {
                             result = rDetails.runDetails;
@@ -151,7 +151,7 @@ export class RunService {
     }
 
     private extractSpeed(cell: any): string {
-        let untrimmedSpeed = cell.children[0].data;
+        const untrimmedSpeed = cell.children[0].data;
         return untrimmedSpeed.substring(0, untrimmedSpeed.length - 5);
     }
 

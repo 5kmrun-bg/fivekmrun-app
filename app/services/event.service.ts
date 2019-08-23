@@ -2,9 +2,9 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import * as cheerio from "cheerio";
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 import { Event, Result } from "../models";
-import { map } from "rxjs/operators";
 
 @Injectable()
 export class EventService {
@@ -48,7 +48,7 @@ export class EventService {
         };
 
         const webPage = cheerio.load(response, options);
-        const rows = webPage("div.table-responsive1 table tbody tr")
+        const rows = webPage("div.table-responsive1 table tbody tr");
 
         rows.each((index, row) => {
             let name: string;
@@ -61,7 +61,7 @@ export class EventService {
             const position = row.children[1].children[0].data;
 
             results.push(new Result(name, time, position));
-        })
+        });
 
         return results;
     }
@@ -82,12 +82,12 @@ export class EventService {
         }
 
         rows.each((index, row) => {
-            const cells = row.children.filter(c => c.type == "tag" && c.name == "td");
+            const cells = row.children.filter(c => c.type === "tag" && c.name === "td");
             let date: Date;
             for (let i = 0; i < cells.length; ++i) {
-                if (i == 0) {
-                    if (cells[0].children[1] != undefined) {
-                        const parts = cells[0].children[1].children[0].data.match(/(\d+)/g)
+                if (i === 0) {
+                    if (cells[0].children[1] !== undefined) {
+                        const parts = cells[0].children[1].children[0].data.match(/(\d+)/g);
                         date = new Date(parts[2], parts[1] - 1, parts[0]);
                     } else {
                         break;
@@ -103,7 +103,7 @@ export class EventService {
     }
 
     private parseCell(cell: any, date: Date, events: Array<Event>) {
-        if (cell && cell.type == "tag" && cell.name == "a") {
+        if (cell && cell.type === "tag" && cell.name === "a") {
             const title = this.parseTitle(cell);
             const imageUrl = this.parseImageUrl(cell);
             const link = this.parseLink(cell);
