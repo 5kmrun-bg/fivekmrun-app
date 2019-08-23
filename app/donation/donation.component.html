@@ -2,9 +2,12 @@
     <Label class="action-bar-title text-center" text="Дарение"></Label>
 </ActionBar>
 
-<GridLayout class="page page-content dark-page" style="height: 100%;" rows="*, auto, *, auto">
-    <Label row="0" textWrap="true" class="text-center" text="Това приложение и цялата дейност на 5kmRun се издържа изцяло от дарения и доброволен труд. Можете да подкрепите нашите усилия като дарите избрана от вас сума бързо и лесно чрез системата PayPal."></Label>
-    <Button row="1" (tap)="initiateDonation()" class="input-button-wide" text="Дари!"></Button>
+<GridLayout class="page page-content dark-page" style="height: 100%;" rows="*, *, auto, auto, *">
+    <Label row="0" textWrap="true" class="text-center" text="Това приложение и цялата дейност на 5kmRun се издържа изцяло от дарения и доброволен труд. Можете да подкрепите нашите усилия като дарите избрана от вас сума бързо."></Label>
+    <GridLayout columns="*, auto, auto, *" row="1" (tap)="initiateDonation()" class="input-button-wide text-center va-m">
+        <Label col="1" class="va-m text-center" style="font-size: 18" text="Дари с  "></Label>
+        <Label col="2" class="va-m text-center fa-brands" style="font-size: 32" [text]="'\uf1f4'"></Label>
+    </GridLayout>
     <Label row="2" text="Благодарим ви!" class="text-center m-t-30" style="font-size: 26;"></Label>
     <Label row="3" text="От целия екип" class="text-right m-r-20"></Label>
 </GridLayout>
