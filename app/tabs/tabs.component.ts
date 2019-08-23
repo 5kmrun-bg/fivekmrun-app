@@ -30,7 +30,8 @@ export class TabsComponent implements OnInit, AfterViewInit {
                 homeTab: ["home"],
                 runsTab: ["runs"],
                 eventsTab: ["future-events"],
-                resultsTab: ["results"]
+                resultsTab: ["results"],
+                donationTab: ["donation"]
             }
         }], { relativeTo: this.activeRoute });
     }

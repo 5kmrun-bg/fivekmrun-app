@@ -40,6 +40,13 @@ import { ConnectivityGuard } from "~/guards";
                         component: NSEmptyOutletComponent,
                         loadChildren: "../future-events/future-events.module#FutureEventsModule",
                         canActivate: [ConnectivityGuard]
+                    },
+                    {
+                        path: "donation",
+                        outlet: "donationTab",
+                        component: NSEmptyOutletComponent,
+                        loadChildren: "../donation/donation.module#DonationModule",
+                        canActivate: [ConnectivityGuard]
                     }
                 ]
             }

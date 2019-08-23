@@ -4,6 +4,7 @@
         <TabStripItem iconSource="font://&#xf70c;" name="runsTab" title="Бягания"></TabStripItem>
         <TabStripItem iconSource="font://&#xf2f2;" name="resultsTab" title="Резултати"></TabStripItem>
         <TabStripItem iconSource="font://&#xf073;" name="eventsTab" title="Събития"></TabStripItem>
+        <TabStripItem iconSource="font://&#xf004;" name="donationTab" title="Дарение"></TabStripItem>
     </TabStrip>
     <TabContentItem name="homeTab">
         <page-router-outlet name="homeTab">
@@ -19,6 +20,10 @@
     </TabContentItem>
     <TabContentItem name="eventsTab">
         <page-router-outlet name="eventsTab">
+        </page-router-outlet>
+    </TabContentItem>
+    <TabContentItem name="donationTab">
+        <page-router-outlet name="donationTab">
         </page-router-outlet>
     </TabContentItem>
 </BottomNavigation>
