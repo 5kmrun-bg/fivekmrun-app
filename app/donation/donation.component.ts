@@ -15,6 +15,6 @@ export class DonationComponent implements OnInit {
     initiateDonation(): void {
         console.log("log donation");
         firebase.analytics.logEvent({ key: "button_donation_clicked" });
-        utils.openUrl("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6B7VDX7UW7JKJ&source=url");
+        utils.openUrl("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U9KNHBAU8VMFS&source=url");
     }
 }
