@@ -17,7 +17,7 @@ export class BarComponent {
 
         return (this.barMaximumValue - this.barValue) * (100 / this.barMaximumValue);
     }
-    
+
     get fullBarWidth(): number {
         if (isNaN(this.barMaximumValue) || isNaN(this.barValue)) {
             return 50;

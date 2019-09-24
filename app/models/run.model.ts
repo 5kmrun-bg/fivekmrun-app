@@ -17,7 +17,7 @@ export class Run {
         public pace: string
     ) {
         this.id = Md5.hashStr(date + "#" + time + "#" + place + "#").toString();
-        const timeParts = time.split(':');
-        this.timeInSeconds = (Number(timeParts[0]) * 60 + Number(timeParts[1]))/60;
+        const timeParts = time.split(":");
+        this.timeInSeconds = Number(timeParts[0]) * 60 + Number(timeParts[1]);
     }
 }

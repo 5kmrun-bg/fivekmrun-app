@@ -12,7 +12,7 @@ export class StatisticsService {
     constructor(private runService: RunService) {
     }
 
-    getRunsByCity(): Observable<{ City, RunsCount }[]> {
+    getRunsByCity(): Observable<{ City: string, RunsCount: number }[]> {
         return this.runService.getByCurrentUser().pipe(
             map(runs => {
                 const cityRuns = (new List(runs)).GroupBy(r => r.place, r => 1);
@@ -22,19 +22,21 @@ export class StatisticsService {
         );
     }
 
-    getBestTimesByCity(): Observable<{ City, BestTime }[]> {
+    getBestTimesByCity(): Observable<{ City: string, BestTime: number }[]> {
         return this.runService.getByCurrentUser().pipe(
             map(runs => {
                 const cityRuns = (new List(runs)).GroupBy(r => r.place, r => r.timeInSeconds);
                 const result = Object.keys(cityRuns)
-                    .map(k => ({ City: this.trimCityName(k), BestTime: Math.round(Math.min.apply(null, cityRuns[k]) * 100) / 100 }));
+                    .map(k => ({ City: this.trimCityName(k), BestTime: Math.min.apply(null, cityRuns[k]) }));
+
+                console.dir(result);
 
                 return result;
             })
         );
     }
 
-    getRunsTimes(): Observable<{ Date, Time }[]> {
+    getRunsTimes(): Observable<{ Date: Date, Time: number }[]> {
         return this.runService.getByCurrentUser().pipe(
             map(runs => {
                 // v Items are sorted because of a bug in the Chart component
@@ -44,7 +46,7 @@ export class StatisticsService {
         );
     }
 
-    getRunsByMonth(): Observable<{ Date, RunsCount }[]> {
+    getRunsByMonth(): Observable<{ Date: Date, RunsCount: number }[]> {
         return this.runService.getByCurrentUser().pipe(
             map(runs => {
                 const groupedRuns = (new List(runs))
@@ -68,7 +70,7 @@ export class StatisticsService {
         } else if (fullName.includes("Гребен канал")) {
             return "Гребен канал";
         } else if (fullName.includes("Борисова градина")) {
-            return "Борисова градина"
+            return "Борисова градина";
         } else {
             return fullName;
         }

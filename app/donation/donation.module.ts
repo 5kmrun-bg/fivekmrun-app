@@ -1,15 +1,11 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
-import { NativeScriptFormsModule } from "nativescript-angular/forms"
-import { DonationComponent } from "./donation.component";
+import { SharedModule } from "../shared/shared.modules";
 import { DonationRoutingModule } from "./donation-routing.module";
+import { DonationComponent } from "./donation.component";
 
 @NgModule({
     imports: [
-        NativeScriptFormsModule,
-        CommonModule,
-        NativeScriptCommonModule,
+        SharedModule,
         DonationRoutingModule
     ],
     declarations: [
