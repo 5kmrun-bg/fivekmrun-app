@@ -3,6 +3,6 @@
         <Label [text]="barTitle" class="m-l-10" style="color: #ffffff; font-size: 14;"></Label>
     </StackLayout>
     <StackLayout [width]="emptyBarWidth + '%'" height="100%" style="background-color: #F1F2F3; font-size: 12" class="text-right va-m">
-        <Label [text]="barValue + ' мин.'" class="m-r-10"></Label>
+        <Label [text]="(barValue | timeMinutes) + ' мин.'" class="m-r-10"></Label>
     </StackLayout>
 </StackLayout>

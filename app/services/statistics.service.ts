@@ -29,8 +29,6 @@ export class StatisticsService {
                 const result = Object.keys(cityRuns)
                     .map(k => ({ City: this.trimCityName(k), BestTime: Math.min.apply(null, cityRuns[k]) }));
 
-                console.dir(result);
-
                 return result;
             })
         );
