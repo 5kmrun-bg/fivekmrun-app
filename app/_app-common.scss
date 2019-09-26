@@ -283,6 +283,14 @@ ListView { separator-color: transparent; }
     }
 }
 
+TabStripItem Label {
+    font-size: 12;
+}
+
+TabStripItem Image {
+    font-size: 32;
+}
+
 TabStripItem:active {
     color: $accent;
 }

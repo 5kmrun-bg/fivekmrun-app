@@ -50,7 +50,7 @@
     "nativescript-ui-gauge": "5.0.0",
     "reflect-metadata": "~0.1.8",
     "rxjs": "^6.4.0",
-    "tns-core-modules": "~6.0.1",
+    "tns-core-modules": "~6.1.1",
     "ts-md5": "^1.2.2",
     "zone.js": "^0.9.1"
   },
