@@ -1,26 +1,24 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import * as cheerio from "cheerio";
-import { Observable } from "rxjs";
+import { Observable, ReplaySubject } from "rxjs";
 
-import { map, share } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { Run, RunDetails } from "../models";
 import { UserService } from "../services";
 
 @Injectable()
 export class RunService {
     private lastUserId: number;
-    private lastRuns$: Observable<Run[]>;
+    private lastRuns$: ReplaySubject<Run[]> = new ReplaySubject(1);
 
     constructor(private http: HttpClient, private userService: UserService) { }
 
     getByCurrentUser(): Observable<Run[]> {
-        if (this.lastRuns$ && this.lastUserId === this.userService.currentUserId) {
-            return this.lastRuns$;
-        } else {
+        if (this.lastUserId !== this.userService.currentUserId) {
             console.log("Getting runs ...");
             this.lastUserId = this.userService.currentUserId;
-            return this.lastRuns$ = this.http.get(
+            this.http.get(
                 "http://5km.5kmrun.bg/stat.php?id=" + this.userService.currentUserId,
                 { responseType: "text" })
                 .pipe(
@@ -44,11 +42,14 @@ export class RunService {
                             }
                         });
 
-                        return runs.sort((a, b) => (a.date < b.date) ? 1 : (a.date > b.date) ? -1 : 0);
-                    }),
-                    share()
-                );
+                        return runs.sort((a, b) => b.date - a.date);
+                    })
+                ).subscribe(runs => {
+                    this.lastRuns$.next(runs);
+                });
         }
+
+        return this.lastRuns$;
     }
 
     public getRunDetails(runId: string): Observable<RunDetails> {

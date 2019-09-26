@@ -5,7 +5,6 @@ import { map } from "rxjs/operators";
 
 import { RunService } from "./run.service";
 
-
 @Injectable()
 export class StatisticsService {
 

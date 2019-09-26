@@ -3,7 +3,7 @@
 </ActionBar>
 
 <GridLayout class="page page-content">
-    <ListView [items]="runs | async" class="grey-background">
+    <ListView [items]="runs$ | async" class="grey-background">
         <ng-template let-item="item" let-i="index">
             <CardView margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
             shadowRadius="3">

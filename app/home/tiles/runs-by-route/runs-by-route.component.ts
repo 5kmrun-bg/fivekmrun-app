@@ -8,11 +8,11 @@ import { StatisticsService } from "../../../services";
     templateUrl: "./runs-by-route.component.html"
 })
 export class RunsByRouteComponent implements OnInit {
-    citiesParticipationSource$: Observable<{City, RunsCount}[]>;
+    citiesParticipationSource$: Observable<{ City, RunsCount }[]>;
 
     constructor(private statisticsService: StatisticsService) {
     }
-    
+
     ngOnInit(): void {
         this.citiesParticipationSource$ = this.statisticsService.getRunsByCity();
     }
