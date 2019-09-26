@@ -17,7 +17,7 @@ export class RunStatsTileComponent implements OnInit {
     min: number;
     max: number;
     step: number;
-    runs: Run[] = [];
+    runs: { date: Date, timeInSeconds: number, time: string }[] = [];
 
     ngOnInit(): void {
         this.runs$.pipe(tap((runsResults) => {
@@ -25,8 +25,10 @@ export class RunStatsTileComponent implements OnInit {
             this.max = Math.ceil(Math.max(...times));
             this.min = Math.floor(Math.min(...times));
             this.step = Math.round((this.max - this.min) / 4);
-            // v Items are sorted because of a bug in the Chart component
-            this.runs = runsResults.sort((r1, r2) => (r1.date < r2.date) ? -1 : (r1.date > r2.date) ? 1 : 0);
+            // Items are sorted because of a bug in the Chart component
+            this.runs = runsResults
+                .sort((r1, r2) => (r1.date - r2.date))
+                .map(r => ({ date: new Date(r.date), timeInSeconds: r.timeInSeconds, time: r.time }));
         })).subscribe();
 
     }

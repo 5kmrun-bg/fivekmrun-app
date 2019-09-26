@@ -6,7 +6,7 @@ export class Run {
     public timeInSeconds: number;
     public runDetails: RunDetails;
     constructor(
-        public date: Date,
+        public date: number,
         public time: string,
         public place: string,
         public differenceFromPrevious: string,

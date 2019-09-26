@@ -118,9 +118,9 @@ export class RunService {
         );
     }
 
-    private extractDate(cell: any): Date {
+    private extractDate(cell: any): number {
         const strMatch = cell.children[0].data.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
-        return new Date(strMatch[3], strMatch[2] - 1, strMatch[1]);
+        return new Date(strMatch[3], strMatch[2] - 1, strMatch[1]).getTime();
     }
 
     private extractPlace(cell: any): string {
