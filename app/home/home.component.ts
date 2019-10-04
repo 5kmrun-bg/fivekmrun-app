@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { map, share } from "rxjs/operators";
+import { map } from "rxjs/operators";
 
 import { Ratings } from "nativescript-ratings";
 import { Page } from "tns-core-modules/ui/page/page";
@@ -25,17 +25,12 @@ export class HomeComponent implements OnInit {
 
     ngOnInit(): void {
         this.currentUser$ = this.userService.getCurrentUser();
-
-        const runs$ = this.runService.getByCurrentUser();
-
-        this.runs$ = runs$.pipe(map(runs => runs.reverse()));
-        this.lastRun$ = runs$.pipe(map(runs => runs.reduce((a, b) => (getTime(a.date) - getTime(b.date)) > 0 ? a : b)));
-        this.bestRun$ = runs$.pipe(map(runs => runs.reduce((a, b) => a.time.localeCompare(b.time) < 0 ? a : b)));
+        this.runs$ = this.runService.getByCurrentUser();
+        this.lastRun$ = this.runs$.pipe(map(runs => runs.reduce((a, b) => a.date > b.date ? a : b)));
+        this.bestRun$ = this.runs$.pipe(map(runs => runs.reduce((a, b) => a.timeInSeconds < b.timeInSeconds ? a : b)));
 
         this.initializeRatingPlugin();
     }
-
-
 
     private initializeRatingPlugin() {
         const ratings = new Ratings({
@@ -52,8 +47,4 @@ export class HomeComponent implements OnInit {
         ratings.init();
         ratings.prompt();
     }
-}
-
-function getTime(date?: Date) {
-    return date != null ? date.getTime() : 0;
 }

@@ -1,34 +1,31 @@
 import { HttpClient } from "@angular/common/http";
 import { EventEmitter, Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, ReplaySubject } from "rxjs";
 import { User } from "../models";
 
 import * as appSettings from "application-settings";
 import * as cheerio from "cheerio";
-import { map, share } from "rxjs/operators";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class UserService {
-    private currentUser: User;
-    private _currentUserId?: number;
-    private lastLoadedUser$: Observable<User>;
-    private lastLoadedUserId: number;
-
     userChanged: EventEmitter<void> = new EventEmitter();
 
+    private _currentUserId?: number;
+    private lastLoadedUser$: ReplaySubject<User> = new ReplaySubject(1);
+    private lastLoadedUserId: number;
+
     constructor(private http: HttpClient) {
-        if (appSettings.getNumber("currentUserId") != NaN) {
+        if (appSettings.getNumber("currentUserId")) {
             this._currentUserId = appSettings.getNumber("currentUserId");
         }
     }
 
     getCurrentUser(): Observable<User> {
-        if (this.lastLoadedUserId === this.currentUserId && this.lastLoadedUser$) {
-            return this.lastLoadedUser$;
-        } else {
+        if (this.lastLoadedUserId !== this.currentUserId) {
             console.log("Getting user ...");
             this.lastLoadedUserId = this.currentUserId;
-            return this.lastLoadedUser$ = this.http.get(
+            this.http.get(
                 "http://5km.5kmrun.bg/usr.php?id=" + this._currentUserId,
                 { responseType: "text" })
                 .pipe(
@@ -48,14 +45,15 @@ export class UserService {
                         const runsCount = this.parseRunsCount(webPage);
                         const totalKmRan = this.parseTotalKmRan(webPage);
                         const age = this.parseAge(webPage);
-                        this.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
-
-                        this.userChanged.next();
-                        return this.currentUser;
-                    }),
-                    share() // Share the Observable to avoid multiple requests
-                );
+                        return new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
+                    })
+                ).subscribe((user: User) => {
+                    this.lastLoadedUser$.next(user);
+                    this.userChanged.next();
+                });
         }
+
+        return this.lastLoadedUser$;
     }
 
     get currentUserId(): number {
