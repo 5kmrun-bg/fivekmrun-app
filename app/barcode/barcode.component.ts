@@ -4,6 +4,7 @@ import { UserService } from "../services/user.service";
 import { User } from "../models/user.model";
 import { Brightness } from "nativescript-brightness";
 import { Page } from "tns-core-modules/ui/page/page";
+import { RouterExtensions } from "nativescript-angular/router";
 
 @Component({
     selector: "Barcode",
@@ -15,7 +16,7 @@ export class BarcodeComponent implements OnInit {
     oldBrightness: number;
     currentUser$: Observable<User>;
  
-    constructor(userService: UserService, private page: Page) {
+    constructor(userService: UserService, private page: Page, private routerExtensions: RouterExtensions) {
         this.brightness = new Brightness();
         this.currentUser$ = userService.getCurrentUser();
 
@@ -31,5 +32,9 @@ export class BarcodeComponent implements OnInit {
     }
 
     ngOnInit(): void {   
+    }
+
+    onNavBtnTap(): void {
+        this.routerExtensions.back();
     }
 }
