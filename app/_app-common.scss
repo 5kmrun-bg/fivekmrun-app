@@ -294,3 +294,12 @@ TabStripItem Image {
 TabStripItem:active {
     color: $accent;
 }
+
+ActionBar {
+    background-color: $background-dark;
+    color: $white;
+}
+
+.action-bar-title {
+    color: $white;
+}
