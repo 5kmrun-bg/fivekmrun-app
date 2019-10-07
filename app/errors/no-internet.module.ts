@@ -1,12 +1,12 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
+import { SharedModule } from "../shared/shared.modules";
 import { NoInternetRoutingModule } from "./no-internet-routing.module";
 import { NoInternetComponent } from "./no-internet.component";
 
 @NgModule({
     imports: [
+        SharedModule,
         NoInternetRoutingModule,
-        NativeScriptCommonModule
     ],
     declarations: [
         NoInternetComponent

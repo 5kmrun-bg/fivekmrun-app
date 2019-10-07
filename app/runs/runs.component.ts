@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { RunService } from "../services";
-import { Run } from "../models";
 import { Observable } from "rxjs";
+import { Run } from "../models";
+import { RunService } from "../services";
 
 @Component({
     selector: "Runs",
@@ -9,11 +9,11 @@ import { Observable } from "rxjs";
     templateUrl: "./runs.component.html"
 })
 export class RunsComponent implements OnInit {
-    runs: Observable<Run[]>;
+    runs$: Observable<Run[]>;
 
-    constructor(private runService: RunService) {}
+    constructor(private runService: RunService) { }
 
     ngOnInit(): void {
-        this.runs = this.runService.getByCurrentUser();
+        this.runs$ = this.runService.getByCurrentUser();
     }
 }

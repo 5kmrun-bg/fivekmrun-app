@@ -1,22 +1,24 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
+import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
+import { NativeScriptUIGaugeModule } from "nativescript-ui-gauge/angular";
+import { BarcodeModule } from "../barcode/barcode.module";
+import { SharedModule } from "../shared/shared.modules";
+import { BarComponent } from "./components/bar.component";
 import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
-import { NativeScriptUIGaugeModule } from "nativescript-ui-gauge/angular";
-import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
-import { RunDetailsTileComponent, NextMilestoneTileComponent, TotalDistanceTileComponent, RunStatsTileComponent, RunsByRouteComponent, BestTimeByRouteComponent } from "./tiles";
-import { BarcodeModule } from "../barcode/barcode.module";
-import { BarComponent } from "./components/bar.component";
+import {
+    BestTimeByRouteComponent, NextMilestoneTileComponent,
+    RunDetailsTileComponent, RunsByRouteComponent,
+    RunStatsTileComponent, TotalDistanceTileComponent
+} from "./tiles";
 
 @NgModule({
     imports: [
-        HomeRoutingModule,  
+        SharedModule,
+        HomeRoutingModule,
         NativeScriptUIGaugeModule,
         NativeScriptUIChartModule,
-        CommonModule,
-        NativeScriptCommonModule,
-        BarcodeModule
+        BarcodeModule,
     ],
     declarations: [
         HomeComponent,

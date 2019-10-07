@@ -1,16 +1,12 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
+import { SharedModule } from "../../shared/shared.modules";
 import { ResultsDetailsRoutingModule } from "./results-details-routing.module";
 import { ResultsDetailsComponent } from "./results-details.component";
-import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
 @NgModule({
     imports: [
-        NativeScriptFormsModule,
+        SharedModule,
         ResultsDetailsRoutingModule,
-        CommonModule,
-        NativeScriptCommonModule
     ],
     declarations: [
         ResultsDetailsComponent

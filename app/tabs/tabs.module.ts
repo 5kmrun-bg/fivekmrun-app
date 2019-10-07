@@ -1,13 +1,13 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptRouterModule, NSEmptyOutletComponent } from "nativescript-angular/router";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
 
+import { ConnectivityGuard } from "../guards";
+import { SharedModule } from "../shared/shared.modules";
 import { TabsComponent } from "./tabs.component";
-import { ConnectivityGuard } from "~/guards";
 
 @NgModule({
     imports: [
-        NativeScriptCommonModule,
+        SharedModule,
         NativeScriptRouterModule,
         NativeScriptRouterModule.forChild([
             {

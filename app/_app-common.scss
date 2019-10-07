@@ -231,6 +231,7 @@ GridLayout.details Label {
     font-weight: bold;
     margin-right: 10;
     margin-left: 10;
+    vertical-align: middle;
 }
 
 .red-number-big {
@@ -280,6 +281,14 @@ ListView { separator-color: transparent; }
     Label {
         color: #ffffff;
     }
+}
+
+TabStripItem Label {
+    font-size: 12;
+}
+
+TabStripItem Image {
+    font-size: 32;
 }
 
 TabStripItem:active {

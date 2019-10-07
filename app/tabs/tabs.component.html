@@ -1,10 +1,25 @@
-<BottomNavigation #tabView class="fa" style="font-size:14;">
-    <TabStrip>
-        <TabStripItem iconSource="font://&#xf007;" name="profileTab" title="Профил"></TabStripItem>
-        <TabStripItem iconSource="font://&#xf70c;" name="runsTab" title="Бягания"></TabStripItem>
-        <TabStripItem iconSource="font://&#xf2f2;" name="resultsTab" title="Резултати"></TabStripItem>
-        <TabStripItem iconSource="font://&#xf073;" name="eventsTab" title="Събития"></TabStripItem>
-        <TabStripItem iconSource="font://&#xf004;" name="donationTab" title="Дарение"></TabStripItem>
+<BottomNavigation #tabView>
+    <TabStrip >
+        <TabStripItem name="profileTab">
+            <Image src="font://&#xf007;" class="fa"></Image>
+            <Label text="Профил"></Label>
+        </TabStripItem>
+        <TabStripItem name="runsTab">
+            <Image src="font://&#xf70c;" class="fa"></Image>
+            <Label text="Бягания"></Label>
+        </TabStripItem>
+        <TabStripItem name="resultsTab">
+            <Image src="font://&#xf2f2;" class="fa"></Image>
+            <Label text="Резултати"></Label>
+        </TabStripItem>
+        <TabStripItem name="eventsTab">
+            <Image src="font://&#xf073;" class="fa"></Image>
+            <Label text="Събития"></Label>
+        </TabStripItem>13731
+        <TabStripItem name="donationTab">
+            <Image src="font://&#xf004;" class="fa"></Image>
+            <Label text="Дарение"></Label>
+        </TabStripItem>
     </TabStrip>
     <TabContentItem name="homeTab">
         <page-router-outlet name="homeTab">
