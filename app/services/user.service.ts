@@ -40,7 +40,8 @@ export class UserService {
 
                         const webPage = cheerio.load(content, options);
 
-                        const avatarUrl = this.constantsService.baseUrl + this.parseAvatarUrl(webPage);
+                        const avatarUrl = this.parseAvatarUrl(webPage).replace("http://5kmrun.bg/", "http://old.5kmrun.bg/");
+                        console.log("AVATAR URL: " + avatarUrl);
                         const userPoints = this.parseUserPoints(webPage);
                         const name = this.parseName(webPage);
                         const runsCount = this.parseRunsCount(webPage);

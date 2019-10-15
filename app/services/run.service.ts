@@ -33,11 +33,11 @@ export class RunService {
                         };
 
                         const webPage = cheerio.load(content, options);
-                        const rows = webPage("table tr");
+                        const rows = webPage("table tbody tr");
 
                         rows.each((index, elem) => {
                             const cells = elem.children.filter(c => c.type === "tag" && c.name === "td");
-                            if (cells.length === 8) {
+                            if (cells.length === 9) {
                                 runs.push(this.extractRun(cells));
                             }
                         });
@@ -114,8 +114,8 @@ export class RunService {
             this.extractDifferenceToBest(cells[5]),
             this.extractPosition(cells[2]),
             this.extractSpeed(cells[6]),
-            this.extractNotes(cells[7]),
-            " - "
+            this.extractNotes(cells[8]),
+            this.extractPace(cells[7])
         );
     }
 
@@ -165,7 +165,7 @@ export class RunService {
         }
     }
 
-    private extractPage(cell: any): string {
+    private extractPace(cell: any): string {
         return cell.children[0].data;
     }
 }
