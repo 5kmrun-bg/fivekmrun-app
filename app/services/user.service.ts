@@ -40,7 +40,7 @@ export class UserService {
 
                         const webPage = cheerio.load(content, options);
 
-                        const avatarUrl = this.parseAvatarUrl(webPage);
+                        const avatarUrl = this.constantsService.baseUrl + this.parseAvatarUrl(webPage);
                         const userPoints = this.parseUserPoints(webPage);
                         const name = this.parseName(webPage);
                         const runsCount = this.parseRunsCount(webPage);
