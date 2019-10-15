@@ -6,6 +6,7 @@ import { User } from "../models";
 import * as appSettings from "application-settings";
 import * as cheerio from "cheerio";
 import { map } from "rxjs/operators";
+import { ConstantsService } from "../services";
 
 @Injectable()
 export class UserService {
@@ -15,7 +16,7 @@ export class UserService {
     private lastLoadedUser$: ReplaySubject<User> = new ReplaySubject(1);
     private lastLoadedUserId: number;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private constantsService: ConstantsService) {
         if (appSettings.getNumber("currentUserId")) {
             this._currentUserId = appSettings.getNumber("currentUserId");
         }
@@ -26,7 +27,7 @@ export class UserService {
             console.log("Getting user ...");
             this.lastLoadedUserId = this.currentUserId;
             this.http.get(
-                "http://5km.5kmrun.bg/usr.php?id=" + this._currentUserId,
+                this.constantsService.userUrl + this._currentUserId,
                 { responseType: "text" })
                 .pipe(
                     map(response => {
