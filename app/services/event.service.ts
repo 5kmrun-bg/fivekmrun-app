@@ -3,16 +3,16 @@ import { Injectable } from "@angular/core";
 import * as cheerio from "cheerio";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-
 import { Event, Result } from "../models";
+import { ConstantsService } from "../services";
 
 @Injectable()
 export class EventService {
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private constantsService: ConstantsService) { }
 
     getAllPastEvents(): Observable<Event[]> {
-        return this.http.get("http://5km.5kmrun.bg/calendar-a.php", { responseType: "text" }).pipe(
+        return this.http.get(this.constantsService.pastEventsUrl, { responseType: "text" }).pipe(
             map(response => {
                 return this.parseEventsResponse(response, 4);
             })
@@ -20,11 +20,11 @@ export class EventService {
     }
 
     getResultsDetailsById(eventId: string): Observable<Result[]> {
-        return this.getResultsDetails("http://5km.5kmrun.bg/results.php?event=" + eventId + "&type=1");
+        return this.getResultsDetails(this.constantsService.resultsUrl + eventId + "&type=1");
     }
 
     getAllFutureEvents(): Observable<Event[]> {
-        return this.http.get("http://5km.5kmrun.bg/calendar.php", { responseType: "text" }).pipe(
+        return this.http.get(this.constantsService.futureEventsUrl, { responseType: "text" }).pipe(
             map(response => {
                 return this.parseEventsResponse(response);
             })
@@ -116,7 +116,7 @@ export class EventService {
     private parseLink(cell: any): string {
         let url = cell.attribs["href"];
         if (!url.startsWith("http")) {
-            url = "http://5km.5kmrun.bg/" + url;
+            url = this.constantsService.baseUrl + url;
         }
 
         return url;
@@ -129,7 +129,7 @@ export class EventService {
     private parseImageUrl(cell: any): string {
         let imageUrl = cell.children[3].attribs.src;
         if (!imageUrl.startsWith("http")) {
-            imageUrl = "http://5km.5kmrun.bg/" + imageUrl;
+            imageUrl = this.constantsService.baseUrl + imageUrl;
         }
 
         return imageUrl;

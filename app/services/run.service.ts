@@ -5,21 +5,21 @@ import { Observable, ReplaySubject } from "rxjs";
 
 import { map } from "rxjs/operators";
 import { Run, RunDetails } from "../models";
-import { UserService } from "../services";
+import { UserService, ConstantsService } from "../services";
 
 @Injectable()
 export class RunService {
     private lastUserId: number;
     private lastRuns$: ReplaySubject<Run[]> = new ReplaySubject(1);
 
-    constructor(private http: HttpClient, private userService: UserService) { }
+    constructor(private http: HttpClient, private userService: UserService, private constantsService: ConstantsService) { }
 
     getByCurrentUser(): Observable<Run[]> {
         if (this.lastUserId !== this.userService.currentUserId) {
             console.log("Getting runs ...");
             this.lastUserId = this.userService.currentUserId;
             this.http.get(
-                "http://5km.5kmrun.bg/stat.php?id=" + this.userService.currentUserId,
+                this.constantsService.runsUrl + this.userService.currentUserId,
                 { responseType: "text" })
                 .pipe(
                     map(response => {
@@ -54,7 +54,7 @@ export class RunService {
 
     public getRunDetails(runId: string): Observable<RunDetails> {
         return this.http.get(
-            "http://5km.5kmrun.bg/user.php?id=" + this.userService.currentUserId,
+            this.constantsService.userUrl + this.userService.currentUserId,
             { responseType: "text" })
             .pipe(
                 map(response => {
@@ -115,7 +115,7 @@ export class RunService {
             this.extractPosition(cells[2]),
             this.extractSpeed(cells[6]),
             this.extractNotes(cells[8]),
-            this.extractPage(cells[7])
+            this.extractPace(cells[7])
         );
     }
 
@@ -165,7 +165,7 @@ export class RunService {
         }
     }
 
-    private extractPage(cell: any): string {
+    private extractPace(cell: any): string {
         return cell.children[0].data;
     }
 }
