@@ -1,0 +1,12 @@
+<CardView col="0" row="3" colSpan="4" class="cardStyle m-t-30" margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
+shadowRadius="3" style="margin-top: 15">
+    <GridLayout columns="*" rows="auto, auto" class="dashboard-item-light">
+        <Label col="0" row="0" class="tile-header-white" text="Рекорди по трасета"></Label>
+
+        <StackLayout col="0" row="1">
+            <StackLayout *ngFor="let bestTimeEntry of (citiesBestTimesSource$ | async)">
+                <bar-component [barTitle]="bestTimeEntry.City" [barValue]="bestTimeEntry.BestTime" [barMaximumValue]="maxBarValue"></bar-component>
+            </StackLayout>
+        </StackLayout>
+    </GridLayout>
+</CardView>

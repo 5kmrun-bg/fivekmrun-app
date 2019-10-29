@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:766608951702:android:c651658a245607ee",
         "android_client_info": {
-          "package_name": "bg.5kmpark.5kmrun"
+          "package_name": "bg.fivekmpark.fivekmrun"
         }
       },
       "oauth_client": [
@@ -25,15 +25,20 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "766608951702-hmnc3d8fa53o442k4t786s9008d3c9sm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "766608951702-onht1qtkk8a11ppad4qjkrf2jtla8di2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "bg.fivekmpark.fivekmrun"
+              }
+            }
+          ]
         }
       }
     }

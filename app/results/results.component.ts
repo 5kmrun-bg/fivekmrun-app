@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { EventService } from "../services";
 import { Event } from "../models";
-import { Observable } from "rxjs/Observable";
-import * as app from "application";
-import { RadSideDrawer } from "nativescript-ui-sidedrawer";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "Results",
@@ -18,10 +16,5 @@ export class ResultsComponent implements OnInit {
 
     ngOnInit(): void {
         this.events = this.eventService.getAllPastEvents();
-    }
-
-    onDrawerButtonTap(): void {
-        const sideDrawer = <RadSideDrawer>app.getRootView();
-        sideDrawer.showDrawer();
     }
 }

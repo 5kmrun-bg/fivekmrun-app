@@ -2,11 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef} from "@angular/core";
 import { trigger, state, style, transition, animate } from "@angular/animations";
 import { UserService } from "../services";
 import { User } from "../models";
-import { Observable } from "rxjs/Observable";
-import { EventData } from "data/observable";
+import { Observable } from "rxjs";
 import { Router } from "@angular/router";
 import { Page } from "ui/page";
-import { TextField } from "ui/text-field";
 import * as firebase from "nativescript-plugin-firebase";
 
 @Component({
@@ -41,7 +39,7 @@ export class LoginComponent implements OnInit {
     public user$: Observable<User>;
     public isProfileLoaded = false;
 
-    @ViewChild("txtUserId") txtUserId: ElementRef;
+    @ViewChild("txtUserId", {static: false}) txtUserId: ElementRef;
 
     constructor(private _page: Page, private router: Router, private userService: UserService) {
         this._page.actionBarHidden = true;

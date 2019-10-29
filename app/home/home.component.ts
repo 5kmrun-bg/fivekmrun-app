@@ -1,11 +1,12 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { UserService, RunService } from "../services";
-import { User, Run } from "../models";
-import { Observable } from "rxjs/Observable";
-import 'rxjs/add/operator/map';
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+
 import { Ratings } from "nativescript-ratings";
-import * as app from "application";
-import { RadSideDrawer } from "nativescript-ui-sidedrawer";
+import { Page } from "tns-core-modules/ui/page/page";
+
+import { Run, User } from "../models";
+import { RunService, UserService } from "../services";
 
 @Component({
     selector: "Home",
@@ -18,25 +19,21 @@ export class HomeComponent implements OnInit {
     lastRun$: Observable<Run>;
     bestRun$: Observable<Run>;
     runs$: Observable<Run[]>;
-    constructor(private userService: UserService, private runService: RunService) { }
+    constructor(private userService: UserService, private runService: RunService, private page: Page) {
+        this.page.actionBarHidden = true;
+    }
 
     ngOnInit(): void {
         this.currentUser$ = this.userService.getCurrentUser();
-
-        const that = this;
-        this.lastRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return 0 - (that.getTime(a.date) - that.getTime(b.date));})[0]);
-        this.bestRun$ = this.runService.getByCurrentUser().map(runs => runs.sort((a, b) => { return a.time.localeCompare(b.time);})[0]);
-        this.runs$ = this.runService.getByCurrentUser().map(runs => runs.reverse());
+        this.runs$ = this.runService.getByCurrentUser();
+        this.lastRun$ = this.runs$.pipe(map(runs => runs.reduce((a, b) => a.date > b.date ? a : b)));
+        this.bestRun$ = this.runs$.pipe(map(runs => runs.reduce((a, b) => a.timeInSeconds < b.timeInSeconds ? a : b)));
 
         this.initializeRatingPlugin();
     }
 
-    private getTime(date?: Date) {
-        return date != null ? date.getTime() : 0;
-    }
-
     private initializeRatingPlugin() {
-        let ratings = new Ratings({
+        const ratings = new Ratings({
             id: "bg.5kmpark.5kmrun",
             showOnCount: 5,
             title: "Харесвате ли приложението?",
@@ -49,10 +46,5 @@ export class HomeComponent implements OnInit {
 
         ratings.init();
         ratings.prompt();
-    }
-
-    onDrawerButtonTap(): void {
-        const sideDrawer = <RadSideDrawer>app.getRootView();
-        sideDrawer.showDrawer();
     }
 }

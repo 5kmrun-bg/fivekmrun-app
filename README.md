@@ -1,4 +1,4 @@
-# fivekmrun-app
+# fivekmrun-app [![Build Status](https://travis-ci.org/etabakov/fivekmrun-app.svg?branch=master)](https://travis-ci.org/etabakov/fivekmrun-app)
 
 This is the official application for 5kmrun.bg for iOS.
 

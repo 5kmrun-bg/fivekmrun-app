@@ -12,3 +12,6 @@ tmp/
 typings/
 report/
 .vscode/settings.json
+e2e/reports
+test-results.xml
+e2e/**/*.js

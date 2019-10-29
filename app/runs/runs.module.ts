@@ -1,14 +1,14 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
+import { SharedModule } from "../shared/shared.modules";
+import { RunDetailsModule } from "./run-details/run-details.module";
 import { RunsRoutingModule } from "./runs-routing.module";
 import { RunsComponent } from "./runs.component";
 
 @NgModule({
     imports: [
+        SharedModule,
         RunsRoutingModule,
-        CommonModule,
-        NativeScriptCommonModule
+        RunDetailsModule
     ],
     declarations: [
         RunsComponent

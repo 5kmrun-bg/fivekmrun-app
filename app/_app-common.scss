@@ -1,0 +1,305 @@
+@import "~nativescript-theme-core/core";
+
+
+// Start custom common variables
+ @import 'app-variables';
+// End custom common variables
+
+.fa {
+   font-family: "Font Awesome 5 Free";
+}
+
+.fa-brands {
+    font-family: "Font Awesome 5 Brands";
+}
+
+// Common page class
+.page-content {
+    font-family: 'Helvetica Neue';
+    
+    .page-icon {
+        font-size: 72;
+        vertical-align: top;
+        horizontal-align: center;
+        color: $page-icon-color;
+        margin-top: 20%;
+    }
+}
+
+.barcode {
+    text-align: center;
+    margin: 30 0 0 0;
+    font-size: 30;
+}
+
+.barcode-text {
+    font-family: 'New'; 
+    font-size: 60;
+    transform: scaleY(2);
+}
+
+.dashboard-item {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20;
+    height: 100%;
+}
+
+.dashboard-item-light {
+    background-color: $white;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20;
+    height: 100%;
+}
+
+.stat-box {
+    margin-top: 10;
+    margin-bottom: 10;
+    margin-left: 10;
+    margin-right: 10;
+}
+
+.login {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20;
+}
+
+%input-button {
+    background-color: $accent;
+    color: $white;
+    width: 150;
+    height: 50;
+    margin-top: 15;
+}
+
+.input-button-wide {
+    @extend %input-button;
+    width: 150;
+}
+.input-button-narrow {
+    @extend %input-button;
+    width: 50;
+}
+
+TextField {
+    color: $white;
+    border-width: 1;
+    border-color: $white;
+    width: 150;
+    height: 50;
+    margin-top: 15;
+}
+
+.va-m {
+    vertical-align: middle;
+}
+
+.va-t {
+    vertical-align: top;
+}
+
+.va-b {
+    vertical-align: bottom;
+}
+
+GridLayout.details Label {
+    padding: 10;
+    vertical-align: middle;
+}
+
+.profile-preview {
+    Image {
+        border-radius: 100;
+        border-width: 1;
+        border-color: $accent;
+        width: 150;
+        height: 150;
+        margin-top: 10;
+    }
+}
+@keyframes example {
+    from { transform: translate(-800, 0); }
+    to { transform: translate(0, 0); }
+}
+
+.tile-header-dark {
+    color: $white;
+    font-size: 14;
+    text-align: center;
+}
+
+.tile-header-white {
+    color: #000000;
+    font-size: 14;
+    text-align: center;
+    padding: 5 5 5 5;
+}
+
+.tile-value-white {
+    color: #000000;
+    font-size: 12;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.tile-value-tooltip {
+    color: #aaaaaa;
+    font-size: 12;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.tile-value-dark {
+    color: $white;
+    font-size: 14;
+}
+
+.dashboard-icon {
+    font-family: 'FontAwesome';
+    font-size: 14;
+    color: #aaaaaa;
+    text-align: center;
+    margin-left: 10;
+    vertical-align: middle;
+}
+
+.subtitle {
+    text-align: left;
+    margin-left: 10;
+}
+
+.results {
+    background-color: $white;
+    margin: 10 10 10 10;
+    padding: 10 10 10 10;
+}
+
+.list-icon {
+    font-family: "Font Awesome 5 Free";
+    vertical-align: middle;
+    text-align: center;
+    color: $accent;
+}
+
+.list-details {
+    text-align: left;
+    margin-left: 10;
+    vertical-align: middle;
+    font-size: 14;
+}
+
+.resultsView {
+    background-color: $background-dark;
+    color: $white;
+
+    TextField {
+        placeholder-color: white;
+        padding: 5 5 5 5;
+        margin: 10 10 10 10;
+    }
+}
+
+.round-tile {
+    border-radius: 100;
+    background-color: $white;
+    margin: 20 20 20 20;
+    width: 80;
+    height: 80;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.round-tile-big {
+    border-radius: 100;
+    background-color: $white;
+    margin: 20 20 20 20;
+    width: 110;
+    height: 110;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.round-tile-value {
+    font-size: 14;
+}
+
+.red-number {
+    font-size: 18;
+    color: $accent;
+    font-weight: bold;
+    margin-right: 10;
+    margin-left: 10;
+    vertical-align: middle;
+}
+
+.red-number-big {
+    font-size: 30;
+    font-weight: bold;
+    color: $accent;
+    font-weight: bold;
+    margin-right: 5;
+    margin-left: 5;
+    margin-bottom: 5;
+    text-align: center
+}
+
+.color-red {
+    color: $accent;
+    font-size: 18;
+}
+
+.color-green {
+    color: #AAD278;
+    font-size: 18;
+}
+
+.tab-icons {
+    font-size: 30;
+    padding: 20 20 20 20;
+    margin: 20 20 20 20;
+}
+
+.grey-background {
+    background-color: #f0f0f0;
+}
+
+ListView { separator-color: transparent; }
+
+.loader-overlay {
+    background-color: #33252525
+}
+
+.no-border {
+    border-width: 0 0 0 0;
+}
+
+.dark-page {
+    background-color: $background-dark; 
+
+    Label {
+        color: #ffffff;
+    }
+}
+
+TabStripItem Label {
+    font-size: 12;
+}
+
+TabStripItem Image {
+    font-size: 32;
+}
+
+TabStripItem:active {
+    color: $accent;
+}
+
+ActionBar {
+    background-color: $background-dark;
+    color: $white;
+}
+
+.action-bar-title {
+    color: $white;
+}

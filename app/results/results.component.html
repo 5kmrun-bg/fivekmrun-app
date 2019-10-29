@@ -1,22 +1,24 @@
-<ActionBar class="action-bar">
-
-    <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
-
-    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left">
-    </ActionItem>
+<ActionBar class="action-bar" flat="true">
     <Label class="action-bar-title" text="Резултати"></Label>
 </ActionBar>
     
-<StackLayout>
-    <ListView [items]="events | async" height="100%">
+<StackLayout class="page page-content">
+    <ListView [items]="events | async" height="100%" class="grey-background">
         <ng-template let-item="item" let-i="index">
-            <GridLayout columns="auto, *, auto" rows="auto, *, *" class="results"  [nsRouterLink]="['/results/' + item.id]">
-                <Label col="0" row="0" [text]="'\uf073'" class="h2 fa va-m"></Label> <Label class="h2 text-left m-l-10 va-m" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="0"></Label>
-                <Image [src]="item.imageUrl" col="2" row="0" rowSpan="3" width="80" height="80" class="img-circle"></Image>
-                <Label col="0" row="1" [text]="'\uf041'" class="fa va-m"></Label> <Label [text]="item.location" col="1" row="1" class="subtitle"> </Label>
-                <Label [text]="'\uf14b'" class="fa" col="0" row="2" *ngIf="item.title"></Label> 
-                <Label class="subtitle" [text]="item.title" col="1" row="2" textWrap="true"></Label>
-            </GridLayout> 
+            <CardView class="cardStyle" margin="3" elevation="3" radius="3" shadowOffsetWidth="3" shadowOffsetHeight="3"
+            shadowRadius="3">
+                <GridLayout columns="auto, *, auto" rows="auto, auto, auto" class="results"  [nsRouterLink]="['../' + item.id]">
+                    <Label col="0" row="0" [text]="'\uf073'" class="list-icon m-b-10"></Label> 
+                    <Label class="list-details m-b-10" [text]="item.date | date:'dd.MM.yyyy'" col="1" row="0"></Label>
+                    <Image [src]="item.imageUrl" col="2" row="0" rowSpan="3" width="80" height="80"></Image>
+
+                    <Label col="0" row="1" [text]="'\uf041'" class="list-icon m-b-10"></Label> 
+                    <Label [text]="item.location" col="1" row="1" class="list-details m-b-10"> </Label>
+
+                    <Label [text]="'\uf14b'" class="list-icon" col="0" row="2" *ngIf="item.title"></Label> 
+                    <Label class="list-details" [text]="item.title" col="1" row="2" textWrap="true" *ngIf="item.title"></Label>
+                </GridLayout>
+            </CardView> 
         </ng-template>
     </ListView>
 </StackLayout>

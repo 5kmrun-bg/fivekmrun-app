@@ -1,9 +1,13 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { User } from "../../../models";
-import { Observable } from "rxjs/Observable";
-import 'rxjs/add/operator/do';
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
-@Component({ 
+import { registerElement } from "nativescript-angular/element-registry";
+import { ContentView } from "tns-core-modules/ui/page/page";
+
+registerElement("next-milestone-tile", () => { return ContentView })
+@Component({
     selector: "next-milestone-tile",
     moduleId: module.id,
     templateUrl: "./next-milestone-tile.component.html"
@@ -14,7 +18,7 @@ export class NextMilestoneTileComponent implements OnInit {
     currentRuns: number = 0;
 
     ngOnInit(): void {
-        this.currentUser$.do(user => {
+        this.currentUser$.pipe(tap(user => {
             if (user.runsCount <= 50) {
                 this.nextMilestone = 50;
             } else if (user.runsCount <= 100) {
@@ -26,6 +30,6 @@ export class NextMilestoneTileComponent implements OnInit {
             }
 
             this.currentRuns = user.runsCount;
-        }).subscribe();
+        })).subscribe();
     }
 }

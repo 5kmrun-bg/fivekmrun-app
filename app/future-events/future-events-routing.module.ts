@@ -5,7 +5,8 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { FutureEventsComponent } from "./future-events.component";
 
 const routes: Routes = [
-    { path: "", component: FutureEventsComponent }
+    { path: "", redirectTo: "default"},
+    { path: "default", component: FutureEventsComponent }
 ];
 
 @NgModule({

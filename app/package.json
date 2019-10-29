@@ -1,11 +1,8 @@
 {
   "android": {
-    "v8Flags": "--expose_gc"
+    "v8Flags": "--expose_gc",
+    "markingMode": "none",
+    "codeCache": "true"
   },
-  "main": "main.js",
-  "name": "tns-template-drawer-navigation-ng",
-  "version": "3.1.0",
-  "dependencies": {
-    "nativescript-telerik-ui-pro": "^3.0.4"
-  }
+  "main": "main.js"
 }

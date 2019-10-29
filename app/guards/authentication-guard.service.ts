@@ -4,7 +4,7 @@ import { UserService } from "../services";
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
-    constructor(private router: Router, private userService: UserService) {}
+    constructor(private router: Router, private userService: UserService) { }
 
     canActivate(): boolean {
         if (this.userService.isCurrentUserSet()) {

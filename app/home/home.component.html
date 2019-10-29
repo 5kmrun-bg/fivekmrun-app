@@ -1,28 +1,33 @@
-<ActionBar class="action-bar">
-    <!-- 
-    Use the NavigationButton as a side-drawer button in Android because ActionItems are shown on the right side of the ActionBar
-    -->
-    <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
-    <!-- 
-    Use the ActionItem for IOS with position set to left. Using the NavigationButton as a side-drawer button in iOS is not possible, because its function is to always navigate back in the application.
-    -->
-    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left">
-    </ActionItem>
-    <Label class="action-bar-title" text="Начало"></Label>
-</ActionBar>
+<ScrollView class="page page-content dashboard">
+    <StackLayout>
+        <GridLayout columns="*, *, *, *" rows="auto, auto, 50" style="background-color: #252525">
+            <Label row="0" col="0" [text]="'\uf02a'" class="fa tile-header-dark text-left m-t-10 va-t" style="font-size: 30;" [nsRouterLink]="['../barcode']"></Label>
+            <Label row="0" col="3" [text]="'\uf2f5'" class="fa tile-header-dark text-right m-t-10 va-t" style="font-size: 30;" [nsRouterLink]="['/login']"></Label>
 
-<GridLayout class="page page-content dashboard" columns="*, *" rows="*, *, *">
-    <!-- Total KMs -->
-    <total-distance-tile [distance]="(currentUser$ | async)?.totalKmRan"></total-distance-tile>
+            <total-distance-tile [currentUser$]="currentUser$" col="0" row="1" verticalAlignment="middle"></total-distance-tile>
+            <StackLayout col="1" row="0" colSpan="2" rowSpan="2" class="profile-preview m-t-10"
+                *ngIf="currentUser$ | async as user">
+                <Image [src]="user.avatarUrl"></Image>
+                <Label [text]="user.name" class="tile-header-dark font-weight-bold m-t-5"></Label>
+                <Label [text]="user.age" class="tile-header-dark"></Label>
+                <Label [text]="user.suuntoPoints + ' SUUNTO точки'" class="tile-header-dark"></Label>
+            </StackLayout>
+            <next-milestone-tile [currentUser$]="currentUser$" col="3" row="1"
+            verticalAlignment="middle"></next-milestone-tile>
+            
+        </GridLayout>
+        <GridLayout columns="*, *, *, *" rows="100, 200, 200, auto" style="background-color: #f2f2f2; padding: 10 10 10 10;">
+            <!-- Last Run -->
+            <run-details-tile title="Последно участие" [run]="lastRun$ | async" col="0" row="0" colSpan="2"></run-details-tile>
 
-    <!-- Next Goal -->
-    <next-milestone-tile [currentUser$]="currentUser$"></next-milestone-tile>
+            <!-- Best Run -->
+            <run-details-tile title="Най-добро участие" [run]="bestRun$ | async" col="2" row="0" colSpan="2"></run-details-tile>
 
-    <!-- Time stats-->
-    <run-stats-tile [runs$]="runs$"></run-stats-tile>
-    <!-- Last Run -->
-    <run-details-tile title="Последно" [run]="lastRun$ | async" col="0" row="2"></run-details-tile>
+            <run-stats-tile [runs$]="runs$"></run-stats-tile>
 
-    <!-- Best Run -->
-    <run-details-tile title="Най-бързо" [run]="bestRun$ | async" col="1" row="2"></run-details-tile>
-</GridLayout>
+            <runs-by-route-tile></runs-by-route-tile>
+
+            <best-time-by-route-tile></best-time-by-route-tile>
+        </GridLayout>
+    </StackLayout>
+</ScrollView>

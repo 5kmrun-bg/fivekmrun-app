@@ -1,17 +1,27 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Run } from "../../../models";
+import { NavigationService } from "../../../services";
+import { ActivatedRoute } from "@angular/router";
 
-@Component({ 
+@Component({
     selector: "run-details-tile",
     moduleId: module.id,
     templateUrl: "./run-details-tile.component.html"
 })
-export class RunDetailsTileComponent implements OnInit {
+export class RunDetailsTileComponent {
     @Input() run: Run;
     @Input() title: string;
     @Input() col: number;
-    @Input() row: number; 
-    
-    ngOnInit(): void {
+    @Input() row: number;
+
+    constructor(private navService: NavigationService) {
+    }
+
+    navigateToRun() {
+        if (!this.run) {
+            return;
+        }
+
+        this.navService.navigateToRun(this.run.id);
     }
 }

@@ -1,10 +1,14 @@
 import { Component, OnInit } from "@angular/core";
-import { EventService } from "../../services";
-import { Event, Result } from "../../models";
-import { PageRoute } from "nativescript-angular/router";
-import "rxjs/add/operator/switchMap";
+import { ActivatedRoute } from "@angular/router";
 import { RouterExtensions } from "nativescript-angular/router";
 import * as firebase from "nativescript-plugin-firebase";
+import { map, switchMap, tap } from "rxjs/operators";
+import { isIOS } from "tns-core-modules/platform";
+import { ItemEventData } from "tns-core-modules/ui/list-view";
+import { Event, Result } from "../../models";
+import { EventService } from "../../services";
+
+declare var UITableViewCellSelectionStyle;
 
 @Component({
     selector: "ResultsDetails",
@@ -12,33 +16,30 @@ import * as firebase from "nativescript-plugin-firebase";
     templateUrl: "./results-details.component.html"
 })
 export class ResultsDetailsComponent implements OnInit {
-    private id: string;
-    private isSearchTracked: boolean = false;
     event$: Event;
     unfilteredResults: Result[];
     results: Result[];
+    private id: string;
+    private isSearchTracked: boolean = false;
 
     constructor(
         private eventService: EventService,
-        private pageRoute: PageRoute, 
+        private route: ActivatedRoute,
         private routerExtensions: RouterExtensions) {
-        this.pageRoute.activatedRoute
-                .switchMap(activatedRoute => activatedRoute.params)
-                .forEach((params) => { this.id = params["id"]; });
-      
+        this.route.params.pipe(
+            tap((params) => { this.id = params["id"]; })
+        ).subscribe();
     }
 
-    /* ***********************************************************
-    * Use the sideDrawerTransition property to change the open/close animation of the drawer.
-    *************************************************************/
     ngOnInit(): void {
-        this.eventService.getAllPastEvents()
-                .map(events => events.filter(e => e.id == this.id)[0])
-                .do(event => this.event$ = event)
-                .do(event => this.eventService.getResultsDetails(event.eventDetailsUrl)
-                                                .do(r => this.results = this.unfilteredResults = r)
-                                                .subscribe())
-                .subscribe();
+        // TODO: needs refactoring
+        this.eventService.getAllPastEvents().pipe(
+            map(events => events.filter(e => e.id == this.id)[0]),
+            tap((event: Event) => this.event$ = event),
+            tap((event: Event) => this.eventService.getResultsDetails(event.eventDetailsUrl).pipe(
+                tap(r => this.results = this.unfilteredResults = r)
+            ).subscribe())
+        ).subscribe();
     }
 
     onNavBtnTap(): void {
@@ -58,6 +59,13 @@ export class ResultsDetailsComponent implements OnInit {
         }
         else {
             this.results = this.unfilteredResults;
+        }
+    }
+
+    onItemLoading(args: ItemEventData) {
+        if (isIOS) {
+            const iosCell = args.ios;
+            iosCell.selectionStyle = UITableViewCellSelectionStyle.None;
         }
     }
 }

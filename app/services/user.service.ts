@@ -1,55 +1,61 @@
-import { Injectable, EventEmitter } from "@angular/core";
-import { Http } from "@angular/http";
-import { Observable } from "rxjs/Observable";
+import { HttpClient } from "@angular/common/http";
+import { EventEmitter, Injectable } from "@angular/core";
+import { Observable, ReplaySubject } from "rxjs";
 import { User } from "../models";
 
 import * as appSettings from "application-settings";
 import * as cheerio from "cheerio";
+import { map } from "rxjs/operators";
+import { ConstantsService } from "../services";
 
 @Injectable()
 export class UserService {
-    private currentUser: User;
-    private _currentUserId?: number;
-    private lastLoadedUser: Observable<User>;
-    private lastLoadedUserId: number;
-
     userChanged: EventEmitter<void> = new EventEmitter();
 
-    constructor(private http: Http) {
-        if (appSettings.getNumber("currentUserId") != NaN) {
+    private _currentUserId?: number;
+    private lastLoadedUser$: ReplaySubject<User> = new ReplaySubject(1);
+    private lastLoadedUserId: number;
+
+    constructor(private http: HttpClient, private constantsService: ConstantsService) {
+        if (appSettings.getNumber("currentUserId")) {
             this._currentUserId = appSettings.getNumber("currentUserId");
         }
     }
 
-    getCurrentUser(): Observable<User> {        
-        if (this.lastLoadedUser != null && this.lastLoadedUserId == this.currentUserId) {
-            return this.lastLoadedUser;
-        } else {
+    getCurrentUser(): Observable<User> {
+        if (this.lastLoadedUserId !== this.currentUserId) {
             console.log("Getting user ...");
-            const that = this;
             this.lastLoadedUserId = this.currentUserId;
-            return this.lastLoadedUser = this.http.get("http://5km.5kmrun.bg/usr.php?id=" + this._currentUserId).map(response => {
-                const content = response.text();
+            this.http.get(
+                this.constantsService.userUrl + this._currentUserId,
+                { responseType: "text" })
+                .pipe(
+                    map(response => {
+                        const content = response;
 
-                const options = {
-                    normalizeWhitespace: true,
-                    xmlMode: true
-                };
+                        const options = {
+                            normalizeWhitespace: true,
+                            xmlMode: true
+                        };
 
-                const webPage = cheerio.load(content, options);
+                        const webPage = cheerio.load(content, options);
 
-                const avatarUrl = this.parseAvatarUrl(webPage);
-                const userPoints = this.parseUserPoints(webPage);
-                const name = this.parseName(webPage);
-                const runsCount = this.parseRunsCount(webPage);
-                const totalKmRan = this.parseTotalKmRan(webPage);
-                const age = this.parseAge(webPage);
-                that.currentUser = new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
-
-                this.userChanged.next();
-                return that.currentUser;
-            });
+                        const avatarUrl = this.parseAvatarUrl(webPage).replace("http://5kmrun.bg/", "http://old.5kmrun.bg/");
+                        console.log("AVATAR URL: " + avatarUrl);
+                        const userPoints = this.parseUserPoints(webPage);
+                        const name = this.parseName(webPage);
+                        const runsCount = this.parseRunsCount(webPage);
+                        const totalKmRan = this.parseTotalKmRan(webPage);
+                        const age = this.parseAge(webPage);
+                        return new User(this._currentUserId, name, avatarUrl, userPoints, runsCount, totalKmRan, age);
+                    })
+                ).subscribe((user: User) => {
+                    this.lastLoadedUser$.next(user);
+                    this.userChanged.next();
+                });
         }
+
+        return this.lastLoadedUser$;
     }
 
     get currentUserId(): number {
@@ -60,7 +66,7 @@ export class UserService {
     set currentUserId(value: number) {
         this._currentUserId = value;
 
-        if (this._currentUserId != undefined) {
+        if (this._currentUserId) {
             appSettings.setNumber("currentUserId", this._currentUserId);
         } else {
             appSettings.remove("currentUserId");
@@ -68,7 +74,7 @@ export class UserService {
     }
 
     isCurrentUserSet(): boolean {
-        return this._currentUserId != undefined;
+        return !!this._currentUserId;
     }
 
     private parseAvatarUrl(webPage: any): string {
@@ -80,8 +86,11 @@ export class UserService {
     }
 
     private parseName(webPage: any): string {
-        const title = webPage("h2.article-title").first().text();
-        return title.substr(title.indexOf("-") + 2);
+        let title = webPage("h2.article-title").first().text();
+        if (title.indexOf("-") > 0) {
+            title = title.substr(title.indexOf("-") + 2);
+        }
+        return title;
     }
 
     private parseRunsCount(webPage: any): number {
