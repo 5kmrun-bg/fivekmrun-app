@@ -1,0 +1,11 @@
+<ActionBar class="action-bar" flat="true">
+    <NavigationButton text="Назад" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
+    <Label class="action-bar-title" text="Настройки" flat="true"></Label>
+</ActionBar>
+
+<GridLayout class="page page-content dark-page" columns="*, auto" rows="auto, auto">
+    <Label row="0" col="0" text="Известия"></Label>
+    <Switch row="0" col="1" [checked]="notificationsAllowed" (checkedChange)="onCheckedChange($event)"></Switch>
+    <Label row="1" col="0" text="Изход"></Label>
+    <Label row="1" col="1" [text]="'\uf2f5'" class="fa" style="font-size: 30;" [nsRouterLink]="['/login']"></Label>
+</GridLayout>
