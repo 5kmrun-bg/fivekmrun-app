@@ -3,7 +3,6 @@ import { SettingsService } from "../services";
 import { EventData } from "tns-core-modules/data/observable";
 import { Switch } from "tns-core-modules/ui/switch/switch";
 import * as firebase from "nativescript-plugin-firebase";
-import { messaging } from "nativescript-plugin-firebase";
 
 @Component({
     selector: "Settings",

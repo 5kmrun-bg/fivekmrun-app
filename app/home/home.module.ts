@@ -11,6 +11,7 @@ import {
     RunDetailsTileComponent, RunsByRouteComponent,
     RunStatsTileComponent, TotalDistanceTileComponent
 } from "./tiles";
+import { SettingsModule } from "~/settings/settings.module";
 
 @NgModule({
     imports: [
@@ -19,6 +20,7 @@ import {
         NativeScriptUIGaugeModule,
         NativeScriptUIChartModule,
         BarcodeModule,
+        SettingsModule
     ],
     declarations: [
         HomeComponent,
