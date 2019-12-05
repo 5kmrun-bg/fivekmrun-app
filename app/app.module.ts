@@ -8,7 +8,7 @@ import { AppComponent } from "./app.component";
 
 import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 import { AuthenticationGuard, ConnectivityGuard } from "./guards";
-import { EventService, RunService, StatisticsService, UserService, HttpInterceptorService } from "./services";
+import { EventService, RunService, StatisticsService, UserService, HttpInterceptorService, SettingsService } from "./services";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
 export class LoggerErrorHandler implements ErrorHandler {
@@ -38,6 +38,7 @@ export class LoggerErrorHandler implements ErrorHandler {
         EventService,
         StatisticsService,
         AuthenticationGuard,
+        SettingsService,
         { provide: ErrorHandler, useClass: LoggerErrorHandler },
         ConnectivityGuard,
         {

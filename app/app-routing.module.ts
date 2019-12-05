@@ -21,6 +21,11 @@ const routes: Routes = [
         canActivate: [AuthenticationGuard, ConnectivityGuard]
     },
     {
+        path: "settings",
+        loadChildren: "./settings/settings.module#SettingsModule",
+        canActivate: [AuthenticationGuard, ConnectivityGuard]
+    },
+    {
         path: "errors/no-internet", 
         loadChildren: "./errors/no-internet.module#NoInternetModule"
     }    

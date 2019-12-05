@@ -1,10 +1,8 @@
-import { Component, ViewChild, AfterViewInit, ElementRef, OnInit, NgZone } from "@angular/core";
+import { Component, ViewChild, AfterViewInit, ElementRef, OnInit } from "@angular/core";
 import { RouterExtensions } from "nativescript-angular/router";
 import { ActivatedRoute } from "@angular/router";
 import { NavigationService } from "../services/navigation.service";
-import { BottomNavigation, SelectedIndexChangedEventData } from "tns-core-modules/ui/bottom-navigation";
-import { EventData } from "tns-core-modules/data/observable";
-import { Color } from "tns-core-modules/color/color";
+import { BottomNavigation } from "tns-core-modules/ui/bottom-navigation";
 
 @Component({
     moduleId: module.id,
@@ -20,7 +18,6 @@ export class TabsComponent implements OnInit, AfterViewInit {
         private routerExtension: RouterExtensions,
         private activeRoute: ActivatedRoute,
         private navService: NavigationService,
-        private _zone: NgZone
     ) {
     }
 
