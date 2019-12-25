@@ -1,7 +1,7 @@
 import 'package:fivekmrun_flutter/state/resource.dart';
 import 'package:fivekmrun_flutter/state/user_model.dart';
+import 'package:fivekmrun_flutter/constants.dart' as constants;
 
-import '../constants.dart' as constants;
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart';
 import 'package:shared_preferences/shared_preferences.dart';

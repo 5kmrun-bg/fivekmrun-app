@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,8 @@ class _LoginState extends State<Login> {
   void onPressed() async {
     int userId = int.parse(numberInputController.text);
     Provider.of<UserResource>(context, listen: false).load(userId);
+    // TODO: should we load all here
+    Provider.of<RunsResource>(context, listen: false).load(userId);
     Navigator.pushNamed(context, '/loginPreview');
   }
 

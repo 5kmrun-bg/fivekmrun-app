@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/profile.dart';
+import 'package:fivekmrun_flutter/runs/run_list.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -10,18 +11,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
+
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    // Text(
-    //   'Index 0: Профил',
-    //   style: optionStyle,
-    // ),
     ProfileDashboard(),
-    Text(
-      'Index 1: Бягания',
-      style: optionStyle,
-    ),
+    RunList(),
     Text(
       'Index 2: Резултати',
       style: optionStyle,

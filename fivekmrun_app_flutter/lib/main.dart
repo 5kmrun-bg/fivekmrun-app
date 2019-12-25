@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/home.dart';
+import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,8 +41,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => userRes,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => userRes),
+        ChangeNotifierProvider(create: (_) => RunsResource()),
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: appTheme,
