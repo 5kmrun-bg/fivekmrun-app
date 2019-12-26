@@ -28,8 +28,8 @@ abstract class Resource<T> extends ChangeNotifier {
     }
   }
 
-  void load(int id) async {
-    if (id == currentlyLoadingId) {
+  void load({int id = 0, bool force = false}) async {
+    if (!force && id == currentlyLoadingId) {
       return;
     }
 

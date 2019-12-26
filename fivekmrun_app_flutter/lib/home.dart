@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/future_events/future_event_list.dart';
 import 'package:fivekmrun_flutter/profile.dart';
 import 'package:fivekmrun_flutter/runs/run_list.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +22,7 @@ class _HomeState extends State<Home> {
       'Index 2: Резултати',
       style: optionStyle,
     ),
-    Text(
-      'Index 3: Събития',
-      style: optionStyle,
-    ),
+    FutureEventList(),
     Text(
       'Index 4: Дарения',
       style: optionStyle,

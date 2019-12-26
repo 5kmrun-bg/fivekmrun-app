@@ -30,7 +30,7 @@ class RunsResource extends Resource<List<Run>> {
 
   Run extractRun(List<Element> cells) {
     return Run(
-      place: cells[0].text,
+      location: cells[0].text,
       date: extractDate(cells[1]),
       position: extractPosition(cells[2]),
       time: cells[3].text,

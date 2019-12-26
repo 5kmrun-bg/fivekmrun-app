@@ -1,9 +1,10 @@
+import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-DateFormat dateFromat = DateFormat("dd.MM.yyyy");
+final DateFormat dateFromat = DateFormat("dd.MM.yyyy");
 
 class RunList extends StatelessWidget {
   const RunList({Key key}) : super(key: key);
@@ -19,18 +20,17 @@ class RunList extends StatelessWidget {
             return Card(
               child: Column(
                 children: <Widget>[
-                  ListTile(
-                    leading: const Icon(Icons.calendar_today),
-                    title: Text(dateFromat.format(runs[index].date)),
+                  ListTileRow(
+                    icon: Icons.calendar_today,
+                    text: dateFromat.format(runs[index].date),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.pin_drop),
-                    title: Text(runs[index].place),
-
+                  ListTileRow(
+                    icon: Icons.pin_drop,
+                    text: runs[index].location,
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.timer),
-                    title: Text(runs[index].time),
+                  ListTileRow(
+                    icon: Icons.timer,
+                    text: runs[index].time,
                   ),
                 ],
               ),
