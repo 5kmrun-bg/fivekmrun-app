@@ -38,40 +38,47 @@ class ProfileDashboard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.line_weight),
-                    onPressed: () {},
-                  ),
-                  MilestoneTile(
-                      value: user?.totalKmRan?.toInt() ?? 0,
-                      milestone: 1250,
-                      title: "Пробягано\nразстояние"),
-                ],
+              Expanded(
+                flex: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.line_weight),
+                      onPressed: () {},
+                    ),
+                    MilestoneTile(
+                        value: user?.totalKmRan?.toInt() ?? 0,
+                        milestone: 1250,
+                        title: "Пробягано\nразстояние"),
+                  ],
+                ),
               ),
-              Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Hero(tag: "avatar", child: Avatar(url: user?.avatarUrl)),
-                  Text(user?.name ?? "", style: textTheme.body2),
-                  Text("${user?.age ?? ""}г."),
-                  Text("${user?.suuntoPoints ?? ""} SUUNTO точки"),
-                ],
+              Expanded(
+                flex: 3,
+                child: Column(
+                  children: <Widget>[
+                    Hero(tag: "avatar", child: Avatar(url: user?.avatarUrl)),
+                    Text(user?.name ?? "", style: textTheme.body2, textAlign: TextAlign.center,),
+                    Text("${user?.age ?? ""}г."),
+                    Text("${user?.suuntoPoints ?? ""} SUUNTO точки"),
+                  ],
+                ),
               ),
-              Column(
-                children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.exit_to_app),
-                    onPressed: logout,
-                  ),
-                  MilestoneTile(
-                      value: user?.runsCount ?? 0,
-                      milestone: nextRunsMilestone(user?.runsCount ?? 0),
-                      title: "Следаваща\nцел"),
-                ],
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.exit_to_app),
+                      onPressed: logout,
+                    ),
+                    MilestoneTile(
+                        value: user?.runsCount ?? 0,
+                        milestone: nextRunsMilestone(user?.runsCount ?? 0),
+                        title: "Следаваща\nцел"),
+                  ],
+                ),
               ),
             ],
           ),
