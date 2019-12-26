@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 
 final DateFormat dateFromat = DateFormat("dd.MM.yyyy");
 
-class RunList extends StatelessWidget {
-  const RunList({Key key}) : super(key: key);
+class RunsList extends StatelessWidget {
+  const RunsList({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

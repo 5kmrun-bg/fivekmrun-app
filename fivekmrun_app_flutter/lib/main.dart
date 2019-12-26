@@ -1,7 +1,7 @@
 import 'package:fivekmrun_flutter/home.dart';
 import 'package:fivekmrun_flutter/login/login.dart';
 import 'package:fivekmrun_flutter/login/loginPreview.dart';
-import 'package:fivekmrun_flutter/state/future_events_resource.dart';
+import 'package:fivekmrun_flutter/state/events_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => userRes),
         ChangeNotifierProvider(create: (_) => RunsResource()),
         ChangeNotifierProvider(create: (_) => FutureEventsResource()),
+        ChangeNotifierProvider(create: (_) => PastEventsResource()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -1,4 +1,4 @@
-import 'package:fivekmrun_flutter/state/future_events_resource.dart';
+import 'package:fivekmrun_flutter/state/events_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +27,7 @@ class _LoginState extends State<Login> {
     Provider.of<UserResource>(context, listen: false).load(id: userId);
     // TODO: should we load all here
     Provider.of<RunsResource>(context, listen: false).load(id: userId);
+    Provider.of<PastEventsResource>(context, listen: false).load(force: true);
     Provider.of<FutureEventsResource>(context, listen: false).load(force: true);
     Navigator.pushNamed(context, '/loginPreview');
   }

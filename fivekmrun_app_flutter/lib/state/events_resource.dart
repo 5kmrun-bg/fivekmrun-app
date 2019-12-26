@@ -5,18 +5,16 @@ import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-class FutureEventsResource extends Resource<List<Event>> {
+abstract class EventsResource extends Resource<List<Event>> {
   static final DateFormat inputDateFromat = DateFormat("dd/MM/yyyy");
 
-  @override
-  Future<http.Response> fetch(int id) {
-    return http.get("${constants.futureEventsUrl}");
-  }
-
-  @override
-  List<Event> parse(Document doc) {
+  List<Event> parseEvents(Document doc, [int topNWeeks = 0]) {
     List<Event> events = List<Event>();
-    final rows = doc.querySelectorAll("div.table-responsive table tr");
+    Iterable<Element> rows = doc.querySelectorAll("div.table-responsive table tr");
+
+    if (topNWeeks > 0) {
+      rows = rows.take(topNWeeks);
+    }
 
     rows.forEach((row) {
       final cells = row.getElementsByTagName("td");
@@ -54,5 +52,29 @@ class FutureEventsResource extends Resource<List<Event>> {
       url = constants.baseUrl + url;
     }
     return url;
+  }
+}
+
+class FutureEventsResource extends EventsResource {
+  @override
+  Future<http.Response> fetch(int id) {
+    return http.get("${constants.futureEventsUrl}");
+  }
+
+  @override
+  List<Event> parse(Document doc) {
+    return this.parseEvents(doc);
+  }
+}
+
+class PastEventsResource extends EventsResource {
+  @override
+  Future<http.Response> fetch(int id) {
+    return http.get("${constants.pastEventsUrl}");
+  }
+
+  @override
+  List<Event> parse(Document doc) {
+    return this.parseEvents(doc, 4);
   }
 }

@@ -1,7 +1,9 @@
-import 'package:fivekmrun_flutter/future_events/future_event_list.dart';
+import 'package:fivekmrun_flutter/past_events/past_events_list.dart';
 import 'package:fivekmrun_flutter/profile.dart';
-import 'package:fivekmrun_flutter/runs/run_list.dart';
+import 'package:fivekmrun_flutter/runs/runs_list.dart';
 import 'package:flutter/material.dart';
+
+import 'future_events/future_events_list.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -17,12 +19,9 @@ class _HomeState extends State<Home> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     ProfileDashboard(),
-    RunList(),
-    Text(
-      'Index 2: Резултати',
-      style: optionStyle,
-    ),
-    FutureEventList(),
+    RunsList(),
+    PastEventsList(),
+    FutureEventsList(),
     Text(
       'Index 4: Дарения',
       style: optionStyle,
