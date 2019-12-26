@@ -6,6 +6,31 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class RunsResource extends Resource<List<Run>> {
+  Run _bestRun;
+  Run _lastRun;
+
+  Run get bestRun {
+    if (_bestRun == null) {
+      _bestRun =
+          value?.reduce((a, b) => a.timeInSeconds < b.timeInSeconds ? a : b);
+    }
+    return _bestRun;
+  }
+
+  Run get lastRun {
+    if (_lastRun == null) {
+      _lastRun = value?.first;
+    }
+    return _lastRun;
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    _bestRun = null;
+    _lastRun = null;
+  }
+
   @override
   Future<http.Response> fetch(int id) {
     return http.get("${constants.runsUrl}$id");

@@ -1,3 +1,7 @@
+import 'package:intl/intl.dart';
+
+final DateFormat dateFromat = DateFormat("dd.MM.yyyy");
+
 class Run {
   final int id;
   final DateTime date;
@@ -10,6 +14,8 @@ class Run {
   final String speed;
   final String notes;
   final String pace;
+
+  String get displayDate => dateFromat.format(date);
 
   Run(
       {this.date,

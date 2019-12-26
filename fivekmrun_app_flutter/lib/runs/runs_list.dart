@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-final DateFormat dateFromat = DateFormat("dd.MM.yyyy");
-
 class RunsList extends StatelessWidget {
   const RunsList({Key key}) : super(key: key);
 
@@ -22,7 +20,7 @@ class RunsList extends StatelessWidget {
                 children: <Widget>[
                   ListTileRow(
                     icon: Icons.calendar_today,
-                    text: dateFromat.format(runs[index].date),
+                    text: runs[index].displayDate,
                   ),
                   ListTileRow(
                     icon: Icons.pin_drop,

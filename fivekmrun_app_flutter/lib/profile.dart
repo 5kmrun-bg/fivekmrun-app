@@ -1,4 +1,7 @@
 import 'package:fivekmrun_flutter/common/avatar.dart';
+import 'package:fivekmrun_flutter/common/run_card.dart';
+import 'package:fivekmrun_flutter/state/run_model.dart';
+import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +28,7 @@ class ProfileDashboard extends StatelessWidget {
     return Consumer<UserResource>(builder: (context, userResource, child) {
       final user = userResource?.value;
       final textTheme = Theme.of(context).textTheme;
+      final runsResource = Provider.of<RunsResource>(context);
       final logout = () {
         userResource.reset();
         Navigator.pushNamedAndRemoveUntil(context, "/", (_) {
@@ -59,7 +63,11 @@ class ProfileDashboard extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Hero(tag: "avatar", child: Avatar(url: user?.avatarUrl)),
-                    Text(user?.name ?? "", style: textTheme.body2, textAlign: TextAlign.center,),
+                    Text(
+                      user?.name ?? "",
+                      style: textTheme.body2,
+                      textAlign: TextAlign.center,
+                    ),
                     Text("${user?.age ?? ""}г."),
                     Text("${user?.suuntoPoints ?? ""} SUUNTO точки"),
                   ],
@@ -78,6 +86,22 @@ class ProfileDashboard extends StatelessWidget {
                         milestone: nextRunsMilestone(user?.runsCount ?? 0),
                         title: "Следаваща\nцел"),
                   ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: RunCard(
+                  title: "Последно уастие",
+                  run: runsResource.lastRun,
+                ),
+              ),
+              Expanded(
+                child: RunCard(
+                  title: "Най-добро уастие",
+                  run: runsResource.bestRun,
                 ),
               ),
             ],
