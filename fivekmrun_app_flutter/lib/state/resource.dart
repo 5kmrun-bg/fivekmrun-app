@@ -28,9 +28,9 @@ abstract class Resource<T> extends ChangeNotifier {
     }
   }
 
-  void load({int id = 0, bool force = false}) async {
+  Future<T> load({int id = 0, bool force = false}) async {
     if (!force && id == currentlyLoadingId) {
-      return;
+      return null;
     }
 
     this.loading = true;
@@ -42,7 +42,7 @@ abstract class Resource<T> extends ChangeNotifier {
     if (response.statusCode != 200) {
       this.loading = false;
       //TODO: error handling
-      return;
+      return null;
     }
 
     if (currentlyLoadingId == id) {
@@ -53,6 +53,9 @@ abstract class Resource<T> extends ChangeNotifier {
 
       this.value = parsedObj;
       this.loading = false;
+      return this.value;
+    } else {
+      return null;
     }
   }
 
