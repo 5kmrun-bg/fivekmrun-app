@@ -30,7 +30,7 @@ abstract class Resource<T> extends ChangeNotifier {
 
   Future<T> load({int id = 0, bool force = false}) async {
     if (!force && id == currentlyLoadingId) {
-      return null;
+      return this.value;
     }
 
     this.loading = true;

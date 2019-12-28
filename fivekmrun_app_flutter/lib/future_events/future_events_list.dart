@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
+import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:fivekmrun_flutter/state/events_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,27 +19,33 @@ class FutureEventsList extends StatelessWidget {
         return ListView.builder(
           itemCount: events.length,
           itemBuilder: (BuildContext context, int i) {
+            final Event event = events[i];
             return Card(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        ListTileRow(
-                            text: events[i].location, icon: Icons.pin_drop),
-                        ListTileRow(
-                            text: dateFromat.format(events[i].date),
-                            icon: Icons.calendar_today),
-                        ListTileRow(text: events[i].title, icon: Icons.info),
-                      ],
+              child: ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          ListTileRow(
+                              text: event.location, icon: Icons.pin_drop),
+                          ListTileRow(
+                              text: dateFromat.format(event.date),
+                              icon: Icons.calendar_today),
+                          ListTileRow(text: event.title, icon: Icons.info),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: 120,
-                    child: Image.network(events[i].imageUrl, fit: BoxFit.fitWidth,),
-                  ),
-                ],
+                    Container(
+                      width: 120,
+                      child: Image.network(
+                        event.imageUrl,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },

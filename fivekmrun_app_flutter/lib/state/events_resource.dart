@@ -5,12 +5,15 @@ import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+final idPattern = RegExp(r"event=(\d+)");
+
 abstract class EventsResource extends Resource<List<Event>> {
   static final DateFormat inputDateFromat = DateFormat("dd/MM/yyyy");
 
   List<Event> parseEvents(Document doc, [int topNWeeks = 0]) {
     List<Event> events = List<Event>();
-    Iterable<Element> rows = doc.querySelectorAll("div.table-responsive table tr");
+    Iterable<Element> rows =
+        doc.querySelectorAll("div.table-responsive table tr");
 
     if (topNWeeks > 0) {
       rows = rows.take(topNWeeks);
@@ -33,12 +36,17 @@ abstract class EventsResource extends Resource<List<Event>> {
         final links = cell.querySelectorAll("a");
         links.forEach((link) {
           if (link.children.length >= 2) {
+            final detailsUrl = expandRelativeUrl(link.attributes["href"]);
+            final match = idPattern.firstMatch(detailsUrl);
+            final id = match != null ? int.tryParse(match.group(1)) : 0;
+
             events.add(Event(
+                id: id,
                 date: date,
                 title: link.children[0].text,
                 imageUrl: expandRelativeUrl(link.children[1].attributes["src"]),
                 location: link.children[2].text,
-                detailsUrl: expandRelativeUrl(link.attributes["href"])));
+                detailsUrl: detailsUrl));
           }
         });
       });

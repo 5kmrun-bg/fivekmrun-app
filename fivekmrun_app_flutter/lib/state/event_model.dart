@@ -7,10 +7,11 @@ class Event {
   final String detailsUrl;
 
   Event({
+    this.id,
     this.title,
     this.date,
     this.imageUrl,
     this.location,
     this.detailsUrl,
-  }) : id = ("$date#$title#$location").hashCode;
+  });
 }

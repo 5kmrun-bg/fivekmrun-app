@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/past_events/event_results.dart';
 import 'package:fivekmrun_flutter/past_events/past_events_list.dart';
 import 'package:fivekmrun_flutter/profile.dart';
 import 'package:fivekmrun_flutter/runs/runs_list.dart';
@@ -12,15 +13,33 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+class TabNavigator extends StatelessWidget {
+  final Map<String, WidgetBuilder> routes;
+  const TabNavigator({Key key, this.routes}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      onGenerateRoute: (RouteSettings settings) {
+        return MaterialPageRoute(
+            builder: routes[settings.name], settings: settings);
+      },
+    );
+  }
+}
+
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     ProfileDashboard(),
     RunsList(),
-    PastEventsList(),
+    TabNavigator(routes: {
+      '/': (context) => PastEventsList(),
+      '/list': (context) => EventResults(),
+    }),
     FutureEventsList(),
     Text(
       'Index 4: Дарения',
@@ -38,7 +57,11 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        // child: _widgetOptions.elementAt(_selectedIndex),
+        child: IndexedStack(
+          index: _selectedIndex,
+          children: _widgetOptions,
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

@@ -12,7 +12,7 @@ class ListTileRow extends StatelessWidget {
       children: <Widget>[
         if (icon != null)
           Padding(
-            padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
+            padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
             child: Icon(
               icon,
               color: theme.accentColor,

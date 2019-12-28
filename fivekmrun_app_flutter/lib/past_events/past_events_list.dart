@@ -11,45 +11,58 @@ class PastEventsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PastEventsResource>(
+    return Scaffold(
+      appBar: AppBar(title: Text("Минали събития")),
+      body: Consumer<PastEventsResource>(
         builder: (context, eventsResource, child) {
-      final events = eventsResource.value;
-      if (events != null) {
-        return ListView.builder(
-          itemCount: events.length,
-          itemBuilder: (BuildContext context, int i) {
-            return Card(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+          final events = eventsResource.value;
+          if (events != null) {
+            return ListView.builder(
+              itemCount: events.length,
+              itemBuilder: (BuildContext context, int i) {
+                return Card(
+                  child: ListTile(
+                    onTap: () => Navigator.of(context).pushNamed(
+                      "/list",
+                      arguments: events[i],
+                    ),
+                    title: Row(
                       children: <Widget>[
-                        ListTileRow(
-                            text: events[i].location, icon: Icons.pin_drop),
-                        ListTileRow(
-                            text: dateFromat.format(events[i].date),
-                            icon: Icons.calendar_today),
-                        if (events[i].title != null && events[i].title != "")
-                          ListTileRow(text: events[i].title, icon: Icons.info),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              ListTileRow(
+                                  text: events[i].location,
+                                  icon: Icons.pin_drop),
+                              ListTileRow(
+                                  text: dateFromat.format(events[i].date),
+                                  icon: Icons.calendar_today),
+                              if (events[i].title != null &&
+                                  events[i].title != "")
+                                ListTileRow(
+                                    text: events[i].title, icon: Icons.info),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 120,
+                          child: Image.network(
+                            events[i].imageUrl,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  Container(
-                    width: 120,
-                    child: Image.network(
-                      events[i].imageUrl,
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             );
-          },
-        );
-      } else {
-        return Text("loading"); // TODO: loading indicator
-      }
-    });
+          } else {
+            return Text("loading"); // TODO: loading indicator
+          }
+        },
+      ),
+    );
   }
 }

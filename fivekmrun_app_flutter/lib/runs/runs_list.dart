@@ -1,7 +1,6 @@
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class RunsList extends StatelessWidget {
@@ -15,22 +14,25 @@ class RunsList extends StatelessWidget {
         return ListView.builder(
           itemCount: runs.length,
           itemBuilder: (BuildContext context, int index) {
+            final run = runs[index];
             return Card(
-              child: Column(
-                children: <Widget>[
-                  ListTileRow(
-                    icon: Icons.calendar_today,
-                    text: runs[index].displayDate,
-                  ),
-                  ListTileRow(
-                    icon: Icons.pin_drop,
-                    text: runs[index].location,
-                  ),
-                  ListTileRow(
-                    icon: Icons.timer,
-                    text: runs[index].time,
-                  ),
-                ],
+              child: ListTile(
+                title: Column(
+                  children: <Widget>[
+                    ListTileRow(
+                      icon: Icons.calendar_today,
+                      text: run.displayDate,
+                    ),
+                    ListTileRow(
+                      icon: Icons.pin_drop,
+                      text: run.location,
+                    ),
+                    ListTileRow(
+                      icon: Icons.timer,
+                      text: run.time,
+                    ),
+                  ],
+                ),
               ),
             );
           },
