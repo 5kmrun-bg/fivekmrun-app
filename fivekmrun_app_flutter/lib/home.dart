@@ -1,10 +1,12 @@
-import 'package:fivekmrun_flutter/past_events/event_results.dart';
-import 'package:fivekmrun_flutter/past_events/past_events_list.dart';
+import 'package:fivekmrun_flutter/donate/donate_page.dart';
+import 'package:fivekmrun_flutter/past_events/event_results_page.dart';
+import 'package:fivekmrun_flutter/past_events/past_events_page.dart';
+import 'package:fivekmrun_flutter/future_events/future_events_page.dart';
 import 'package:fivekmrun_flutter/profile.dart';
-import 'package:fivekmrun_flutter/runs/runs_list.dart';
+import 'package:fivekmrun_flutter/runs/run_details_page.dart';
+import 'package:fivekmrun_flutter/runs/user_runs_page.dart';
 import 'package:flutter/material.dart';
 
-import 'future_events/future_events_list.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -35,16 +37,20 @@ class _HomeState extends State<Home> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     ProfileDashboard(),
-    RunsList(),
     TabNavigator(routes: {
-      '/': (context) => PastEventsList(),
-      '/list': (context) => EventResults(),
+      '/': (context) => UserRunsPage(),
+      '/run-details': (context) => RunDetailsPage(),
     }),
-    FutureEventsList(),
-    Text(
-      'Index 4: Дарения',
-      style: optionStyle,
-    ),
+    TabNavigator(routes: {
+      '/': (context) => PastEventsPage(),
+      '/event-results': (context) => EventResultsPage(),
+    }),
+    TabNavigator(routes: {
+      '/': (context) => FutureEventsPage(),
+    }),
+    TabNavigator(routes: {
+      '/': (context) => DonatePage(),
+    }),
   ];
 
   void _onItemTapped(int index) {

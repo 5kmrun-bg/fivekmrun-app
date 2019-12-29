@@ -9,6 +9,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 const String userIdKey = "5kmrun_UserID";
 
 class UserResource extends Resource<User> {
+  int get currentUserId {
+    if (currentlyLoadingId != null) {
+      return currentlyLoadingId;
+    }
+
+    if (value != null) {
+      return value.id;
+    }
+
+    return null;
+  }
+
   @override
   Future<http.Response> fetch(int id) {
     // return Future.delayed(Duration(seconds: 2), () => http.get("${constants.userUrl}$id"));

@@ -4,14 +4,14 @@ import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:fivekmrun_flutter/state/results_resource.dart';
 import 'package:flutter/material.dart';
 
-class EventResults extends StatefulWidget {
-  EventResults({Key key}) : super(key: key);
+class EventResultsPage extends StatefulWidget {
+  EventResultsPage({Key key}) : super(key: key);
 
   @override
-  _EventResultsState createState() => _EventResultsState();
+  _EventResultsPageState createState() => _EventResultsPageState();
 }
 
-class _EventResultsState extends State<EventResults> {
+class _EventResultsPageState extends State<EventResultsPage> {
   ResultsResource results = ResultsResource();
 
   @override
@@ -35,7 +35,8 @@ class _EventResultsState extends State<EventResults> {
                   'Error:\n\n${snapshot.error}',
                   textAlign: TextAlign.center,
                 );
-              return ResultsList(results: snapshot.data);
+              else
+                return ResultsList(results: snapshot.data);
           }
         },
       ),
