@@ -32,9 +32,7 @@ class ProfileDashboard extends StatelessWidget {
       final runsResource = Provider.of<RunsResource>(context);
       final logout = () {
         userResource.reset();
-        Navigator.pushNamedAndRemoveUntil(context, "/", (_) {
-          return false;
-        });
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil("/", (_) => false);
       };
       return ListView(
         children: <Widget>[

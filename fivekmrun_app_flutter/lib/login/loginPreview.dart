@@ -3,7 +3,6 @@ import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class LoginPreview extends StatelessWidget {
   LoginPreview({Key key}) : super(key: key);
 
@@ -48,10 +47,8 @@ class LoginPreview extends StatelessWidget {
                     child: RaisedButton(
                         child: Text("Напред"),
                         onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(context, "/home",
-                              (_) {
-                            return false;
-                          });
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, "/home", (_) => false);
                         }),
                   ),
                 ],

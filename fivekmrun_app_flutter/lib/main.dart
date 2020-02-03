@@ -15,7 +15,9 @@ final appTheme = ThemeData(
   accentIconTheme: IconThemeData(color: Colors.black),
   dividerColor: Colors.black12,
   textTheme: TextTheme(
-    body2: TextStyle(fontWeight: FontWeight.bold),
+    subhead: TextStyle(fontSize: 14),
+    body1: TextStyle(fontSize: 12),
+    body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
   ),
 );
 
