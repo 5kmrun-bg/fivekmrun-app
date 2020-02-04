@@ -7,20 +7,6 @@ import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-final appTheme = ThemeData(
-  primarySwatch: Colors.deepOrange,
-  brightness: Brightness.dark,
-  backgroundColor: Colors.black,
-  accentColor: Colors.deepOrangeAccent,
-  accentIconTheme: IconThemeData(color: Colors.black),
-  dividerColor: Colors.black12,
-  textTheme: TextTheme(
-    subhead: TextStyle(fontSize: 14),
-    body1: TextStyle(fontSize: 12),
-    body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-  ),
-);
-
 final userRes = UserResource();
 
 void main() async {
@@ -52,7 +38,19 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: appTheme,
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
+          brightness: Brightness.dark,
+          backgroundColor: Colors.black,
+          accentColor: Colors.deepOrangeAccent,
+          accentIconTheme: IconThemeData(color: Colors.black),
+          dividerColor: Colors.black12,
+          textTheme: TextTheme(
+            subhead: TextStyle(fontSize: 14),
+            body1: TextStyle(fontSize: 12),
+            body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+          ),
+        ),
         initialRoute: _initialRoute,
         routes: {
           '/': (context) => Login(),

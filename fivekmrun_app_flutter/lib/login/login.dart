@@ -27,10 +27,6 @@ class _LoginState extends State<Login> {
     Provider.of<UserResource>(context, listen: false).load(id: userId);
     // TODO: should we load all here
     Provider.of<RunsResource>(context, listen: false).load(id: userId);
-    Provider.of<PastEventsResource>(context, listen: false).load(force: true);
-    Provider.of<FutureEventsResource>(context, listen: false).load(force: true);
-
-    // ResultsResource().load(id: 1472);
     Navigator.pushNamed(context, '/loginPreview');
   }
 
