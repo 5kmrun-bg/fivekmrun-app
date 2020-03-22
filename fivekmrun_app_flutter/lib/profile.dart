@@ -83,7 +83,7 @@ class ProfileDashboard extends StatelessWidget {
                     MilestoneTile(
                         value: user?.runsCount ?? 0,
                         milestone: nextRunsMilestone(user?.runsCount ?? 0),
-                        title: "Следаваща\nцел"),
+                        title: "Следваща\nцел"),
                   ],
                 ),
               ),
