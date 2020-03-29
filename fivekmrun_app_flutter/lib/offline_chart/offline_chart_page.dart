@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:strava_flutter/strava.dart';
 import 'package:strava_flutter/Models/activity.dart';
-
-import '../constants.dart';
 import '../private/secrets.dart';
 
 Strava strava;
@@ -63,7 +61,7 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
       strava.getLoggedInAthleteActivities(before, after).then(
         (a) {
           print("BEFORE STATE " + a.length.toString());
-          setState(() => this.stravaActivities = a.where((i) => i.type == activityRunType).toList());
+          setState(() => this.stravaActivities = a.where((i) => i.type == ActivityType.Run).toList());
           print("AFTER STATE " + a.length.toString());
         }
       ).catchError((e) => print(e));
