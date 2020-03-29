@@ -11,7 +11,7 @@ import 'package:strava_flutter/strava.dart';
 import 'package:strava_flutter/Models/activity.dart';
 import 'package:strava_flutter/Models/detailedAthlete.dart';
 
-import '../secrets.dart';
+import '../private/secrets.dart';
 
 
 Strava strava;
