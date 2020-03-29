@@ -36,6 +36,9 @@ dependencies:
 
   intl: ^0.16.0
 
+  strava_flutter: ^1.2.0+48
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
