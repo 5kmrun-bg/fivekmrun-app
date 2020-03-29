@@ -1,18 +1,10 @@
-import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:flutter/material.dart';
-// To remove # at the end of redirect url when in web mode (not mobile)
-// This is a web only package
-// import 'dart:html' as html;
 
 import 'package:strava_flutter/strava.dart';
-
-// Used by example
-
 import 'package:strava_flutter/Models/activity.dart';
-import 'package:strava_flutter/Models/detailedAthlete.dart';
 
+import '../constants.dart';
 import '../private/secrets.dart';
-
 
 Strava strava;
 
@@ -22,11 +14,11 @@ class OfflineChartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Strava Flutter',
+      title: 'Офлайн Класация',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: StravaFlutterPage(title: 'strava_flutter demo'),
+      home: StravaFlutterPage(title: 'Седмична офлайн класация'),
     );
   }
 }
@@ -46,20 +38,15 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
   @override
   void initState() {
     setState(() {
-      // html.window.history.pushState(null, "home", '/');
     });
     super.initState();
   }
 
-  ///
-  /// Example of dart code to use Strava API
-  ///
-  /// set isInDebug to true in strava init to see the debug info
   void example() async {
 
     bool isAuthOk = false;
 
-    final strava = Strava(true, stravaSecret);
+    strava = Strava(true, stravaSecret);
     final prompt = 'auto';
 
     isAuthOk = await strava.oauth(
@@ -67,41 +54,21 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
         'read_all,activity:read_all,profile:read_all',
         stravaSecret,
         prompt);
-
+    
     if (isAuthOk) {
     
-      // Type of expected answer:
-      // {"id":25707617,"username":"patrick_ff","resource_state":3,"firstname":"Patrick","lastname":"FF",
-      // "city":"Le Beausset","state":"Provence-Alpes-Côte d'Azur","country":"France","sex":null,"premium"
-      DetailedAthlete _athlete = await strava.getLoggedInAthlete();
-      if (_athlete.fault.statusCode != 200) {
-        print(
-            'Error in getloggedInAthlete ${_athlete.fault.statusCode}  ${_athlete.fault.message}');
-      } else {
-        print('getLoggedInAthlete ${_athlete.firstname}  ${_athlete.lastname}');
-      }
-
       int before = DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(0)).inSeconds;
-      int after = DateTime.now().subtract(new Duration (days: 30)).difference(DateTime.fromMillisecondsSinceEpoch(0)).inSeconds;
+      int after = DateTime.now().subtract(new Duration (days: 90)).difference(DateTime.fromMillisecondsSinceEpoch(0)).inSeconds;
 
       strava.getLoggedInAthleteActivities(before, after).then(
         (a) {
           print("BEFORE STATE " + a.length.toString());
-          setState(() => this.stravaActivities = a);
+          setState(() => this.stravaActivities = a.where((i) => i.type == activityRunType).toList());
           print("AFTER STATE " + a.length.toString());
         }
       ).catchError((e) => print(e));
 
     }
-  }
-
-  void deAuthorize() async {
-    // need to get authorized before (valid token)
-    final strava = Strava(
-      true, // to get disply info in API
-      stravaSecret, // Put your secret key in secret.dart file
-    );
-    var fault = await strava.deAuthorize();
   }
 
   @override
@@ -125,20 +92,8 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
             Text('with other Apis'),
             RaisedButton(
               key: Key('OthersButton'),
-              child: Text('strava_flutter'),
+              child: Image(image: AssetImage('assets/btn_strava_connectwith_orange@2x.png')),
               onPressed: example,
-            ),
-            Text(' '),
-            Text(''),
-            Text(''),
-            Text('Push this button'),
-            Text(
-              'to revoke/DeAuthorize Strava user',
-            ),
-            RaisedButton(
-              key: Key('DeAuthorizeButton'),
-              child: Text('DeAuthorize'),
-              onPressed: deAuthorize,
             ),
             StravaActivityList(activities: this.stravaActivities)
           ],
@@ -146,7 +101,6 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
       ),
     );
   }
-
 }
 
 class StravaActivityList extends StatelessWidget {
@@ -174,7 +128,43 @@ class StravaActivityList extends StatelessWidget {
    ListTile _buildItemsForListView(BuildContext context, int index) {
       return ListTile(
         title: Text(activities[index].name), 
-        subtitle: Text(activities[index].distance.toString()),
+        subtitle: StravaResultTile(activity: activities[index]),
       );
+  }
+}
+
+class StravaResultTile extends StatelessWidget {
+  const StravaResultTile({ Key key, @required this.activity }) : super(key: key);
+
+  final SummaryActivity activity;
+
+  @override
+  Widget build(BuildContext context) {    
+    return Column(children: <Widget>[
+    Row(children: <Widget>[
+      Column(children: <Widget>[
+        Text('Дистанция'),
+        Text(this.activity.distance.toString())
+      ],),
+      Column(children: <Widget>[
+        Text('Време'),
+        Text(this.activity.elapsedTime.toString())
+      ],),
+
+    ],),
+    Row(children: <Widget>[
+      FutureBuilder<DetailedActivity>(
+        future: strava.getActivityById(this.activity.id.toString()),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Image.network("https://maps.googleapis.com/maps/api/staticmap?size=200x200&zoom=12&path=weight:3%7Ccolor:blue%7Cenc:" + snapshot.data.map.polyline + "&key=" + googleMapsKey);
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          } else {      
+            return CircularProgressIndicator();
+          }
+        })
+
+    ],)]);
   }
 }

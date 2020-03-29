@@ -248,10 +248,10 @@ packages:
   strava_flutter:
     dependency: "direct main"
     description:
-      name: strava_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.0+48"
+      path: "../../strava_flutter"
+      relative: true
+    source: path
+    version: "1.2.0+49"
   stream_channel:
     dependency: transitive
     description:
