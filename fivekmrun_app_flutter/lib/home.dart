@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/donate/donate_page.dart';
+import 'package:fivekmrun_flutter/offline_chart/offline_chart_page.dart';
 import 'package:fivekmrun_flutter/past_events/event_results_page.dart';
 import 'package:fivekmrun_flutter/past_events/past_events_page.dart';
 import 'package:fivekmrun_flutter/future_events/future_events_page.dart';
@@ -8,7 +9,7 @@ import 'package:fivekmrun_flutter/runs/user_runs_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum AppTab { profile, runs, futureEvents, pastEvents, donate }
+enum AppTab { profile, runs, futureEvents, pastEvents, donate, offlineChart }
 
 Map<AppTab, GlobalKey<NavigatorState>> navigatorKeys = {
   AppTab.profile: GlobalKey<NavigatorState>(),
@@ -16,6 +17,7 @@ Map<AppTab, GlobalKey<NavigatorState>> navigatorKeys = {
   AppTab.futureEvents: GlobalKey<NavigatorState>(),
   AppTab.pastEvents: GlobalKey<NavigatorState>(),
   AppTab.donate: GlobalKey<NavigatorState>(),
+  AppTab.offlineChart: GlobalKey<NavigatorState>()
 };
 
 class Home extends StatefulWidget {
@@ -96,6 +98,12 @@ class _HomeState extends State<Home> {
         '/': (context) => DonatePage(),
       },
     ),
+    TabNavigator(
+      navigatorKey: navigatorKeys[AppTab.offlineChart],
+      routes: {
+        '/': (context) => OfflineChartPage(),
+      }
+    )
   ];
 
   int _selectedIndex = 0;
@@ -154,6 +162,9 @@ class _HomeState extends State<Home> {
               icon: Icon(Icons.favorite),
               title: Text('Дарения'),
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.pie_chart),
+              title: Text('Офлайн Класация') )
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
