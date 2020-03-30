@@ -1,4 +1,4 @@
-package com.example.fivekmrun_app_flutter
+package bg.fivekmpark.fivekmrun
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

@@ -38,6 +38,9 @@ dependencies:
 
   strava_flutter: ^1.2.0+50
 
+  firebase_core: ^0.4.4+3
+  firebase_analytics: ^5.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
