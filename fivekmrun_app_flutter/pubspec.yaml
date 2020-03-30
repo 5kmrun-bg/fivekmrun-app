@@ -36,9 +36,7 @@ dependencies:
 
   intl: ^0.16.0
 
-  strava_flutter: 
-    path: ../../strava_flutter
-
+  strava_flutter: ^1.2.0+50
 
 dev_dependencies:
   flutter_test:
