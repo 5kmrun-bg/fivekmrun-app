@@ -35,6 +35,10 @@ class ProfileDashboard extends StatelessWidget {
         userResource.reset();
         Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil("/", (_) => false);
       };
+      final goToBarcode = () {
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil("/barcode", (_) => false);
+      };
+
       return ListView(
         children: <Widget>[
           Row(
@@ -48,8 +52,8 @@ class ProfileDashboard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     IconButton(
-                      icon: Icon(Icons.line_weight),
-                      onPressed: () {},
+                      icon: Icon(Icons.receipt),
+                      onPressed: goToBarcode,
                     ),
                     MilestoneTile(
                         value: user?.totalKmRan?.toInt() ?? 0,
