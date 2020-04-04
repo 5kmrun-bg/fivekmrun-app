@@ -36,7 +36,7 @@ class ProfileDashboard extends StatelessWidget {
         Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil("/", (_) => false);
       };
       final goToBarcode = () {
-        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil("/barcode", (_) => false);
+        Navigator.of(context, rootNavigator: true).pushNamed("/barcode");
       };
 
       return ListView(

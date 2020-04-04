@@ -10,7 +10,10 @@ class BarcodePage extends StatelessWidget {
       final user = userResource?.value;
 
       return Scaffold(
-          appBar: AppBar(title: Text("Barcode")),
+          appBar: AppBar(
+              leading: BackButton(color: Colors.white),
+              title: Text("Barcode"),
+              centerTitle: true,),
           backgroundColor: Colors.white,
           body: Center(child: Column(children: <Widget>[
             Text(user.name, style: TextStyle(color: Colors.black)),
