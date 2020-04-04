@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import "package:collection/collection.dart";
 
-
 class RunsByRouteChart extends StatelessWidget {
-
   final List<charts.Series> seriesList;
   final bool animate;
 
@@ -20,9 +18,11 @@ class RunsByRouteChart extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[IntrinsicHeight(child: Text("Бягания по трасета")), 
-        Expanded(child: new charts.PieChart(seriesList, animate: animate, behaviors: [
-          new charts.DatumLegend(
+    return Column(children: <Widget>[
+      IntrinsicHeight(child: Text("Бягания по трасета")),
+      Expanded(
+          child: new charts.PieChart(seriesList, animate: animate, behaviors: [
+        new charts.DatumLegend(
           // Positions for "start" and "end" will be left and right respectively
           // for widgets with a build context that has directionality ltr.
           // For rtl, "start" and "end" will be right and left respectively.
@@ -39,24 +39,27 @@ class RunsByRouteChart extends StatelessWidget {
           horizontalFirst: false,
           // This defines the padding around each legend entry.
           cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
-          )
-    ])),
+        )
+      ])),
     ]);
   }
 
-  static List<charts.Series<RunsByRouteEntry, String>> _createData(List<Run> runs) {
+  static List<charts.Series<RunsByRouteEntry, String>> _createData(
+      List<Run> runs) {
     List<RunsByRouteEntry> series = groupBy(runs, (r) => r.location)
-                                      .entries.map((e) => RunsByRouteEntry(e.key, e.value.length)).toList();
+        .entries
+        .map((e) => RunsByRouteEntry(e.key, e.value.length))
+        .toList();
 
     return [
       new charts.Series<RunsByRouteEntry, String>(
-        id: 'BestTimeByRoute',
+        id: 'RunsByRoute',
         domainFn: (RunsByRouteEntry run, _) => run.location,
         measureFn: (RunsByRouteEntry run, _) => run.timeInSeconds,
         data: series,
       )
     ];
-  }  
+  }
 }
 
 class RunsByRouteEntry {

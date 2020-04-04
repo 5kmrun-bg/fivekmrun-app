@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/charts/best_times_by_route_chart.dart';
 import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
@@ -119,6 +120,13 @@ class ProfileDashboard extends StatelessWidget {
                 child: RunsByRouteChart.withRuns(runsResource?.value)
               ),
             ),
+          if (runsResource.value != null) 
+            Card(
+              child: Container(
+                height: 200,
+                child: BestTimesByRouteChart.withRuns(runsResource?.value)
+              )
+            )
         ],
       );
     });
