@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import '../common/int_extensions.dart';
 
 class BestTimesByRouteChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -50,7 +51,7 @@ class BestTimesByRouteChart extends StatelessWidget {
         domainFn: (BestTimeByRouteEntry run, _) => run.location,
         measureFn: (BestTimeByRouteEntry run, _) => run.timeInSeconds,
         labelAccessorFn: (BestTimeByRouteEntry run, _) =>
-            "${run.location}: ${run.timeInSeconds}",
+            "${run.location}: ${run.timeInSeconds.parseSecondsToTimestamp()}",
         data: series,
       )
     ];

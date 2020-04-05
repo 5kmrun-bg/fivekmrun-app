@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:strava_flutter/strava.dart';
 import 'package:strava_flutter/Models/activity.dart';
 import '../private/secrets.dart';
+import '../common/int_extensions.dart';
+import '../common/double_extensions.dart';
 
 Strava strava;
 
@@ -142,11 +144,11 @@ class StravaResultTile extends StatelessWidget {
     Row(children: <Widget>[
       Column(children: <Widget>[
         Text('Дистанция'),
-        Text(this.activity.distance.toString())
+        Text(this.activity.distance.parseMetersToKilometers())
       ],),
       Column(children: <Widget>[
         Text('Време'),
-        Text(this.activity.elapsedTime.toString())
+        Text(this.activity.elapsedTime.parseSecondsToTimestamp())
       ],),
 
     ],),
@@ -155,7 +157,7 @@ class StravaResultTile extends StatelessWidget {
         future: strava.getActivityById(this.activity.id.toString()),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Image.network("https://maps.googleapis.com/maps/api/staticmap?size=200x200&zoom=12&path=weight:3%7Ccolor:blue%7Cenc:" + snapshot.data.map.polyline + "&key=" + googleMapsKey);
+            return Image.network("https://maps.googleapis.com/maps/api/staticmap?size=200x200&zoom=15&path=weight:3%7Ccolor:blue%7Cenc:" + snapshot.data.map.polyline + "&key=" + googleMapsKey);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else {      
