@@ -50,6 +50,8 @@ class UserRunsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    runs.sort((r1, r2) => r2.date.compareTo(r1.date));
+
     return ListView.builder(
       itemCount: runs.length,
       itemBuilder: (BuildContext context, int index) {
