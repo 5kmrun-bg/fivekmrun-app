@@ -48,6 +48,8 @@ class BestTimesByRouteChart extends StatelessWidget {
     return [
       new charts.Series<BestTimeByRouteEntry, String>(
         id: 'BestTimeByRoute',
+        //TODO: Add chart color to Theme
+        colorFn: (_, __) => charts.MaterialPalette.deepOrange.shadeDefault,
         domainFn: (BestTimeByRouteEntry run, _) => run.location,
         measureFn: (BestTimeByRouteEntry run, _) => run.timeInSeconds,
         labelAccessorFn: (BestTimeByRouteEntry run, _) =>

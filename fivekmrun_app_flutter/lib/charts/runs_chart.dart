@@ -69,7 +69,7 @@ class RunsChart extends StatelessWidget {
     return [
       new charts.Series<Run, DateTime>(
         id: 'Runs',
-        // colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (_, i) => charts.MaterialPalette.deepOrange.makeShades(runs.length)[i],
         domainFn: (Run run, _) => run.date,
         measureFn: (Run run, _) => run.timeInSeconds,
         labelAccessorFn: (Run run, _) =>

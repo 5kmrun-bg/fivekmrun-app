@@ -54,6 +54,7 @@ class RunsByRouteChart extends StatelessWidget {
     return [
       new charts.Series<RunsByRouteEntry, String>(
         id: 'RunsByRoute',
+        colorFn: (_, i) => charts.MaterialPalette.deepOrange.makeShades(1000)[i*100],
         domainFn: (RunsByRouteEntry run, _) => run.location,
         measureFn: (RunsByRouteEntry run, _) => run.timeInSeconds,
         data: series,
