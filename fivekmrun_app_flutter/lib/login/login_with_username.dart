@@ -24,7 +24,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
     String username = this.usernameInputController.text;
     String password = this.passwordInputController.text;
 
-    Provider.of<AuthenticationResource>(context, listen: false).getToken(username, password).then((s) => print("TOKEN: " + s))
+    Provider.of<AuthenticationResource>(context, listen: false).authenticate(username, password).then((s) => print("AUTHENTICATED: " + s.toString()))
     .catchError((error, stackTrace) => print("ERROR: " + error.toString()));
   }
 

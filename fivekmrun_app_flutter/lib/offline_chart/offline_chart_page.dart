@@ -1,4 +1,9 @@
+import 'package:fivekmrun_flutter/state/authentication_resource.dart';
+import 'package:fivekmrun_flutter/state/offline_chart_resource.dart';
+import 'package:fivekmrun_flutter/state/offline_chart_submission_model.dart';
+import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:strava_flutter/strava.dart';
 import 'package:strava_flutter/Models/activity.dart';
@@ -87,6 +92,11 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            RaisedButton(
+              key: Key("SubmitOfflineEntry"),
+              onPressed: submitOfflineEntry,
+              child: Text("Submit offline entry")
+            ),
             Text(''),
             Text('Authentication'),
             Text('with other Apis'),
@@ -100,6 +110,23 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
         ),
       ),
     );
+  }
+
+  submitOfflineEntry() {
+    UserResource userResource = Provider.of<UserResource>(context, listen: false);
+    AuthenticationResource authResource = Provider.of<AuthenticationResource>(context, listen: false);
+    OfflineChartResource offlineChartResource = Provider.of<OfflineChartResource>(context, listen: false);
+
+    OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
+      userId: userResource.currentUserId.toString(),
+      elapsedTime: 5000,
+      distance: 5000,
+      startDate: DateTime.now(),
+      mapPath: "",
+      startLocation: "",
+    );
+
+    offlineChartResource.submitEntry(model, authResource.getToken());
   }
 }
 
