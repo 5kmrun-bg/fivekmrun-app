@@ -15,7 +15,7 @@ Strava strava;
 
 class OfflineChartPage extends StatelessWidget {
   const OfflineChartPage({Key key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,37 +42,34 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
 
   @override
   void initState() {
-    setState(() {
-    });
+    setState(() {});
     super.initState();
   }
 
   void example() async {
-
     bool isAuthOk = false;
 
     strava = Strava(true, stravaSecret);
     final prompt = 'auto';
 
-    isAuthOk = await strava.oauth(
-        stravaClientId,
-        'read_all,activity:read_all,profile:read_all',
-        stravaSecret,
-        prompt);
-    
+    isAuthOk = await strava.oauth(stravaClientId,
+        'read_all,activity:read_all,profile:read_all', stravaSecret, prompt);
+
     if (isAuthOk) {
-    
-      int before = DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(0)).inSeconds;
-      int after = DateTime.now().subtract(new Duration (days: 90)).difference(DateTime.fromMillisecondsSinceEpoch(0)).inSeconds;
+      int before = DateTime.now()
+          .difference(DateTime.fromMillisecondsSinceEpoch(0))
+          .inSeconds;
+      int after = DateTime.now()
+          .subtract(new Duration(days: 90))
+          .difference(DateTime.fromMillisecondsSinceEpoch(0))
+          .inSeconds;
 
-      strava.getLoggedInAthleteActivities(before, after).then(
-        (a) {
-          print("BEFORE STATE " + a.length.toString());
-          setState(() => this.stravaActivities = a.where((i) => i.type == ActivityType.Run).toList());
-          print("AFTER STATE " + a.length.toString());
-        }
-      ).catchError((e) => print(e));
-
+      strava.getLoggedInAthleteActivities(before, after).then((a) {
+        print("BEFORE STATE " + a.length.toString());
+        setState(() => this.stravaActivities =
+            a.where((i) => i.type == ActivityType.Run).toList());
+        print("AFTER STATE " + a.length.toString());
+      }).catchError((e) => print(e));
     }
   }
 
@@ -93,16 +90,17 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             RaisedButton(
-              key: Key("SubmitOfflineEntry"),
-              onPressed: submitOfflineEntry,
-              child: Text("Submit offline entry")
-            ),
+                key: Key("SubmitOfflineEntry"),
+                onPressed: submitOfflineEntry,
+                child: Text("Submit offline entry")),
             Text(''),
             Text('Authentication'),
             Text('with other Apis'),
             RaisedButton(
               key: Key('OthersButton'),
-              child: Image(image: AssetImage('assets/btn_strava_connectwith_orange@2x.png')),
+              child: Image(
+                  image: AssetImage(
+                      'assets/btn_strava_connectwith_orange@2x.png')),
               onPressed: example,
             ),
             StravaActivityList(activities: this.stravaActivities)
@@ -113,17 +111,21 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
   }
 
   submitOfflineEntry() {
-    UserResource userResource = Provider.of<UserResource>(context, listen: false);
-    AuthenticationResource authResource = Provider.of<AuthenticationResource>(context, listen: false);
-    OfflineChartResource offlineChartResource = Provider.of<OfflineChartResource>(context, listen: false);
+    SummaryActivity stravaActivity = this.stravaActivities[0];
+    UserResource userResource =
+        Provider.of<UserResource>(context, listen: false);
+    AuthenticationResource authResource =
+        Provider.of<AuthenticationResource>(context, listen: false);
+    OfflineChartResource offlineChartResource =
+        Provider.of<OfflineChartResource>(context, listen: false);
 
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
-      elapsedTime: 5000,
-      distance: 5000,
+      elapsedTime: stravaActivity.elapsedTime,
+      distance: stravaActivity.distance,
       startDate: DateTime.now(),
-      mapPath: "",
-      startLocation: "",
+      mapPath: "", //stravaActivity.map.polyline,
+      startLocation: [0.1, 0.2], //stravaActivity.startLatlng,
     );
 
     offlineChartResource.submitEntry(model, authResource.getToken());
@@ -151,47 +153,58 @@ class StravaActivityList extends StatelessWidget {
       itemBuilder: _buildItemsForListView,
     );
   }
-  
-   ListTile _buildItemsForListView(BuildContext context, int index) {
-      return ListTile(
-        title: Text(activities[index].name), 
-        subtitle: StravaResultTile(activity: activities[index]),
-      );
+
+  ListTile _buildItemsForListView(BuildContext context, int index) {
+    return ListTile(
+      title: Text(activities[index].name),
+      subtitle: StravaResultTile(activity: activities[index]),
+    );
   }
 }
 
 class StravaResultTile extends StatelessWidget {
-  const StravaResultTile({ Key key, @required this.activity }) : super(key: key);
+  const StravaResultTile({Key key, @required this.activity}) : super(key: key);
 
   final SummaryActivity activity;
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Column(children: <Widget>[
-    Row(children: <Widget>[
-      Column(children: <Widget>[
-        Text('Дистанция'),
-        Text(this.activity.distance.parseMetersToKilometers())
-      ],),
-      Column(children: <Widget>[
-        Text('Време'),
-        Text(this.activity.elapsedTime.parseSecondsToTimestamp())
-      ],),
-
-    ],),
-    Row(children: <Widget>[
-      FutureBuilder<DetailedActivity>(
-        future: strava.getActivityById(this.activity.id.toString()),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Image.network("https://maps.googleapis.com/maps/api/staticmap?size=200x200&zoom=15&path=weight:3%7Ccolor:blue%7Cenc:" + snapshot.data.map.polyline + "&key=" + googleMapsKey);
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          } else {      
-            return CircularProgressIndicator();
-          }
-        })
-
-    ],)]);
+      Row(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Text('Дистанция'),
+              Text(this.activity.distance.parseMetersToKilometers())
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Text('Време'),
+              Text(this.activity.elapsedTime.parseSecondsToTimestamp())
+            ],
+          ),
+        ],
+      ),
+      Row(
+        children: <Widget>[
+          FutureBuilder<DetailedActivity>(
+              future: strava.getActivityById(this.activity.id.toString()),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Image.network(
+                      "https://maps.googleapis.com/maps/api/staticmap?size=200x200&zoom=15&path=weight:3%7Ccolor:blue%7Cenc:" +
+                          snapshot.data.map.polyline +
+                          "&key=" +
+                          googleMapsKey);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                } else {
+                  return CircularProgressIndicator();
+                }
+              })
+        ],
+      )
+    ]);
   }
 }

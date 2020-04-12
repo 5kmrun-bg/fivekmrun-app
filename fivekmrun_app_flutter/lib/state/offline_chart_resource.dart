@@ -14,8 +14,7 @@ class OfflineChartResource extends ChangeNotifier {
     body += "&start_date=" + model.startDate.toString();
     body += "&tkn=" + authToken;
     body += "&map=" + model.mapPath;
-    body += "&gps=" + model.startLocation;
-
+    body += "&gps=" + model.startLocation[0].toString() + "," + model.startLocation[1].toString();
 
     HttpClient httpClient = new HttpClient();
     HttpClientRequest request =

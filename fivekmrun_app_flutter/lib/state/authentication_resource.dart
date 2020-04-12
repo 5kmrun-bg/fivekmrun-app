@@ -8,6 +8,7 @@ class AuthenticationResource extends ChangeNotifier {
   String _token;
   String _username;
   String _password;
+  int _userId;
 
   Future<bool> authenticate(String username, String password) async {
     this._username = username;
@@ -30,10 +31,15 @@ class AuthenticationResource extends ChangeNotifier {
     return this._token;
   }
 
+  int getUserId() {
+    return this._userId;
+  }
+
   Future<void> logout() {
     this._username = null;
     this._password = null;
     this._token = null;
+    this._username = null;
 
     return null;
   }
@@ -50,10 +56,15 @@ class AuthenticationResource extends ChangeNotifier {
     print(reply);
     httpClient.close();
     Map<String, dynamic> map = json.decode(reply);
-
-    String token  = map["answer"];
     List<String> errors = List.from(map["errors"]);
 
-    return token;
+    if (errors.isEmpty) {
+      this._token = map["answer"]["tkn"];
+      this._userId = map["answer"]["id"];
+
+      return this._token;
+    } else {
+      return null;
+    }
   }
 }
