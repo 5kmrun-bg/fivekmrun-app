@@ -52,11 +52,14 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
               style: Theme.of(context).textTheme.title,
             ),
             TextField(
+              autocorrect: false,
               textAlign: TextAlign.center,
               controller: this.usernameInputController,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputHelpers.decoration(),
             ),
             TextField(
+              autocorrect: false,
               textAlign: TextAlign.center,
               controller: this.passwordInputController,
               obscureText: true,
