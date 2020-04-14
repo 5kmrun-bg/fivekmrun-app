@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/offline_chart/offline_chart_page.dart';
 import 'package:fivekmrun_flutter/past_events/event_results_page.dart';
 import 'package:fivekmrun_flutter/past_events/past_events_page.dart';
@@ -151,7 +152,7 @@ class _HomeState extends State<Home> {
               title: Text('Събития'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.pie_chart),
+              icon: Icon(CustomIcons.award),
               title: Text('Офлайн Класация') )
           ],
           currentIndex: _selectedIndex,

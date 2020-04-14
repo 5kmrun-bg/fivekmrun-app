@@ -2,6 +2,7 @@ import 'package:fivekmrun_flutter/charts/best_times_by_route_chart.dart';
 import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
+import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class ProfileDashboard extends StatelessWidget {
       final goToSettings = () {
         Navigator.of(context, rootNavigator: true).pushNamed("/settings");
       };
-      
+
       final goToBarcode = () {
         Navigator.of(context, rootNavigator: true).pushNamed("/barcode");
       };
@@ -53,7 +54,7 @@ class ProfileDashboard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     IconButton(
-                      icon: Icon(Icons.receipt),
+                      icon: Icon(CustomIcons.barcode),
                       onPressed: goToBarcode,
                     ),
                     MilestoneTile(
