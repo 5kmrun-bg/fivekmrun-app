@@ -1,4 +1,3 @@
-import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/offline_chart/offline_chart_page.dart';
 import 'package:fivekmrun_flutter/past_events/event_results_page.dart';
 import 'package:fivekmrun_flutter/past_events/past_events_page.dart';
@@ -9,14 +8,13 @@ import 'package:fivekmrun_flutter/runs/user_runs_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum AppTab { profile, runs, futureEvents, pastEvents, donate, offlineChart }
+enum AppTab { profile, runs, futureEvents, pastEvents, offlineChart }
 
 Map<AppTab, GlobalKey<NavigatorState>> navigatorKeys = {
   AppTab.profile: GlobalKey<NavigatorState>(),
   AppTab.runs: GlobalKey<NavigatorState>(),
   AppTab.futureEvents: GlobalKey<NavigatorState>(),
   AppTab.pastEvents: GlobalKey<NavigatorState>(),
-  AppTab.donate: GlobalKey<NavigatorState>(),
   AppTab.offlineChart: GlobalKey<NavigatorState>()
 };
 
@@ -93,12 +91,6 @@ class _HomeState extends State<Home> {
       },
     ),
     TabNavigator(
-      navigatorKey: navigatorKeys[AppTab.donate],
-      routes: {
-        '/': (context) => DonatePage(),
-      },
-    ),
-    TabNavigator(
       navigatorKey: navigatorKeys[AppTab.offlineChart],
       routes: {
         '/': (context) => OfflineChartPage(),
@@ -157,10 +149,6 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),
               title: Text('Събития'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              title: Text('Дарения'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.pie_chart),

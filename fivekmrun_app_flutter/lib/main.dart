@@ -1,7 +1,9 @@
 import 'package:fivekmrun_flutter/barcode_page.dart';
+import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/home.dart';
 import 'package:fivekmrun_flutter/login/login.dart';
 import 'package:fivekmrun_flutter/login/loginPreview.dart';
+import 'package:fivekmrun_flutter/settings_page.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/events_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_resource.dart';
@@ -58,10 +60,12 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: _initialRoute,
         routes: {
-          '/': (context) => Login(),
-          '/loginPreview': (context) => LoginPreview(),
-          '/home': (context) => Home(),
-          '/barcode': (context) => BarcodePage(),
+          '/': (_) => Login(),
+          '/loginPreview': (_) => LoginPreview(),
+          '/home': (_) => Home(),
+          '/barcode': (_) => BarcodePage(),
+          '/settings': (_) => SettingsPage(),
+          '/donation': (_) => DonatePage(),
         },
       ),
     );

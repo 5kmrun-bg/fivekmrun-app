@@ -6,7 +6,9 @@ class DonatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Дарение")),
+        appBar: AppBar(
+          leading: BackButton(color: Colors.white),
+          title: Text("Дарение")),
         body: Center(
           child: RaisedButton(
             child: Text("PayPal"),

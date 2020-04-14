@@ -2,7 +2,6 @@ import 'package:fivekmrun_flutter/charts/best_times_by_route_chart.dart';
 import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
-import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -32,14 +31,11 @@ class ProfileDashboard extends StatelessWidget {
       final user = userResource?.value;
       final textTheme = Theme.of(context).textTheme;
       final runsResource = Provider.of<RunsResource>(context);
-      final authenticationResource = Provider.of<AuthenticationResource>(context);
 
-      final logout = () {
-        userResource.reset();
-        authenticationResource.logout();
-        
-        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil("/", (_) => false);
+      final goToSettings = () {
+        Navigator.of(context, rootNavigator: true).pushNamed("/settings");
       };
+      
       final goToBarcode = () {
         Navigator.of(context, rootNavigator: true).pushNamed("/barcode");
       };
@@ -87,8 +83,8 @@ class ProfileDashboard extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     IconButton(
-                      icon: const Icon(Icons.exit_to_app),
-                      onPressed: logout,
+                      icon: const Icon(Icons.settings),
+                      onPressed: goToSettings,
                     ),
                     MilestoneTile(
                         value: user?.runsCount ?? 0,
