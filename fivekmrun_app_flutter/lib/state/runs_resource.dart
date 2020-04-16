@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/state/resource.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/constants.dart' as constants;
@@ -69,7 +70,7 @@ class RunsResource extends Resource<List<Run>> {
   }
 
   DateTime extractDate(Element cell) {
-    DateFormat inputFormat = DateFormat("dd.MM.yyyy");
+    DateFormat inputFormat = DateFormat(Constants.DATE_FORMAT);
     DateTime date = inputFormat.parse(cell.text);
     return date;
   }

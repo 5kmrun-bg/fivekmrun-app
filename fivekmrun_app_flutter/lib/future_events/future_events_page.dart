@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:fivekmrun_flutter/state/events_resource.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-final DateFormat dateFromat = DateFormat("dd.MM.yyyy");
+final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
 class FutureEventsPage extends StatelessWidget {
   const FutureEventsPage({Key key}) : super(key: key);

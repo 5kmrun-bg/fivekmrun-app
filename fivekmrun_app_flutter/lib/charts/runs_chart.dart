@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -39,7 +40,7 @@ class _RunsChartState extends State<RunsChart> {
           date = selectedDatum.first.datum.date;
           time = selectedDatum.first.datum.time;
         }
-        setState(() => this.dataPointLabel = "Дата: " + DateFormat("dd.MM.yyyy").format(date) + "\nВреме:" + time + "");
+        setState(() => this.dataPointLabel = "Дата: " + DateFormat(Constants.DATE_FORMAT).format(date) + "\nВреме:" + time + "");
         print("model: time(" + date.toString() + "), value(" + time + ")");
       }
 

@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/milestone_gauge.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class RunDetailsPage extends StatelessWidget {
               ),
               Row(
                 children: <Widget>[
-                  Text(new DateFormat("dd.MM.yyyy").format(run.date)),
+                  Text(new DateFormat(Constants.DATE_FORMAT).format(run.date)),
                   Text(run.time),
                 ],
               ),
