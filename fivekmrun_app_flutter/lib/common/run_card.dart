@@ -51,12 +51,12 @@ class RunCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text("Дата:", style: labelStyle),
+                          Text("Дата: ", style: labelStyle),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Text("Темпо:", style: labelStyle),
+                            child: Text("Темпо: ", style: labelStyle),
                           ),
-                          Text("Време:", style: labelStyle),
+                          Text("Време: ", style: labelStyle),
                         ],
                       ),
                       Expanded(
