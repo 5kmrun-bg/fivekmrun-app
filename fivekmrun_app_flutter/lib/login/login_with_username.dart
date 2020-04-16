@@ -24,7 +24,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
   }
 
   void onPressed() async {
-    String username = this.usernameInputController.text;
+    String username = this.usernameInputController.text.trim();
     String password = this.passwordInputController.text;
 
     Provider.of<AuthenticationResource>(context, listen: false)
