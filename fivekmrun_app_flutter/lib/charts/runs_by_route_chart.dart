@@ -26,25 +26,33 @@ class RunsByRouteChart extends StatelessWidget {
       child: Column(children: <Widget>[
         IntrinsicHeight(child: Text("Бягания по трасета", style: subHeadStyle)),
         Expanded(
-            child: new charts.PieChart(seriesList, animate: animate, behaviors: [
-          new charts.DatumLegend(
-            // Positions for "start" and "end" will be left and right respectively
-            // for widgets with a build context that has directionality ltr.
-            // For rtl, "start" and "end" will be right and left respectively.
-            // Since this example has directionality of ltr, the legend is
-            // positioned on the right side of the chart.
-            position: charts.BehaviorPosition.end,
-            // For a legend that is positioned on the left or right of the chart,
-            // setting the justification for [endDrawArea] is aligned to the
-            // bottom of the chart draw area.
-            //outsideJustification: charts.OutsideJustification.endDrawArea,
-            // By default, if the position of the chart is on the left or right of
-            // the chart, [horizontalFirst] is set to false. This means that the
-            // legend entries will grow as new rows first instead of a new column.
-            horizontalFirst: false,
-            // This defines the padding around each legend entry.
-            cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
-          )
+            child: new charts.PieChart(
+              seriesList, 
+              animate: animate, 
+              defaultRenderer: new charts.ArcRendererConfig(
+                arcWidth: 60,
+                arcRendererDecorators: [new charts.ArcLabelDecorator(
+                  outsideLabelStyleSpec: charts.TextStyleSpec(fontSize: 12, color: charts.Color.white)
+                )]),
+              behaviors: [
+                new charts.DatumLegend(
+                  // Positions for "start" and "end" will be left and right respectively
+                  // for widgets with a build context that has directionality ltr.
+                  // For rtl, "start" and "end" will be right and left respectively.
+                  // Since this example has directionality of ltr, the legend is
+                  // positioned on the right side of the chart.
+                  position: charts.BehaviorPosition.end,
+                  // For a legend that is positioned on the left or right of the chart,
+                  // setting the justification for [endDrawArea] is aligned to the
+                  // bottom of the chart draw area.
+                  //outsideJustification: charts.OutsideJustification.endDrawArea,
+                  // By default, if the position of the chart is on the left or right of
+                  // the chart, [horizontalFirst] is set to false. This means that the
+                  // legend entries will grow as new rows first instead of a new column.
+                  horizontalFirst: false,
+                  // This defines the padding around each legend entry.
+                  cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                )
         ])),
     ]));
   }
@@ -63,6 +71,7 @@ class RunsByRouteChart extends StatelessWidget {
         domainFn: (RunsByRouteEntry run, _) => run.location,
         measureFn: (RunsByRouteEntry run, _) => run.timeInSeconds,
         data: series,
+        labelAccessorFn: (RunsByRouteEntry run, _) => run.timeInSeconds.toString(),
       )
     ];
   }
