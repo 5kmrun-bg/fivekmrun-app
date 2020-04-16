@@ -2,33 +2,53 @@ import 'package:collection/collection.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:intl/intl.dart';
 import '../common/int_extensions.dart';
 
-class RunsChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
+class RunsChart extends StatefulWidget {
+  final List<Run> runs;
+
+  RunsChart({Key key, this.runs}) : super(key: key);
+
+  @override
+  _RunsChartState createState() => _RunsChartState();
+}
+
+class _RunsChartState extends State<RunsChart> {
+  List<charts.Series> seriesList;
+  String dataPointLabel = "";
   final bool animate;
   static int lowestValues;
   static int highestValues;
 
-  RunsChart(this.seriesList, {this.animate});
-
-  /// Creates a [TimeSeriesChart] with sample data and no transition.
-  factory RunsChart.withRuns(List<Run> runs) {
-    return new RunsChart(
-      _createData(runs),
-    );
-  }
+  _RunsChartState({this.animate});
 
   @override
   Widget build(BuildContext context) {
+    this.seriesList = _createData(this.widget.runs);
+
     final theme = Theme.of(context);
     final subHeadStyle = theme.textTheme.subhead;
+
+    _onSelectionChanged(charts.SelectionModel model) {
+        final selectedDatum = model.selectedDatum;
+        String time;
+        DateTime date;
+
+        if (selectedDatum.isNotEmpty) {
+          date = selectedDatum.first.datum.date;
+          time = selectedDatum.first.datum.time;
+        }
+        setState(() => this.dataPointLabel = "Дата: " + DateFormat("dd.MM.yyyy").format(date) + "\nВреме:" + time + "");
+        print("model: time(" + date.toString() + "), value(" + time + ")");
+      }
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
           IntrinsicHeight(child: Text("Резултати от бягания", style: subHeadStyle)),
+          IntrinsicHeight(child: Text(this.dataPointLabel)),
           Expanded(
             child: charts.TimeSeriesChart(
               seriesList,
@@ -47,13 +67,19 @@ class RunsChart extends StatelessWidget {
                         charts.LinePointHighlighterFollowLineType.none,
                     showVerticalFollowLine:
                         charts.LinePointHighlighterFollowLineType.nearest),
-                // Optional - By default, select nearest is configured to trigger
-                // with tap so that a user can have pan/zoom behavior and line point
-                // highlighter. Changing the trigger to tap and drag allows the
-                // highlighter to follow the dragging gesture but it is not
-                // recommended to be used when pan/zoom behavior is enabled.
+                // // Optional - By default, select nearest is configured to trigger
+                // // with tap so that a user can have pan/zoom behavior and line point
+                // // highlighter. Changing the trigger to tap and drag allows the
+                // // highlighter to follow the dragging gesture but it is not
+                // // recommended to be used when pan/zoom behavior is enabled.
                 new charts.SelectNearest(
                     eventTrigger: charts.SelectionTrigger.tapAndDrag),
+              ],
+              selectionModels: [
+                new charts.SelectionModelConfig(
+                  type: charts.SelectionModelType.info,
+                  changedListener: _onSelectionChanged,
+                )
               ],
               primaryMeasureAxis: new charts.NumericAxisSpec(
                   viewport:

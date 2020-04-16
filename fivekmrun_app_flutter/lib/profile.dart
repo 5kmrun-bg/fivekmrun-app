@@ -116,7 +116,7 @@ class ProfileDashboard extends StatelessWidget {
             Card(
               child: Container(
                 height: 200,
-                child: RunsChart.withRuns(runsResource?.value),
+                child: RunsChart(runs: runsResource?.value),
               ),
             ),
           if (runsResource.value != null)
