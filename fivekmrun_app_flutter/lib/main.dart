@@ -3,9 +3,11 @@ import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/home.dart';
 import 'package:fivekmrun_flutter/login/login.dart';
 import 'package:fivekmrun_flutter/login/loginPreview.dart';
+import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/settings_page.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/events_resource.dart';
+import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
@@ -34,6 +36,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    PushNotificationsManager().init();
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => userRes),
@@ -42,9 +46,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PastEventsResource()),
         ChangeNotifierProvider(create: (_) => AuthenticationResource()),
         ChangeNotifierProvider(create: (_) => OfflineChartResource()),
+        ChangeNotifierProvider(create: (_) => LocalStorageResource()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: '5kmRun.bg',
         theme: ThemeData(
           primarySwatch: Colors.deepOrange,
           brightness: Brightness.dark,
