@@ -12,6 +12,7 @@ class Login extends StatelessWidget {
       children: <Widget>[
         Container(height: 200), 
         LoginWithUsername(),
+        Container(height: 150),
         LoginWithId()],
     )));
   }

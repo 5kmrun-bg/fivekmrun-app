@@ -34,7 +34,7 @@ class _LoginWithIdState extends State<LoginWithId> {
   Widget build(BuildContext context) {
     return Container(
           width: 150,
-          height: 180,
+          height: 150,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             // mainAxisSize: MainAxisSize.min,

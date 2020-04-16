@@ -62,6 +62,7 @@ class MyApp extends StatelessWidget {
             body1: TextStyle(fontSize: 12),
             body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
           ),
+          errorColor: Colors.deepOrangeAccent
         ),
         initialRoute: _initialRoute,
         routes: {

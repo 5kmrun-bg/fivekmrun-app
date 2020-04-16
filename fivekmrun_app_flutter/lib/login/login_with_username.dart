@@ -14,6 +14,7 @@ class LoginWithUsername extends StatefulWidget {
 class _LoginWithUsernameState extends State<LoginWithUsername> {
   final usernameInputController = TextEditingController();
   final passwordInputController = TextEditingController();
+  bool loginError = false;
 
   @override
   void dispose() {
@@ -31,10 +32,14 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
         .then((isAuthenticated) {
       if (isAuthenticated) {
         int userId = Provider.of<AuthenticationResource>(context, listen: false).getUserId();
+
+        setState(() => this.loginError = false);
         Provider.of<UserResource>(context, listen: false).load(id: userId);
         // TODO: should we load all here
         Provider.of<RunsResource>(context, listen: false).load(id: userId);
         Navigator.pushNamed(context, '/home');
+      } else {
+        setState(() => this.loginError = true);
       }
     }).catchError((error, stackTrace) => print("ERROR: " + error.toString()));
   }
@@ -42,8 +47,8 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 300,
-        width: 150,
+        height: 250,
+        width: 200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -51,6 +56,9 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
               "Потребителско име",
               style: Theme.of(context).textTheme.title,
             ),
+            if (this.loginError) 
+              Text("Грешно потребителско име или парола", style: TextStyle(color: Theme.of(context).errorColor))
+            ,
             TextField(
               autocorrect: false,
               textAlign: TextAlign.center,
