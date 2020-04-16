@@ -18,23 +18,26 @@ class BestTimesByRouteChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        IntrinsicHeight(child: Text("Рекорди по трасета")),
-        Expanded(
-            child: charts.BarChart(
-              seriesList,
-              animate: this.animate,
-              vertical: false,
-              barRendererDecorator: new charts.BarLabelDecorator<String>(),
-              // Hide domain axis.
-              domainAxis: new charts.OrdinalAxisSpec(
-                  renderSpec: new charts.NoneRenderSpec()),
-                      primaryMeasureAxis: new charts.NumericAxisSpec(
-            renderSpec: charts.NoneRenderSpec())
-            ))
-      ],
-    );
+    final theme = Theme.of(context);
+    final subHeadStyle = theme.textTheme.subhead;
+
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          IntrinsicHeight(child: Text("Рекорди по трасета", style: subHeadStyle)),
+          Expanded(
+              child: charts.BarChart(seriesList,
+                  animate: this.animate,
+                  vertical: false,
+                  barRendererDecorator: new charts.BarLabelDecorator<String>(),
+                  // Hide domain axis.
+                  domainAxis: new charts.OrdinalAxisSpec(
+                      renderSpec: new charts.NoneRenderSpec()),
+                  primaryMeasureAxis: new charts.NumericAxisSpec(
+                      renderSpec: charts.NoneRenderSpec())))
+        ],
+    ));
   }
 
   static List<charts.Series<BestTimeByRouteEntry, String>> _createData(
