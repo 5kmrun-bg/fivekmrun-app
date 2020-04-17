@@ -69,7 +69,11 @@ class _StravaFlutterPageState extends State<StravaFlutterPage> {
 
   @override
   void dispose() {
-    strava.dispose();
+    if (strava != null) {
+      strava.dispose();
+      strava = null;
+    }
+
     super.dispose();
   }
 
