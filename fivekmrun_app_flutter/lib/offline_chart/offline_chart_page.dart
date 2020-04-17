@@ -18,13 +18,7 @@ class OfflineChartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Офлайн Класация',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: StravaFlutterPage(title: 'Седмична офлайн класация'),
-    );
+    return StravaFlutterPage(title: 'Седмична офлайн класация');
   }
 }
 
