@@ -11,14 +11,6 @@ import 'package:provider/provider.dart';
 
 enum AppTab { profile, runs, futureEvents, pastEvents, offlineChart }
 
-Map<AppTab, GlobalKey<NavigatorState>> navigatorKeys = {
-  AppTab.profile: GlobalKey<NavigatorState>(),
-  AppTab.runs: GlobalKey<NavigatorState>(),
-  AppTab.futureEvents: GlobalKey<NavigatorState>(),
-  AppTab.pastEvents: GlobalKey<NavigatorState>(),
-  AppTab.offlineChart: GlobalKey<NavigatorState>()
-};
-
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
 
@@ -27,6 +19,14 @@ class Home extends StatefulWidget {
 }
 
 class TabNavigationHelper {
+  Map<AppTab, GlobalKey<NavigatorState>> navigatorKeys = {
+    AppTab.profile: GlobalKey<NavigatorState>(),
+    AppTab.runs: GlobalKey<NavigatorState>(),
+    AppTab.futureEvents: GlobalKey<NavigatorState>(),
+    AppTab.pastEvents: GlobalKey<NavigatorState>(),
+    AppTab.offlineChart: GlobalKey<NavigatorState>()
+  };
+
   _HomeState _home;
 
   TabNavigationHelper(this._home);
@@ -64,43 +64,10 @@ class TabNavigator extends StatelessWidget {
 class _HomeState extends State<Home> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static final List<Widget> _widgetOptions = <Widget>[
-    TabNavigator(
-      navigatorKey: navigatorKeys[AppTab.profile],
-      routes: {
-        '/': (context) => ProfileDashboard(),
-      },
-    ),
-    TabNavigator(
-      navigatorKey: navigatorKeys[AppTab.runs],
-      routes: {
-        '/': (context) => UserRunsPage(),
-        '/run-details': (context) => RunDetailsPage(),
-      },
-    ),
-    TabNavigator(
-      navigatorKey: navigatorKeys[AppTab.pastEvents],
-      routes: {
-        '/': (context) => PastEventsPage(),
-        '/event-results': (context) => EventResultsPage(),
-      },
-    ),
-    TabNavigator(
-      navigatorKey: navigatorKeys[AppTab.futureEvents],
-      routes: {
-        '/': (context) => FutureEventsPage(),
-      },
-    ),
-    TabNavigator(
-      navigatorKey: navigatorKeys[AppTab.offlineChart],
-      routes: {
-        '/': (context) => OfflineChartPage(),
-      }
-    )
-  ];
 
   int _selectedIndex = 0;
   TabNavigationHelper _tabHelper;
+  List<Widget> _widgetOptions;
 
   set selectedIndex(value) {
     if (value != _selectedIndex) {
@@ -114,6 +81,39 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     this._tabHelper = TabNavigationHelper(this);
+    this._widgetOptions = <Widget>[
+      TabNavigator(
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.profile],
+        routes: {
+          '/': (context) => ProfileDashboard(),
+        },
+      ),
+      TabNavigator(
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.runs],
+        routes: {
+          '/': (context) => UserRunsPage(),
+          '/run-details': (context) => RunDetailsPage(),
+        },
+      ),
+      TabNavigator(
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.pastEvents],
+        routes: {
+          '/': (context) => PastEventsPage(),
+          '/event-results': (context) => EventResultsPage(),
+        },
+      ),
+      TabNavigator(
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.futureEvents],
+        routes: {
+          '/': (context) => FutureEventsPage(),
+        },
+      ),
+      TabNavigator(
+          navigatorKey: this._tabHelper.navigatorKeys[AppTab.offlineChart],
+          routes: {
+            '/': (context) => OfflineChartPage(),
+          })
+    ];
   }
 
   void _onItemTapped(int index) {
@@ -153,7 +153,8 @@ class _HomeState extends State<Home> {
             ),
             BottomNavigationBarItem(
               icon: Icon(CustomIcons.award),
-              title: Text('Офлайн Класация') )
+              title: Text('Офлайн Класация'),
+            ),
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
