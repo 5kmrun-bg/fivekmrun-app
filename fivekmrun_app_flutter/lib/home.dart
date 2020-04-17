@@ -36,9 +36,9 @@ class TabNavigationHelper {
   }
 
   pushToTab(AppTab tab, String routeName, {Object arguments}) {
-    navigatorKeys[tab]
-        .currentState
-        .pushNamedAndRemoveUntil(routeName, (_) => true, arguments: arguments);
+    navigatorKeys[tab].currentState.pushNamedAndRemoveUntil(
+        routeName, ModalRoute.withName('/'),
+        arguments: arguments);
   }
 }
 
