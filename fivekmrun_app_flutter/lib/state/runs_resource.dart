@@ -40,8 +40,10 @@ class RunsResource extends ChangeNotifier {
 
     http.Response response =
         await http.get("${constants.userEndpointUrl}$userId");
-    if (response.statusCode != 200) {
+    if (response.statusCode != 200 || response.headers["content-type"] != "application/json;charset=utf-8;") {
       this.loading = false;
+      //TODO: Fix this when endpoint behaves properly
+      this.value = new List<Run>();
       return null;
     }
 
