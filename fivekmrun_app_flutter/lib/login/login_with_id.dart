@@ -1,4 +1,6 @@
 import 'package:fivekmrun_flutter/login/input_helpers.dart';
+import 'package:fivekmrun_flutter/state/new_runs_resource.dart';
+import 'package:fivekmrun_flutter/state/new_user_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +32,17 @@ class _LoginWithIdState extends State<LoginWithId> {
     Navigator.pushNamed(context, '/loginPreview');
   }
 
+  void onPressedTest() async {
+    int userId = int.parse(numberInputController.text);
+    Provider.of<NewUserResource>(context, listen: false).getById(userId);
+    Provider.of<NewRunsResource>(context, listen: false).getByUserId(userId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
           width: 150,
-          height: 150,
+          height: 250,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             // mainAxisSize: MainAxisSize.min,
@@ -49,7 +57,11 @@ class _LoginWithIdState extends State<LoginWithId> {
               SizedBox(
                   width: 150,
                   child:
-                      RaisedButton(onPressed: onPressed, child: Text("Напред")))
+                      RaisedButton(onPressed: onPressed, child: Text("Напред"))),
+              SizedBox(
+                  width: 150,
+                  child:
+                      RaisedButton(onPressed: onPressedTest, child: Text("Тест"))),
             ],
           ),
     );

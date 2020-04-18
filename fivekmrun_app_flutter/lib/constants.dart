@@ -4,3 +4,6 @@ const futureEventsUrl = baseUrl + "calendar.php";
 const runsUrl = baseUrl + "stat.php?id=";
 const resultsUrl = baseUrl + "results.php?event=";
 const userUrl = baseUrl + "usr.php?id=";
+
+const endpointBaseUrl = "https://5kmrun.bg/api/5kmrun/";
+const userEndpointUrl = endpointBaseUrl + "user/";

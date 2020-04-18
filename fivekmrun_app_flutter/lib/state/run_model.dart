@@ -30,4 +30,23 @@ class Run {
       this.notes,
       this.pace})
       : id = ("$date#$time#$location").hashCode;
+
+  Run.fromJson(dynamic json) :
+    id = json["r_id"],
+    date = DateTime.now(),// DateTime(json["e_date"]),
+    time = "",
+    timeInSeconds = json["1719"],
+    location = json["n_name"],
+    differenceFromBest = "",
+    differenceFromPrevious = "",
+    position = json["r_finish_pos"],
+    speed = "",
+    notes = "",
+    pace = "";
+  
+  static List<Run> listFromJson(Map<String, dynamic> json) {
+    List<dynamic> runs = json["runners"];
+    var result = runs.map((d) => Run.fromJson(d)).toList();
+    return result;
+  }
 }

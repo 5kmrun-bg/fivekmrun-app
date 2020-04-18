@@ -1,5 +1,6 @@
 import 'package:fivekmrun_flutter/login/input_helpers.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
+import 'package:fivekmrun_flutter/state/new_user_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +35,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
         int userId = Provider.of<AuthenticationResource>(context, listen: false).getUserId();
 
         setState(() => this.loginError = false);
-        Provider.of<UserResource>(context, listen: false).load(id: userId);
-        // TODO: should we load all here
-        Provider.of<RunsResource>(context, listen: false).load(id: userId);
+        Provider.of<NewUserResource>(context, listen: false).currentUserId = userId;
         Navigator.pushNamed(context, '/home');
       } else {
         setState(() => this.loginError = true);

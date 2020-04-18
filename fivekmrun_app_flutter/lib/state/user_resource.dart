@@ -33,7 +33,6 @@ class UserResource extends Resource<User> {
         id: currentlyLoadingId,
         avatarUrl: parseAvatarUrl(doc),
         name: parseName(doc),
-        suuntoPoints: parseUserPoints(doc),
         runsCount: parseRunsCount(doc),
         totalKmRan: parseTotalKmRan(doc),
         age: parseAge(doc));
