@@ -33,9 +33,9 @@ class Run {
 
   Run.fromJson(dynamic json) :
     id = json["r_id"],
-    date = DateTime.now(),// DateTime(json["e_date"]),
-    time = "",
-    timeInSeconds = json["1719"],
+    date = DateTime.fromMillisecondsSinceEpoch(json["e_date"] * 1000),
+    time = timeInSecondsToString(json["r_time"]),
+    timeInSeconds = json["r_time"],
     location = json["n_name"],
     differenceFromBest = "",
     differenceFromPrevious = "",
@@ -48,5 +48,9 @@ class Run {
     List<dynamic> runs = json["runners"];
     var result = runs.map((d) => Run.fromJson(d)).toList();
     return result;
+  }
+
+  static String timeInSecondsToString(int timeInSeconds) {
+    return (timeInSeconds ~/ 60).toString() + ":" + (timeInSeconds % 60).toString();
   }
 }

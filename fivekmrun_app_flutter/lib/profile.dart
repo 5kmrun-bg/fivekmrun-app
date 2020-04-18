@@ -104,41 +104,41 @@ class ProfileDashboard extends StatelessWidget {
             )
           ],
         ),
-        // if (runsResource.value != null && runsResource.value.length > 0)
-        // Row(
-        //   children: <Widget>[
-        //     Expanded(
-        //       child: RunCard(
-        //         title: "Последно участие",
-        //         run: runsResource.lastRun,
-        //       ),
-        //     ),
-        //     Expanded(
-        //       child: RunCard(
-        //         title: "Най-добро участие",
-        //         run: runsResource.bestRun,
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        // if (runsResource.value != null && runsResource.value.length > 0)
-        // Card(
-        //   child: Container(
-        //     height: 200,
-        //     child: RunsChart(runs: runsResource?.value),
-        //   ),
-        // ),
-        // if (runsResource.value != null && runsResource.value.length > 0)
-        // Card(
-        //   child: Container(
-        //       height: 200,
-        //       child: RunsByRouteChart.withRuns(runsResource?.value)),
-        // ),
-        // if (runsResource.value != null && runsResource.value.length > 0)
-        // Card(
-        //     child: Container(
-        //         height: 200,
-        //         child: BestTimesByRouteChart.withRuns(runsResource?.value)))
+        if (runsResource.value != null && runsResource.value.length > 0)
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: RunCard(
+                title: "Последно участие",
+                run: runsResource.lastRun,
+              ),
+            ),
+            Expanded(
+              child: RunCard(
+                title: "Най-добро участие",
+                run: runsResource.bestRun,
+              ),
+            ),
+          ],
+        ),
+        if (runsResource.value != null && runsResource.value.length > 0)
+        Card(
+          child: Container(
+            height: 200,
+            child: RunsChart(runs: runsResource?.value),
+          ),
+        ),
+        if (runsResource.value != null && runsResource.value.length > 0)
+        Card(
+          child: Container(
+              height: 200,
+              child: RunsByRouteChart.withRuns(runsResource?.value)),
+        ),
+        if (runsResource.value != null && runsResource.value.length > 0)
+        Card(
+            child: Container(
+                height: 200,
+                child: BestTimesByRouteChart.withRuns(runsResource?.value)))
       ],
     );
     });
