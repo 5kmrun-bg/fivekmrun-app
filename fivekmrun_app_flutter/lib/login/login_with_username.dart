@@ -35,6 +35,8 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
 
         setState(() => this.loginError = false);
         Provider.of<UserResource>(context, listen: false).currentUserId = userId;
+        Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
+        
         Navigator.pushNamed(context, '/home');
       } else {
         setState(() => this.loginError = true);

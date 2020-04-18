@@ -3,6 +3,7 @@ import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
+import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,7 @@ class ProfileDashboard extends StatelessWidget {
     return Consumer<UserResource>(builder: (context, userResource, child) {
     final user = userResource?.value;
     final textTheme = Theme.of(context).textTheme;
-    // final runsResource = Provider.of<NewRunsResource>(context);
+    final runsResource = Provider.of<RunsResource>(context);
 
     final goToSettings = () {
       Navigator.of(context, rootNavigator: true).pushNamed("/settings");
@@ -94,15 +95,15 @@ class ProfileDashboard extends StatelessWidget {
             ),
           ],
         ),
-        // if (runsResource.value == null || runsResource.value.length <= 0)
-        // Row(
-        //   children: <Widget>[
-        //     Expanded(
-        //       child:
-        //           Text("Все още не сте направили първото си официално бягане"),
-        //     )
-        //   ],
-        // ),
+        if (runsResource.value == null || runsResource.value.length <= 0)
+        Row(
+          children: <Widget>[
+            Expanded(
+              child:
+                  Text("Все още не сте направили първото си официално бягане"),
+            )
+          ],
+        ),
         // if (runsResource.value != null && runsResource.value.length > 0)
         // Row(
         //   children: <Widget>[
