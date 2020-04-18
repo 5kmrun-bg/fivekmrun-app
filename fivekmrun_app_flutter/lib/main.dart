@@ -10,6 +10,7 @@ import 'package:fivekmrun_flutter/state/events_resource.dart';
 import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
+import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthenticationResource()),
         ChangeNotifierProvider(create: (_) => OfflineChartResource()),
         ChangeNotifierProvider(create: (_) => LocalStorageResource()),
+        ChangeNotifierProvider(create: (_) => StravaResource()),
       ],
       child: MaterialApp(
         title: '5kmRun.bg',

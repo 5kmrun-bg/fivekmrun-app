@@ -1,6 +1,7 @@
 import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
+import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,15 +15,21 @@ class SettingsPage extends StatefulWidget {
   _SettingsPageState createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage>{
+class _SettingsPageState extends State<SettingsPage> {
   bool _pushNotificationsSubscribed = false;
 
   @override
   Widget build(BuildContext context) {
     final userResource = Provider.of<UserResource>(context);
+    final stravaResource = Provider.of<StravaResource>(context);
+    stravaResource.isAuthenticated().then((result) {
+      print("STRAVA status: " + result.toString());
+    });
+
     final authenticationResource = Provider.of<AuthenticationResource>(context);
     final localStorage = new LocalStorageResource();
-    localStorage.isSubscribedForGeneral.then((value) => this._pushNotificationsSubscribed = value);
+    localStorage.isSubscribedForGeneral
+        .then((value) => this._pushNotificationsSubscribed = value);
 
     final logout = () {
       userResource.reset();
@@ -33,8 +40,7 @@ class _SettingsPageState extends State<SettingsPage>{
     };
 
     final goToDonation = () {
-      Navigator.of(context, rootNavigator: true)
-          .pushNamed("/donation");
+      Navigator.of(context, rootNavigator: true).pushNamed("/donation");
     };
 
     return Scaffold(
@@ -47,23 +53,28 @@ class _SettingsPageState extends State<SettingsPage>{
           Row(
             children: <Widget>[
               Text("Известия"),
-              Switch(onChanged: (value) { 
-                print("SET PUSH NOTIFICATION: " + value.toString());
-                final pushNotificationManager = PushNotificationsManager.getInstance();
-                setState(() => localStorage.isSubscrubedForGeneral = value); 
-                this._pushNotificationsSubscribed = value;
-                if (value) {
-                  pushNotificationManager.subscribeTopic("general");
-                } else {
-                  pushNotificationManager.unsubscribeTopic("general");
-                }
-              }, value: this._pushNotificationsSubscribed),
+              Switch(
+                  onChanged: (value) {
+                    print("SET PUSH NOTIFICATION: " + value.toString());
+                    final pushNotificationManager =
+                        PushNotificationsManager.getInstance();
+                    setState(() => localStorage.isSubscrubedForGeneral = value);
+                    this._pushNotificationsSubscribed = value;
+                    if (value) {
+                      pushNotificationManager.subscribeTopic("general");
+                    } else {
+                      pushNotificationManager.unsubscribeTopic("general");
+                    }
+                  },
+                  value: this._pushNotificationsSubscribed),
             ],
           ),
           Row(
             children: <Widget>[
               Text("Strava интеграция"),
-              Switch(onChanged: (_) {}, value: true),
+              RaisedButton(
+                  child: Text("deAuth"),
+                  onPressed: () => {stravaResource.deAuthenticate()}),
             ],
           ),
           Row(children: <Widget>[

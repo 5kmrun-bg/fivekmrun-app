@@ -1,17 +1,21 @@
+import 'package:fivekmrun_flutter/common/constants.dart';
+import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_submission_model.dart';
+import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:strava_flutter/Models/activity.dart';
-import 'package:strava_flutter/strava.dart';
 import '../common/int_extensions.dart';
 import '../common/double_extensions.dart';
 
-// TODO: Wrap this as a resource
-Strava strava;
+final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
+
+typedef void ActivityPressedCB(DetailedActivity activity);
 
 class AddOfflineEntryPage extends StatefulWidget {
   AddOfflineEntryPage({Key key}) : super(key: key);
@@ -21,59 +25,47 @@ class AddOfflineEntryPage extends StatefulWidget {
 }
 
 class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
-  List<SummaryActivity> stravaActivities;
-
-  void initStrava() async {
-    strava = Strava(true, stravaSecret);
-
-    bool isAuthOk = await strava.oauth(stravaClientId,
-        'read_all,activity:read_all,profile:read_all', stravaSecret, 'auto');
-
-    if (isAuthOk) {}
-  }
-
-  void loadActivities() async {
-    if (strava == null) {
-      strava = Strava(true, stravaSecret);
-    }
-
-    bool isAuthOk = await strava.oauth(stravaClientId,
-        'read_all,activity:read_all,profile:read_all', stravaSecret, 'auto');
-    if (isAuthOk) {
-      var stravaRuns = await getActivities(strava);
-      this.setState(() => this.stravaActivities = stravaRuns);
-    }
-  }
-
-  Future<List<SummaryActivity>> getActivities(Strava stravaApi) async {
-    int before = DateTime.now()
-        .difference(DateTime.fromMillisecondsSinceEpoch(0))
-        .inSeconds;
-    int after = DateTime.now()
-        .subtract(new Duration(days: 7))
-        .difference(DateTime.fromMillisecondsSinceEpoch(0))
-        .inSeconds;
-
-    var activities = await strava.getLoggedInAthleteActivities(before, after);
-
-    var runActivites =
-        activities.where((a) => a.type == ActivityType.Run).toList();
-
-    return runActivites;
-  }
+  List<DetailedActivity> activities;
+  DetailedActivity selectedActivity;
+  bool isConnectedToStrava = false;
+  bool isLoading = false;
 
   @override
-  void dispose() {
-    if (strava != null) {
-      strava.dispose();
-      strava = null;
-    }
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
 
-    super.dispose();
+    final strava = Provider.of<StravaResource>(this.context);
+    final isConnectedToStrava = await strava.isAuthenticated();
+
+    setState(() {
+      this.isLoading = false;
+      this.isConnectedToStrava = isConnectedToStrava;
+    });
+
+    if (isConnectedToStrava) {
+      loadActivities(strava);
+    }
   }
 
-  submitOfflineEntry() {
-    SummaryActivity stravaActivity = this.stravaActivities[0];
+  void loadActivities(StravaResource strava) {
+    setState(() {
+      this.isLoading = true;
+    });
+
+    strava.getThisWeekActivities().then((loadedActivites) {
+      this.setState(() {
+        this.activities = loadedActivites;
+        this.isLoading = false;
+      });
+    });
+  }
+
+  void submitOfflineEntry() async {
+    if (this.selectedActivity == null) {
+      return;
+    }
+
+    DetailedActivity stravaActivity = this.selectedActivity;
     UserResource userResource =
         Provider.of<UserResource>(context, listen: false);
     AuthenticationResource authResource =
@@ -90,7 +82,21 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       startLocation: [0.1, 0.2], //stravaActivity.startLatlng,
     );
 
-    offlineChartResource.submitEntry(model, authResource.getToken());
+    final result =
+        await offlineChartResource.submitEntry(model, authResource.getToken());
+  }
+
+  void toggleActivity(DetailedActivity activity) {
+    this.setState(() => {
+          this.selectedActivity =
+              this.selectedActivity == activity ? null : activity
+        });
+  }
+
+  void triggerStravaAuth() {
+    final stravaResource = Provider.of<StravaResource>(this.context);
+    stravaResource.authenticate().then(
+        (success) => this.setState(() => this.isConnectedToStrava = success));
   }
 
   @override
@@ -100,100 +106,106 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         title: Text('Участвай в класацията'),
       ),
       body: Center(
-        child: Column(
-          children: <Widget>[
-            RaisedButton(
-              child: Image(
-                image:
-                    AssetImage('assets/btn_strava_connectwith_orange@2x.png'),
-              ),
-              onPressed: loadActivities,
-            ),
-            RaisedButton(
-                onPressed: submitOfflineEntry,
-                child: Text("Submit offline entry")),
-            Expanded(
-              child: StravaActivityList(activities: this.stravaActivities),
-            )
-          ],
-        ),
-      ),
+          child: this.isLoading
+              ? CircularProgressIndicator()
+              : this.isConnectedToStrava
+                  ? this._buildList(context)
+                  : this._buildStravaAuth(context)),
     );
+  }
+
+  Widget _buildStravaAuth(BuildContext context) {
+    return RaisedButton(
+      child: Image(
+        image: AssetImage('assets/btn_strava_connectwith_orange@2x.png'),
+      ),
+      onPressed: this.triggerStravaAuth,
+    );
+  }
+
+  Widget _buildList(BuildContext context) {
+    return Column(children: <Widget>[
+      Expanded(
+        child: StravaActivityList(
+            activities: this.activities,
+            selectedActivity: this.selectedActivity,
+            onActivityTap: toggleActivity),
+      ),
+      RaisedButton(
+          onPressed: this.selectedActivity != null ? submitOfflineEntry : null,
+          child: Text("Submit offline entry")),
+    ]);
   }
 }
 
 class StravaActivityList extends StatelessWidget {
-  const StravaActivityList({
-    Key key,
-    @required this.activities,
-  }) : super(key: key);
+  final List<DetailedActivity> activities;
+  final DetailedActivity selectedActivity;
+  final ActivityPressedCB onActivityTap;
 
-  final List<SummaryActivity> activities;
+  const StravaActivityList(
+      {Key key,
+      @required this.activities,
+      @required this.selectedActivity,
+      @required this.onActivityTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (activities == null) {
-      return Text('Зареждане ...');
+      return CircularProgressIndicator();
+    } else if (activities.length == 0) {
+      return Text("няма подходяши бягания");
+    } else {
+      return ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: activities.length,
+        itemBuilder: _buildItemsForListView,
+      );
     }
-
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      itemCount: activities.length,
-      itemBuilder: _buildItemsForListView,
-    );
   }
 
-  ListTile _buildItemsForListView(BuildContext context, int index) {
-    return ListTile(
-      title: Text(activities[index].name),
-      subtitle: StravaResultTile(activity: activities[index]),
-    );
-  }
-}
-
-class StravaResultTile extends StatelessWidget {
-  const StravaResultTile({Key key, @required this.activity}) : super(key: key);
-
-  final SummaryActivity activity;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Row(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Text('Дистанция'),
-              Text(this.activity.distance.parseMetersToKilometers())
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              Text('Време'),
-              Text(this.activity.elapsedTime.parseSecondsToTimestamp())
-            ],
-          ),
-        ],
+  Widget _buildItemsForListView(BuildContext context, int index) {
+    final activity = activities[index];
+    final date = DateTime.tryParse(activity.startDate);
+    final dateString = date != null ? dateFromat.format(date) : "n/a";
+    return Card(
+      color: this.selectedActivity == activity
+          ? Colors.blueGrey // TODO: Color?
+          : Colors.transparent,
+      child: ListTile(
+        onTap: () => this.onActivityTap(activity),
+        selected: this.selectedActivity == activity,
+        title: Row(
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  ListTileRow(text: activity.name, icon: Icons.info),
+                  ListTileRow(text: dateString, icon: Icons.calendar_today),
+                  ListTileRow(
+                      text: activity.distance.parseMetersToKilometers(),
+                      icon: Icons.map),
+                  ListTileRow(
+                      text: activity.elapsedTime.parseSecondsToTimestamp(),
+                      icon: Icons.timer),
+                ],
+              ),
+            ),
+            Container(
+              width: 140,
+              child: Image.network(
+                "https://maps.googleapis.com/maps/api/staticmap?size=140x140&zoom=14&path=weight:3%7Ccolor:blue%7Cenc:" +
+                    activity.map.polyline +
+                    "&key=" +
+                    googleMapsKey,
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+          ],
+        ),
       ),
-      Row(
-        children: <Widget>[
-          FutureBuilder<DetailedActivity>(
-              future: strava.getActivityById(this.activity.id.toString()),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Image.network(
-                      "https://maps.googleapis.com/maps/api/staticmap?size=200x200&zoom=15&path=weight:3%7Ccolor:blue%7Cenc:" +
-                          snapshot.data.map.polyline +
-                          "&key=" +
-                          googleMapsKey);
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                } else {
-                  return CircularProgressIndicator();
-                }
-              })
-        ],
-      )
-    ]);
+    );
   }
 }
