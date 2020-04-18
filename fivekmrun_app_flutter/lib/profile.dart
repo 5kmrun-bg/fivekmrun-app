@@ -3,8 +3,6 @@ import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
-import 'package:fivekmrun_flutter/state/new_runs_resource.dart';
-import 'package:fivekmrun_flutter/state/new_user_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

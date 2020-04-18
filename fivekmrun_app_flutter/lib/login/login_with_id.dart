@@ -1,6 +1,4 @@
 import 'package:fivekmrun_flutter/login/input_helpers.dart';
-import 'package:fivekmrun_flutter/state/new_runs_resource.dart';
-import 'package:fivekmrun_flutter/state/new_user_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -26,16 +24,16 @@ class _LoginWithIdState extends State<LoginWithId> {
 
   void onPressed() async {
     int userId = int.parse(numberInputController.text);
-    Provider.of<UserResource>(context, listen: false).load(id: userId);
+    //Provider.of<UserResource>(context, listen: false).load(id: userId);
     // TODO: should we load all here
-    Provider.of<RunsResource>(context, listen: false).load(id: userId);
+    //Provider.of<RunsResource>(context, listen: false).load(id: userId);
     Navigator.pushNamed(context, '/loginPreview');
   }
 
   void onPressedTest() async {
     int userId = int.parse(numberInputController.text);
-    Provider.of<NewUserResource>(context, listen: false).getById(userId);
-    Provider.of<NewRunsResource>(context, listen: false).getByUserId(userId);
+    Provider.of<UserResource>(context, listen: false).getById(userId);
+    Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
   }
 
   @override
