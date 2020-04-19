@@ -40,11 +40,11 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     setState(() {
       this.isLoading = false;
       this.isConnectedToStrava = isConnectedToStrava;
-    });
 
-    if (isConnectedToStrava) {
-      loadActivities(strava);
-    }
+      if (isConnectedToStrava) {
+        loadActivities(strava);
+      }
+    });
   }
 
   void loadActivities(StravaResource strava) {
@@ -94,9 +94,13 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   }
 
   void triggerStravaAuth() {
-    final stravaResource = Provider.of<StravaResource>(this.context);
-    stravaResource.authenticate().then(
-        (success) => this.setState(() => this.isConnectedToStrava = success));
+    final strava = Provider.of<StravaResource>(this.context);
+    strava.authenticate().then(
+          (success) => this.setState(() {
+            this.isConnectedToStrava = success;
+            this.loadActivities(strava);
+          }),
+        );
   }
 
   @override
@@ -153,7 +157,7 @@ class StravaActivityList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (activities == null) {
-      return CircularProgressIndicator();
+      return Center(child: CircularProgressIndicator());
     } else if (activities.length == 0) {
       return Text("няма подходяши бягания");
     } else {

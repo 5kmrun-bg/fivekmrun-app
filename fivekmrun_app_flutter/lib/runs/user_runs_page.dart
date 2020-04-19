@@ -23,7 +23,6 @@ class UserRunsPage extends StatelessWidget {
               case ConnectionState.waiting:
               case ConnectionState.active:
                 return Center(child: CircularProgressIndicator());
-                break;
               case ConnectionState.done:
                 if (snapshot.hasError)
                   return Text(

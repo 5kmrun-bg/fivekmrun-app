@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'common/strava_connect.dart';
 import 'state/user_resource.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -43,17 +44,21 @@ class _SettingsPageState extends State<SettingsPage> {
       Navigator.of(context, rootNavigator: true).pushNamed("/donation");
     };
 
+    final dividerColor = Theme.of(context).accentColor;
+
     return Scaffold(
         appBar: AppBar(
           leading: BackButton(color: Colors.white),
           title: Text("Настройки"),
           centerTitle: true,
         ),
-        body: Column(children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text("Известия"),
-              Switch(
+        body: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text("Известия"),
+                Switch(
                   onChanged: (value) {
                     print("SET PUSH NOTIFICATION: " + value.toString());
                     final pushNotificationManager =
@@ -66,31 +71,30 @@ class _SettingsPageState extends State<SettingsPage> {
                       pushNotificationManager.unsubscribeTopic("general");
                     }
                   },
-                  value: this._pushNotificationsSubscribed),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Text("Strava интеграция"),
-              RaisedButton(
-                  child: Text("deAuth"),
-                  onPressed: () => {stravaResource.deAuthenticate()}),
-            ],
-          ),
-          Row(children: <Widget>[
-            Text("Дарения"),
-            IconButton(
-              icon: const Icon(Icons.favorite),
-              onPressed: goToDonation,
+                  value: this._pushNotificationsSubscribed,
+                )
+              ],
             ),
+            Divider(color: dividerColor),
+            Text("Strava интеграция"),
+            StravaConnect(),
+            Divider(color: dividerColor),
+            Row(children: <Widget>[
+              Text("Дарения"),
+              IconButton(
+                icon: const Icon(Icons.favorite),
+                onPressed: goToDonation,
+              ),
+            ]),
+            Divider(color: dividerColor),
+            Row(children: <Widget>[
+              Text("Изход"),
+              IconButton(
+                icon: const Icon(Icons.exit_to_app),
+                onPressed: logout,
+              ),
+            ])
           ]),
-          Row(children: <Widget>[
-            Text("Изход"),
-            IconButton(
-              icon: const Icon(Icons.exit_to_app),
-              onPressed: logout,
-            ),
-          ])
-        ]));
+        ));
   }
 }
