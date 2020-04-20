@@ -80,10 +80,12 @@ class PastEventsList extends StatelessWidget {
                 ),
                 Container(
                   width: 120,
-                  child: Image.network(
-                    events[i].imageUrl,
-                    fit: BoxFit.fitWidth,
-                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: Image.network(
+                      events[i].imageUrl,
+                      fit: BoxFit.fitWidth,
+                    ),),
                 ),
               ],
             ),

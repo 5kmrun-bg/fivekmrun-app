@@ -74,11 +74,18 @@ class FutureEventsList extends StatelessWidget {
                 ),
                 Container(
                   width: 120,
+                  decoration: new BoxDecoration(
+                      borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(10.0),
+                        topRight: const Radius.circular(10.0),
+                      )),
+                  child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5.0),
                   child: Image.network(
-                    event.imageUrl,
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
+                      event.imageUrl,
+                      fit: BoxFit.fitWidth,
+                    ),
+                ),),
               ],
             ),
           ),
