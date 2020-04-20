@@ -34,6 +34,10 @@ class UserResource extends ChangeNotifier {
   }
 
   Future<User> getById(int userId, [bool force = false]) async {
+    if (userId == 0) {
+      return null;
+    }
+
     if (!force && userId != 0 && userId == currentUserId) {
       return value;
     }
