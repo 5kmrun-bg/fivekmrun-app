@@ -17,7 +17,7 @@ class _StravaConnectState extends State<StravaConnect> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final strava = Provider.of<StravaResource>(this.context);
+    final strava = Provider.of<StravaResource>(this.context, listen: false);
     final isConnectedToStrava = await strava.isAuthenticated();
 
     setState(() {
@@ -28,7 +28,7 @@ class _StravaConnectState extends State<StravaConnect> {
 
   @override
   Widget build(BuildContext context) {
-    final strava = Provider.of<StravaResource>(this.context);
+    final strava = Provider.of<StravaResource>(this.context, listen: false);
 
     void connect() async {
       if (this.isLoading) {

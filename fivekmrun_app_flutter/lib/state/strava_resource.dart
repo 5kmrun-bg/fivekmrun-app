@@ -11,7 +11,7 @@ class StravaResource extends ChangeNotifier {
   // Strava strava = Strava(true, stravaSecret);
 
   Future<T> _withStrava<T>(StravaCallback<T> fn) async {
-    Strava strava = Strava(true, stravaSecret);
+    Strava strava = Strava(false, stravaSecret);
     try {
       return await fn(strava);
     } finally {

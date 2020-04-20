@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 
 class AuthenticationResource extends ChangeNotifier {
-
   String _token;
   String _username;
   String _password;
@@ -33,6 +32,10 @@ class AuthenticationResource extends ChangeNotifier {
 
   int getUserId() {
     return this._userId;
+  }
+
+  bool isLoggedIn() {
+    return this._token != null && this._userId != null;
   }
 
   Future<void> logout() {

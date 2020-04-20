@@ -36,6 +36,7 @@ class _LoginWithIdState extends State<LoginWithId> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TextField(
+          textAlign: TextAlign.center,
           controller: numberInputController,
           keyboardType: TextInputType.number,
           decoration: InputHelpers.decoration("личен номер"),
