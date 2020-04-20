@@ -14,6 +14,7 @@ class User {
       Map run = runs[0];
       id = run["r_uid"];
       name = run["u_name"] + " " + run["u_surname"];
+      // TODO: This number doesn't include volunteering currently
       runsCount = run["u_runs"];
       avatarUrl = run["pic"];
       // Total km is not runsCount * 5, because runsCount contains alo volunteering
