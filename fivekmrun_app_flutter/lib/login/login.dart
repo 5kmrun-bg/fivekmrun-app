@@ -20,12 +20,14 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: Center(
         child: Container(
-          width: 200,
+          width: 220,
+          height: 400,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               this._buildLogo(),
               SizedBox(height: 10),
+              Spacer(),
               this.loginWithId ? LoginWithId() : LoginWithUsername(),
               SizedBox(height: 4),
               SizedBox(
