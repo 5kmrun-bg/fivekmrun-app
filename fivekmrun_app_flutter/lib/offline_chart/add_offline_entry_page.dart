@@ -99,7 +99,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   }
 
   void triggerStravaAuth() {
-    final strava = Provider.of<StravaResource>(this.context);
+    final strava = Provider.of<StravaResource>(this.context, listen: false);
     strava.authenticate().then(
           (success) => this.setState(() {
             this.isConnectedToStrava = success;

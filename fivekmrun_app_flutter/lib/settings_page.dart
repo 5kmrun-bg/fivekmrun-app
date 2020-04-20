@@ -21,13 +21,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userResource = Provider.of<UserResource>(context);
-    final stravaResource = Provider.of<StravaResource>(context);
-    stravaResource.isAuthenticated().then((result) {
-      print("STRAVA status: " + result.toString());
-    });
-
-    final authenticationResource = Provider.of<AuthenticationResource>(context);
+    final userResource = Provider.of<UserResource>(context, listen: false);
+    final authenticationResource =
+        Provider.of<AuthenticationResource>(context, listen: false);
     final localStorage = new LocalStorageResource();
     localStorage.isSubscribedForGeneral
         .then((value) => this._pushNotificationsSubscribed = value);

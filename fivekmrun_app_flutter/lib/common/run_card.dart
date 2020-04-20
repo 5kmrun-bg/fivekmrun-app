@@ -18,7 +18,8 @@ class RunCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        final tabHelper = Provider.of<TabNavigationHelper>(context);
+        final tabHelper =
+            Provider.of<TabNavigationHelper>(context, listen: false);
         tabHelper.selectTab(AppTab.runs);
         tabHelper.pushToTab(AppTab.runs, "/run-details", arguments: run);
       },
@@ -63,12 +64,18 @@ class RunCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(run.displayDate, style: valueStyle, overflow: TextOverflow.ellipsis),
+                            Text(run.displayDate,
+                                style: valueStyle,
+                                overflow: TextOverflow.ellipsis),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: Text(run.pace, style: valueStyle, overflow: TextOverflow.ellipsis),
+                              child: Text(run.pace,
+                                  style: valueStyle,
+                                  overflow: TextOverflow.ellipsis),
                             ),
-                            Text(run.time, style: valueStyle, overflow: TextOverflow.ellipsis),
+                            Text(run.time,
+                                style: valueStyle,
+                                overflow: TextOverflow.ellipsis),
                           ],
                         ),
                       ),
