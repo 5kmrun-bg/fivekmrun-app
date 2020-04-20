@@ -9,16 +9,15 @@ class RunsResource extends ChangeNotifier {
   Run _lastRun;
   
   Run get bestRun {
-    if (_bestRun == null && value != null && value.length > 0) {
+    if (value != null && value.length > 0) {
       _bestRun = value?.reduce((a, b) => a.timeInSeconds < b.timeInSeconds ? a : b);
     }
     return _bestRun;
   }
 
   Run get lastRun {
-    if (_lastRun == null) {
-      _lastRun = value?.first;
-    }
+    _lastRun = value?.first;
+    
     return _lastRun;
   }
 
