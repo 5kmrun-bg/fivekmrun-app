@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fivekmrun_flutter/common/constants.dart';
+import 'package:fivekmrun_flutter/common/pinkish_red_palette.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -101,7 +102,7 @@ class _RunsChartState extends State<RunsChart> {
     return [
       new charts.Series<Run, DateTime>(
         id: 'Runs',
-        colorFn: (_, i) => charts.MaterialPalette.deepOrange.makeShades(runs.length)[i],
+        colorFn: (Run run, i) => PinkishRedColor().makeShades(runs.length)[i],
         domainFn: (Run run, _) => run.date,
         measureFn: (Run run, _) => run.timeInSeconds,
         labelAccessorFn: (Run run, _) =>

@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/common/pinkish_red_palette.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -65,7 +66,7 @@ class RunsByRouteChart extends StatelessWidget {
     return [
       new charts.Series<RunsByRouteEntry, String>(
         id: 'RunsByRoute',
-        colorFn: (_, i) => charts.MaterialPalette.deepOrange.makeShades(1000)[i*100],
+        colorFn: (_, i) => PinkishRedColor().makeShades(1000)[i*100],
         domainFn: (RunsByRouteEntry run, _) => run.location,
         measureFn: (RunsByRouteEntry run, _) => run.timeInSeconds,
         data: series,
