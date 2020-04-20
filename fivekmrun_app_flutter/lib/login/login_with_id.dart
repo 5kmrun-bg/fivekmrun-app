@@ -28,12 +28,6 @@ class _LoginWithIdState extends State<LoginWithId> {
     Navigator.pushNamed(context, '/loginPreview');
   }
 
-  void onPressedTest() async {
-    int userId = int.parse(numberInputController.text);
-    Provider.of<UserResource>(context, listen: false).getById(userId);
-    Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
-  }
-
   @override
   Widget build(BuildContext context) {
     final textStlyle = Theme.of(context).textTheme.subtitle;
