@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:fivekmrun_flutter/common/pinkish_red_palette.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -52,7 +53,7 @@ class BestTimesByRouteChart extends StatelessWidget {
       new charts.Series<BestTimeByRouteEntry, String>(
         id: 'BestTimeByRoute',
         //TODO: Add chart color to Theme
-        colorFn: (_, __) => charts.MaterialPalette.deepOrange.shadeDefault,
+        colorFn: (_, __) => PinkishRedColor().darker,
         domainFn: (BestTimeByRouteEntry run, _) => run.location,
         measureFn: (BestTimeByRouteEntry run, _) => run.timeInSeconds,
         labelAccessorFn: (BestTimeByRouteEntry run, _) =>

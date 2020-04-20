@@ -1,6 +1,7 @@
 import 'package:fivekmrun_flutter/barcode_page.dart';
 import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/home.dart';
+import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/login/login.dart';
 import 'package:fivekmrun_flutter/login/loginPreview.dart';
 import 'package:fivekmrun_flutter/push_notifications_manager.dart';
@@ -10,11 +11,14 @@ import 'package:fivekmrun_flutter/state/events_resource.dart';
 import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
+import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 final userRes = UserResource();
+
+final appAccentColor = Color.fromRGBO(252, 24, 81, 1.0);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,14 +51,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthenticationResource()),
         ChangeNotifierProvider(create: (_) => OfflineChartResource()),
         ChangeNotifierProvider(create: (_) => LocalStorageResource()),
+        ChangeNotifierProvider(create: (_) => StravaResource()),
       ],
       child: MaterialApp(
         title: '5kmRun.bg',
         theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
+          primarySwatch: getColor(appAccentColor),
           brightness: Brightness.dark,
           backgroundColor: Colors.black,
-          accentColor: Colors.deepOrangeAccent,
+          accentColor: appAccentColor,
           accentIconTheme: IconThemeData(color: Colors.black),
           dividerColor: Colors.black12,
           textTheme: TextTheme(
@@ -62,7 +67,7 @@ class MyApp extends StatelessWidget {
             body1: TextStyle(fontSize: 12),
             body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
           ),
-          errorColor: Colors.deepOrangeAccent
+          errorColor: Colors.red,
         ),
         initialRoute: _initialRoute,
         routes: {

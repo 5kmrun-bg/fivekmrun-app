@@ -1,9 +1,8 @@
-import 'package:fivekmrun_flutter/login/input_helpers.dart';
+import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 
 class LoginWithId extends StatefulWidget {
   LoginWithId({Key key}) : super(key: key);
@@ -38,30 +37,41 @@ class _LoginWithIdState extends State<LoginWithId> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-          width: 150,
-          height: 250,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text("Личен номер", style: Theme.of(context).textTheme.title),
-              TextField(
-                textAlign: TextAlign.center,
-                controller: numberInputController,
-                keyboardType: TextInputType.number,
-                decoration: InputHelpers.decoration(),
+    final textStlyle = Theme.of(context).textTheme.subtitle;
+    final accentColor = Theme.of(context).accentColor;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        TextField(
+          textAlign: TextAlign.center,
+          controller: numberInputController,
+          keyboardType: TextInputType.number,
+          decoration: InputHelpers.decoration("личен номер"),
+        ),
+        SizedBox(height: 16),
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: textStlyle,
+            children: <TextSpan>[
+              TextSpan(text: 'Участието в '),
+              TextSpan(
+                text: 'Selfie',
+                style: textStlyle.copyWith(
+                  color: accentColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(
-                  width: 150,
-                  child:
-                      RaisedButton(onPressed: onPressed, child: Text("Напред"))),
-              SizedBox(
-                  width: 150,
-                  child:
-                      RaisedButton(onPressed: onPressedTest, child: Text("Тест"))),
+              TextSpan(text: ' класацията е достъпно само с парола!'),
             ],
           ),
+        ),
+        SizedBox(height: 18),
+        SizedBox(
+          width: double.infinity,
+          child: RaisedButton(onPressed: onPressed, child: Text("Напред")),
+        ),
+      ],
     );
   }
 }

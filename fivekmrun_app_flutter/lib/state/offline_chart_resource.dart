@@ -5,7 +5,8 @@ import 'package:fivekmrun_flutter/state/offline_chart_submission_model.dart';
 import 'package:flutter/widgets.dart';
 
 class OfflineChartResource extends ChangeNotifier {
-  Future<void> submitEntry(OfflineChartSubmissionModel model, String authToken) async {
+  Future<String> submitEntry(
+      OfflineChartSubmissionModel model, String authToken) async {
     String body = "";
 
     body += "user_id=" + model.userId;
@@ -14,7 +15,10 @@ class OfflineChartResource extends ChangeNotifier {
     body += "&start_date=" + model.startDate.toString();
     body += "&tkn=" + authToken;
     body += "&map=" + model.mapPath;
-    body += "&gps=" + model.startLocation[0].toString() + "," + model.startLocation[1].toString();
+    body += "&gps=" +
+        model.startLocation[0].toString() +
+        "," +
+        model.startLocation[1].toString();
 
     HttpClient httpClient = new HttpClient();
     HttpClientRequest request =
@@ -26,5 +30,6 @@ class OfflineChartResource extends ChangeNotifier {
     String reply = await response.transform(utf8.decoder).join();
     print(reply);
     httpClient.close();
+    return reply;
   }
 }

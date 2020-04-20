@@ -1,4 +1,4 @@
-import 'package:fivekmrun_flutter/login/input_helpers.dart';
+import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
@@ -31,7 +31,8 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
         .authenticate(username, password)
         .then((isAuthenticated) {
       if (isAuthenticated) {
-        int userId = Provider.of<AuthenticationResource>(context, listen: false).getUserId();
+        int userId = Provider.of<AuthenticationResource>(context, listen: false)
+            .getUserId();
 
         setState(() => this.loginError = false);
         Provider.of<UserResource>(context, listen: false).currentUserId = userId;
@@ -46,38 +47,42 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 250,
-        width: 200,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              "Потребителско име",
-              style: Theme.of(context).textTheme.title,
-            ),
-            if (this.loginError) 
-              Text("Грешно потребителско име или парола", style: TextStyle(color: Theme.of(context).errorColor))
-            ,
-            TextField(
-              autocorrect: false,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        if (this.loginError)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
+            child: Text(
+              "Грешно потребителско име или парола",
               textAlign: TextAlign.center,
-              controller: this.usernameInputController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputHelpers.decoration(),
+              style: TextStyle(
+                color: Theme.of(context).errorColor,
+              ),
             ),
-            TextField(
-              autocorrect: false,
-              textAlign: TextAlign.center,
-              controller: this.passwordInputController,
-              obscureText: true,
-              decoration: InputHelpers.decoration(),
-            ),
-            SizedBox(
-                width: 150,
-                child:
-                    RaisedButton(onPressed: onPressed, child: Text("Напред")))
-          ],
-        ));
+          ),
+        TextField(
+          autocorrect: false,
+          controller: this.usernameInputController,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputHelpers.decoration("email"),
+        ),
+        SizedBox(height: 10),
+        TextField(
+          controller: this.passwordInputController,
+          autocorrect: false,
+          obscureText: true,
+          decoration: InputHelpers.decoration("парола"),
+        ),
+        SizedBox(height: 10),
+        SizedBox(
+          width: double.infinity,
+          child: RaisedButton(
+            onPressed: onPressed,
+            child: Text("Напред"),
+          ),
+        )
+      ],
+    );
   }
 }
