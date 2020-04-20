@@ -23,9 +23,8 @@ class _LoginWithIdState extends State<LoginWithId> {
 
   void onPressed() async {
     int userId = int.parse(numberInputController.text);
-    //Provider.of<UserResource>(context, listen: false).load(id: userId);
-    // TODO: should we load all here
-    //Provider.of<RunsResource>(context, listen: false).load(id: userId);
+    Provider.of<UserResource>(context, listen: false).currentUserId = userId;
+    Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
     Navigator.pushNamed(context, '/loginPreview');
   }
 

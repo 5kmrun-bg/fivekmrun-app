@@ -19,8 +19,10 @@ class Avatar extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: Theme.of(context).accentColor),
                 padding: EdgeInsets.all(2),
-                child: CircleAvatar(
-                    radius: SIZE / 2, backgroundImage: NetworkImage(url)),
+                child: 
+                  (url == null ||url != "") ?
+                    CircleAvatar(
+                        radius: SIZE / 2, backgroundImage: NetworkImage(url)) : Container(),
               )
             : CircularProgressIndicator(),
       ),
