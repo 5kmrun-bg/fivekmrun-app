@@ -5,7 +5,7 @@ import 'package:fivekmrun_flutter/state/offline_chart_submission_model.dart';
 import 'package:flutter/widgets.dart';
 
 class OfflineChartResource extends ChangeNotifier {
-  Future<String> submitEntry(
+  Future<Map<String, dynamic>> submitEntry(
       OfflineChartSubmissionModel model, String authToken) async {
     String body = "";
 
@@ -30,6 +30,6 @@ class OfflineChartResource extends ChangeNotifier {
     String reply = await response.transform(utf8.decoder).join();
     print(reply);
     httpClient.close();
-    return reply;
+    return json.decode(reply);
   }
 }

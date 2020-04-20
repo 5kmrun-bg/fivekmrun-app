@@ -85,7 +85,10 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     final result =
         await offlineChartResource.submitEntry(model, authResource.getToken());
 
-    print("SUBMIT RESPONSE: " + result);
+    //TODO: error handling
+    if (result["answer"]) {
+      Navigator.of(context).pushNamed("/");
+    }
   }
 
   void toggleActivity(DetailedActivity activity) {
