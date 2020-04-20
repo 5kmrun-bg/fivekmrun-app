@@ -1,4 +1,4 @@
-import 'package:fivekmrun_flutter/login/input_helpers.dart';
+import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';

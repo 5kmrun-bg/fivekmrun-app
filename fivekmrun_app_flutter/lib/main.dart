@@ -1,6 +1,7 @@
 import 'package:fivekmrun_flutter/barcode_page.dart';
 import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/home.dart';
+import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/login/login.dart';
 import 'package:fivekmrun_flutter/login/loginPreview.dart';
 import 'package:fivekmrun_flutter/push_notifications_manager.dart';
@@ -16,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 final userRes = UserResource();
+
+final appAccentColor = Color.fromRGBO(252, 24, 81, 1.0);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,10 +56,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: '5kmRun.bg',
         theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
+          primarySwatch: getColor(appAccentColor),
           brightness: Brightness.dark,
           backgroundColor: Colors.black,
-          accentColor: Colors.deepOrangeAccent,
+          accentColor: appAccentColor,
           accentIconTheme: IconThemeData(color: Colors.black),
           dividerColor: Colors.black12,
           textTheme: TextTheme(
@@ -64,7 +67,7 @@ class MyApp extends StatelessWidget {
             body1: TextStyle(fontSize: 12),
             body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
           ),
-          errorColor: Colors.deepOrangeAccent
+          errorColor: Colors.red,
         ),
         initialRoute: _initialRoute,
         routes: {

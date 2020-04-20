@@ -1,4 +1,4 @@
-import 'package:fivekmrun_flutter/login/input_helpers.dart';
+import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
@@ -53,10 +53,13 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
         if (this.loginError)
           Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
-            child: Text("Грешно потребителско име или парола",
-                style: TextStyle(
-                  color: Theme.of(context).errorColor,
-                )),
+            child: Text(
+              "Грешно потребителско име или парола",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).errorColor,
+              ),
+            ),
           ),
         TextField(
           autocorrect: false,
