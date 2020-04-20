@@ -10,32 +10,11 @@ class UserRunsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId =
-        Provider.of<UserResource>(context, listen: false).currentUserId;
     return Scaffold(
-      appBar: AppBar(title: Text("Твоите Бягания")),
-      body: Consumer<RunsResource>(builder: (context, runsResource, child) {
-        return FutureBuilder(
-          future: runsResource.load(id: userId),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-              case ConnectionState.active:
-                return Center(child: CircularProgressIndicator());
-              case ConnectionState.done:
-                if (snapshot.hasError)
-                  return Text(
-                    'Error:\n\n${snapshot.error}',
-                    textAlign: TextAlign.center,
-                  );
-                else
-                  return UserRunsList(runs: snapshot.data);
-            }
-          },
-        );
-      }),
-    );
+        appBar: AppBar(title: Text("Твоите Бягания")),
+        body: Consumer<RunsResource>(builder: (context, runsResource, child) {
+          return UserRunsList(runs: runsResource.value);
+        }));
   }
 }
 
@@ -49,6 +28,10 @@ class UserRunsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (runs == null || runs.length <= 0) {
+      return Text("Все още не сте направили първото си официално бягане");
+    }
+
     runs.sort((r1, r2) => r2.date.compareTo(r1.date));
 
     return ListView.builder(

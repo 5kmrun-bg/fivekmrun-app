@@ -26,7 +26,7 @@ void main() async {
   String initialRoute = "/";
   if (userId != 0 && userId != null) {
     print("userID ${userId.toString()}");
-    userRes.load(id: userId);
+    userRes.currentUserId = userId;
     initialRoute = "/home";
   }
 

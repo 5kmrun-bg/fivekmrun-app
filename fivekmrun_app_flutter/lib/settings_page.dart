@@ -33,7 +33,8 @@ class _SettingsPageState extends State<SettingsPage> {
         .then((value) => this._pushNotificationsSubscribed = value);
 
     final logout = () {
-      userResource.reset();
+      userResource.currentUserId = null;
+      userResource.value = null;
       authenticationResource.logout();
 
       Navigator.of(context, rootNavigator: true)
