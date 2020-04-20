@@ -51,6 +51,6 @@ class Run {
   }
 
   static String timeInSecondsToString(int timeInSeconds) {
-    return (timeInSeconds ~/ 60).toString() + ":" + (timeInSeconds % 60).toString();
+    return (timeInSeconds ~/ 60).toString().padLeft(2, '0') + ":" + (timeInSeconds % 60).toString().padLeft(2, '0');
   }
 }
