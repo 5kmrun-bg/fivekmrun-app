@@ -78,12 +78,14 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       elapsedTime: stravaActivity.elapsedTime,
       distance: stravaActivity.distance,
       startDate: DateTime.now(),
-      mapPath: "", //stravaActivity.map.polyline,
-      startLocation: [0.1, 0.2], //stravaActivity.startLatlng,
+      mapPath: stravaActivity.map.polyline,
+      startLocation: stravaActivity.startLatlng,
     );
 
     final result =
         await offlineChartResource.submitEntry(model, authResource.getToken());
+
+    print("SUBMIT RESPONSE: " + result);
   }
 
   void toggleActivity(DetailedActivity activity) {
@@ -200,7 +202,7 @@ class StravaActivityList extends StatelessWidget {
             Container(
               width: 140,
               child: Image.network(
-                "https://maps.googleapis.com/maps/api/staticmap?size=140x140&zoom=14&path=weight:3%7Ccolor:blue%7Cenc:" +
+                "https://maps.googleapis.com/maps/api/staticmap?size=140x140&zoom=13&path=weight:3%7Ccolor:blue%7Cenc:" +
                     activity.map.polyline +
                     "&key=" +
                     googleMapsKey,
