@@ -22,7 +22,7 @@ class RunDetailsPage extends StatelessWidget {
                     child:
                   Column(
                     children: <Widget>[
-                      CircleWidget(run.pace.toString(), "мин/км"),
+                      CircleWidget(run.pace, "мин/км"),
                       Text("Темпо"),
                     ],
                   )),
@@ -38,7 +38,7 @@ class RunDetailsPage extends StatelessWidget {
                     flex: 3,
                     child: Column(
                     children: <Widget>[
-                      CircleWidget(run.speed.toString(), "км/ч"),
+                      CircleWidget(run.speed, "км/ч"),
                       Text("Скорост")
                     ],
                   )),

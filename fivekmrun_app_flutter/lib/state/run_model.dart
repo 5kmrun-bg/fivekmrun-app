@@ -40,9 +40,9 @@ class Run {
     differenceFromBest = "",
     differenceFromPrevious = "",
     position = json["r_finish_pos"],
-    speed = "",
+    speed = timeInSecondsToSpeed(json["r_time"]),
     notes = "",
-    pace = "";
+    pace = timeInSecondsToPace(json["r_time"]);
   
   static List<Run> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];
@@ -52,5 +52,20 @@ class Run {
 
   static String timeInSecondsToString(int timeInSeconds) {
     return (timeInSeconds ~/ 60).toString().padLeft(2, '0') + ":" + (timeInSeconds % 60).toString().padLeft(2, '0');
+  }
+
+  static String timeInSecondsToSpeed(int timeInSeconds) {
+    return ((5000 / timeInSeconds) * 3.6).toStringAsFixed(2);
+  }
+
+  static String timeInSecondsToPace(int timeInSeconds) {
+    if (timeInSeconds == 0) {
+      return "";
+    }
+    double paceDouble = timeInSeconds / 5.0;
+    final duration = Duration(seconds: paceDouble.toInt());
+    String pace = duration.toString().substring(2, 7);
+
+    return pace;
   }
 }
