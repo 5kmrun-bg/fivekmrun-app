@@ -97,6 +97,12 @@ class _HomeState extends State<Home> {
         },
       ),
       TabNavigator(
+          navigatorKey: this._tabHelper.navigatorKeys[AppTab.offlineChart],
+          routes: {
+            '/': (context) => OfflineChartPage(),
+            '/add': (context) => AddOfflineEntryPage(),
+          }),
+      TabNavigator(
         navigatorKey: this._tabHelper.navigatorKeys[AppTab.pastEvents],
         routes: {
           '/': (context) => PastEventsPage(),
@@ -109,12 +115,6 @@ class _HomeState extends State<Home> {
           '/': (context) => FutureEventsPage(),
         }, 
       ),
-      TabNavigator(
-          navigatorKey: this._tabHelper.navigatorKeys[AppTab.offlineChart],
-          routes: {
-            '/': (context) => OfflineChartPage(),
-            '/add': (context) => AddOfflineEntryPage(),
-          })
     ];
   }
 
@@ -146,16 +146,16 @@ class _HomeState extends State<Home> {
               title: Text('Бягания'),
             ),
             BottomNavigationBarItem(
+              icon: Icon(CustomIcons.award),
+              title: Text('Selfie'),
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.timer),
               title: Text('Резултати'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),
               title: Text('Събития'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CustomIcons.award),
-              title: Text('Офлайн Класация'),
             ),
           ],
           currentIndex: _selectedIndex,
