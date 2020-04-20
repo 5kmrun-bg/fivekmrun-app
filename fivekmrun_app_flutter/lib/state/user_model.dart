@@ -19,11 +19,29 @@ class User {
       avatarUrl = run["pic"];
       // Total km is not runsCount * 5, because runsCount contains alo volunteering
       totalKmRan = runs.length * 5.0;
+      age = calculateAge(DateTime.fromMillisecondsSinceEpoch(run["u_bdate"] * 1000));
     } else {
       id = 13731;
       name = "fake user";
       runsCount = 33;
       totalKmRan = 33 * 5.0;
     }
+  }
+
+  calculateAge(DateTime birthDate) {
+    DateTime currentDate = DateTime.now();
+    int age = currentDate.year - birthDate.year;
+    int month1 = currentDate.month;
+    int month2 = birthDate.month;
+    if (month2 > month1) {
+      age--;
+    } else if (month1 == month2) {
+      int day1 = currentDate.day;
+      int day2 = birthDate.day;
+      if (day2 > day1) {
+        age--;
+      }
+    }
+    return age;
   }
 }
