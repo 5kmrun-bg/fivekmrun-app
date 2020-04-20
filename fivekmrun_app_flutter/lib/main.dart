@@ -64,8 +64,8 @@ class MyApp extends StatelessWidget {
           dividerColor: Colors.black12,
           textTheme: TextTheme(
             subhead: TextStyle(fontSize: 14),
-            body1: TextStyle(fontSize: 12),
-            body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+            body1: TextStyle(fontSize: 11),
+            body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
           ),
           errorColor: Colors.red,
         ),

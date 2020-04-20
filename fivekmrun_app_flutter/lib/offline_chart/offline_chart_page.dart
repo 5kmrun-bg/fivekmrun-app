@@ -133,11 +133,11 @@ class SelectButton extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: this.selected
             ? RaisedButton(
-                child: Text(this.text),
+                child: Text(this.text, style: Theme.of(context).textTheme.subhead),
                 onPressed: this.onPressed,
               )
             : OutlineButton(
-                child: Text(this.text),
+                child: Text(this.text, style: Theme.of(context).textTheme.subhead),
                 onPressed: this.onPressed,
               ),
       ),
