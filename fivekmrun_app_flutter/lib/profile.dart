@@ -71,7 +71,7 @@ class ProfileDashboard extends StatelessWidget {
                   Avatar(url: user?.avatarUrl),
                   Text(
                     user?.name ?? "",
-                    style: textTheme.body2,
+                    style: textTheme.subhead,
                     textAlign: TextAlign.center,
                   ),
                   Text("${user?.age ?? ""}г."),

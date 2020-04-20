@@ -63,9 +63,9 @@ class MyApp extends StatelessWidget {
           accentIconTheme: IconThemeData(color: Colors.black),
           dividerColor: Colors.black12,
           textTheme: TextTheme(
-            subhead: TextStyle(fontSize: 14),
-            body1: TextStyle(fontSize: 11),
-            body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+            subhead: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            body1: TextStyle(fontSize: 10),
+            body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
           ),
           errorColor: Colors.red,
         ),
