@@ -15,6 +15,7 @@ class User {
       id = run["r_uid"];
       name = run["u_name"] + " " + run["u_surname"];
       runsCount = run["u_runs"];
+      avatarUrl = run["pic"];
       // Total km is not runsCount * 5, because runsCount contains alo volunteering
       totalKmRan = runs.length * 5.0;
     } else {
