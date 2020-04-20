@@ -76,12 +76,12 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
             Row(
               children: <Widget>[
                 SelectButton(
-                  text: "Милата седмица",
+                  text: "Предходна седмица",
                   onPressed: this.selectLastWeek,
                   selected: !this.thisWeekSelected,
                 ),
                 SelectButton(
-                  text: "Тази седмица",
+                  text: "Текуща седмица",
                   onPressed: this.selectThisWeek,
                   selected: this.thisWeekSelected,
                 ),
