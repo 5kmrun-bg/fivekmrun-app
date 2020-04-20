@@ -4,7 +4,6 @@ import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class LoginWithId extends StatefulWidget {
   LoginWithId({Key key}) : super(key: key);
 
@@ -32,26 +31,21 @@ class _LoginWithIdState extends State<LoginWithId> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-          width: 150,
-          height: 150,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text("Личен номер", style: Theme.of(context).textTheme.title),
-              TextField(
-                textAlign: TextAlign.center,
-                controller: numberInputController,
-                keyboardType: TextInputType.number,
-                decoration: InputHelpers.decoration(),
-              ),
-              SizedBox(
-                  width: 150,
-                  child:
-                      RaisedButton(onPressed: onPressed, child: Text("Напред")))
-            ],
-          ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        TextField(
+          textAlign: TextAlign.center,
+          controller: numberInputController,
+          keyboardType: TextInputType.number,
+          decoration: InputHelpers.decoration("личен номер"),
+        ),
+        SizedBox(height: 10),
+        SizedBox(
+          width: double.infinity,
+          child: RaisedButton(onPressed: onPressed, child: Text("Напред")),
+        ),
+      ],
     );
   }
 }
