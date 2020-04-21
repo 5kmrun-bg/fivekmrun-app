@@ -128,9 +128,28 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
 
   @override
   Widget build(BuildContext context) {
+    final textStlyle = Theme.of(context).textTheme.title;
+    final accentColor = Theme.of(context).accentColor;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Седмична офлайн класация'),
+        title: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: textStlyle,
+            children: <TextSpan>[
+              TextSpan(text: 'Седмична '),
+              TextSpan(
+                text: 'Selfie',
+                style: textStlyle.copyWith(
+                  color: accentColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(text: ' класация'),
+            ],
+          ),
+        ),
       ),
       body: Center(
         child: Column(
