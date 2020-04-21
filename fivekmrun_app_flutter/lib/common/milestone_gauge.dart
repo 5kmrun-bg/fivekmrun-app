@@ -14,9 +14,8 @@ class MilestoneGauge extends StatelessWidget {
   Widget build(BuildContext context) {
     final seriesList = _createData(value, milestone, context);
     final textStyle = Theme.of(context).textTheme;
-    return SizedBox(
-      width: 120,
-      height: 120,
+    return AspectRatio(
+      aspectRatio: 1,
       child: Stack(
         children: <Widget>[
           charts.PieChart(seriesList,

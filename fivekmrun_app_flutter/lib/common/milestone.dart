@@ -14,8 +14,8 @@ class MilestoneTile extends StatelessWidget {
       alignment: Alignment.topCenter,
       children: <Widget>[
         MilestoneGauge(value, milestone),
-        Padding(
-          padding: EdgeInsets.only(top: 100),
+        Positioned(
+          bottom: 0,
           child: Text(
             title,
             textAlign: TextAlign.center,

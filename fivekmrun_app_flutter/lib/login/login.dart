@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               this._buildLogo(),
-              SizedBox(height: 10),
+              SizedBox(height: 10), 
               Spacer(),
               this.loginWithId ? LoginWithId() : LoginWithUsername(),
               SizedBox(height: 4),

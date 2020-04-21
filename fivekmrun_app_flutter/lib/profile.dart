@@ -49,7 +49,7 @@ class ProfileDashboard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -65,7 +65,7 @@ class ProfileDashboard extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: 5,
               child: Column(
                 children: <Widget>[
                   Avatar(url: user?.avatarUrl),
@@ -79,7 +79,7 @@ class ProfileDashboard extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Column(
                 children: <Widget>[
                   IconButton(
