@@ -45,25 +45,14 @@ class RunDetailsPage extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
+                Expanded(flex: 2, child: SizedBox()),
                 Expanded(
                     flex: 3,
-                    child: Column(
-                      children: <Widget>[
-                        CircleWidget(run.pace, "мин/км"),
-                        SizedBox(height: 10),
-                        Text(
-                          "Темпо",
-                          style: theme.textTheme.subtitle,
-                        ),
-                      ],
-                    )),
-                Expanded(
-                    flex: 4,
                     child: Stack(
                       children: <Widget>[
                         buildPositionGauge(run),
                         Positioned(
-                          bottom: 0,
+                          bottom: 6,
                           left: 0,
                           right: 0,
                           child: Text(
@@ -74,21 +63,46 @@ class RunDetailsPage extends StatelessWidget {
                         ),
                       ],
                     )),
-                Expanded(
-                    flex: 3,
-                    child: Column(
-                      children: <Widget>[
-                        CircleWidget(run.speed, "км/ч"),
-                        SizedBox(height: 10),
-                        Text(
-                          "Скорост",
-                          style: theme.textTheme.subtitle,
-                        )
-                      ],
-                    )),
+                Expanded(flex: 2, child: SizedBox()),
               ],
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    CircleWidget(run.pace, "мин/км"),
+                    SizedBox(height: 10),
+                    Text(
+                      "Темпо",
+                      style: theme.textTheme.subtitle,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    CircleWidget(run.time, "мин"),
+                    SizedBox(height: 10),
+                    Text(
+                      "Време",
+                      style: theme.textTheme.subtitle,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    CircleWidget(run.speed, "км/ч"),
+                    SizedBox(height: 10),
+                    Text(
+                      "Скорост",
+                      style: theme.textTheme.subtitle,
+                    )
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -97,21 +111,12 @@ class RunDetailsPage extends StatelessWidget {
                   text: run.displayDate,
                 ),
                 IconText(
-                  icon: Icons.timer,
-                  text: run.time + " мин.",
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconText(
                   icon: Icons.pin_drop,
                   text: run.location,
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 20),
             ComapreTime(
               text: "Предишно бягане: ",
               time: run.differenceFromPrevious,
@@ -190,8 +195,8 @@ class ComapreTime extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     final color = time < 0
-        ? Color.fromRGBO(170, 208, 124, 1)
-        : Color.fromRGBO(248, 91, 56, 1);
+        ? Color.fromRGBO(0, 173, 25, 1)
+        : Color.fromRGBO(250, 32, 87, 1);
 
     final numberStyle = textTheme.subtitle.copyWith(color: color);
     return Row(

@@ -68,7 +68,6 @@ class _ResultsListState extends State<ResultsList> {
     final res = _filteredResults[index];
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final labelStyle = theme.textTheme.body1;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(6),
@@ -86,7 +85,7 @@ class _ResultsListState extends State<ResultsList> {
                     style:
                         textTheme.display2.copyWith(color: theme.accentColor),
                   ),
-                  Text("място", style: labelStyle),
+                  Text("място", style: textTheme.subtitle),
                 ],
               ),
             ),
