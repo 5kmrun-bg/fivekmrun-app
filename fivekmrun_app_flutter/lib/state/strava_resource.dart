@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/constants.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:flutter/material.dart';
 import 'package:strava_flutter/Models/activity.dart';
@@ -51,12 +52,12 @@ class StravaResource extends ChangeNotifier {
         // TODO: should we throw here?
         return [];
       }
+      final now = DateTime.now();
 
-      int before = DateTime.now()
+      int before = now
           .difference(DateTime.fromMillisecondsSinceEpoch(0))
           .inSeconds;
-      int after = DateTime.now()
-          .subtract(new Duration(days: 7))
+      int after = now.subtract(Duration(days: now.weekday - 1, hours: now.hour, minutes: now.minute, seconds: now.second))
           .difference(DateTime.fromMillisecondsSinceEpoch(0))
           .inSeconds;
 
@@ -64,7 +65,7 @@ class StravaResource extends ChangeNotifier {
 
       // TODO: Additional filters (distance)
       final runActivites = await Future.wait(activities
-          .where((a) => a.type == ActivityType.Run)
+          .where((a) => a.type == ActivityType.Run && a.distance >= stravaFilterMinDistance && a.distance <= stravaFilterMaxDistance)
           .map((a) => strava.getActivityById(a.id.toString())));
 
       return runActivites;

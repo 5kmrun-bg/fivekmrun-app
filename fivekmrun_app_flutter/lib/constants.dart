@@ -9,3 +9,6 @@ const endpointBaseUrl = "https://5kmrun.bg/api/5kmrun/";
 const userEndpointUrl = endpointBaseUrl + "user/";
 
 const String userIdKey = "5kmrun_UserID";
+
+const int stravaFilterMinDistance = 4900;
+const int stravaFilterMaxDistance = 5300;
