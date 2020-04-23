@@ -1,7 +1,7 @@
 import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
-import 'package:fivekmrun_flutter/state/strava_resource.dart';
+import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,17 +21,16 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userResource = Provider.of<UserResource>(context, listen: false);
-    final authenticationResource =
+    final authResource =
         Provider.of<AuthenticationResource>(context, listen: false);
     final localStorage = new LocalStorageResource();
     localStorage.isSubscribedForGeneral
         .then((value) => this._pushNotificationsSubscribed = value);
 
-    final logout = () {
-      userResource.currentUserId = null;
-      userResource.value = null;
-      authenticationResource.logout();
+    final logout = () async {
+      await authResource.logout();
+      Provider.of<UserResource>(context, listen: false).clear();
+      Provider.of<RunsResource>(context, listen: false).clear();
 
       Navigator.of(context, rootNavigator: true)
           .pushNamedAndRemoveUntil("/", (_) => false);

@@ -15,8 +15,4 @@ class LocalStorageResource extends ChangeNotifier {
   set isSubscrubedForGeneral(bool value) {
     _storage.then((storage) => storage.setBool(this._keySubscribedForGeneral, value));
   }
-
-  setCurrentUser(int userId) {
-    _storage.then((storage) => storage.setInt(constants.userIdKey, userId));
-  }
 }

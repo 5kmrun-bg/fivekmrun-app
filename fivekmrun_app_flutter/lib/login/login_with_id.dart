@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/login/helpers.dart';
+import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ class _LoginWithIdState extends State<LoginWithId> {
 
   void onPressed() async {
     int userId = int.parse(numberInputController.text);
+    await Provider.of<AuthenticationResource>(context, listen: false)
+        .authenticateWithUserId(userId);
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;
     Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
     Navigator.pushNamed(context, '/loginPreview');

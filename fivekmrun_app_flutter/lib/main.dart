@@ -17,15 +17,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 final userRes = UserResource();
+final authRes = AuthenticationResource();
 
 final appAccentColor = Color.fromRGBO(252, 24, 81, 1.0);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var userId = await userRes.presistedId();
+  await authRes.loadFromLocalStore();
   String initialRoute = "/";
-  if (userId != 0 && userId != null) {
-    print("userID ${userId.toString()}");
+
+  final userId = authRes.getUserId();
+  if (authRes.getUserId() != null) {
     userRes.currentUserId = userId;
     initialRoute = "/home";
   }
@@ -44,11 +46,11 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => authRes),
         ChangeNotifierProvider(create: (_) => userRes),
         ChangeNotifierProvider(create: (_) => RunsResource()),
         ChangeNotifierProvider(create: (_) => FutureEventsResource()),
         ChangeNotifierProvider(create: (_) => PastEventsResource()),
-        ChangeNotifierProvider(create: (_) => AuthenticationResource()),
         ChangeNotifierProvider(create: (_) => OfflineChartResource()),
         ChangeNotifierProvider(create: (_) => LocalStorageResource()),
         ChangeNotifierProvider(create: (_) => StravaResource()),

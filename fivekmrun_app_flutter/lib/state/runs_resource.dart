@@ -28,6 +28,13 @@ class RunsResource extends ChangeNotifier {
     }
   }
 
+  clear() {
+    this.value = null;
+    this.loading = false;
+    this._bestRun = null;
+    this._lastRun = null;
+  }
+
   Future<List<Run>> getByUserId(int userId) async {
     this.loading = true;
 

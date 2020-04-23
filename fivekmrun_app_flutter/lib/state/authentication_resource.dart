@@ -2,52 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fivekmrun_flutter/constants.dart' as constants;
 
 class AuthenticationResource extends ChangeNotifier {
   String _token;
-  String _username;
-  String _password;
   int _userId;
 
   Future<bool> authenticate(String username, String password) async {
-    this._username = username;
-    this._password = password;
-
-    return this.refreshToken();
-  }
-
-  Future<bool> refreshToken() async {
-    this._token = await this._getToken(this._username, this._password);
-
-    if (this._token != null && this._token != "") {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  String getToken() {
-    return this._token;
-  }
-
-  int getUserId() {
-    return this._userId;
-  }
-
-  bool isLoggedIn() {
-    return this._token != null && this._userId != null;
-  }
-
-  Future<void> logout() {
-    this._username = null;
-    this._password = null;
-    this._token = null;
-    this._username = null;
-
-    return null;
-  }
-
-  Future<String> _getToken(String username, String password) async {
     HttpClient httpClient = new HttpClient();
     HttpClientRequest request =
         await httpClient.postUrl(Uri.parse("https://5kmrun.bg/api/auth"));
@@ -62,12 +24,87 @@ class AuthenticationResource extends ChangeNotifier {
     List<String> errors = List.from(map["errors"]);
 
     if (errors.isEmpty) {
-      this._token = map["answer"]["tkn"];
-      this._userId = map["answer"]["id"];
+      final token = map["answer"]["tkn"];
+      final userId = map["answer"]["id"];
 
-      return this._token;
+      if (token != null && token != "" && userId != null) {
+        await this._onLoginSuccess(userId, token);
+
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return null;
+      return false;
     }
+  }
+
+  Future<bool> authenticateWithUserId(int userId) async {
+    await this._onLoginSuccess(userId, null);
+    return true;
+  }
+
+  String getToken() {
+    return this._token;
+  }
+
+  int getUserId() {
+    return this._userId;
+  }
+
+  bool isLoggedIn() {
+    return this._token != null && this._userId != null;
+  }
+
+  Future<void> logout() async {
+    this._token = null;
+    this._userId = null;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(constants.key_userId);
+    await prefs.remove(constants.key_token);
+    await prefs.remove(constants.key_tokenTimestamp);
+  }
+
+  Future<void> _onLoginSuccess(int userId, String token) async {
+    this._userId = userId;
+    this._token = token;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(constants.key_userId, userId);
+
+    if (token != null) {
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      await prefs.setString(constants.key_token, token);
+      await prefs.setInt(constants.key_tokenTimestamp, timestamp);
+    } else {
+      await prefs.remove(constants.key_token);
+      await prefs.remove(constants.key_tokenTimestamp);
+    }
+  }
+
+  Future<void> loadFromLocalStore() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // load user ID
+    this._userId = prefs.getInt(constants.key_userId);
+
+    final token = prefs.getString(constants.key_token);
+    if (token != null) {
+      final timestamp = prefs.getInt(constants.key_tokenTimestamp);
+      if (timestamp != null) {
+        final created = DateTime.fromMillisecondsSinceEpoch(timestamp);
+        print("AUTH.loadFromLocalStore token created: ${created.toString()}");
+
+        final expiresAt =
+            created.add(new Duration(days: constants.tokenExpiryDays));
+        if (expiresAt.isAfter(DateTime.now())) {
+          this._token = token;
+        }
+      }
+    }
+
+    print("AUTH.loadFromLocalStore userId: ${this._userId.toString()} ");
+    print("AUTH.loadFromLocalStore token: ${this._token}");
   }
 }
