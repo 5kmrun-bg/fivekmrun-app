@@ -16,8 +16,8 @@ class OfflineChartPage extends StatefulWidget {
 class _OfflineChartPageState extends State<OfflineChartPage> {
   bool thisWeekSelected = true;
   List<Result> results;
-  OfflineResultsResouce lastWeekResource = OfflineResultsResouce();
-  OfflineResultsResouce thisWeekResource = OfflineResultsResouce();
+  OfflineResultsResource lastWeekResource = OfflineResultsResource();
+  OfflineResultsResource thisWeekResource = OfflineResultsResource();
 
   selectThisWeek() {
     if (this.thisWeekSelected) {
