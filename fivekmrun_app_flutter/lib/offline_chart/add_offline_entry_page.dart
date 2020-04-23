@@ -124,12 +124,23 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   }
 
   Widget _buildStravaAuth(BuildContext context) {
-    return RaisedButton(
-      child: Image(
-        image: AssetImage('assets/btn_strava_connectwith_orange@2x.png'),
+    return Column(children: <Widget>[
+      Container(height: 200,),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text("За да продължите - следвайте инструкциите за да свържете 5kmRun приложението с вашия Strava профил",
+              style: Theme.of(context).textTheme.subtitle,
+              textAlign: TextAlign.center,),
       ),
-      onPressed: this.triggerStravaAuth,
-    );
+      Container(height: 50,),
+      RaisedButton(
+        color: Colors.transparent,
+        child: Image(
+          image: AssetImage('assets/btn_strava_connectwith_orange.png'),
+        ),
+        onPressed: this.triggerStravaAuth,
+      ),
+    ],);
   }
 
   Widget _buildList(BuildContext context) {
