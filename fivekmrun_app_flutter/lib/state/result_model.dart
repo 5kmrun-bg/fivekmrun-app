@@ -6,6 +6,7 @@ class Result {
   final int position;
   final String totalRuns;
   final String sex;
+  int status = 0;
 
   Result({
     this.name,
@@ -20,7 +21,8 @@ class Result {
       time = (json["s_time"] as int).parseSecondsToTimestamp(),
       position = json["s_finish_pos"],
       totalRuns = "",
-      sex = json["u_sex"];
+      sex = json["u_sex"],
+      status = json["s_type"];
 
   static List<Result> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];

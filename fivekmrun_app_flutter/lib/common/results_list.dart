@@ -101,6 +101,21 @@ class _ResultsListState extends State<ResultsList> {
                     icon: Icons.timer,
                     text: res.time,
                   ),
+                  if (res.status > 0 && res.status <= 2) 
+                    ListTileRow(
+                      icon: Icons.check_box,
+                      text: "доказан"
+                  ),
+                  if (res.status == 3)
+                    ListTileRow(
+                      icon: Icons.check,
+                      text: "самостоятелен"
+                  ),                  
+                  if (res.status > 3 && res.status <= 5)
+                    ListTileRow(
+                      icon: Icons.error,
+                      text: "дисквалифициран"
+                  ),
                 ],
               ),
             ),
