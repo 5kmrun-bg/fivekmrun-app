@@ -2,6 +2,7 @@ import 'package:fivekmrun_flutter/common/results_list.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_results_resource.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
+import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +17,8 @@ class OfflineChartPage extends StatefulWidget {
 class _OfflineChartPageState extends State<OfflineChartPage> {
   bool thisWeekSelected = true;
   List<Result> results;
-  OfflineResultsResouce lastWeekResource = OfflineResultsResouce();
-  OfflineResultsResouce thisWeekResource = OfflineResultsResouce();
+  OfflineResultsResource lastWeekResource = OfflineResultsResource();
+  OfflineResultsResource thisWeekResource = OfflineResultsResource();
 
   selectThisWeek() {
     if (this.thisWeekSelected) {
@@ -54,7 +55,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   }
 
   void showLogoutDialog() {
-    final userResource = Provider.of<UserResource>(context, listen: false);
+    final authResource = Provider.of<AuthenticationResource>(context, listen: false);
     final textStlyle = Theme.of(context).textTheme.subtitle;
     final accentColor = Theme.of(context).accentColor;
     showDialog(
@@ -83,9 +84,11 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("вход с парола"),
-              onPressed: () {
-                userResource.currentUserId = null;
-                userResource.value = null;
+              onPressed: () async {
+                await authResource.logout();
+                Provider.of<UserResource>(context, listen: false).clear();
+                Provider.of<RunsResource>(context, listen: false).clear();
+
                 Navigator.of(context, rootNavigator: true)
                     .pushNamedAndRemoveUntil("/", (_) => false);
               },

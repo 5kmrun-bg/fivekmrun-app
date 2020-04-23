@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
-class OfflineResultsResouce extends ChangeNotifier {
+class OfflineResultsResource extends ChangeNotifier {
   bool _loading = false;
 
   bool get loading => _loading;

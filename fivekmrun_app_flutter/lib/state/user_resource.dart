@@ -1,11 +1,8 @@
-import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
 import 'package:fivekmrun_flutter/state/user_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:fivekmrun_flutter/constants.dart' as constants;
 import 'dart:convert';
-
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserResource extends ChangeNotifier {
   bool _loading = false;
@@ -30,10 +27,18 @@ class UserResource extends ChangeNotifier {
   int _currentUserId;
   int get currentUserId => _currentUserId;
   set currentUserId(int v) {
-    final localStorage = LocalStorageResource();
-    localStorage.setCurrentUser(v);
-    _currentUserId = v;
-    this.getById(v, true);
+    this._currentUserId = v;
+    if (v != null) {
+      this.getById(v, true);
+    } else {
+      this.value = null;
+    }
+  }
+
+  clear() {
+    this.currentUserId = null;
+    this.value = null;
+    this.loading = false;
   }
 
   Future<User> getById(int userId, [bool force = false]) async {
@@ -47,24 +52,24 @@ class UserResource extends ChangeNotifier {
 
     this.loading = true;
 
-    http.Response response = await http.get("${constants.userEndpointUrl}$userId");
-    if (response.statusCode != 200 || response.headers["content-type"] != "application/json;charset=utf-8;") {
+    http.Response response =
+        await http.get("${constants.userEndpointUrl}$userId");
+    if (response.statusCode != 200 ||
+        response.headers["content-type"] != "application/json;charset=utf-8;") {
       this.loading = false;
       //TODO: Fix this when endpoint behaves properly
-      this.value = new User(age: 23, name: "fake user", runsCount: 23,);
+      this.value = new User(
+        age: 23,
+        name: "fake user",
+        runsCount: 23,
+      );
       return this.value;
     }
-    
+
     String body = utf8.decode(response.bodyBytes);
     User user = User.fromJson(jsonDecode(body));
     this.value = user;
     this.loading = false;
     return user;
-  }
-
-  Future<int> presistedId() async {
-    // obtain shared preferences
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(constants.userIdKey);
   }
 }
