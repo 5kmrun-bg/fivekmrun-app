@@ -7,6 +7,7 @@ const userUrl = baseUrl + "usr.php?id=";
 
 const endpointBaseUrl = "https://5kmrun.bg/api/5kmrun/";
 const userEndpointUrl = endpointBaseUrl + "user/";
+const offlineChartEndpointUrl = "https://5kmrun.bg/api/selfie/ofc/";
 
 const String userIdKey = "5kmrun_UserID";
 

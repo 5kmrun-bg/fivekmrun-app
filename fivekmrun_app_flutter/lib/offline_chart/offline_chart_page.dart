@@ -1,7 +1,7 @@
 import 'package:fivekmrun_flutter/common/results_list.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
+import 'package:fivekmrun_flutter/state/offline_results_resource.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
-import 'package:fivekmrun_flutter/state/results_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +16,8 @@ class OfflineChartPage extends StatefulWidget {
 class _OfflineChartPageState extends State<OfflineChartPage> {
   bool thisWeekSelected = true;
   List<Result> results;
-  ResultsResource lastWeekResource = ResultsResource();
-  ResultsResource thisWeekResource = ResultsResource();
+  OfflineResultsResouce lastWeekResource = OfflineResultsResouce();
+  OfflineResultsResouce thisWeekResource = OfflineResultsResouce();
 
   selectThisWeek() {
     if (this.thisWeekSelected) {
@@ -111,7 +111,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   _loadFakeLastWeekResult() {
     setState(() {
       this.results = null;
-      this.lastWeekResource.load(id: 1537).then((loadedResults) {
+      this.lastWeekResource.getPastWeekResults().then((loadedResults) {
         this.setState(() => this.results = loadedResults);
       });
     });
@@ -120,7 +120,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   _loadFakeThistWeekResult() {
     setState(() {
       this.results = null;
-      this.thisWeekResource.load(id: 1525).then((loadedResults) {
+      this.thisWeekResource.getThisWeekResults().then((loadedResults) {
         this.setState(() => this.results = loadedResults);
       });
     });
