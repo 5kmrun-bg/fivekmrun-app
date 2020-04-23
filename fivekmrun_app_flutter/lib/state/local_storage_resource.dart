@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fivekmrun_flutter/constants.dart' as constants;
 
 class LocalStorageResource extends ChangeNotifier {
   final String _keySubscribedForGeneral = "push_notifications_subscribed_general";
@@ -13,5 +14,9 @@ class LocalStorageResource extends ChangeNotifier {
 
   set isSubscrubedForGeneral(bool value) {
     _storage.then((storage) => storage.setBool(this._keySubscribedForGeneral, value));
+  }
+
+  setCurrentUser(int userId) {
+    _storage.then((storage) => storage.setInt(constants.userIdKey, userId));
   }
 }

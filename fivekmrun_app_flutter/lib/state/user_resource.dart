@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
 import 'package:fivekmrun_flutter/state/user_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +30,8 @@ class UserResource extends ChangeNotifier {
   int _currentUserId;
   int get currentUserId => _currentUserId;
   set currentUserId(int v) {
+    final localStorage = LocalStorageResource();
+    localStorage.setCurrentUser(v);
     _currentUserId = v;
     this.getById(v, true);
   }
