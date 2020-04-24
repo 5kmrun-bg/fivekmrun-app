@@ -1,7 +1,6 @@
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
-import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +12,14 @@ class UserRunsPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: Text("Твоите Бягания")),
         body: Consumer<RunsResource>(builder: (context, runsResource, child) {
-          return UserRunsList(runs: runsResource.value);
+          if (runsResource.loading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (runsResource.value == null ||
+              runsResource.value.length == 0) {
+            return Text("Все още не сте направили първото си официално бягане");
+          } else {
+            return UserRunsList(runs: runsResource.value);
+          }
         }));
   }
 }
@@ -28,10 +34,6 @@ class UserRunsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (runs == null || runs.length <= 0) {
-      return Text("Все още не сте направили първото си официално бягане");
-    }
-
     runs.sort((r1, r2) => r2.date.compareTo(r1.date));
 
     return ListView.builder(

@@ -27,7 +27,7 @@ class _LoginWithIdState extends State<LoginWithId> {
     await Provider.of<AuthenticationResource>(context, listen: false)
         .authenticateWithUserId(userId);
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;
-    Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
+
     Navigator.pushNamed(context, '/loginPreview');
   }
 

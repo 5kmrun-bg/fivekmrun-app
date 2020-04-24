@@ -7,6 +7,10 @@ import 'package:fivekmrun_flutter/future_events/future_events_page.dart';
 import 'package:fivekmrun_flutter/profile.dart';
 import 'package:fivekmrun_flutter/runs/run_details_page.dart';
 import 'package:fivekmrun_flutter/runs/user_runs_page.dart';
+import 'package:fivekmrun_flutter/state/authentication_resource.dart';
+import 'package:fivekmrun_flutter/state/events_resource.dart';
+import 'package:fivekmrun_flutter/state/runs_resource.dart';
+import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -81,6 +85,14 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
+    final userId = Provider.of<AuthenticationResource>(context, listen: false).getUserId();
+    print("HOME: start loading userId $userId");
+    Provider.of<UserResource>(context, listen: false).currentUserId = userId;
+    Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
+    Provider.of<FutureEventsResource>(context, listen: false).load();
+    Provider.of<PastEventsResource>(context, listen: false).load();
+
     this._tabHelper = TabNavigationHelper(this);
     this._widgetOptions = <Widget>[
       TabNavigator(

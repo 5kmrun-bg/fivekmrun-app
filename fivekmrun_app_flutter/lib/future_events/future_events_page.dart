@@ -17,26 +17,11 @@ class FutureEventsPage extends StatelessWidget {
       appBar: AppBar(title: Text("Предстоящи Събития")),
       body: Consumer<FutureEventsResource>(
           builder: (context, eventsResource, child) {
-        return FutureBuilder(
-          future: eventsResource.load(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-              case ConnectionState.active:
-                return Center(child: CircularProgressIndicator());
-                break;
-              case ConnectionState.done:
-                if (snapshot.hasError)
-                  return Text(
-                    'Error:\n\n${snapshot.error}',
-                    textAlign: TextAlign.center,
-                  );
-                else
-                  return FutureEventsList(events: snapshot.data);
-            }
-          },
-        );
+        if (eventsResource.loading) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          return FutureEventsList(events: eventsResource.value);
+        }
       }),
     );
   }
@@ -76,16 +61,17 @@ class FutureEventsList extends StatelessWidget {
                   width: 120,
                   decoration: new BoxDecoration(
                       borderRadius: new BorderRadius.only(
-                        topLeft: const Radius.circular(10.0),
-                        topRight: const Radius.circular(10.0),
-                      )),
+                    topLeft: const Radius.circular(10.0),
+                    topRight: const Radius.circular(10.0),
+                  )),
                   child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5.0),
-                  child: Image.network(
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: Image.network(
                       event.imageUrl,
                       fit: BoxFit.fitWidth,
                     ),
-                ),),
+                  ),
+                ),
               ],
             ),
           ),

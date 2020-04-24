@@ -3,6 +3,7 @@ import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
+import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +29,14 @@ class ProfileDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserResource>(builder: (context, userResource, child) {
+    final userResource = Provider.of<UserResource>(context);
+    final runsRes = Provider.of<RunsResource>(context);
+
     final user = userResource?.value;
     final textTheme = Theme.of(context).textTheme;
-    final runsResource = Provider.of<RunsResource>(context);
+
+    final runs = runsRes.value;
+    final hasRuns = runs != null && runs.length > 0;
 
     final goToSettings = () {
       Navigator.of(context, rootNavigator: true).pushNamed("/settings");
@@ -58,7 +63,7 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToBarcode,
                   ),
                   MilestoneTile(
-                      value: (runsResource?.value?.length?.toInt() ?? 0) * 5,
+                      value: (runsRes?.value?.length?.toInt() ?? 0) * 5,
                       milestone: 1250,
                       title: "Пробягано\nразстояние"),
                 ],
@@ -87,60 +92,76 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToSettings,
                   ),
                   MilestoneTile(
-                      value: runsResource?.value?.length?.toInt() ?? 0,
-                      milestone: nextRunsMilestone(runsResource?.value?.length?.toInt() ?? 0),
+                      value: runsRes?.value?.length?.toInt() ?? 0,
+                      milestone: nextRunsMilestone(
+                          runsRes?.value?.length?.toInt() ?? 0),
                       title: "Следваща\nцел"),
                 ],
               ),
             ),
           ],
         ),
-        if (runsResource.value == null || runsResource.value.length <= 0)
-        Row(
-          children: <Widget>[
-            Expanded(
-              child:
-                  Text("Все още не сте направили първото си официално бягане"),
-            )
-          ],
-        ),
-        if (runsResource.value != null && runsResource.value.length > 0)
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: RunCard(
-                title: "Последно участие",
-                run: runsResource.lastRun,
-              ),
-            ),
-            Expanded(
-              child: RunCard(
-                title: "Най-добро участие",
-                run: runsResource.bestRun,
-              ),
-            ),
-          ],
-        ),
-        if (runsResource.value != null && runsResource.value.length > 0)
-        Card(
-          child: Container(
-            height: 200,
-            child: RunsChart(runs: runsResource?.value),
+        if (runsRes.loading) Center(child: CircularProgressIndicator()),
+        if (!runsRes.loading && !hasRuns)
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                    "Все още не сте направили първото си официално бягане"),
+              )
+            ],
           ),
-        ),
-        if (runsResource.value != null && runsResource.value.length > 0)
-        Card(
-          child: Container(
-              height: 200,
-              child: RunsByRouteChart.withRuns(runsResource?.value)),
-        ),
-        if (runsResource.value != null && runsResource.value.length > 0)
-        Card(
-            child: Container(
-                height: 200,
-                child: BestTimesByRouteChart.withRuns(runsResource?.value)))
+        if (hasRuns) this.buildRunsCards(runsRes.bestRun, runsRes.lastRun),
+        if (hasRuns) this.buildRunsChartCard(runs),
+        if (hasRuns) this.buildRunsByRouteCard(runs),
+        if (hasRuns) this.buildBestTimesCard(runs),
       ],
     );
-    });
+  }
+
+  Widget buildRunsCards(Run bestRun, Run lastRun) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: RunCard(
+            title: "Последно участие",
+            run: lastRun,
+          ),
+        ),
+        Expanded(
+          child: RunCard(
+            title: "Най-добро участие",
+            run: bestRun,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildRunsChartCard(List<Run> runs) {
+    return Card(
+      child: Container(
+        height: 200,
+        child: RunsChart(runs: runs),
+      ),
+    );
+  }
+
+  Widget buildRunsByRouteCard(List<Run> runs) {
+    return Card(
+      child: Container(
+        height: 200,
+        child: RunsByRouteChart.withRuns(runs),
+      ),
+    );
+  }
+
+  Widget buildBestTimesCard(List<Run> runs) {
+    return Card(
+      child: Container(
+        height: 200,
+        child: BestTimesByRouteChart.withRuns(runs),
+      ),
+    );
   }
 }
