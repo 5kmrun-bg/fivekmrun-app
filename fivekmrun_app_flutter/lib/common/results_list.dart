@@ -68,7 +68,11 @@ class _ResultsListState extends State<ResultsList> {
     final res = _filteredResults[index];
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+
     return Card(
+      color: res.status > 3
+          ? Colors.grey // TODO: Color?
+          : Colors.transparent,
       child: Padding(
         padding: const EdgeInsets.all(6),
         child: Row(
@@ -83,7 +87,7 @@ class _ResultsListState extends State<ResultsList> {
                   Text(
                     res.position.toString(),
                     style:
-                        textTheme.display2.copyWith(color: theme.accentColor),
+                        res.status > 3 ? textTheme.display2.copyWith(color: Colors.grey) : textTheme.display2.copyWith(color: theme.accentColor),
                   ),
                   Text("място", style: textTheme.subtitle),
                 ],
