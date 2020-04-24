@@ -32,7 +32,8 @@ class OfflineResultsResource extends ChangeNotifier {
 
   Future<List<Result>> getPastWeekResults() async {
     final now = DateTime.now();
-    DateTime lastWeek = DateTime.now().subtract(Duration(days: now.weekday - 1 + 7));
+    DateTime lastWeek =
+        DateTime.now().subtract(Duration(days: now.weekday - 1 + 7));
 
     String weekFilter = "${lastWeek.year}/${_weekNumber(lastWeek)}";
 
@@ -47,18 +48,34 @@ class OfflineResultsResource extends ChangeNotifier {
   }
 
   Future<List<Result>> _loadResultByWeek(String weekFilter) async {
-    http.Response response = await http.get("${constants.offlineChartEndpointUrl}$weekFilter");
-    if (response.statusCode != 200 || response.headers["content-type"] != "application/json;charset=utf-8;") {
+    http.Response response =
+        await http.get("${constants.offlineChartEndpointUrl}$weekFilter");
+    if (response.statusCode != 200 ||
+        response.headers["content-type"] != "application/json;charset=utf-8;") {
       this.loading = false;
-    
+
       return null;
     }
-    
+
     String body = utf8.decode(response.bodyBytes);
     List<Result> results = Result.listFromJson(jsonDecode(body));
-    this.value = results;
+    List<Result> processedResults = processResults(results);
+
+    this.value = processedResults;
     this.loading = false;
-    
-    return results;
+
+    return processedResults;
+  }
+
+  List<Result> processResults(List<Result> res) {
+    final ofcList = res.where((r) => !r.isDisqualified);
+    var ofcPos = 1;
+    ofcList.forEach((r) => r.officialPosition = ofcPos++);
+
+    var dsqPos = 1;
+    final dsqList = res.where((r) => r.isDisqualified);
+    dsqList.forEach((r) => r.officialPosition = dsqPos++);
+
+    return [...ofcList, ...dsqList];
   }
 }

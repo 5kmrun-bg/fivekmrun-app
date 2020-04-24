@@ -69,10 +69,19 @@ class _ResultsListState extends State<ResultsList> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
+    var position = res.position.toString();
+    if (res.officialPosition != null) {
+      position = res.officialPosition.toString();
+    }
+
+    final positionStyle = res.isDisqualified
+        ? textTheme.display2.copyWith(color: theme.disabledColor)
+        : textTheme.display2.copyWith(color: theme.accentColor);
+    final iconColor =
+        res.isDisqualified ? theme.disabledColor : theme.accentColor;
+        
     return Card(
-      color: res.status > 3
-          ? Colors.grey // TODO: Color?
-          : Colors.transparent,
+      color: res.isDisqualified ? Colors.grey.shade800 : Colors.transparent,
       child: Padding(
         padding: const EdgeInsets.all(6),
         child: Row(
@@ -85,9 +94,8 @@ class _ResultsListState extends State<ResultsList> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
-                    res.position.toString(),
-                    style:
-                        res.status > 3 ? textTheme.display2.copyWith(color: Colors.grey) : textTheme.display2.copyWith(color: theme.accentColor),
+                    position,
+                    style: positionStyle,
                   ),
                   Text("място", style: textTheme.subtitle),
                 ],
@@ -100,26 +108,31 @@ class _ResultsListState extends State<ResultsList> {
                   ListTileRow(
                     icon: Icons.person,
                     text: res.name,
+                    iconColor: iconColor,
                   ),
                   ListTileRow(
                     icon: Icons.timer,
                     text: res.time,
+                    iconColor: iconColor,
                   ),
-                  if (res.status > 0 && res.status <= 2) 
+                  if (res.status > 0 && res.status <= 2)
                     ListTileRow(
                       icon: Icons.check_box,
-                      text: "доказан"
-                  ),
+                      text: "доказан",
+                      iconColor: iconColor,
+                    ),
                   if (res.status == 3)
                     ListTileRow(
                       icon: Icons.check,
-                      text: "самостоятелен"
-                  ),                  
+                      text: "самостоятелен",
+                      iconColor: iconColor,
+                    ),
                   if (res.status > 3 && res.status <= 5)
                     ListTileRow(
                       icon: Icons.error,
-                      text: "дисквалифициран"
-                  ),
+                      text: "дисквалифициран",
+                      iconColor: iconColor,
+                    ),
                 ],
               ),
             ),
