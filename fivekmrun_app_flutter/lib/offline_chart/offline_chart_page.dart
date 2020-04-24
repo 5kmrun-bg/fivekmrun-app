@@ -83,7 +83,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
-              child: new Text("вход с парола"),
+              child: new Text("Вход с парола"),
               onPressed: () async {
                 await authResource.logout();
                 Provider.of<UserResource>(context, listen: false).clear();
@@ -94,7 +94,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               },
             ),
             new FlatButton(
-              child: new Text("откажи"),
+              child: new Text("Откажи"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
