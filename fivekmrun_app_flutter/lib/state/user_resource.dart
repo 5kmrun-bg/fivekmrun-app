@@ -59,15 +59,14 @@ class UserResource extends ChangeNotifier {
       this.loading = false;
       //TODO: Fix this when endpoint behaves properly
       this.value = new User(
-        age: 23,
-        name: "fake user",
-        runsCount: 23,
+        age: 0,
+        name: " ",
       );
       return this.value;
     }
 
     String body = utf8.decode(response.bodyBytes);
-    User user = User.fromJson(jsonDecode(body));
+    User user = User.fromJson(userId, jsonDecode(body));
     this.value = user;
     this.loading = false;
     return user;

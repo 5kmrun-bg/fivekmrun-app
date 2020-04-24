@@ -6,7 +6,8 @@ const resultsUrl = baseUrl + "results.php?event=";
 const userUrl = baseUrl + "usr.php?id=";
 
 const endpointBaseUrl = "https://5kmrun.bg/api/5kmrun/";
-const userEndpointUrl = endpointBaseUrl + "user/";
+const userEndpointUrl = "https://5kmrun.bg/api/selfie/user/";
+const runsEndpointUrl = endpointBaseUrl + "user/";
 const offlineChartEndpointUrl = "https://5kmrun.bg/api/selfie/ofc/";
 
 

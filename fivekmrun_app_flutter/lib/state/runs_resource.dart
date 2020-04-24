@@ -39,7 +39,7 @@ class RunsResource extends ChangeNotifier {
     this.loading = true;
 
     http.Response response =
-        await http.get("${constants.userEndpointUrl}$userId");
+        await http.get("${constants.runsEndpointUrl}$userId");
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
       this.loading = false;

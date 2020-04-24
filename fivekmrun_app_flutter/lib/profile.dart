@@ -58,7 +58,7 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToBarcode,
                   ),
                   MilestoneTile(
-                      value: user?.totalKmRan?.toInt() ?? 0,
+                      value: (runsResource?.value?.length?.toInt() ?? 0) * 5,
                       milestone: 1250,
                       title: "Пробягано\nразстояние"),
                 ],
@@ -87,8 +87,8 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToSettings,
                   ),
                   MilestoneTile(
-                      value: user?.runsCount ?? 0,
-                      milestone: nextRunsMilestone(user?.runsCount ?? 0),
+                      value: runsResource?.value?.length?.toInt() ?? 0,
+                      milestone: nextRunsMilestone(runsResource?.value?.length?.toInt() ?? 0),
                       title: "Следваща\nцел"),
                 ],
               ),
