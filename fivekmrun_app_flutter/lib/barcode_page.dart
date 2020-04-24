@@ -8,7 +8,9 @@ class BarcodePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UserResource>(builder: (context, userResource, child) {
       final user = userResource?.value;
-
+      final userId = (user?.id != null) ? user?.id : 0;
+      final userName = (user?.name != null) ? user?.name : "";
+      
       return Scaffold(
           appBar: AppBar(
               leading: BackButton(color: Colors.white),
@@ -16,16 +18,16 @@ class BarcodePage extends StatelessWidget {
               centerTitle: true,),
           backgroundColor: Colors.white,
           body: Center(child: Column(children: <Widget>[
-            Text(user.name, style: TextStyle(color: Colors.black)),
+            Text(userName, style: TextStyle(color: Colors.black)),
             BarCodeImage(
                 params: Code39BarCodeParams(
-              user.id.toString().padLeft(10, '0'),
+              userId.toString().padLeft(10, '0'),
               lineWidth:
                   2.0, // width for a single black/white bar (default: 2.0)
               barHeight: 90.0, // height for the entire widget (default: 100.0)
               withText: false,
             )),
-            Text(user.id.toString(), style: TextStyle(color: Colors.black))
+            Text(userId.toString(), style: TextStyle(color: Colors.black))
           ])));
     });
   }
