@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/barcode_page.dart';
 import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/home.dart';
@@ -32,7 +35,13 @@ void main() async {
     initialRoute = "/home";
   }
 
-  runApp(MyApp(initialRoute));
+  FlutterError.onError = (FlutterErrorDetails details) {
+    Crashlytics.instance.recordError(details.exception, details.stack);
+  };
+
+  runZoned(() {
+    runApp(MyApp(initialRoute));
+  }, onError: Crashlytics.instance.recordError);
 }
 
 class MyApp extends StatelessWidget {
