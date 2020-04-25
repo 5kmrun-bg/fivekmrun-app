@@ -124,37 +124,55 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   }
 
   Widget _buildStravaAuth(BuildContext context) {
-    return Column(children: <Widget>[
-      Container(height: 200,),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("За да продължите - следвайте инструкциите за да свържете 5kmRun приложението с вашия Strava профил",
-              style: Theme.of(context).textTheme.subtitle,
-              textAlign: TextAlign.center,),
-      ),
-      Container(height: 50,),
-      RaisedButton(
-        color: Colors.transparent,
-        child: Image(
-          image: AssetImage('assets/btn_strava_connectwith_orange.png'),
+    return Column(
+      children: <Widget>[
+        Container(
+          height: 200,
         ),
-        onPressed: this.triggerStravaAuth,
-      ),
-    ],);
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "За да продължите - следвайте инструкциите за да свържете 5kmRun приложението с вашия Strava профил",
+            style: Theme.of(context).textTheme.subtitle,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Container(
+          height: 50,
+        ),
+        RaisedButton(
+          color: Colors.transparent,
+          child: Image(
+            image: AssetImage('assets/btn_strava_connectwith_orange.png'),
+          ),
+          onPressed: this.triggerStravaAuth,
+        ),
+      ],
+    );
   }
 
   Widget _buildList(BuildContext context) {
-    return Column(children: <Widget>[
-      Expanded(
-        child: StravaActivityList(
-            activities: this.activities,
-            selectedActivity: this.selectedActivity,
-            onActivityTap: toggleActivity),
-      ),
-      RaisedButton(
-          onPressed: this.selectedActivity != null ? submitOfflineEntry : null,
-          child: Text("Submit offline entry")),
-    ]);
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: StravaActivityList(
+              activities: this.activities,
+              selectedActivity: this.selectedActivity,
+              onActivityTap: toggleActivity),
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: RaisedButton(
+              onPressed:
+                  this.selectedActivity != null ? submitOfflineEntry : null,
+              child: Text("Участвай с избраното бяагане"),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -175,7 +193,7 @@ class StravaActivityList extends StatelessWidget {
     if (activities == null) {
       return Center(child: CircularProgressIndicator());
     } else if (activities.length == 0) {
-      return Text("няма подходящи бягания");
+      return Text("Няма подходящи бягания");
     } else {
       return ListView.builder(
         scrollDirection: Axis.vertical,
@@ -189,9 +207,10 @@ class StravaActivityList extends StatelessWidget {
     final activity = activities[index];
     final date = DateTime.tryParse(activity.startDate);
     final dateString = date != null ? dateFromat.format(date) : "n/a";
+    final selectedColor = Colors.blueGrey.shade700;
     return Card(
       color: this.selectedActivity == activity
-          ? Colors.blueGrey // TODO: Color?
+          ? selectedColor
           : Colors.transparent,
       child: ListTile(
         onTap: () => this.onActivityTap(activity),
