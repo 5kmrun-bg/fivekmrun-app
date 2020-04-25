@@ -86,7 +86,8 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
 
-    final userId = Provider.of<AuthenticationResource>(context, listen: false).getUserId();
+    final userId =
+        Provider.of<AuthenticationResource>(context, listen: false).getUserId();
     print("HOME: start loading userId $userId");
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;
     Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
@@ -125,7 +126,7 @@ class _HomeState extends State<Home> {
         navigatorKey: this._tabHelper.navigatorKeys[AppTab.futureEvents],
         routes: {
           '/': (context) => FutureEventsPage(),
-        }, 
+        },
       ),
     ];
   }
@@ -136,6 +137,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    var selectedColor = Theme.of(context).accentColor;
     return Provider(
       create: (_) => _tabHelper,
       child: Scaffold(
@@ -147,7 +149,8 @@ class _HomeState extends State<Home> {
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
+          type: BottomNavigationBarType.shifting,
+          selectedItemColor: selectedColor,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
