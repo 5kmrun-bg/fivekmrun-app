@@ -1,6 +1,9 @@
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
+import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widgets/flutter_widgets.dart';
+import 'package:provider/provider.dart';
 
 class ResultsList extends StatefulWidget {
   final List<Result> results;
@@ -13,23 +16,45 @@ class ResultsList extends StatefulWidget {
 
 class _ResultsListState extends State<ResultsList> {
   TextEditingController _controller;
+  ItemScrollController _scrollController = ItemScrollController();
   List<Result> _filteredResults;
+  int _userRunIndex = -1;
+  int _userId;
+  bool _showScrollBtn = false;
 
   void initState() {
     super.initState();
+    _userId =
+        Provider.of<AuthenticationResource>(context, listen: false).getUserId();
+    _showScrollBtn = widget.results.any((r) => r.userId == _userId);
     _filteredResults = widget.results;
     _controller = TextEditingController();
     _controller.addListener(() {
       this._doFilter();
     });
+    this._doFilter();
+    // print("Results.initState $_userId $_showScrollBtn $_userRunIndex");
   }
 
   @override
   void didUpdateWidget(ResultsList oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // print("Results.didUpdateWidget $_userId $_showScrollBtn $_userRunIndex");
+
+    _userId =
+        Provider.of<AuthenticationResource>(context, listen: false).getUserId();
+    _showScrollBtn = widget.results.any((r) => r.userId == _userId);
+
     if (this.widget.results != oldWidget.results) {
       this._doFilter();
     }
+  }
+
+  void _scrollToView() {
+    this._scrollController.scrollTo(
+          index: this._userRunIndex,
+          duration: Duration(seconds: 1),
+        );
   }
 
   void _doFilter() {
@@ -39,6 +64,8 @@ class _ResultsListState extends State<ResultsList> {
               .toLowerCase()
               .contains(_controller.text.toLowerCase() ?? ""))
           .toList();
+      this._userRunIndex =
+          _filteredResults.indexWhere((r) => r.userId == this._userId);
     });
   }
 
@@ -53,12 +80,21 @@ class _ResultsListState extends State<ResultsList> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SearchBox(controller: _controller),
+        SearchBox(
+          controller: _controller,
+          showLoacateButton: this._showScrollBtn,
+          locateCB: _userRunIndex >= 0 ? _scrollToView : null,
+        ),
         Expanded(
-          child: ListView.builder(
-            itemCount: _filteredResults.length,
-            itemBuilder: resultTileBuilder,
-          ),
+          child: _filteredResults.length > 0
+              ? ScrollablePositionedList.builder(
+                  itemScrollController: _scrollController,
+                  itemCount: _filteredResults.length,
+                  itemBuilder: resultTileBuilder,
+                )
+              : Center(
+                  child: Text("Няма резултати"),
+                ),
         ),
       ],
     );
@@ -79,7 +115,7 @@ class _ResultsListState extends State<ResultsList> {
         : textTheme.display2.copyWith(color: theme.accentColor);
     final iconColor =
         res.isDisqualified ? theme.disabledColor : theme.accentColor;
-        
+
     return Card(
       color: res.isDisqualified ? Colors.grey.shade800 : Colors.transparent,
       child: Padding(
@@ -145,26 +181,46 @@ class _ResultsListState extends State<ResultsList> {
 
 class SearchBox extends StatelessWidget {
   final TextEditingController controller;
-  const SearchBox({Key key, this.controller}) : super(key: key);
+  final bool showLoacateButton;
+  final Function locateCB;
+
+  const SearchBox({
+    Key key,
+    this.controller,
+    this.showLoacateButton,
+    this.locateCB,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).primaryColor,
       child: Card(
-        child: ListTile(
-          leading: Icon(Icons.search),
-          title: TextField(
-            controller: controller,
-            decoration: new InputDecoration(
-                hintText: 'Search', border: InputBorder.none),
-          ),
-          trailing: new IconButton(
-            icon: new Icon(Icons.cancel),
-            onPressed: () {
-              controller.clear();
-            },
-          ),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Icon(Icons.search),
+            ),
+            Expanded(
+              child: TextField(
+                controller: controller,
+                decoration: new InputDecoration(
+                    hintText: 'Търси', border: InputBorder.none),
+              ),
+            ),
+            IconButton(
+              icon: new Icon(Icons.cancel),
+              onPressed: () {
+                controller.clear();
+              },
+            ),
+            if (showLoacateButton)
+              new IconButton(
+                icon: new Icon(Icons.location_searching),
+                onPressed: locateCB,
+              ),
+          ],
         ),
       ),
     );

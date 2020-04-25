@@ -18,6 +18,7 @@ class ResultsResource extends Resource<List<Result>> {
     var results = rows.map((row) {
       return Result(
         position: int.tryParse(row.children[0].text),
+        userId: int.tryParse(row.children[1].text),
         name: row.children[2].text,
         time: row.children[3].text,
         totalRuns: row.children[11].text,

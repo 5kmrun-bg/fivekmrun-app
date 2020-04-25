@@ -2,6 +2,7 @@ import '../common/int_extensions.dart';
 
 class Result {
   final String name;
+  final int userId;
   final String time;
   final int position;
   final String totalRuns;
@@ -17,10 +18,12 @@ class Result {
       this.totalRuns,
       this.sex,
       this.status = 0,
-      this.isDisqualified = false});
+      this.isDisqualified = false,
+      this.userId = -1});
 
   Result.fromJson(dynamic json)
       : name = json["u_name"] + " " + json["u_surname"],
+        userId = json["s_uid"],
         time = (json["s_time"] as int).parseSecondsToTimestamp(),
         position = json["s_finish_pos"],
         totalRuns = "",
