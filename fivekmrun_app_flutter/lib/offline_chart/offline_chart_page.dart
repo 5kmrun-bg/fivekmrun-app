@@ -55,7 +55,8 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   }
 
   void showLogoutDialog() {
-    final authResource = Provider.of<AuthenticationResource>(context, listen: false);
+    final authResource =
+        Provider.of<AuthenticationResource>(context, listen: false);
     final textStlyle = Theme.of(context).textTheme.subtitle;
     final accentColor = Theme.of(context).accentColor;
     showDialog(
@@ -212,16 +213,27 @@ class SelectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final btnPdding = EdgeInsets.symmetric(vertical: 4, horizontal: 16);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: this.selected
             ? RaisedButton(
-                child: Text(this.text, style: Theme.of(context).textTheme.subhead),
+                padding: btnPdding,
+                child: Text(
+                  this.text,
+                  style: Theme.of(context).textTheme.subhead,
+                  textAlign: TextAlign.center,
+                ),
                 onPressed: this.onPressed,
               )
             : OutlineButton(
-                child: Text(this.text, style: Theme.of(context).textTheme.subhead),
+                padding: btnPdding,
+                child: Text(
+                  this.text,
+                  style: Theme.of(context).textTheme.subhead,
+                  textAlign: TextAlign.center,
+                ),
                 onPressed: this.onPressed,
               ),
       ),
