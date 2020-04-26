@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/barcode_page.dart';
 import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/home.dart';
@@ -24,17 +25,23 @@ final authRes = AuthenticationResource();
 final appAccentColor = Color.fromRGBO(252, 24, 81, 1.0);
 
 void main() async {
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
   WidgetsFlutterBinding.ensureInitialized();
   await authRes.loadFromLocalStore();
   String initialRoute = "/";
 
   final userId = authRes.getUserId();
   if (authRes.getUserId() != null) {
+    Crashlytics.instance.setUserIdentifier(userId.toString());
     userRes.currentUserId = userId;
     initialRoute = "/home";
   }
 
-  runApp(MyApp(initialRoute));
+  runZoned(() {
+    runApp(MyApp(initialRoute));
+  }, onError: Crashlytics.instance.recordError);
 }
 
 class MyApp extends StatelessWidget {
