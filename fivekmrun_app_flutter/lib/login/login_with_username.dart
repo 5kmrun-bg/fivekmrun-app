@@ -1,7 +1,6 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
-import 'package:fivekmrun_flutter/state/runs_resource.dart';
-import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +29,8 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
     Provider.of<AuthenticationResource>(context, listen: false)
         .authenticate(username, password)
         .then((isAuthenticated) {
+      Crashlytics.instance.log("authenticate with username result: $isAuthenticated");
+
       if (isAuthenticated) {
         setState(() => this.loginError = false);
         Navigator.pushNamed(context, '/home');

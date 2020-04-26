@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fivekmrun_flutter/constants.dart' as constants;
@@ -10,6 +11,8 @@ class AuthenticationResource extends ChangeNotifier {
   int _userId;
 
   Future<bool> authenticate(String username, String password) async {
+    Crashlytics.instance.log("authenticate username - $username");
+
     HttpClient httpClient = new HttpClient();
     HttpClientRequest request =
         await httpClient.postUrl(Uri.parse("https://5kmrun.bg/api/auth"));
@@ -40,6 +43,8 @@ class AuthenticationResource extends ChangeNotifier {
   }
 
   Future<bool> authenticateWithUserId(int userId) async {
+    Crashlytics.instance.log("authenticate userID - $userId");
+
     await this._onLoginSuccess(userId, null);
     return true;
   }
@@ -56,19 +61,31 @@ class AuthenticationResource extends ChangeNotifier {
     return this._token != null && this._userId != null;
   }
 
+  void _setUserId(int userId) {
+    this._userId = userId;
+    Crashlytics.instance.setUserIdentifier(userId?.toString());
+  }
+
+  void _setToken(String token) {
+    this._token = token;
+    Crashlytics.instance.setBool("hasToken", token != null && token != "");
+  }
+
   Future<void> logout() async {
-    this._token = null;
-    this._userId = null;
+    Crashlytics.instance.log("logout() started");
+    this._setUserId(null);
+    this._setToken(null);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(constants.key_userId);
     await prefs.remove(constants.key_token);
     await prefs.remove(constants.key_tokenTimestamp);
+    Crashlytics.instance.log("logout() completed");
   }
 
   Future<void> _onLoginSuccess(int userId, String token) async {
-    this._userId = userId;
-    this._token = token;
+    this._setUserId(userId);
+    this._setToken(token);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt(constants.key_userId, userId);
@@ -87,7 +104,8 @@ class AuthenticationResource extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // load user ID
-    this._userId = prefs.getInt(constants.key_userId);
+    final userId = prefs.getInt(constants.key_userId);
+    this._setUserId(userId);
 
     final token = prefs.getString(constants.key_token);
     if (token != null) {
@@ -99,7 +117,7 @@ class AuthenticationResource extends ChangeNotifier {
         final expiresAt =
             created.add(new Duration(days: constants.tokenExpiryDays));
         if (expiresAt.isAfter(DateTime.now())) {
-          this._token = token;
+          this._setToken(token);
         }
       }
     }

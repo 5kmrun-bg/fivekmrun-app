@@ -29,7 +29,6 @@ class UserResource extends ChangeNotifier {
   int get currentUserId => _currentUserId;
   set currentUserId(int v) {
     this._currentUserId = v;
-    Crashlytics.instance.setUserIdentifier(v.toString());
     if (v != null) {
       this.getById(v, true);
     } else {
