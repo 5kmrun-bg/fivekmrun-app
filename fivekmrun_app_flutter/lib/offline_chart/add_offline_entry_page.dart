@@ -54,8 +54,14 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
     strava.getThisWeekActivities().then((loadedActivites) {
       this.setState(() {
-        this.activities = loadedActivites;
         this.isLoading = false;
+        if (loadedActivites != null) {
+          this.activities = loadedActivites;
+        } else {
+          // Returning null means error while getting runs.
+          this.activities = null;
+          this.isConnectedToStrava = false;
+        }
       });
     });
   }
