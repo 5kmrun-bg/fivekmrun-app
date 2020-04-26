@@ -38,7 +38,7 @@ dependencies:
 
   intl: ^0.16.0
 
-  strava_flutter: ^1.2.0+50
+  strava_flutter: ^1.2.1+52
 
   barcode_flutter: ^1.1.2
 
