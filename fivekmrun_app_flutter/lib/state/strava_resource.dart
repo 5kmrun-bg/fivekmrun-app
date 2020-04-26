@@ -63,7 +63,10 @@ class StravaResource extends ChangeNotifier {
 
       final activities = await strava.getLoggedInAthleteActivities(before, after);
 
-      // TODO: Additional filters (distance)
+      if (activities == null) {
+        return [];
+      }
+
       final runActivites = await Future.wait(activities
           .where((a) => a.type == ActivityType.Run && a.distance >= stravaFilterMinDistance && a.distance <= stravaFilterMaxDistance)
           .map((a) => strava.getActivityById(a.id.toString())));
