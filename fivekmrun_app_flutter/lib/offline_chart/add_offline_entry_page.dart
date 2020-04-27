@@ -173,7 +173,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
             child: RaisedButton(
               onPressed:
                   this.selectedActivity != null ? submitOfflineEntry : null,
-              child: Text("Участвай с избраното бяагане"),
+              child: Text("Участвай с избраното бягане"),
             ),
           ),
         ),
