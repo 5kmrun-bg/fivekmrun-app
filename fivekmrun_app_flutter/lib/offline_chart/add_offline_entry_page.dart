@@ -11,6 +11,7 @@ import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:strava_flutter/Models/activity.dart';
@@ -239,11 +240,18 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.all(8),
-            child: RaisedButton(
-              onPressed:
-                  this.selectedActivity != null ? submitOfflineEntry : null,
-              child: Text("Участвай с избраното бягане"),
-            ),
+            child: 
+            ProgressButton(
+                defaultWidget: const Text("Участвай с избраното бягане"),
+                progressWidget: const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                type: ProgressButtonType.Raised,
+                animate: true,
+                onPressed: () async {
+                    await submitOfflineEntry();
+                    return () {};
+                },
+              ),
           ),
         ),
       ],
