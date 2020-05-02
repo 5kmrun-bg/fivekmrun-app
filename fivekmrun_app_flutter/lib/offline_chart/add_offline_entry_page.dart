@@ -1,9 +1,11 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_submission_model.dart';
+import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -85,13 +87,75 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       distance: stravaActivity.distance,
       startDate: DateTime.now(),
       mapPath: stravaActivity.map.polyline,
-      startLocation: stravaActivity.startLatlng,
+      startGeoLocation: stravaActivity.startLatlng,
+      elevationGainedTotal: stravaActivity.totalElevationGain,
+      elevationLow: stravaActivity.elevLow,
+      elevationHigh: stravaActivity.elevHigh,
     );
 
-    final result =
-        await offlineChartResource.submitEntry(model, authResource.getToken());
+    Map<String, dynamic> result;
+    try {
+      result = await offlineChartResource.submitEntry(model, authResource.getToken());
+    } on Exception catch(e) {
+      Crashlytics.instance.recordError(e, StackTrace.current);
+      showDialog(
+        context: context,
+        useRootNavigator: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Сървърна грешка"),
+            content: Text("Грешка при изпращане на данните. Моля, опитайте по-късно."),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("OK"), 
+                onPressed: () => Navigator.of(context).pop())
+            ],);
+        });
+      return;
+    }
+    
+    if (result["errors"] != null && result["errors"].contains("403")) {
+      Crashlytics.instance.recordError(Exception("Unexpected invalid 5kmRun token"), StackTrace.current);
+      final textStlyle = Theme.of(context).textTheme.subtitle;
+      showDialog(
+        context: context,
+        useRootNavigator: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text("Невалидно потребителско име и парола"),
+            content: RichText(
+              text: TextSpan(
+                style: textStlyle,
+                children: <TextSpan>[
+                  TextSpan(text: 'Влезте отново с вашите 5kmRun потребителско име и парола.'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("Вход"),
+                onPressed: () async {
+                  await authResource.logout();
+                  Provider.of<UserResource>(context, listen: false).clear();
+                  Provider.of<RunsResource>(context, listen: false).clear();
 
-    //TODO: error handling
+                  Navigator.of(context, rootNavigator: true)
+                      .pushNamedAndRemoveUntil("/", (_) => false);
+                },
+              ),
+              new FlatButton(
+                child: new Text("Откажи"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     if (result["answer"]) {
       Navigator.of(context).pushNamed("/");
     }
