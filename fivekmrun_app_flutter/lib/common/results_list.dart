@@ -139,12 +139,12 @@ class _ResultsListState extends State<ResultsList> {
       color: res.isDisqualified ? Colors.grey.shade800 : Colors.transparent,
       child: Padding(
         padding: const EdgeInsets.all(0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
               Container(
                 margin: EdgeInsets.only(right: 10),
-                height: 118,
                 width: 10,
                 decoration: BoxDecoration(
                   color: cardColor, 
@@ -154,50 +154,51 @@ class _ResultsListState extends State<ResultsList> {
                     )
                   ),
                 ),
-            Expanded(
-              child: Column(
+              Expanded(
+                child: Column(
+                    children: <Widget>[
+                      ListTileRow(
+                        icon: CustomIcons.award,
+                        text: position,
+                        iconColor: iconColor,
+                      ),
+                      ListTileRow(
+                        icon: Icons.timer,
+                        text: res.time,
+                        iconColor: iconColor,
+                      ),
+                      ListTileRow(
+                        icon: Icons.arrow_upward,
+                        text: res.elevationGainedTotal != null ? res.elevationGainedTotal.toString() + "m" : "-",
+                        iconColor: iconColor,
+                      )
+                    ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     ListTileRow(
-                      icon: CustomIcons.award,
-                      text: position,
+                      icon: Icons.perm_identity,
+                      text: res.userId.toString() ?? " - ",
                       iconColor: iconColor,
                     ),
                     ListTileRow(
-                      icon: Icons.timer,
-                      text: res.time,
+                      icon: Icons.person,
+                      text: res.name,
                       iconColor: iconColor,
                     ),
                     ListTileRow(
-                      icon: Icons.arrow_upward,
-                      text: res.elevationGainedTotal != null ? res.elevationGainedTotal.toString() + "m" : "-",
+                      icon: Icons.location_city,
+                      text: res.startLocation ?? " - ",
                       iconColor: iconColor,
-                    )
+                    ),
                   ],
+                ),
               ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ListTileRow(
-                    icon: Icons.perm_identity,
-                    text: res.userId.toString() ?? " - ",
-                    iconColor: iconColor,
-                  ),
-                  ListTileRow(
-                    icon: Icons.person,
-                    text: res.name,
-                    iconColor: iconColor,
-                  ),
-                  ListTileRow(
-                    icon: Icons.location_city,
-                    text: res.startLocation ?? " - ",
-                    iconColor: iconColor,
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
