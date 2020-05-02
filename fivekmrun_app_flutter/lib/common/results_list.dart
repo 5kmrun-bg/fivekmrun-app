@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
+import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:flutter/material.dart';
@@ -103,38 +104,75 @@ class _ResultsListState extends State<ResultsList> {
   Widget resultTileBuilder(BuildContext context, int index) {
     final res = _filteredResults[index];
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
 
     var position = res.position.toString();
     if (res.officialPosition != null) {
       position = res.officialPosition.toString();
     }
 
-    final positionStyle = res.isDisqualified
-        ? textTheme.display2.copyWith(color: theme.disabledColor)
-        : textTheme.display2.copyWith(color: theme.accentColor);
     final iconColor =
         res.isDisqualified ? theme.disabledColor : theme.accentColor;
+
+    Color cardColor;
+
+    switch (res.status) {
+      case 1:
+        cardColor = Colors.greenAccent;
+        break;
+      case 2:
+        cardColor = Colors.blueAccent;
+        break;
+      case 3:
+        cardColor = Colors.redAccent;
+        break;
+      case 4:
+        cardColor = Colors.purpleAccent;
+        break;
+      case 5:
+        cardColor = Colors.yellowAccent;
+        break;
+      default:
+        cardColor = Colors.white;
+    }
 
     return Card(
       color: res.isDisqualified ? Colors.grey.shade800 : Colors.transparent,
       child: Padding(
-        padding: const EdgeInsets.all(6),
+        padding: const EdgeInsets.all(0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 20, 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    position,
-                    style: positionStyle,
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                height: 118,
+                width: 10,
+                decoration: BoxDecoration(
+                  color: cardColor, 
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(5), 
+                    topLeft: Radius.circular(5)
+                    )
                   ),
-                  Text("място", style: textTheme.subtitle),
-                ],
+                ),
+            Expanded(
+              child: Column(
+                  children: <Widget>[
+                    ListTileRow(
+                      icon: CustomIcons.award,
+                      text: position,
+                      iconColor: iconColor,
+                    ),
+                    ListTileRow(
+                      icon: Icons.timer,
+                      text: res.time,
+                      iconColor: iconColor,
+                    ),
+                    ListTileRow(
+                      icon: Icons.arrow_upward,
+                      text: res.elevationGainedTotal != null ? res.elevationGainedTotal.toString() + "m" : "-",
+                      iconColor: iconColor,
+                    )
+                  ],
               ),
             ),
             Expanded(
@@ -142,33 +180,20 @@ class _ResultsListState extends State<ResultsList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ListTileRow(
+                    icon: Icons.perm_identity,
+                    text: res.userId.toString() ?? " - ",
+                    iconColor: iconColor,
+                  ),
+                  ListTileRow(
                     icon: Icons.person,
                     text: res.name,
                     iconColor: iconColor,
                   ),
                   ListTileRow(
-                    icon: Icons.timer,
-                    text: res.time,
+                    icon: Icons.location_city,
+                    text: res.startLocation ?? " - ",
                     iconColor: iconColor,
                   ),
-                  if (res.status > 0 && res.status <= 2)
-                    ListTileRow(
-                      icon: Icons.check_box,
-                      text: "доказан",
-                      iconColor: iconColor,
-                    ),
-                  if (res.status == 3)
-                    ListTileRow(
-                      icon: Icons.check,
-                      text: "самостоятелен",
-                      iconColor: iconColor,
-                    ),
-                  if (res.status > 3 && res.status <= 5)
-                    ListTileRow(
-                      icon: Icons.error,
-                      text: "дисквалифициран",
-                      iconColor: iconColor,
-                    ),
                 ],
               ),
             ),
