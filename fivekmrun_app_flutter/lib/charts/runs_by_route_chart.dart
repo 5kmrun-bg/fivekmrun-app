@@ -66,7 +66,7 @@ class RunsByRouteChart extends StatelessWidget {
     return [
       new charts.Series<RunsByRouteEntry, String>(
         id: 'RunsByRoute',
-        colorFn: (_, i) => PinkishRedColor().makeShades(1000)[i*100],
+        colorFn: (_, i) => PinkishRedColor().getPalette()[i % PinkishRedColor().getPalette().length],
         domainFn: (RunsByRouteEntry run, _) => run.location,
         measureFn: (RunsByRouteEntry run, _) => run.timeInSeconds,
         data: series,

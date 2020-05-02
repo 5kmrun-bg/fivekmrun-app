@@ -33,4 +33,15 @@ class PinkishRedColor extends charts.Color {
       lighter: lighter,
     );
   }
+
+  List<charts.Color> getPalette() {
+    return [
+      charts.Color.fromHex(code: "#560000"),
+      charts.Color.fromHex(code: "#880000"),
+      charts.Color.fromHex(code: "#c10029"),
+      charts.Color.fromHex(code: "#fb4d52"),
+      charts.Color.fromHex(code: "#ff827e"),
+    //  charts.Color.fromHex(code: "#ffb4ad"),
+    ];
+  }
 }
