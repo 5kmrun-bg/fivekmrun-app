@@ -3,6 +3,7 @@ import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
+import 'package:fivekmrun_flutter/state/google_maps_service.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_submission_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
@@ -79,7 +80,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     AuthenticationResource authResource =
         Provider.of<AuthenticationResource>(context, listen: false);
     OfflineChartResource offlineChartResource =
-        Provider.of<OfflineChartResource>(context, listen: false);
+        Provider.of<OfflineChartResource>(context, listen: false);  
+    GoogleMapsService googleMapsService = GoogleMapsService();
 
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
@@ -91,6 +93,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       elevationGainedTotal: stravaActivity.totalElevationGain,
       elevationLow: stravaActivity.elevLow,
       elevationHigh: stravaActivity.elevHigh,
+      startLocation: await googleMapsService.getTownFromGeoLocation(stravaActivity.startLatitude, stravaActivity.startLongitude),
     );
 
     Map<String, dynamic> result;
