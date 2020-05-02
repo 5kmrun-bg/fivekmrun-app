@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
@@ -160,6 +161,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     }
 
     if (result["answer"]) {
+      FirebaseAnalytics().logEvent(name: "submit_selfie_entry");
       Navigator.of(context).pushNamed("/");
     }
   }
