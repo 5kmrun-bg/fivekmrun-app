@@ -14,6 +14,7 @@ class Result {
   double elevationLow;
   double elevationHigh;
   double elevationGainedTotal;
+  String mapPolyline;
 
   Result(
       {this.name,
@@ -37,7 +38,8 @@ class Result {
         startLocation = json["s_start_location"],
         elevationLow = _jsonToDouble(json["s_elevation_loss"]),
         elevationHigh = _jsonToDouble(json["s_elevation_gained"]),
-        elevationGainedTotal = _jsonToDouble(json["s_elevation_gained_total"]);
+        elevationGainedTotal = _jsonToDouble(json["s_elevation_gained_total"]),
+        mapPolyline = json["s_map"];
 
   static List<Result> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];
