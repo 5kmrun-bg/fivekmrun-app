@@ -33,7 +33,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   List<DetailedActivity> activities;
   DetailedActivity selectedActivity;
   bool isConnectedToStrava = false;
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void didChangeDependencies() async {
