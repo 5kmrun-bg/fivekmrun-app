@@ -9,7 +9,7 @@ class LocalStorageResource extends ChangeNotifier {
 
   Future<bool> get isSubscribedForGeneral async {
     final SharedPreferences storage = await _storage;
-    return storage.getBool(this._keySubscribedForGeneral);
+    return storage.getBool(this._keySubscribedForGeneral) ?? false;
   }
 
   set isSubscrubedForGeneral(bool value) {
