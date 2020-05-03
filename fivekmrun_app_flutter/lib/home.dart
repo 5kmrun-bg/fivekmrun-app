@@ -1,5 +1,6 @@
 import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/offline_chart/add_offline_entry_page.dart';
+import 'package:fivekmrun_flutter/offline_chart/offline_chart_details_page.dart';
 import 'package:fivekmrun_flutter/offline_chart/offline_chart_page.dart';
 import 'package:fivekmrun_flutter/past_events/event_results_page.dart';
 import 'package:fivekmrun_flutter/past_events/past_events_page.dart';
@@ -114,6 +115,7 @@ class _HomeState extends State<Home> {
           routes: {
             '/': (context) => OfflineChartPage(),
             '/add': (context) => AddOfflineEntryPage(),
+            '/details': (context) => OfflineChartDetailsPage(),
           }),
       TabNavigator(
         navigatorKey: this._tabHelper.navigatorKeys[AppTab.pastEvents],

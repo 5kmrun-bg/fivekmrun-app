@@ -25,7 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
         Provider.of<AuthenticationResource>(context, listen: false);
     final localStorage = new LocalStorageResource();
     localStorage.isSubscribedForGeneral
-        .then((value) => this._pushNotificationsSubscribed = value);
+        .then((value) => setState(() => this._pushNotificationsSubscribed = value));
 
     final logout = () async {
       await authResource.logout();

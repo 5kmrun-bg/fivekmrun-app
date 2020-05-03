@@ -15,7 +15,7 @@ class OfflineChartResource extends ChangeNotifier {
     body += "&start_date=" + model.startDate.toString();
     body += "&tkn=" + authToken;
     body += "&map=" + model.mapPath;
-    body += "&start_location" + model.startLocation;
+    body += "&start_location=" + model.startLocation;
     body += "&elevation_loss=" + model.elevationLow.toString();
     body += "&elevation_gained=" + model.elevationHigh.toString();
     body += "&elevation_gained_total=" + model.elevationGainedTotal.toString();
