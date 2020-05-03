@@ -81,6 +81,7 @@ class OfflineChartDetailsPage extends StatelessWidget {
                       indent: 10,
                       endIndent: 10,
                     ),
+                    SizedBox(height: 10, width: 10,),
                     Expanded(
                       child: Column(children: <Widget>[
                         ListTileRow(
