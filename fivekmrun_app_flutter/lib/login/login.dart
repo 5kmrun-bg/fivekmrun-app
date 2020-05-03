@@ -1,7 +1,9 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fivekmrun_flutter/login/login_with_id.dart';
 import 'package:fivekmrun_flutter/login/login_with_username.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -17,6 +19,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final accentColor = Theme.of(context).accentColor;
+
     return Scaffold(
       body: Center(
         child: Container(
@@ -37,7 +41,12 @@ class _LoginState extends State<Login> {
                       Text(this.loginWithId ? "влез с парола" : "влез с номер"),
                   onPressed: this._toggleLogin,
                 ),
-              )
+              ),
+              Spacer(),
+              Text("Нямате регистрация?"),
+              GestureDetector(
+                onTap: () => _loadRegistrationScreen(),
+                child: Text("Регистрирай се сега", style: TextStyle(color: accentColor, fontSize: 14, fontWeight: FontWeight.bold)), )
             ],
           ),
         ),
@@ -54,5 +63,11 @@ class _LoginState extends State<Login> {
         height: 120,
       ),
     );
+  }
+
+  _loadRegistrationScreen() async {
+    print("load registration");
+    FirebaseAnalytics().logEvent(name: "open_registration_link");
+    await launch("https://5kmrun.bg/register");
   }
 }
