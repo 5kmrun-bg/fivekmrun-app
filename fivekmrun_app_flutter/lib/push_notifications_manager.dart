@@ -23,7 +23,7 @@ class PushNotificationsManager {
       _firebaseMessaging.configure();
 
       LocalStorageResource localStorageResource = new LocalStorageResource();
-      localStorageResource.isSubscribedForGeneral.then((isSubscribed) => this.subscribeTopic("general"));
+      localStorageResource.isSubscribedForGeneral.then((isSubscribed) { if (isSubscribed) this.subscribeTopic("general"); });
 
       // For testing purposes print the Firebase Messaging token
       String token = await _firebaseMessaging.getToken();
