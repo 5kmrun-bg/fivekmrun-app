@@ -160,25 +160,28 @@ class _ResultsListState extends State<ResultsList> {
                     )
                   ),
                 ),
-              IntrinsicWidth(
-                child: Column(
-                    children: <Widget>[
-                      ListTileRow(
-                        icon: CustomIcons.award,
-                        text: position,
-                        iconColor: iconColor,
-                      ),
-                      ListTileRow(
-                        icon: Icons.timer,
-                        text: res.time,
-                        iconColor: iconColor,
-                      ),
-                      ListTileRow(
-                        icon: Icons.terrain,
-                        text: res.elevationGainedTotal != null ? res.elevationGainedTotal.toString() + "m" : "-",
-                        iconColor: iconColor,
-                      )
-                    ],
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: IntrinsicWidth(
+                  child: Column(
+                      children: <Widget>[
+                        ListTileRow(
+                          icon: CustomIcons.award,
+                          text: position,
+                          iconColor: iconColor,
+                        ),
+                        ListTileRow(
+                          icon: Icons.timer,
+                          text: res.time,
+                          iconColor: iconColor,
+                        ),
+                        ListTileRow(
+                          icon: Icons.terrain,
+                          text: res.elevationGainedTotal != null ? res.elevationGainedTotal.toString() + "m" : "-",
+                          iconColor: iconColor,
+                        )
+                      ],
+                  ),
                 ),
               ),
               Expanded(
