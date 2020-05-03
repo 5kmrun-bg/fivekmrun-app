@@ -205,7 +205,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            "За да продължите - следвайте инструкциите за да свържете 5kmRun приложението с вашия Strava профил",
+            "За да продължите - следвайте инструкциите за да свържете 5kmRun приложението с вашия Strava профил.\n \nМоля, използвайте Google Chrome при свързването и въведете директно Strava потребителско име и парола. В момента, свързване с други браузъри не сработва успешно.",
             style: Theme.of(context).textTheme.subtitle,
             textAlign: TextAlign.center,
           ),
