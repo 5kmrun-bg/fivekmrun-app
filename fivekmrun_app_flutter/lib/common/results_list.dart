@@ -135,7 +135,13 @@ class _ResultsListState extends State<ResultsList> {
         cardColor = Colors.white;
     }
 
-    return Card(
+    return GestureDetector(
+    onTap: () {
+      if (res.mapPolyline != null && res.mapPolyline != "") {
+        Navigator.of(context).pushNamed("/details", arguments: res);
+      }
+    },
+    child: Card(
       color: res.isDisqualified ? Colors.grey.shade800 : Colors.transparent,
       child: Padding(
         padding: const EdgeInsets.all(0),
@@ -154,7 +160,7 @@ class _ResultsListState extends State<ResultsList> {
                     )
                   ),
                 ),
-              Expanded(
+              IntrinsicWidth(
                 child: Column(
                     children: <Widget>[
                       ListTileRow(
@@ -168,7 +174,7 @@ class _ResultsListState extends State<ResultsList> {
                         iconColor: iconColor,
                       ),
                       ListTileRow(
-                        icon: Icons.arrow_upward,
+                        icon: Icons.terrain,
                         text: res.elevationGainedTotal != null ? res.elevationGainedTotal.toString() + "m" : "-",
                         iconColor: iconColor,
                       )
@@ -201,7 +207,7 @@ class _ResultsListState extends State<ResultsList> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
 
