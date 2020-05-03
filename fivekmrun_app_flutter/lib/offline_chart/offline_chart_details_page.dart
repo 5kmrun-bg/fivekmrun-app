@@ -1,63 +1,46 @@
-import 'package:fivekmrun_flutter/common/list_tile_row.dart';
-import 'package:fivekmrun_flutter/common/milestone_gauge.dart';
-import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/offline_chart/details_tile.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
-import 'package:fivekmrun_flutter/state/results_resource.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class OfflineChartDetailsPage extends StatelessWidget {
   const OfflineChartDetailsPage({Key key}) : super(key: key);
-
-  Widget buildPositionGauge(Run run) {
-    ResultsResource results = ResultsResource();
-    return FutureBuilder<List<Result>>(
-        future: results.load(id: run.eventId),
-        builder: (BuildContext context, AsyncSnapshot<List<Result>> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.active:
-            case ConnectionState.waiting:
-              return AspectRatio(
-                aspectRatio: 1,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            case ConnectionState.done:
-              if (snapshot.hasError)
-                return MilestoneGauge(run.position, 400);
-              else
-                return MilestoneGauge(run.position, snapshot.data.length);
-          }
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
     final Result result = ModalRoute.of(context).settings.arguments;
     final iconColor = Theme.of(context).accentColor;
-    final widthSize = MediaQuery.of(context).size.width.round();
+    final imgSize = MediaQuery.of(context).size.width.round() - 32;
 
+    final mapUrl =
+        "https://maps.googleapis.com/maps/api/staticmap?size=${imgSize}x${imgSize}&zoom=14&maptype=terrain&path=weight:3%7Ccolor:0xFC1851%7Cenc:" +
+            result.mapPolyline +
+            "&key=" +
+            googleMapsKey;
     return Scaffold(
       appBar: AppBar(title: Text(result.name)),
-      body: ListView(
-        children: <Widget>[ Center(
+      body: ListView(children: <Widget>[
+        Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Image.network(
-                      "https://maps.googleapis.com/maps/api/staticmap?size=${widthSize}x${widthSize}&zoom=14&maptype=terrain&path=weight:3%7Ccolor:0xFC1851%7Cenc:" +
-                          result.mapPolyline +
-                          "&key=" +
-                          googleMapsKey,
-                      fit: BoxFit.fitWidth,
+                Stack(
+                  children: <Widget>[
+                    SizedBox(
+                      height: imgSize.toDouble(),
+                      child: Center(child: CircularProgressIndicator()),
                     ),
+                    FadeInImage.memoryNetwork(
+                      image: mapUrl,
+                      fit: BoxFit.fitWidth,
+                      height: imgSize.toDouble(),
+                      placeholder: kTransparentImage,
+                      alignment: Alignment.topCenter,
+                    ),
+                  ],
                 ),
                 IntrinsicHeight(
                   child: Row(
@@ -82,22 +65,31 @@ class OfflineChartDetailsPage extends StatelessWidget {
                             ),
                             DetailsTile(
                               title: "общо изкачване",
-                              value: result.elevationGainedTotal != null ? result.elevationGainedTotal.toString() + "m" : "-",
+                              value: result.elevationGainedTotal != null
+                                  ? result.elevationGainedTotal.toString() + "m"
+                                  : "-",
                               accentColor: iconColor,
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(height: 10, width: 5,),
+                      SizedBox(
+                        height: 10,
+                        width: 5,
+                      ),
                       VerticalDivider(
                         color: iconColor,
                         width: 5,
                         indent: 10,
                         endIndent: 10,
                       ),
-                      SizedBox(height: 10, width: 5,),
+                      SizedBox(
+                        height: 10,
+                        width: 5,
+                      ),
                       Expanded(
-                        child: Column(children: <Widget>[
+                          child: Column(
+                        children: <Widget>[
                           DetailsTile(
                             title: "локация",
                             value: result.startLocation ?? " - ",
@@ -105,12 +97,15 @@ class OfflineChartDetailsPage extends StatelessWidget {
                           ),
                           DetailsTile(
                             title: "дистанция",
-                            value: result.distance.toString()+" m",
+                            value: result.distance.toString() + " m",
                             accentColor: iconColor,
                           ),
                           DetailsTile(
                             title: "денивелация",
-                            value: result.elevationLow.toStringAsFixed(0) + " m - " + result.elevationHigh.toStringAsFixed(0) + " m",
+                            value: result.elevationLow.toStringAsFixed(0) +
+                                " m - " +
+                                result.elevationHigh.toStringAsFixed(0) +
+                                " m",
                             accentColor: iconColor,
                           ),
                           if (result.status > 0 && result.status <= 2)
@@ -131,7 +126,8 @@ class OfflineChartDetailsPage extends StatelessWidget {
                               value: "дисквалифициран",
                               accentColor: iconColor,
                             ),
-                        ],))
+                        ],
+                      ))
                     ],
                   ),
                 ),
@@ -139,7 +135,7 @@ class OfflineChartDetailsPage extends StatelessWidget {
             ),
           ),
         ),
-        ]),
+      ]),
     );
   }
 }
