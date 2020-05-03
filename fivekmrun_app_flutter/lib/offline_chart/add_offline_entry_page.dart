@@ -203,7 +203,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     return Column(
       children: <Widget>[
         Container(
-          height: 200,
+          height: 100,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
