@@ -66,7 +66,7 @@ class OfflineChartDetailsPage extends StatelessWidget {
                             DetailsTile(
                               title: "общо изкачване",
                               value: result.elevationGainedTotal != null
-                                  ? result.elevationGainedTotal.toString() + " m"
+                                  ? result.elevationGainedTotal.round().toString() + " m"
                                   : "-",
                               accentColor: iconColor,
                             ),

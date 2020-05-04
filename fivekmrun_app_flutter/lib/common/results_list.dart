@@ -177,7 +177,7 @@ class _ResultsListState extends State<ResultsList> {
                         ),
                         ListTileRow(
                           icon: Icons.terrain,
-                          text: res.elevationGainedTotal != null ? res.elevationGainedTotal.toString() + "m" : "-",
+                          text: res.elevationGainedTotal != null ? res.elevationGainedTotal.round().toString() + "m" : "-",
                           iconColor: iconColor,
                         )
                       ],
