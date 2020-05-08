@@ -19,6 +19,7 @@ class Result {
   String mapPolyline;
   int distance;
   String pace;
+  DateTime startDate;
 
   Result(
       {this.name,
@@ -45,7 +46,8 @@ class Result {
         elevationGainedTotal = _jsonToDouble(json["s_elevation_gained_total"]),
         mapPolyline = json["s_map"],
         distance = json["s_distance"],
-        pace = Run.timeInSecondsToPace(json["s_time"] as int);
+        pace = Run.timeInSecondsToPace(json["s_time"] as int),
+        startDate = DateTime.parse(json["s_start_date"]);
 
   static List<Result> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];

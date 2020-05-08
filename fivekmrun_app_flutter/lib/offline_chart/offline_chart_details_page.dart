@@ -3,10 +3,11 @@ import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
+import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class OfflineChartDetailsPage extends StatelessWidget {
-  const OfflineChartDetailsPage({Key key}) : super(key: key);
+  OfflineChartDetailsPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +50,11 @@ class OfflineChartDetailsPage extends StatelessWidget {
                         child: Column(
                           children: <Widget>[
                             DetailsTile(
+                              title: "дата",
+                              value: DateFormat("dd.MM.yyyy").format(result.startDate),
+                              accentColor: iconColor,
+                            ),
+                            DetailsTile(
                               title: "позиция",
                               value: result.officialPosition.toString(),
                               accentColor: iconColor,
@@ -90,6 +96,11 @@ class OfflineChartDetailsPage extends StatelessWidget {
                       Expanded(
                           child: Column(
                         children: <Widget>[
+                          DetailsTile(
+                            title: "час",
+                            value: DateFormat("HH:mm").format(result.startDate),
+                            accentColor: iconColor,
+                          ),
                           DetailsTile(
                             title: "локация",
                             value: result.startLocation ?? " - ",

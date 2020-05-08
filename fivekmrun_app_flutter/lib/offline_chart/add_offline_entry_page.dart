@@ -89,7 +89,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       userId: userResource.currentUserId.toString(),
       elapsedTime: stravaActivity.elapsedTime,
       distance: stravaActivity.distance,
-      startDate: DateTime.now(),
+      startDate: DateTime.parse(stravaActivity.startDateLocal),
       mapPath: stravaActivity.map.polyline,
       startGeoLocation: stravaActivity.startLatlng,
       elevationGainedTotal: stravaActivity.totalElevationGain,
