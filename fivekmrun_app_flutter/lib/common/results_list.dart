@@ -63,7 +63,8 @@ class _ResultsListState extends State<ResultsList> {
       _filteredResults = widget.results
           .where((res) => res.name
               .toLowerCase()
-              .contains(_controller.text.toLowerCase() ?? ""))
+              .contains(_controller.text.toLowerCase() ?? "") || 
+              res.userId.toString() == (_controller.text ?? "").trim())
           .toList();
       this._userRunIndex =
           _filteredResults.indexWhere((r) => r.userId == this._userId);
@@ -241,7 +242,7 @@ class SearchBox extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 decoration: new InputDecoration(
-                    hintText: 'Търси', border: InputBorder.none),
+                    hintText: 'Търси по име или номер', border: InputBorder.none),
               ),
             ),
             IconButton(
