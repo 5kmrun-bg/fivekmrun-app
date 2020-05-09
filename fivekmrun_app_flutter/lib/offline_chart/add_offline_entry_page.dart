@@ -82,7 +82,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     AuthenticationResource authResource =
         Provider.of<AuthenticationResource>(context, listen: false);
     OfflineChartResource offlineChartResource =
-        Provider.of<OfflineChartResource>(context, listen: false);  
+        Provider.of<OfflineChartResource>(context, listen: false);
     GoogleMapsService googleMapsService = GoogleMapsService();
 
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
@@ -95,70 +95,102 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       elevationGainedTotal: stravaActivity.totalElevationGain,
       elevationLow: stravaActivity.elevLow,
       elevationHigh: stravaActivity.elevHigh,
-      startLocation: await googleMapsService.getTownFromGeoLocation(stravaActivity.startLatitude, stravaActivity.startLongitude),
+      startLocation: await googleMapsService.getTownFromGeoLocation(
+          stravaActivity.startLatitude, stravaActivity.startLongitude),
     );
 
     Map<String, dynamic> result;
     try {
-      result = await offlineChartResource.submitEntry(model, authResource.getToken());
-    } on Exception catch(e) {
+      result = await offlineChartResource.submitEntry(
+          model, authResource.getToken());
+    } on Exception catch (e) {
       Crashlytics.instance.recordError(e, StackTrace.current);
       showDialog(
-        context: context,
-        useRootNavigator: true,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Сървърна грешка"),
-            content: Text("Грешка при изпращане на данните. Моля, опитайте по-късно."),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("OK"), 
-                onPressed: () => Navigator.of(context).pop())
-            ],);
-        });
+          context: context,
+          useRootNavigator: true,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Сървърна грешка"),
+              content: Text(
+                  "Грешка при изпращане на данните. Моля, опитайте по-късно."),
+              actions: <Widget>[
+                FlatButton(
+                    child: Text("OK"),
+                    onPressed: () => Navigator.of(context).pop())
+              ],
+            );
+          });
       return;
     }
-    
-    if (result["errors"] != null && result["errors"].contains("403")) {
-      Crashlytics.instance.recordError(Exception("Unexpected invalid 5kmRun token"), StackTrace.current);
-      final textStlyle = Theme.of(context).textTheme.subtitle;
-      showDialog(
-        context: context,
-        useRootNavigator: true,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text("Невалидно потребителско име и парола"),
-            content: RichText(
-              text: TextSpan(
-                style: textStlyle,
-                children: <TextSpan>[
-                  TextSpan(text: 'Влезте отново с вашите 5kmRun потребителско име и парола.'),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              // usually buttons at the bottom of the dialog
-              new FlatButton(
-                child: new Text("Вход"),
-                onPressed: () async {
-                  await authResource.logout();
-                  Provider.of<UserResource>(context, listen: false).clear();
-                  Provider.of<RunsResource>(context, listen: false).clear();
 
-                  Navigator.of(context, rootNavigator: true)
-                      .pushNamedAndRemoveUntil("/", (_) => false);
-                },
+    if (result["errors"] != null) {
+      if (result["errors"].contains("403")) {
+        Crashlytics.instance.recordError(
+            Exception("Unexpected invalid 5kmRun token"), StackTrace.current);
+        final textStlyle = Theme.of(context).textTheme.subtitle;
+        showDialog(
+          context: context,
+          useRootNavigator: true,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: new Text("Невалидно потребителско име и парола"),
+              content: RichText(
+                text: TextSpan(
+                  style: textStlyle,
+                  children: <TextSpan>[
+                    TextSpan(
+                        text:
+                            'Влезте отново с вашите 5kmRun потребителско име и парола.'),
+                  ],
+                ),
               ),
-              new FlatButton(
-                child: new Text("Откажи"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new FlatButton(
+                  child: new Text("Вход"),
+                  onPressed: () async {
+                    await authResource.logout();
+                    Provider.of<UserResource>(context, listen: false).clear();
+                    Provider.of<RunsResource>(context, listen: false).clear();
+
+                    Navigator.of(context, rootNavigator: true)
+                        .pushNamedAndRemoveUntil("/", (_) => false);
+                  },
+                ),
+                new FlatButton(
+                  child: new Text("Откажи"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        Crashlytics.instance.recordError(Exception(result["errors"].toString()), StackTrace.current);
+                showDialog(
+          context: context,
+          useRootNavigator: true,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: new Text("Грешка при изпращане на сървъра"),
+              actions: <Widget>[
+                FlatButton(
+                    child: Text("OK"),
+                    onPressed: () => Navigator.of(context).pop())
+              ],
+              content: RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: 'Грешка при изпращане на данните. Моля, опитайте по-късно.'),
+                  ],
+                ),
               ),
-            ],
-          );
-        },
-      );
+            );},
+                );
+      }
     }
 
     if (result["answer"]) {
@@ -240,18 +272,17 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.all(8),
-            child: 
-            ProgressButton(
-                defaultWidget: const Text("Участвай с избраното бягане"),
-                progressWidget: const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
-                type: ProgressButtonType.Raised,
-                animate: true,
-                onPressed: () async {
-                    await submitOfflineEntry();
-                    return () {};
-                },
-              ),
+            child: ProgressButton(
+              defaultWidget: const Text("Участвай с избраното бягане"),
+              progressWidget: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+              type: ProgressButtonType.Raised,
+              animate: true,
+              onPressed: () async {
+                await submitOfflineEntry();
+                return () {};
+              },
+            ),
           ),
         ),
       ],
