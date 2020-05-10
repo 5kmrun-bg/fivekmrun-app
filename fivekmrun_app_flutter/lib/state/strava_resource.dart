@@ -111,30 +111,34 @@ class StravaResource extends ChangeNotifier {
               seconds: now.second))
           .difference(DateTime.fromMillisecondsSinceEpoch(0))
           .inSeconds;
+      try {
+        final activities =
+            await strava.getLoggedInAthleteActivities(before, after);
 
-      final activities =
-          await strava.getLoggedInAthleteActivities(before, after);
+        if (activities == null) {
+          Crashlytics.instance.log("Strava get activities results: null");
 
-      if (activities == null) {
-        Crashlytics.instance.log("Strava get activities results: null");
+          return [];
+        }
 
-        return [];
+        Crashlytics.instance
+            .log("Strava get activities results: ${activities.length}");
+
+        final runActivites = await Future.wait(activities
+            .where((a) =>
+                a.type == ActivityType.Run &&
+                a.distance >= stravaFilterMinDistance &&
+                a.distance <= stravaFilterMaxDistance)
+            .map((a) => strava.getActivityById(a.id.toString())));
+
+        Crashlytics.instance.log(
+            "Strava get filtered activities results: ${runActivites.length}");
+
+        return runActivites;
       }
-
-      Crashlytics.instance
-          .log("Strava get activities results: ${activities.length}");
-
-      final runActivites = await Future.wait(activities
-          .where((a) =>
-              a.type == ActivityType.Run &&
-              a.distance >= stravaFilterMinDistance &&
-              a.distance <= stravaFilterMaxDistance)
-          .map((a) => strava.getActivityById(a.id.toString())));
-
-      Crashlytics.instance.log(
-          "Strava get filtered activities results: ${runActivites.length}");
-
-      return runActivites;
+      on Exception catch(e) {
+        Crashlytics.instance.recordError(e, StackTrace.current);
+      }
     });
   }
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/common/constants.dart';
@@ -99,6 +101,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           stravaActivity.startLatitude, stravaActivity.startLongitude),
     );
 
+    Crashlytics.instance.log("5kmRun Submission model: " + jsonEncode(model.toJson()));
+
     Map<String, dynamic> result;
     try {
       result = await offlineChartResource.submitEntry(
@@ -123,7 +127,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       return;
     }
 
-    if (result["errors"] != null) {
+    if (result["errors"] != null && result["errors"].length > 0) {
       if (result["errors"].contains("403")) {
         Crashlytics.instance.recordError(
             Exception("Unexpected invalid 5kmRun token"), StackTrace.current);
@@ -196,6 +200,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     if (result["answer"]) {
       FirebaseAnalytics().logEvent(name: "submit_selfie_entry");
       Navigator.of(context).pushNamed("/");
+    }
+    else {
+      Crashlytics.instance.recordError(Exception("Error from 5kmrun: " + result.toString()), StackTrace.current);
     }
   }
 

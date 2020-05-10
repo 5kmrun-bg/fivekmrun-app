@@ -22,4 +22,19 @@ class OfflineChartSubmissionModel {
     this.elevationGainedTotal,
     this.startLocation
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': this.userId,
+      'elapsedTime': this.elapsedTime,
+      'distance': this.distance,
+      'startDate': this.startDate.toString(),
+      'mapPath': this.mapPath,
+      'startGeoLocation': this.startGeoLocation,
+      'elevationLow': this.elevationLow,
+      'elevationHigh': this.elevationHigh,
+      'elevationGainedTotal': this.elevationGainedTotal,
+      'startLocation': this.startLocation
+    };
+  }
 }
