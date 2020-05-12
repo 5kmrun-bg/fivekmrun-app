@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
@@ -32,6 +33,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
       Crashlytics.instance.log("authenticate with username result: $isAuthenticated");
 
       if (isAuthenticated) {
+        FirebaseAnalytics().logEvent(name: "login");
         setState(() => this.loginError = false);
         Navigator.pushNamed(context, '/home');
       } else {
