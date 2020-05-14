@@ -51,8 +51,10 @@ dependencies:
   flutter_progress_button: ^1.0.0
   url_launcher: ^5.4.5
   transparent_image: ^1.0.0
-  
+  rate_my_app: ^0.6.0+3
+  after_layout: ^1.0.7+2
   geocoder: ^0.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

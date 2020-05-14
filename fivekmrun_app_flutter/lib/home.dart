@@ -1,3 +1,5 @@
+import 'package:after_layout/after_layout.dart';
+import 'package:fivekmrun_flutter/app_rating_manager.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/offline_chart/add_offline_entry_page.dart';
 import 'package:fivekmrun_flutter/offline_chart/offline_chart_details_page.dart';
@@ -68,7 +70,7 @@ class TabNavigator extends StatelessWidget {
   }
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with AfterLayoutMixin<Home>{
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -87,7 +89,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     PushNotificationsManager().init(context);
-
+    
     super.initState();
 
     final userId =
@@ -138,6 +140,11 @@ class _HomeState extends State<Home> {
 
   void _onItemTapped(int index) {
     selectedIndex = index;
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    AppRatingManager(context);
   }
 
   @override
