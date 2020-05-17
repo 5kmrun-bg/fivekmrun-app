@@ -1,8 +1,0 @@
-{
-  "android": {
-    "v8Flags": "--expose_gc",
-    "markingMode": "none",
-    "codeCache": "true"
-  },
-  "main": "main.js"
-}
