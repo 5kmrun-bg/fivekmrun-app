@@ -41,7 +41,7 @@ class _RunsChartState extends State<RunsChart> {
           date = selectedDatum.first.datum.date;
           time = selectedDatum.first.datum.time;
         }
-        setState(() => this.dataPointLabel = "Дата: " + DateFormat(Constants.DATE_FORMAT).format(date) + "\nВреме:" + time + "");
+        setState(() => this.dataPointLabel = "Дата: " + DateFormat(Constants.DATE_FORMAT).format(date) + "\nВреме: " + time + "");
         print("model: time(" + date.toString() + "), value(" + time + ")");
       }
 
