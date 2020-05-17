@@ -1,9 +1,12 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:fivekmrun_flutter/state/run_simple_model.dart';
 import 'package:fivekmrun_flutter/state/user_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:fivekmrun_flutter/constants.dart' as constants;
 import 'dart:convert';
+
+import 'package:intl/intl.dart';
 
 class UserResource extends ChangeNotifier {
   bool _loading = false;
@@ -67,9 +70,23 @@ class UserResource extends ChangeNotifier {
     }
 
     String body = utf8.decode(response.bodyBytes);
-    User user = User.fromJson(userId, jsonDecode(body));
+    dynamic decodedBody = jsonDecode(body);
+    User user = User.fromJson(userId, decodedBody);
+    List<RunSimple> runs = RunSimple.listFromJson(decodedBody);
+
+    this._sendToAnalytics(user, runs);
     this.value = user;
     this.loading = false;
     return user;
+  }
+
+  void _sendToAnalytics(User user, List<RunSimple> runs) {
+    runs.sort((r1, r2) => r1.date.compareTo(r2.date));
+    RunSimple lastRun = runs.last;
+
+    FirebaseAnalytics().setUserProperty(name: "age", value: user.age.toString().padLeft(2, '0'));
+    FirebaseAnalytics().setUserProperty(name: "donation_total", value: user.donationsCount.toString().padLeft(3, '0'));
+    FirebaseAnalytics().setUserProperty(name: "selfie_last_run", value: DateFormat("yyyy-MM-dd").format(lastRun.date));
+    FirebaseAnalytics().setUserProperty(name: "selfie_total_runs", value: runs.length.toString());
   }
 }

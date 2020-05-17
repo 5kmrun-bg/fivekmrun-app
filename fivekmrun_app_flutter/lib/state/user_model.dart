@@ -3,8 +3,9 @@ class User {
   String name;
   String avatarUrl;
   int age;
+  int donationsCount;
 
-  User({this.id, this.name, this.avatarUrl, this.age});
+  User({this.id, this.name, this.avatarUrl, this.age, this.donationsCount});
 
   User.fromJson(int userId, Map<String, dynamic> json) {
     final user = json["user"][0];
@@ -12,6 +13,8 @@ class User {
       id = userId;
       name = user["u_name"] + " " + user["u_surname"];
       avatarUrl = user["pic"];
+      donationsCount = user["u_sponsor"] ?? 0;
+      print("Has donated: " + donationsCount.toString());
       age = calculateAge(DateTime.fromMillisecondsSinceEpoch(user["u_bdate"] * 1000));
     } else {
       id = 0;
