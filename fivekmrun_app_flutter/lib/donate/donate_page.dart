@@ -23,7 +23,7 @@ class DonatePage extends StatelessWidget {
                 child: Text("Дари с PayPal"),
                 onPressed: () async {
                   FirebaseAnalytics().logEvent(name: "button_donation_clicked");
-                  await launch("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U9KNHBAU8VMFS&source=url");
+                  await launch("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U9KNHBAU8VMFS&source=url", forceSafariVC: false);
                 },
               ),
             ],
