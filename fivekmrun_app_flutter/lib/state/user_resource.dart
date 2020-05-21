@@ -81,12 +81,16 @@ class UserResource extends ChangeNotifier {
   }
 
   void _sendToAnalytics(User user, List<RunSimple> runs) {
-    runs.sort((r1, r2) => r1.date.compareTo(r2.date));
-    RunSimple lastRun = runs.last;
-
     FirebaseAnalytics().setUserProperty(name: "age", value: user.age.toString().padLeft(2, '0'));
     FirebaseAnalytics().setUserProperty(name: "donation_total", value: user.donationsCount.toString().padLeft(3, '0'));
-    FirebaseAnalytics().setUserProperty(name: "selfie_last_run", value: DateFormat("yyyy-MM-dd").format(lastRun.date));
-    FirebaseAnalytics().setUserProperty(name: "selfie_total_runs", value: runs.length.toString());
+    if ((runs?.length ?? 0) > 0) {
+      runs.sort((r1, r2) => r1.date.compareTo(r2.date));
+      
+      RunSimple lastRun = runs.last;
+
+
+      FirebaseAnalytics().setUserProperty(name: "selfie_last_run", value: DateFormat("yyyy-MM-dd").format(lastRun.date));
+      FirebaseAnalytics().setUserProperty(name: "selfie_total_runs", value: runs.length.toString());
+    }
   }
 }
