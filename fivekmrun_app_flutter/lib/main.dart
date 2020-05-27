@@ -63,6 +63,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => StravaResource()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: '5kmRun.bg',
         theme: ThemeData(
           primarySwatch: getColor(appAccentColor),
