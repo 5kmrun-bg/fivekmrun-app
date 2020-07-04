@@ -285,10 +285,12 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
               type: ProgressButtonType.Raised,
               animate: true,
-              onPressed: () async {
-                await submitOfflineEntry();
-                return () {};
-              },
+              onPressed: this.selectedActivity != null
+                  ? () async {
+                      await submitOfflineEntry();
+                      return () {};
+                    }
+                  : null,
             ),
           ),
         ),
