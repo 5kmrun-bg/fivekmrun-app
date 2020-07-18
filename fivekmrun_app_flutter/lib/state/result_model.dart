@@ -18,6 +18,8 @@ class Result {
   double elevationGainedTotal;
   String mapPolyline;
   int distance;
+  int totalDistance;
+  String totalTime;
   String pace;
   DateTime startDate;
 
@@ -35,6 +37,7 @@ class Result {
       : name = json["u_name"] + " " + json["u_surname"],
         userId = json["s_uid"],
         time = (json["s_time"] as int).parseSecondsToTimestamp(),
+        totalTime = _getNonZeroTime(json, "s_total_elapsed_time"),
         position = json["s_finish_pos"],
         totalRuns = "",
         sex = json["u_sex"],
@@ -46,6 +49,7 @@ class Result {
         elevationGainedTotal = _jsonToDouble(json["s_elevation_gained_total"]),
         mapPolyline = json["s_map"],
         distance = json["s_distance"],
+        totalDistance = json["s_total_distance"],
         pace = Run.timeInSecondsToPace(json["s_time"] as int),
         startDate = DateTime.parse(json["s_start_date"]);
 
@@ -59,7 +63,15 @@ class Result {
     if (value == null || value == 0) {
       return 0.0;
     }
-    
+
     return value * 1.0;
+  }
+
+  static String _getNonZeroTime(dynamic json, String prop) {
+    if (json[prop] != null && (json[prop] as int) > 0) {
+      return (json[prop] as int).parseSecondsToTimestamp();
+    } else {
+      return "";
+    }
   }
 }

@@ -61,9 +61,15 @@ class OfflineChartDetailsPage extends StatelessWidget {
                             ),
                             DetailsTile(
                               title: "време",
-                              value: result.time + " мин",
+                              value: '${result.time} мин',
                               accentColor: iconColor,
                             ),
+                            if (result.totalTime.isNotEmpty)
+                              DetailsTile(
+                                title: "общо време",
+                                value: '${result.totalTime} мин',
+                                accentColor: iconColor,
+                              ),
                             DetailsTile(
                               title: "темпо",
                               value: result.pace + " мин/км",
@@ -108,9 +114,15 @@ class OfflineChartDetailsPage extends StatelessWidget {
                           ),
                           DetailsTile(
                             title: "дистанция",
-                            value: result.distance.toString() + " m",
+                            value: '${result.distance.toString()} m',
                             accentColor: iconColor,
                           ),
+                          if (result.totalDistance > result.distance)
+                            DetailsTile(
+                              title: "обща дистанция",
+                              value: '${result.totalDistance.toString()} m',
+                              accentColor: iconColor,
+                            ),
                           DetailsTile(
                             title: "денивелация",
                             value: result.elevationLow.toStringAsFixed(0) +
@@ -159,8 +171,7 @@ class CircleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle =
-        Theme.of(context).textTheme.subhead.copyWith(color: Colors.black);
+    final textStyle = Theme.of(context).textTheme.subhead.copyWith(color: Colors.black);
     return Container(
       padding: EdgeInsets.all(24),
       child: Column(
@@ -212,9 +223,8 @@ class ComapreTime extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final color = time < 0
-        ? Color.fromRGBO(0, 173, 25, 1)
-        : Color.fromRGBO(250, 32, 87, 1);
+    final color =
+        time < 0 ? Color.fromRGBO(0, 173, 25, 1) : Color.fromRGBO(250, 32, 87, 1);
 
     final numberStyle = textTheme.subtitle.copyWith(color: color);
     return Row(

@@ -11,7 +11,9 @@ class OfflineChartResource extends ChangeNotifier {
 
     body += "user_id=" + model.userId;
     body += "&elapsed_time=" + model.elapsedTime.toString();
+    body += "&s_total_elapsed_time=" + model.totalElapsedTime.toString();
     body += "&distance=" + model.distance.toString();
+    body += "&s_total_distance=" + model.totalDistance.toString();
     body += "&start_date=" + model.startDate.toString();
     body += "&tkn=" + authToken;
     body += "&map=" + model.mapPath;

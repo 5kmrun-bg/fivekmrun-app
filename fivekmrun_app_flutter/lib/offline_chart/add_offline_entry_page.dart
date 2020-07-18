@@ -10,6 +10,7 @@ import 'package:fivekmrun_flutter/state/google_maps_service.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_submission_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
+import 'package:fivekmrun_flutter/state/strava_activity_model.dart';
 import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ import '../common/double_extensions.dart';
 
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
-typedef void ActivityPressedCB(DetailedActivity activity);
+typedef void ActivityPressedCB(StravaSummaryRun activity);
 
 class AddOfflineEntryPage extends StatefulWidget {
   AddOfflineEntryPage({Key key}) : super(key: key);
@@ -32,8 +33,8 @@ class AddOfflineEntryPage extends StatefulWidget {
 }
 
 class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
-  List<DetailedActivity> activities;
-  DetailedActivity selectedActivity;
+  List<StravaSummaryRun> activities;
+  StravaSummaryRun selectedActivity;
   bool isConnectedToStrava = false;
   bool isLoading = true;
 
@@ -77,8 +78,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     if (this.selectedActivity == null) {
       return;
     }
+    StravaSummaryRun runSummary = this.selectedActivity;
 
-    DetailedActivity stravaActivity = this.selectedActivity;
+    DetailedActivity stravaActivity = this.selectedActivity.detailedActivity;
     UserResource userResource =
         Provider.of<UserResource>(context, listen: false);
     AuthenticationResource authResource =
@@ -89,14 +91,16 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
-      elapsedTime: stravaActivity.elapsedTime,
-      distance: stravaActivity.distance,
+      elapsedTime: runSummary.fastestSplit.elapsedTime,
+      distance: runSummary.fastestSplit.distance,
       startDate: DateTime.parse(stravaActivity.startDateLocal),
       mapPath: stravaActivity.map.polyline,
       startGeoLocation: stravaActivity.startLatlng,
       elevationGainedTotal: stravaActivity.totalElevationGain,
       elevationLow: stravaActivity.elevLow,
       elevationHigh: stravaActivity.elevHigh,
+      totalDistance: stravaActivity.distance,
+      totalElapsedTime: stravaActivity.elapsedTime,
       startLocation: await googleMapsService.getTownFromGeoLocation(
           stravaActivity.startLatitude, stravaActivity.startLongitude),
     );
@@ -206,7 +210,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     }
   }
 
-  void toggleActivity(DetailedActivity activity) {
+  void toggleActivity(StravaSummaryRun activity) {
     this.setState(() => {
           this.selectedActivity =
               this.selectedActivity == activity ? null : activity
@@ -285,10 +289,12 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
               type: ProgressButtonType.Raised,
               animate: true,
-              onPressed: () async {
-                await submitOfflineEntry();
-                return () {};
-              },
+              onPressed: this.selectedActivity != null
+                  ? () async {
+                      await submitOfflineEntry();
+                      return () {};
+                    }
+                  : null,
             ),
           ),
         ),
@@ -298,8 +304,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 }
 
 class StravaActivityList extends StatelessWidget {
-  final List<DetailedActivity> activities;
-  final DetailedActivity selectedActivity;
+  final List<StravaSummaryRun> activities;
+  final StravaSummaryRun selectedActivity;
   final ActivityPressedCB onActivityTap;
 
   const StravaActivityList(
@@ -326,9 +332,15 @@ class StravaActivityList extends StatelessWidget {
 
   Widget _buildItemsForListView(BuildContext context, int index) {
     final activity = activities[index];
-    final date = DateTime.tryParse(activity.startDate);
+    final date = DateTime.tryParse(activity.detailedActivity.startDate);
     final dateString = date != null ? dateFromat.format(date) : "n/a";
     final selectedColor = Colors.blueGrey.shade700;
+
+    final totalTime = activity.detailedActivity.elapsedTime.parseSecondsToTimestamp();
+    final totalDistance = activity.detailedActivity.distance.metersToKm();
+
+    final fastestSplitTime = activity.fastestSplit.elapsedTime.parseSecondsToTimestamp();
+    final fastestSplitDistance = activity.fastestSplit.distance.metersToKm();
     return Card(
       color: this.selectedActivity == activity
           ? selectedColor
@@ -342,13 +354,13 @@ class StravaActivityList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ListTileRow(text: activity.name, icon: Icons.info),
+                  ListTileRow(text: activity.detailedActivity.name, icon: Icons.info),
                   ListTileRow(text: dateString, icon: Icons.calendar_today),
                   ListTileRow(
-                      text: activity.distance.parseMetersToKilometers(),
+                      text: "$fastestSplitDistance / $totalDistance км",
                       icon: Icons.map),
                   ListTileRow(
-                      text: activity.elapsedTime.parseSecondsToTimestamp(),
+                      text: "$fastestSplitTime / $totalTime",
                       icon: Icons.timer),
                 ],
               ),
@@ -357,7 +369,7 @@ class StravaActivityList extends StatelessWidget {
               width: 140,
               child: Image.network(
                 "https://maps.googleapis.com/maps/api/staticmap?size=140x140&zoom=13&path=weight:3%7Ccolor:blue%7Cenc:" +
-                    activity.map.polyline +
+                    activity.detailedActivity.map.polyline +
                     "&key=" +
                     googleMapsKey,
                 fit: BoxFit.fitWidth,

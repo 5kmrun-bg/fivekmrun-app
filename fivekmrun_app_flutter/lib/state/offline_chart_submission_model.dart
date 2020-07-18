@@ -9,6 +9,8 @@ class OfflineChartSubmissionModel {
   final double elevationHigh;
   final double elevationGainedTotal;
   final String startLocation;
+  final double totalDistance;
+  final int totalElapsedTime;
 
   OfflineChartSubmissionModel({
     this.userId,
@@ -20,7 +22,9 @@ class OfflineChartSubmissionModel {
     this.elevationLow,
     this.elevationHigh,
     this.elevationGainedTotal,
-    this.startLocation
+    this.startLocation,
+    this.totalDistance,
+    this.totalElapsedTime
   });
 
   Map<String, dynamic> toJson() {

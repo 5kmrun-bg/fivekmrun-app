@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/constants.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
+import 'package:fivekmrun_flutter/state/strava_activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:strava_flutter/Models/activity.dart';
 import 'package:strava_flutter/Models/fault.dart';
@@ -10,8 +11,6 @@ import 'package:strava_flutter/strava.dart';
 typedef StravaCallback<T> = Future<T> Function(Strava strava);
 
 class StravaResource extends ChangeNotifier {
-  // Strava strava = Strava(true, stravaSecret);
-
   Future<T> _withStrava<T>(StravaCallback<T> fn) async {
     Strava strava = Strava(false, stravaSecret);
     try {
@@ -84,7 +83,37 @@ class StravaResource extends ChangeNotifier {
     });
   }
 
-  Future<List<DetailedActivity>> getThisWeekActivities() async {
+  StravaSummaryRun createSummaryActivity(DetailedActivity activity) {
+    double bestDistance = 0;
+    int bestTime = 999999;
+
+    var splits = activity.splitsMetric;
+
+    for (var startIdx = 0; startIdx < splits.length; startIdx++) {
+      int endIdx = startIdx;
+      double dist = 0;
+      int time = 0;
+
+      while (endIdx < splits.length && dist < stravaFilterMinDistance) {
+        dist += splits[endIdx].distance;
+        time += splits[endIdx].elapsedTime;
+        endIdx++;
+      }
+
+      if (dist > stravaFilterMinDistance &&
+          dist < stravaFilterMaxDistance &&
+          time < bestTime) {
+        bestDistance = dist;
+        bestTime = time;
+      }
+    }
+
+    FastestSplitSummary summary =
+        FastestSplitSummary(elapsedTime: bestTime, distance: bestDistance);
+    return StravaSummaryRun(detailedActivity: activity, fastestSplit: summary);
+  }
+
+  Future<List<StravaSummaryRun>> getThisWeekActivities() async {
     Crashlytics.instance.log("Strava get activities");
 
     return _withStrava((strava) async {
@@ -126,17 +155,22 @@ class StravaResource extends ChangeNotifier {
 
         final runActivites = await Future.wait(activities
             .where((a) =>
-                a.type == ActivityType.Run &&
-                a.distance >= stravaFilterMinDistance &&
-                a.distance <= stravaFilterMaxDistance)
+                    a.type == ActivityType.Run &&
+                    a.distance >= stravaFilterMinDistance
+                )
             .map((a) => strava.getActivityById(a.id.toString())));
 
         Crashlytics.instance.log(
             "Strava get filtered activities results: ${runActivites.length}");
 
-        return runActivites;
-      }
-      on Exception catch(e) {
+        final summaryActivites = runActivites
+            .map((a) => createSummaryActivity(a))
+            // filter again in case we didn't find the proper split
+            .where((s) => s.fastestSplit.distance > stravaFilterMinDistance)
+            .toList();
+
+        return summaryActivites;
+      } on Exception catch (e) {
         Crashlytics.instance.recordError(e, StackTrace.current);
       }
     });
