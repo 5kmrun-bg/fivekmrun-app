@@ -37,7 +37,7 @@ class Result {
       : name = json["u_name"] + " " + json["u_surname"],
         userId = json["s_uid"],
         time = (json["s_time"] as int).parseSecondsToTimestamp(),
-        totalTime = (json["s_total_elapsed_time"] as int).parseSecondsToTimestamp(),
+        totalTime = _getNonZeroTime(json, "s_total_elapsed_time"),
         position = json["s_finish_pos"],
         totalRuns = "",
         sex = json["u_sex"],
@@ -63,7 +63,15 @@ class Result {
     if (value == null || value == 0) {
       return 0.0;
     }
-    
+
     return value * 1.0;
+  }
+
+  static String _getNonZeroTime(dynamic json, String prop) {
+    if (json[prop] != null && (json[prop] as int) > 0) {
+      return (json[prop] as int).parseSecondsToTimestamp();
+    } else {
+      return "";
+    }
   }
 }

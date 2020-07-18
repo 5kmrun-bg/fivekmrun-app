@@ -14,7 +14,7 @@ class DetailsTile extends StatelessWidget {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 12),
           child: Text(this.title, style: subHeadStyle),
         ),
         Padding(
