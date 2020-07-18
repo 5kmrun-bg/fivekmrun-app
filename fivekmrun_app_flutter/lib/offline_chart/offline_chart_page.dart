@@ -28,7 +28,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
       this.thisWeekSelected = true;
     });
 
-    this._loadFakeThistWeekResult();
+    this._loadThisWeekResult();
   }
 
   selectLastWeek() {
@@ -40,7 +40,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
       this.thisWeekSelected = false;
     });
 
-    this._loadFakeLastWeekResult();
+    this._loadLastWeekResult();
   }
 
   void goToAddEntry() {
@@ -109,10 +109,10 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   @override
   void initState() {
     super.initState();
-    this._loadFakeThistWeekResult();
+    this._loadThisWeekResult();
   }
 
-  _loadFakeLastWeekResult() {
+  _loadLastWeekResult() {
     setState(() {
       this.results = null;
       this.lastWeekResource.getPastWeekResults().then((loadedResults) {
@@ -121,7 +121,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
     });
   }
 
-  _loadFakeThistWeekResult() {
+  _loadThisWeekResult() {
     setState(() {
       this.results = null;
       this.thisWeekResource.getThisWeekResults().then((loadedResults) {

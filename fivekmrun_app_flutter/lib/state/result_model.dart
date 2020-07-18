@@ -18,6 +18,8 @@ class Result {
   double elevationGainedTotal;
   String mapPolyline;
   int distance;
+  int totalDistance;
+  String totalTime;
   String pace;
   DateTime startDate;
 
@@ -35,6 +37,7 @@ class Result {
       : name = json["u_name"] + " " + json["u_surname"],
         userId = json["s_uid"],
         time = (json["s_time"] as int).parseSecondsToTimestamp(),
+        totalTime = (json["s_total_elapsed_time"] as int).parseSecondsToTimestamp(),
         position = json["s_finish_pos"],
         totalRuns = "",
         sex = json["u_sex"],
@@ -46,6 +49,7 @@ class Result {
         elevationGainedTotal = _jsonToDouble(json["s_elevation_gained_total"]),
         mapPolyline = json["s_map"],
         distance = json["s_distance"],
+        totalDistance = json["s_total_distance"],
         pace = Run.timeInSecondsToPace(json["s_time"] as int),
         startDate = DateTime.parse(json["s_start_date"]);
 
