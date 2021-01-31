@@ -8,8 +8,7 @@ class RunDetailsPage extends StatelessWidget {
   const RunDetailsPage({Key key}) : super(key: key);
 
   Widget buildPositionGauge(Run run) {
-    if (run.isSelfie)
-      return SizedBox.shrink();
+    if (run.isSelfie) return SizedBox.shrink();
 
     ResultsResource results = ResultsResource();
     return FutureBuilder<List<Result>>(
@@ -73,16 +72,6 @@ class RunDetailsPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                  // Column(
-                  //   children: <Widget>[
-                  //     CircleWidget(Run.distanceToString(run.distance), "км"),
-                  //     SizedBox(height: 10),
-                  //     Text(
-                  //       "Общо разстояние",
-                  //       style: theme.textTheme.subtitle,
-                  //     ),
-                  //   ],
-                  // )             
                 Column(
                   children: <Widget>[
                     CircleWidget(run.pace, "мин/км"),
@@ -103,16 +92,6 @@ class RunDetailsPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                  // Column(
-                  //   children: <Widget>[
-                  //     CircleWidget(run.totalTime, "мин"),
-                  //     SizedBox(height: 10),
-                  //     Text(
-                  //       "Общо време",
-                  //       style: theme.textTheme.subtitle,
-                  //     )
-                  //   ],
-                  // )
                 Column(
                   children: <Widget>[
                     CircleWidget(run.speed, "км/ч"),
@@ -139,29 +118,28 @@ class RunDetailsPage extends StatelessWidget {
                 ),
               ],
             ),
+            if (run.isSelfie)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  IconText(icon: Icons.watch, text: run.totalTime + " мин"),
+                  IconText(
+                      icon: Icons.straighten,
+                      text: (run.distance / 1000).toStringAsFixed(2) + " км"),
+                ],
+              ),
             SizedBox(height: 20),
             if (!run.isSelfie)
               CompareTime(
                 text: "Предишно бягане: ",
                 time: run.differenceFromPrevious,
               ),
-            if (!run.isSelfie)
-              SizedBox(height: 10),
+            if (!run.isSelfie) SizedBox(height: 10),
             if (!run.isSelfie)
               CompareTime(
                 text: "Най-добро бягане: ",
                 time: run.differenceFromBest,
-             ),
-             if (run.isSelfie)
-                RunDetail(
-                    label: "Общо време: ",
-                    value: run.totalTime + " мин"
-                  ),       
-             if (run.isSelfie)
-                RunDetail(
-                    label: "Общо разстояние: ",
-                    value: (run.distance / 1000).toStringAsFixed(2) + " км"
-                  ),    
+              ),
           ],
         ),
       ),
@@ -213,7 +191,7 @@ class IconText extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Text(
             text,
-            style: theme.textTheme.title,
+            style: theme.textTheme.subtitle,
           ),
         ),
       ],
