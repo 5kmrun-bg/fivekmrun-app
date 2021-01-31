@@ -40,14 +40,12 @@ class RunCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          if (!run.isSelfie) 
-                            Text(
-                              run.position.toString(),
-                              style: textTheme.title
-                                  .copyWith(color: theme.accentColor),
-                            ),
-                          if (!run.isSelfie) 
-                            Text("място", style: labelStyle),
+                          Text(
+                            ((run.isSelfie) ? "/" : run.position).toString(),
+                            style: textTheme.title
+                                .copyWith(color: theme.accentColor), //HACK: hide the label if Selfie but bump the space
+                          ),
+                          Text("място", style: labelStyle),
                         ],
                       ),
                     ),
