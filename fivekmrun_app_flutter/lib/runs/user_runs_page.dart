@@ -46,17 +46,22 @@ class UserRunsList extends StatelessWidget {
                 Navigator.of(context).pushNamed("/run-details", arguments: run),
             title: Column(
               children: <Widget>[
+                if (!run.isSelfie)
+                  ListTileRow(
+                    icon: Icons.pin_drop,
+                    text: run.location,
+                  ) else
+                  ListTileRow(
+                    icon: Icons.pin_drop,
+                    text: "Selfie"
+                  ),
                 ListTileRow(
                   icon: Icons.calendar_today,
                   text: run.displayDate,
                 ),
                 ListTileRow(
-                  icon: Icons.pin_drop,
-                  text: run.location,
-                ),
-                ListTileRow(
                   icon: Icons.timer,
-                  text: run.time,
+                  text: run.time + " мин",
                 ),
               ],
             ),

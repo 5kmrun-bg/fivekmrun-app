@@ -8,6 +8,9 @@ class RunDetailsPage extends StatelessWidget {
   const RunDetailsPage({Key key}) : super(key: key);
 
   Widget buildPositionGauge(Run run) {
+    if (run.isSelfie)
+      return SizedBox.shrink();
+
     ResultsResource results = ResultsResource();
     return FutureBuilder<List<Result>>(
         future: results.load(id: run.eventId),
@@ -70,6 +73,16 @@ class RunDetailsPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                  // Column(
+                  //   children: <Widget>[
+                  //     CircleWidget(Run.distanceToString(run.distance), "км"),
+                  //     SizedBox(height: 10),
+                  //     Text(
+                  //       "Общо разстояние",
+                  //       style: theme.textTheme.subtitle,
+                  //     ),
+                  //   ],
+                  // )             
                 Column(
                   children: <Widget>[
                     CircleWidget(run.pace, "мин/км"),
@@ -90,6 +103,16 @@ class RunDetailsPage extends StatelessWidget {
                     ),
                   ],
                 ),
+                  // Column(
+                  //   children: <Widget>[
+                  //     CircleWidget(run.totalTime, "мин"),
+                  //     SizedBox(height: 10),
+                  //     Text(
+                  //       "Общо време",
+                  //       style: theme.textTheme.subtitle,
+                  //     )
+                  //   ],
+                  // )
                 Column(
                   children: <Widget>[
                     CircleWidget(run.speed, "км/ч"),
@@ -112,20 +135,33 @@ class RunDetailsPage extends StatelessWidget {
                 ),
                 IconText(
                   icon: Icons.pin_drop,
-                  text: run.location,
+                  text: (run.isSelfie) ? "Selfie" : run.location,
                 ),
               ],
             ),
             SizedBox(height: 20),
-            ComapreTime(
-              text: "Предишно бягане: ",
-              time: run.differenceFromPrevious,
-            ),
-            SizedBox(height: 10),
-            ComapreTime(
-              text: "Най-добро бягане: ",
-              time: run.differenceFromBest,
-            ),
+            if (!run.isSelfie)
+              CompareTime(
+                text: "Предишно бягане: ",
+                time: run.differenceFromPrevious,
+              ),
+            if (!run.isSelfie)
+              SizedBox(height: 10),
+            if (!run.isSelfie)
+              CompareTime(
+                text: "Най-добро бягане: ",
+                time: run.differenceFromBest,
+             ),
+             if (run.isSelfie)
+                RunDetail(
+                    label: "Общо време: ",
+                    value: run.totalTime + " мин"
+                  ),       
+             if (run.isSelfie)
+                RunDetail(
+                    label: "Общо разстояние: ",
+                    value: (run.distance / 1000).toStringAsFixed(2) + " км"
+                  ),    
           ],
         ),
       ),
@@ -185,10 +221,10 @@ class IconText extends StatelessWidget {
   }
 }
 
-class ComapreTime extends StatelessWidget {
+class CompareTime extends StatelessWidget {
   final int time;
   final String text;
-  const ComapreTime({Key key, this.time, this.text}) : super(key: key);
+  const CompareTime({Key key, this.time, this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -209,6 +245,31 @@ class ComapreTime extends StatelessWidget {
         Text(
           Run.timeInSecondsToString(time, sign: true),
           style: numberStyle,
+        ),
+      ],
+    );
+  }
+}
+
+class RunDetail extends StatelessWidget {
+  final String value;
+  final String label;
+  const RunDetail({Key key, this.value, this.label}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          label,
+          style: textTheme.subtitle,
+        ),
+        Text(
+          value,
+          style: textTheme.subtitle,
         ),
       ],
     );

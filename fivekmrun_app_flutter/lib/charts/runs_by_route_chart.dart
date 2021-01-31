@@ -23,7 +23,7 @@ class RunsByRouteChart extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Column(children: <Widget>[
-        IntrinsicHeight(child: Text("Бягания по трасета", style: subHeadStyle)),
+        IntrinsicHeight(child: Text("Бягания по официални трасета", style: subHeadStyle)),
         Expanded(
             child: new charts.PieChart(
               seriesList, 
@@ -58,7 +58,7 @@ class RunsByRouteChart extends StatelessWidget {
 
   static List<charts.Series<RunsByRouteEntry, String>> _createData(
       List<Run> runs) {
-    List<RunsByRouteEntry> series = groupBy(runs, (r) => r.location)
+    List<RunsByRouteEntry> series = groupBy(runs.where((r) => !r.isSelfie), (r) => r.location)
         .entries
         .map((e) => RunsByRouteEntry(e.key, e.value.length))
         .toList();

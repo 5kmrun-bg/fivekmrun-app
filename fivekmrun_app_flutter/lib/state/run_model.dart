@@ -14,6 +14,9 @@ class Run {
   final String speed;
   final String notes;
   final String pace;
+  final bool isSelfie;
+  final int distance;
+  final String totalTime;
 
   // Calculated
   int differenceFromPrevious;
@@ -32,7 +35,10 @@ class Run {
       this.position,
       this.speed,
       this.notes,
-      this.pace})
+      this.pace,
+      this.isSelfie,
+      this.distance,
+      this.totalTime})
       : id = ("$date#$time#$location").hashCode;
 
   Run.fromJson(dynamic json)
@@ -40,6 +46,7 @@ class Run {
         eventId = json["r_eventid"],
         date = DateTime.fromMillisecondsSinceEpoch(json["e_date"] * 1000),
         time = timeInSecondsToString(json["r_time"]),
+        totalTime = timeInSecondsToString(json["r_time"]),
         timeInSeconds = json["r_time"],
         location = json["n_name"],
         differenceFromBest = json[""],
@@ -47,7 +54,9 @@ class Run {
         position = json["r_finish_pos"],
         speed = timeInSecondsToSpeed(json["r_time"]),
         notes = "",
-        pace = timeInSecondsToPace(json["r_time"]);
+        pace = timeInSecondsToPace(json["r_time"]),
+        isSelfie = false,
+        distance = 5000;
 
   static List<Run> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];
@@ -55,7 +64,34 @@ class Run {
     return result;
   }
 
+  Run.fromSelfieJson(dynamic json)
+      : id = json["s_id"],
+        eventId = null,//json["r_eventid"],
+        date = DateTime.parse(json["s_start_date"]),
+        time = timeInSecondsToString(json["s_time"]),
+        timeInSeconds = json["s_time"],
+        location = "",//json["n_name"],
+        differenceFromBest = json[""],
+        differenceFromPrevious = json[""],
+        position = null,//json["r_finish_pos"],
+        speed = timeInSecondsToSpeed(json["s_time"]),
+        notes = "",
+        pace = timeInSecondsToPace(json["s_time"]),
+        isSelfie = true,
+        distance = json["s_total_distance"],
+        totalTime = timeInSecondsToString(json["s_total_elapsed_time"]); //timeInSecondsToPace(json["r_time"]);
+
+  static List<Run> selfieListFromJson(Map<String, dynamic> json) {
+    List<dynamic> runs = json["runs"];
+    var result = runs.map((d) => Run.fromSelfieJson(d)).toList();
+    return result;
+  }
+
   static String timeInSecondsToString(int timeInSeconds, {bool sign = false}) {
+    if (timeInSeconds == null) {
+      return "";
+    }
+
     String signString = "";
     if (sign) {
       signString = timeInSeconds < 0 ? "-" : "+";
@@ -69,17 +105,29 @@ class Run {
   }
 
   static String timeInSecondsToSpeed(int timeInSeconds) {
+    if (timeInSeconds == 0 || timeInSeconds == null) {
+      return "";
+    }
+
     return ((5000 / timeInSeconds) * 3.6).toStringAsFixed(2);
   }
 
   static String timeInSecondsToPace(int timeInSeconds) {
-    if (timeInSeconds == 0) {
+    if (timeInSeconds == 0 || timeInSeconds == null) {
       return "";
     }
+    
     double paceDouble = timeInSeconds / 5.0;
     final duration = Duration(seconds: paceDouble.toInt());
     String pace = duration.toString().substring(2, 7);
 
     return pace;
+  }
+
+  static String distanceToString(int distance) {
+    if (distance == null)
+      return "";
+
+    return (distance / 1000).toStringAsFixed(2);
   }
 }

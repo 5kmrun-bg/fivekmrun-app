@@ -95,6 +95,7 @@ class _RunsChartState extends State<RunsChart> {
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<Run, DateTime>> _createData(List<Run> runs) {
+    runs = runs.toList();
     lowestValues = minBy<Run, int>(runs, (r) => r.timeInSeconds).timeInSeconds;
     highestValues = maxBy<Run, int>(runs, (r) => r.timeInSeconds).timeInSeconds;
     runs.sort((r1, r2) => r1.date.compareTo(r2.date));

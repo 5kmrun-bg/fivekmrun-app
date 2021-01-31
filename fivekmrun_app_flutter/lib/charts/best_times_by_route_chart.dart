@@ -26,7 +26,7 @@ class BestTimesByRouteChart extends StatelessWidget {
       padding: EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
-          IntrinsicHeight(child: Text("Рекорди по трасета", style: subHeadStyle)),
+          IntrinsicHeight(child: Text("Рекорди по официални трасета", style: subHeadStyle)),
           Expanded(
               child: charts.BarChart(seriesList,
                   animate: this.animate,
@@ -43,7 +43,7 @@ class BestTimesByRouteChart extends StatelessWidget {
 
   static List<charts.Series<BestTimeByRouteEntry, String>> _createData(
       List<Run> runs) {
-    List<BestTimeByRouteEntry> series = groupBy(runs, (r) => r.location)
+    List<BestTimeByRouteEntry> series = groupBy(runs.where((r) => !r.isSelfie), (r) => r.location)
         .entries
         .map((e) => BestTimeByRouteEntry(e.key,
             minBy<Run, int>(e.value, (r) => r.timeInSeconds).timeInSeconds))

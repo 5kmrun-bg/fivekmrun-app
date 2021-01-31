@@ -35,16 +35,19 @@ class RunCard extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-                      child: Column(
+                      child: 
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Text(
-                            run.position.toString(),
-                            style: textTheme.title
-                                .copyWith(color: theme.accentColor),
-                          ),
-                          Text("място", style: labelStyle),
+                          if (!run.isSelfie) 
+                            Text(
+                              run.position.toString(),
+                              style: textTheme.title
+                                  .copyWith(color: theme.accentColor),
+                            ),
+                          if (!run.isSelfie) 
+                            Text("място", style: labelStyle),
                         ],
                       ),
                     ),

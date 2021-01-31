@@ -36,7 +36,8 @@ class ProfileDashboard extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     final runs = runsRes.value;
-    final hasRuns = runs != null && runs.length > 0;
+    final hasAnyRuns = runs != null && runs.length > 0;
+    final hasOfficialRuns = runs != null && runs.where((r) => !r.isSelfie).length > 0;
 
     final goToSettings = () {
       Navigator.of(context, rootNavigator: true).pushNamed("/settings");
@@ -63,9 +64,9 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToBarcode,
                   ),
                   MilestoneTile(
-                      value: (runsRes?.value?.length?.toInt() ?? 0) * 5,
+                      value: ((runsRes?.value?.map((r) => r.distance)?.reduce((a, b) => (a ?? 0) + (b ?? 0)) ?? 0)) ~/ 1000,
                       milestone: 1250,
-                      title: "Пробягано\nразстояние"),
+                      title: "Общо\nразстояние"),
                 ],
               ),
             ),
@@ -92,9 +93,9 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToSettings,
                   ),
                   MilestoneTile(
-                      value: runsRes?.value?.length?.toInt() ?? 0,
+                      value: runsRes?.value?.where((r) => !r.isSelfie)?.length?.toInt() ?? 0,
                       milestone: nextRunsMilestone(
-                          runsRes?.value?.length?.toInt() ?? 0),
+                          runsRes?.value?.where((r) => !r.isSelfie)?.length?.toInt() ?? 50),
                       title: "Следваща\nцел"),
                 ],
               ),
@@ -102,19 +103,24 @@ class ProfileDashboard extends StatelessWidget {
           ],
         ),
         if (runsRes.loading) Center(child: CircularProgressIndicator()),
-        if (!runsRes.loading && !hasRuns)
+        if (hasAnyRuns) this.buildRunsCards(runsRes.bestRun, runsRes.lastRun),
+        if (!runsRes.loading && !hasOfficialRuns)
           Row(
             children: <Widget>[
               Expanded(
-                child: Text(
-                    "Все още не сте направили първото си официално бягане"),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Center(
+                    child: Text(
+                        "Все още не сте направили първото си официално бягане"),
+                  ),
+                ),
               )
             ],
           ),
-        if (hasRuns) this.buildRunsCards(runsRes.bestRun, runsRes.lastRun),
-        if (hasRuns) this.buildRunsChartCard(runs),
-        if (hasRuns) this.buildRunsByRouteCard(runs),
-        if (hasRuns) this.buildBestTimesCard(runs),
+        if (hasOfficialRuns) this.buildRunsChartCard(runs),
+        if (hasOfficialRuns) this.buildRunsByRouteCard(runs),
+        if (hasOfficialRuns) this.buildBestTimesCard(runs),
       ],
     );
   }
