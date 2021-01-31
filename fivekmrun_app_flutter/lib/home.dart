@@ -166,23 +166,23 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home>{
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              title: Text('Профил'),
+              label: 'Профил',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.directions_run),
-              title: Text('Бягания'),
+              label: 'Бягания',
             ),
             BottomNavigationBarItem(
               icon: Icon(CustomIcons.award),
-              title: Text('Selfie'),
+              label: 'Selfie',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.timer),
-              title: Text('Резултати'),
+              label: 'Резултати',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),
-              title: Text('Събития'),
+              label: 'Събития',
             ),
           ],
           currentIndex: _selectedIndex,
