@@ -164,6 +164,7 @@ class StravaResource extends ChangeNotifier {
             "Strava get filtered activities results: ${runActivites.length}");
 
         final summaryActivites = runActivites
+            .where((a) => a.manual == false)
             .map((a) => createSummaryActivity(a))
             // filter again in case we didn't find the proper split
             .where((s) => s.fastestSplit.distance > stravaFilterMinDistance)
