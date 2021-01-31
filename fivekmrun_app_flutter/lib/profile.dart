@@ -165,7 +165,7 @@ class ProfileDashboard extends StatelessWidget {
   Widget buildBestTimesCard(List<Run> runs) {
     return Card(
       child: Container(
-        height: 200,
+        height: 350,
         child: BestTimesByRouteChart.withRuns(runs),
       ),
     );
