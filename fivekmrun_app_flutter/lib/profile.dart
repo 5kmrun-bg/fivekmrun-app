@@ -38,7 +38,7 @@ class ProfileDashboard extends StatelessWidget {
     final runs = runsRes.value;
     final hasAnyRuns = runs != null && runs.length > 0;
     final hasOfficialRuns = runs != null && runs.where((r) => !r.isSelfie).length > 0;
-
+    print("HAS ANY RUNS: " + hasAnyRuns.toString());
     final goToSettings = () {
       Navigator.of(context, rootNavigator: true).pushNamed("/settings");
     };
@@ -64,7 +64,7 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToBarcode,
                   ),
                   MilestoneTile(
-                      value: ((runsRes?.value?.map((r) => r.distance)?.reduce((a, b) => (a ?? 0) + (b ?? 0)) ?? 0)) ~/ 1000,
+                      value: ((runsRes?.value?.map((r) => r.distance)?.fold(0, (a, b) => (a ?? 0) + (b ?? 0)) ?? 0)) ~/ 1000,
                       milestone: 1250,
                       title: "Общо\nразстояние"),
                 ],
@@ -104,6 +104,7 @@ class ProfileDashboard extends StatelessWidget {
         ),
         if (runsRes.loading) Center(child: CircularProgressIndicator()),
         if (hasAnyRuns) this.buildRunsCards(runsRes.bestRun, runsRes.lastRun),
+        if (hasAnyRuns) this.buildRunsChartCard(runs),
         if (!runsRes.loading && !hasOfficialRuns)
           Row(
             children: <Widget>[
@@ -118,7 +119,6 @@ class ProfileDashboard extends StatelessWidget {
               )
             ],
           ),
-        if (hasOfficialRuns) this.buildRunsChartCard(runs),
         if (hasOfficialRuns) this.buildRunsByRouteCard(runs),
         if (hasOfficialRuns) this.buildBestTimesCard(runs),
       ],

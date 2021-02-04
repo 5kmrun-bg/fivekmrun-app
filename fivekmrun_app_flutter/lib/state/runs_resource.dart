@@ -39,9 +39,11 @@ class RunsResource extends ChangeNotifier {
     this.loading = true;
 
 
-    List<Run> runs = await this.retrieve5kmRuns(userId) ?? new List<Run>();
+    List<Run> runs = (await this.retrieve5kmRuns(userId)) ?? new List<Run>();
     List<Run> selfieRuns = await this.retrieveSelfieRuns(userId);
     runs.addAll(selfieRuns.where((r) => r.timeInSeconds != null));
+
+    print("COUNT RUNS:" + runs?.length.toString());
 
     this._processRuns(runs);
 
@@ -55,10 +57,11 @@ class RunsResource extends ChangeNotifier {
         await http.get("${constants.runsEndpointUrl}$userId");
       if (response.statusCode != 200 ||
           response.headers["content-type"] != "application/json;charset=utf-8;") {
-        this.loading = false;
+
+        print('hello');
         //TODO: Fix this when endpoint behaves properly
-        this.value = new List<Run>();
-        return null;
+        
+        return new List<Run>();
       }
 
       String body = utf8.decode(response.bodyBytes);
@@ -70,10 +73,11 @@ class RunsResource extends ChangeNotifier {
         await http.get("https://5kmrun.bg/api/selfie/user/$userId");
       if (response.statusCode != 200 ||
           response.headers["content-type"] != "application/json;charset=utf-8;") {
-        this.loading = false;
+
+        print('hello');
         //TODO: Fix this when endpoint behaves properly
-        this.value = new List<Run>();
-        return null;
+        
+        return new List<Run>();
       }
 
       String body = utf8.decode(response.bodyBytes);
