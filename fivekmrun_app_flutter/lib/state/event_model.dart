@@ -14,4 +14,19 @@ class Event {
     this.location,
     this.detailsUrl,
   });
+
+  Event.fromJson(dynamic json) :
+    id = json["e_id"],
+    title = json["e_title"],
+    date = DateTime.fromMillisecondsSinceEpoch(json["e_date"] * 1000),
+    location = json["n_name"],
+    detailsUrl = "",
+    imageUrl = json["e_sponsor"];
+
+  static List<Event> listFromJson(dynamic json) {
+    List<dynamic> events = json;
+    List<Event> result = events.map((d) => Event.fromJson(d)).toList();
+
+    return result;
+  }
 }

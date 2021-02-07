@@ -38,7 +38,7 @@ class FutureEventsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: events.length,
+      itemCount: events?.length ?? 0,
       itemBuilder: (BuildContext context, int i) {
         final Event event = events[i];
         return Card(
