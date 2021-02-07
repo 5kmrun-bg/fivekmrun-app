@@ -81,7 +81,7 @@ class ProfileDashboard extends StatelessWidget {
                     style: textTheme.subhead,
                     textAlign: TextAlign.center,
                   ),
-                  Text("${user?.age ?? ""}г."),
+                  Text(""),
                 ],
               ),
             ),
