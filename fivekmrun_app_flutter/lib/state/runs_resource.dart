@@ -5,15 +5,26 @@ import 'package:fivekmrun_flutter/constants.dart' as constants;
 import 'dart:convert';
 
 class RunsResource extends ChangeNotifier {
-  Run _bestRun;
-  Run _lastRun;
+  Run _bestOfficialRun;
+  Run _lastOfficialRun;
 
-  Run get bestRun {
-    return _bestRun;
+  Run get bestOfficialRun {
+    return _bestOfficialRun;
   }
 
-  Run get lastRun {
-    return _lastRun;
+  Run get lastOfficialRun {
+    return _lastOfficialRun;
+  }
+
+  Run _bestSelfieRun;
+  Run _lastSelfieRun;
+
+  Run get bestSelfieRun {
+    return _bestSelfieRun;
+  }
+
+  Run get lastSelfieRun {
+    return _lastSelfieRun;
   }
 
   List<Run> value;
@@ -31,8 +42,8 @@ class RunsResource extends ChangeNotifier {
   clear() {
     this.value = null;
     this.loading = false;
-    this._bestRun = null;
-    this._lastRun = null;
+    this._bestOfficialRun = null;
+    this._lastOfficialRun = null;
   }
 
   Future<List<Run>> getByUserId(int userId) async {
@@ -86,25 +97,38 @@ class RunsResource extends ChangeNotifier {
 
   void _processRuns(List<Run> runs) {
     if (runs == null || runs.length == 0) {
-      this._bestRun = null;
-      this._lastRun = null;
+      this._bestOfficialRun = null;
+      this._lastOfficialRun = null;
+      this._bestSelfieRun = null;
+      this._lastSelfieRun = null;
       return;
     }
 
     runs.sort((r1, r2) => r2.date.compareTo(r1.date));
 
-    this._lastRun = runs.first;
-    this._bestRun =
-        runs.reduce((a, b) => (a.timeInSeconds ?? 0) < (b.timeInSeconds ?? 0) ? a : b);
-
-    for (var i = 0; i < runs.length; i++) {
-      final r = runs[i];
-      runs[i].differenceFromBest =
-          r.timeInSeconds - this._bestRun.timeInSeconds;
-
-      if (i < runs.length - 1) {
-        r.differenceFromPrevious = r.timeInSeconds - runs[i + 1].timeInSeconds;
-      }
+    if (runs.where((r) => !r.isSelfie).length > 0) {
+      this._lastOfficialRun = runs.where((r) => !r.isSelfie).first;
+      this._bestOfficialRun =
+          runs.where((r) => !r.isSelfie).reduce((a, b) => (a.timeInSeconds ?? 0) < (b.timeInSeconds ?? 0) ? a : b);
+      //Function.apply((r) => r.differenceFromBest = r.timeInSeconds - this._bestOfficialRun.timeInSeconds, runs.where((r) => !r.isSelfie).toList());
     }
+
+    if (runs.where((r) => r.isSelfie).length > 0) {
+      this._lastSelfieRun = runs.where((r) => r.isSelfie).first;
+      this._bestSelfieRun =
+          runs.where((r) => r.isSelfie).reduce((a, b) => (a.timeInSeconds ?? 0) < (b.timeInSeconds ?? 0) ? a : b);
+      //Function.apply((r) => r.differenceFromBest = r.timeInSeconds - this._bestSelfieRun.timeInSeconds, runs.where((r) => r.isSelfie).toList());
+    }
+
+
+    // for (var i = 0; i < runs.length; i++) {
+    //   final r = runs[i];
+    //   runs[i].differenceFromBest =
+    //       r.timeInSeconds - this._bestOfficialRun.timeInSeconds;
+
+    //   if (i < runs.length - 1) {
+    //     r.differenceFromPrevious = r.timeInSeconds - runs[i + 1].timeInSeconds;
+    //   }
+    // }
   }
 }

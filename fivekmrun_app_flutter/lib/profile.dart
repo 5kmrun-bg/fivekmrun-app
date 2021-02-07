@@ -38,6 +38,8 @@ class ProfileDashboard extends StatelessWidget {
     final runs = runsRes.value;
     final hasAnyRuns = runs != null && runs.length > 0;
     final hasOfficialRuns = runs != null && runs.where((r) => !r.isSelfie).length > 0;
+    final hasSelfieRuns = runs != null && runs.where((r) => r.isSelfie).length > 0;
+
     print("HAS ANY RUNS: " + hasAnyRuns.toString());
     final goToSettings = () {
       Navigator.of(context, rootNavigator: true).pushNamed("/settings");
@@ -104,7 +106,8 @@ class ProfileDashboard extends StatelessWidget {
           ],
         ),
         if (runsRes.loading) Center(child: CircularProgressIndicator()),
-        if (hasAnyRuns) this.buildRunsCards(runsRes.bestRun, runsRes.lastRun),
+        if (hasOfficialRuns) this.buildRunsCards(runsRes.bestOfficialRun, runsRes.lastOfficialRun, "същинско"),
+        if (hasSelfieRuns) this.buildRunsCards(runsRes.bestSelfieRun, runsRes.lastSelfieRun, "selfie"),
         if (hasAnyRuns) this.buildRunsChartCard(runs),
         if (!runsRes.loading && !hasOfficialRuns)
           Row(
@@ -126,18 +129,18 @@ class ProfileDashboard extends StatelessWidget {
     );
   }
 
-  Widget buildRunsCards(Run bestRun, Run lastRun) {
+  Widget buildRunsCards(Run bestRun, Run lastRun, String runType) {
     return Row(
       children: <Widget>[
         Expanded(
           child: RunCard(
-            title: "Последно участие",
+            title: "Последно " + runType,
             run: lastRun,
           ),
         ),
         Expanded(
           child: RunCard(
-            title: "Най-добро участие",
+            title: "Най-добро " + runType,
             run: bestRun,
           ),
         ),

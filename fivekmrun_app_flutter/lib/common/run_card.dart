@@ -41,7 +41,7 @@ class RunCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            ((run.isSelfie) ? "/" : run.position).toString(),
+                            run.position.toString(),
                             style: textTheme.title
                                 .copyWith(color: theme.accentColor), //HACK: hide the label if Selfie but bump the space
                           ),

@@ -73,7 +73,7 @@ class Run {
         location = "",//json["n_name"],
         differenceFromBest = json[""],
         differenceFromPrevious = json[""],
-        position = null,//json["r_finish_pos"],
+        position = json["s_finish_pos"],
         speed = timeInSecondsToSpeed(json["s_time"]),
         notes = "",
         pace = timeInSecondsToPace(json["s_time"]),

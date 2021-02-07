@@ -129,17 +129,17 @@ class RunDetailsPage extends StatelessWidget {
                 ],
               ),
             SizedBox(height: 20),
-            if (!run.isSelfie)
-              CompareTime(
-                text: "Предишно бягане: ",
-                time: run.differenceFromPrevious,
-              ),
-            if (!run.isSelfie) SizedBox(height: 10),
-            if (!run.isSelfie)
-              CompareTime(
-                text: "Най-добро бягане: ",
-                time: run.differenceFromBest,
-              ),
+            // if (!run.isSelfie)
+            //   CompareTime(
+            //     text: "Предишно бягане: ",
+            //     time: run.differenceFromPrevious,
+            //   ),
+            // if (!run.isSelfie) SizedBox(height: 10),
+            // if (!run.isSelfie)
+            //   CompareTime(
+            //     text: "Най-добро бягане: ",
+            //     time: run.differenceFromBest,
+            //   ),
           ],
         ),
       ),
