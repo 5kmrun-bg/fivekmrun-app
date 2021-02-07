@@ -64,9 +64,10 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToBarcode,
                   ),
                   MilestoneTile(
-                      value: ((runsRes?.value?.map((r) => r.distance)?.fold(0, (a, b) => (a ?? 0) + (b ?? 0)) ?? 0)) ~/ 1000,
-                      milestone: 1250,
-                      title: "Общо\nразстояние"),
+                      value: runsRes?.value?.where((r) => r.isSelfie)?.length?.toInt() ?? 0,
+                      milestone: nextRunsMilestone(
+                          runsRes?.value?.where((r) => r.isSelfie)?.length?.toInt() ?? 50),
+                      title: "Легионер\nselfie"),
                 ],
               ),
             ),
@@ -96,7 +97,7 @@ class ProfileDashboard extends StatelessWidget {
                       value: runsRes?.value?.where((r) => !r.isSelfie)?.length?.toInt() ?? 0,
                       milestone: nextRunsMilestone(
                           runsRes?.value?.where((r) => !r.isSelfie)?.length?.toInt() ?? 50),
-                      title: "Следваща\nцел"),
+                      title: "Легионер\nсъщинско"),
                 ],
               ),
             ),
