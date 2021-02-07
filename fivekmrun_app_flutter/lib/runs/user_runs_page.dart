@@ -37,7 +37,7 @@ class UserRunsList extends StatelessWidget {
     runs.sort((r1, r2) => r2.date.compareTo(r1.date));
 
     final accentColor = Theme.of(context).accentColor;
-    final darkerColor = Color.lerp(accentColor, Colors.black, 0.4);
+    final darkerColor = Colors.white;
 
     return ListView.builder(
       itemCount: runs.length,
@@ -47,7 +47,7 @@ class UserRunsList extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 border: Border.all(
-                    color: !run.isSelfie ? accentColor : darkerColor,
+                    color: run.isSelfie ? accentColor : darkerColor,
                     style: BorderStyle.solid,
                     width: 1.0,
                 ),
