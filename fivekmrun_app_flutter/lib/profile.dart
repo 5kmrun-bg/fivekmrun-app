@@ -109,7 +109,7 @@ class ProfileDashboard extends StatelessWidget {
         if (hasOfficialRuns) this.buildRunsCards(runsRes.bestOfficialRun, runsRes.lastOfficialRun, "същинско"),
         if (hasSelfieRuns) this.buildRunsCards(runsRes.bestSelfieRun, runsRes.lastSelfieRun, "selfie"),
         if (hasAnyRuns) this.buildRunsChartCard(runs),
-        if (!runsRes.loading && !hasOfficialRuns)
+        if (!runsRes.loading && !hasAnyRuns)
           Row(
             children: <Widget>[
               Expanded(
@@ -117,7 +117,7 @@ class ProfileDashboard extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Center(
                     child: Text(
-                        "Все още не сте направили първото си същинско бягане"),
+                        "Все още не сте направили първото си бягане"),
                   ),
                 ),
               )
