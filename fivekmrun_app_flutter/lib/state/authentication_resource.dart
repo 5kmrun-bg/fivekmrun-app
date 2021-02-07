@@ -63,7 +63,7 @@ class AuthenticationResource extends ChangeNotifier {
 
   void _setUserId(int userId) {
     this._userId = userId;
-    FirebaseCrashlytics.instance.setUserIdentifier(userId?.toString());
+    FirebaseCrashlytics.instance.setUserIdentifier(userId?.toString() ?? "");
   }
 
   void _setToken(String token) {
