@@ -36,34 +36,48 @@ class UserRunsList extends StatelessWidget {
   Widget build(BuildContext context) {
     runs.sort((r1, r2) => r2.date.compareTo(r1.date));
 
+    final accentColor = Theme.of(context).accentColor;
+    final darkerColor = Color.lerp(accentColor, Colors.black, 0.4);
+
     return ListView.builder(
       itemCount: runs.length,
       itemBuilder: (BuildContext context, int index) {
         final run = runs[index];
         return Card(
-          child: ListTile(
-            onTap: () =>
-                Navigator.of(context).pushNamed("/run-details", arguments: run),
-            title: Column(
-              children: <Widget>[
-                if (!run.isSelfie)
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: !run.isSelfie ? accentColor : darkerColor,
+                    style: BorderStyle.solid,
+                    width: 1.0,
+                ),
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(4.0),
+            ),
+            child: ListTile(
+              onTap: () =>
+                  Navigator.of(context).pushNamed("/run-details", arguments: run),
+              title: Column(
+                children: <Widget>[
+                  if (!run.isSelfie)
+                    ListTileRow(
+                      icon: Icons.pin_drop,
+                      text: run.location,
+                    ) else
+                    ListTileRow(
+                      icon: Icons.pin_drop,
+                      text: "Selfie"
+                    ),
                   ListTileRow(
-                    icon: Icons.pin_drop,
-                    text: run.location,
-                  ) else
-                  ListTileRow(
-                    icon: Icons.pin_drop,
-                    text: "Selfie"
+                    icon: Icons.calendar_today,
+                    text: run.displayDate,
                   ),
-                ListTileRow(
-                  icon: Icons.calendar_today,
-                  text: run.displayDate,
-                ),
-                ListTileRow(
-                  icon: Icons.timer,
-                  text: run.time + " мин",
-                ),
-              ],
+                  ListTileRow(
+                    icon: Icons.timer,
+                    text: run.time + " мин",
+                  ),
+                ],
+              ),
             ),
           ),
         );
