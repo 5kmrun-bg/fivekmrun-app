@@ -17,7 +17,7 @@ class GoogleMapsService {
         return addresses.firstWhere((a) => a.adminArea != null).adminArea;
       }
     } on Exception catch(e) {
-      Crashlytics.instance.recordError(e, StackTrace.current);
+      FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       return "";
     }
   }

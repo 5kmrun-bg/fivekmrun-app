@@ -105,14 +105,14 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           stravaActivity.startLatitude, stravaActivity.startLongitude),
     );
 
-    Crashlytics.instance.log("5kmRun Submission model: " + jsonEncode(model.toJson()));
+    FirebaseCrashlytics.instance.log("5kmRun Submission model: " + jsonEncode(model.toJson()));
 
     Map<String, dynamic> result;
     try {
       result = await offlineChartResource.submitEntry(
           model, authResource.getToken());
     } on Exception catch (e) {
-      Crashlytics.instance.recordError(e, StackTrace.current);
+      FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       showDialog(
           context: context,
           useRootNavigator: true,
@@ -133,7 +133,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
     if (result["errors"] != null && result["errors"].length > 0) {
       if (result["errors"].contains("403")) {
-        Crashlytics.instance.recordError(
+        FirebaseCrashlytics.instance.recordError(
             Exception("Unexpected invalid 5kmRun token"), StackTrace.current);
         final textStlyle = Theme.of(context).textTheme.subtitle;
         showDialog(
@@ -176,7 +176,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           },
         );
       } else {
-        Crashlytics.instance.recordError(Exception(result["errors"].toString()), StackTrace.current);
+        FirebaseCrashlytics.instance.recordError(Exception(result["errors"].toString()), StackTrace.current);
                 showDialog(
           context: context,
           useRootNavigator: true,
@@ -206,7 +206,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       Navigator.of(context).pushNamed("/");
     }
     else {
-      Crashlytics.instance.recordError(Exception("Error from 5kmrun: " + result.toString()), StackTrace.current);
+      FirebaseCrashlytics.instance.recordError(Exception("Error from 5kmrun: " + result.toString()), StackTrace.current);
     }
   }
 

@@ -88,7 +88,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home>{
 
   @override
   void initState() {
-    PushNotificationsManager().init(context);
+    //PushNotificationsManager().init(context);
     
     super.initState();
 

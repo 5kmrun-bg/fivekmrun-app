@@ -11,7 +11,7 @@ class AuthenticationResource extends ChangeNotifier {
   int _userId;
 
   Future<bool> authenticate(String username, String password) async {
-    Crashlytics.instance.log("authenticate username - $username");
+    FirebaseCrashlytics.instance.log("authenticate username - $username");
 
     HttpClient httpClient = new HttpClient();
     HttpClientRequest request =
@@ -43,7 +43,7 @@ class AuthenticationResource extends ChangeNotifier {
   }
 
   Future<bool> authenticateWithUserId(int userId) async {
-    Crashlytics.instance.log("authenticate userID - $userId");
+    FirebaseCrashlytics.instance.log("authenticate userID - $userId");
 
     await this._onLoginSuccess(userId, null);
     return true;
@@ -63,16 +63,16 @@ class AuthenticationResource extends ChangeNotifier {
 
   void _setUserId(int userId) {
     this._userId = userId;
-    Crashlytics.instance.setUserIdentifier(userId?.toString());
+    FirebaseCrashlytics.instance.setUserIdentifier(userId?.toString());
   }
 
   void _setToken(String token) {
     this._token = token;
-    Crashlytics.instance.setBool("hasToken", token != null && token != "");
+    FirebaseCrashlytics.instance.setCustomKey("hasToken", token != null && token != "");
   }
 
   Future<void> logout() async {
-    Crashlytics.instance.log("logout() started");
+    FirebaseCrashlytics.instance.log("logout() started");
     this._setUserId(null);
     this._setToken(null);
 
@@ -80,7 +80,7 @@ class AuthenticationResource extends ChangeNotifier {
     await prefs.remove(constants.key_userId);
     await prefs.remove(constants.key_token);
     await prefs.remove(constants.key_tokenTimestamp);
-    Crashlytics.instance.log("logout() completed");
+    FirebaseCrashlytics.instance.log("logout() completed");
   }
 
   Future<void> _onLoginSuccess(int userId, String token) async {

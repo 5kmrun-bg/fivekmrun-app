@@ -56,16 +56,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 Text("Известия"),
                 Switch(
                   onChanged: (value) {
-                    print("SET PUSH NOTIFICATION: " + value.toString());
-                    final pushNotificationManager =
-                        PushNotificationsManager.getInstance();
-                    setState(() => localStorage.isSubscrubedForGeneral = value);
-                    this._pushNotificationsSubscribed = value;
-                    if (value) {
-                      pushNotificationManager.subscribeTopic("general");
-                    } else {
-                      pushNotificationManager.unsubscribeTopic("general");
-                    }
+                    // print("SET PUSH NOTIFICATION: " + value.toString());
+                    // //final pushNotificationManager =
+                    //     PushNotificationsManager.getInstance();
+                    // setState(() => localStorage.isSubscrubedForGeneral = value);
+                    // this._pushNotificationsSubscribed = value;
+                    // if (value) {
+                    //   pushNotificationManager.subscribeTopic("general");
+                    // } else {
+                    //   pushNotificationManager.unsubscribeTopic("general");
+                    // }
                   },
                   value: this._pushNotificationsSubscribed,
                 )

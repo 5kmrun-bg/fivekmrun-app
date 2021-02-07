@@ -43,27 +43,27 @@ class StravaResource extends ChangeNotifier {
     if (athlete == null || athlete.id == null) {
       final message =
           "_assureAuthenticated - cannot get athlete fault: [${athlete?.fault?.statusCode}] ${athlete?.fault?.message} - will deAuthenticate";
-      Crashlytics.instance.recordError(message, StackTrace.current);
+      FirebaseCrashlytics.instance.recordError(message, StackTrace.current);
 
       await this.deAuthenticate();
 
       return false;
     } else {
-      Crashlytics.instance.setInt("stravaUserID", athlete.id);
-      Crashlytics.instance
+      FirebaseCrashlytics.instance.setCustomKey("stravaUserID", athlete.id);
+      FirebaseCrashlytics.instance
           .log("Strava get activities - atheleteID: ${athlete.id}");
       return true;
     }
   }
 
   Future<bool> authenticate() async {
-    Crashlytics.instance.log("Strava authenticate started");
+    FirebaseCrashlytics.instance.log("Strava authenticate started");
 
     return _withStrava((strava) async {
       bool isAuthOk = await strava.oauth(stravaClientId,
           'read_all,activity:read_all,profile:read_all', stravaSecret, 'auto');
 
-      Crashlytics.instance.log("Strava authenticate result: $isAuthOk");
+      FirebaseCrashlytics.instance.log("Strava authenticate result: $isAuthOk");
 
       return isAuthOk;
     });
@@ -71,12 +71,12 @@ class StravaResource extends ChangeNotifier {
 
   Future<Fault> deAuthenticate() async {
     return _withStrava((strava) async {
-      Crashlytics.instance.log("Strava deAuthenticate");
-      Crashlytics.instance.setInt("stravaUserID", null);
+      FirebaseCrashlytics.instance.log("Strava deAuthenticate");
+      FirebaseCrashlytics.instance.setCustomKey("stravaUserID", null);
 
       Fault result = await strava.deAuthorize();
 
-      Crashlytics.instance.log(
+      FirebaseCrashlytics.instance.log(
           "Strava deAuthenticate result: [${result?.statusCode}]: ${result?.message} ");
 
       return result;
@@ -114,12 +114,12 @@ class StravaResource extends ChangeNotifier {
   }
 
   Future<List<StravaSummaryRun>> getThisWeekActivities() async {
-    Crashlytics.instance.log("Strava get activities");
+    FirebaseCrashlytics.instance.log("Strava get activities");
 
     return _withStrava((strava) async {
       final authOK = await this.authenticate();
       if (!authOK) {
-        Crashlytics.instance.log("Strava get activities - authOK: false");
+        FirebaseCrashlytics.instance.log("Strava get activities - authOK: false");
         return null;
       }
 
@@ -145,12 +145,12 @@ class StravaResource extends ChangeNotifier {
             await strava.getLoggedInAthleteActivities(before, after);
 
         if (activities == null) {
-          Crashlytics.instance.log("Strava get activities results: null");
+          FirebaseCrashlytics.instance.log("Strava get activities results: null");
 
           return [];
         }
 
-        Crashlytics.instance
+        FirebaseCrashlytics.instance
             .log("Strava get activities results: ${activities.length}");
 
         final runActivites = await Future.wait(activities
@@ -160,7 +160,7 @@ class StravaResource extends ChangeNotifier {
                 )
             .map((a) => strava.getActivityById(a.id.toString())));
 
-        Crashlytics.instance.log(
+        FirebaseCrashlytics.instance.log(
             "Strava get filtered activities results: ${runActivites.length}");
 
         final summaryActivites = runActivites
@@ -172,7 +172,7 @@ class StravaResource extends ChangeNotifier {
 
         return summaryActivites;
       } on Exception catch (e) {
-        Crashlytics.instance.recordError(e, StackTrace.current);
+        FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       }
     });
   }

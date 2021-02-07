@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/barcode_page.dart';
 import 'package:fivekmrun_flutter/donate/donate_page.dart';
@@ -23,24 +24,34 @@ final authRes = AuthenticationResource();
 
 final appAccentColor = Color.fromRGBO(252, 24, 81, 1.0);
 
-void main() async {
-  Crashlytics.instance.enableInDevMode = true;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+  // Pass all uncaught errors to Crashlytics.
+  Function originalOnError = FlutterError.onError;
+  FlutterError.onError = (FlutterErrorDetails errorDetails) async {
+    await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+    // Forward to original handler.
+    originalOnError(errorDetails);
+  };
+
   await authRes.loadFromLocalStore();
   String initialRoute = "/";
 
   final userId = authRes.getUserId();
   if (authRes.getUserId() != null) {
-    Crashlytics.instance.setUserIdentifier(userId.toString());
+    FirebaseCrashlytics.instance.setUserIdentifier(userId.toString());
     userRes.currentUserId = userId;
     initialRoute = "/home";
   }
 
   runZoned(() {
     runApp(MyApp(initialRoute));
-  }, onError: Crashlytics.instance.recordError);
+  }, onError: FirebaseCrashlytics.instance.recordError);
 }
 
 class MyApp extends StatelessWidget {
@@ -88,31 +99,6 @@ class MyApp extends StatelessWidget {
           '/settings': (_) => SettingsPage(),
           '/donation': (_) => DonatePage(),
         },
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Login(),
-          ],
-        ),
       ),
     );
   }

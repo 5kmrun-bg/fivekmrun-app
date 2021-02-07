@@ -30,7 +30,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
     Provider.of<AuthenticationResource>(context, listen: false)
         .authenticate(username, password)
         .then((isAuthenticated) {
-      Crashlytics.instance.log("authenticate with username result: $isAuthenticated");
+      FirebaseCrashlytics.instance.log("authenticate with username result: $isAuthenticated");
 
       if (isAuthenticated) {
         FirebaseAnalytics().logEvent(name: "login");
