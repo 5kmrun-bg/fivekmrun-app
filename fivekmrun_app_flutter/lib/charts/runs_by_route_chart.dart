@@ -23,7 +23,7 @@ class RunsByRouteChart extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Column(children: <Widget>[
-        IntrinsicHeight(child: Text("Бягания по официални трасета", style: subHeadStyle)),
+        IntrinsicHeight(child: Text("Бягания по същински трасета", style: subHeadStyle)),
         Expanded(
             child: new charts.PieChart(
               seriesList, 

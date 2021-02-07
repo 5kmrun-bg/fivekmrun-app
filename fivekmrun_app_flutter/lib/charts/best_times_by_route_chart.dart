@@ -26,7 +26,7 @@ class BestTimesByRouteChart extends StatelessWidget {
       padding: EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
-          IntrinsicHeight(child: Text("Рекорди по официални трасета", style: subHeadStyle)),
+          IntrinsicHeight(child: Text("Рекорди по същински трасета", style: subHeadStyle)),
           Expanded(
               child: charts.BarChart(seriesList,
                   animate: this.animate,

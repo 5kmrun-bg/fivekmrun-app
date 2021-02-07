@@ -113,7 +113,7 @@ class ProfileDashboard extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Center(
                     child: Text(
-                        "Все още не сте направили първото си официално бягане"),
+                        "Все още не сте направили първото си същинско бягане"),
                   ),
                 ),
               )

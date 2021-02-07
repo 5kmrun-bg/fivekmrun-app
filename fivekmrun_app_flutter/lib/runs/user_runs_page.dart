@@ -16,7 +16,7 @@ class UserRunsPage extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           } else if (runsResource.value == null ||
               runsResource.value.length == 0) {
-            return Text("Все още не сте направили първото си официално бягане");
+            return Text("Все още не сте направили първото си същинско бягане");
           } else {
             return UserRunsList(runs: runsResource.value);
           }
