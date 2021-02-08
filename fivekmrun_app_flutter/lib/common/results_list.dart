@@ -176,11 +176,12 @@ class _ResultsListState extends State<ResultsList> {
                           text: res.time,
                           iconColor: iconColor,
                         ),
-                        ListTileRow(
-                          icon: Icons.terrain,
-                          text: res.elevationGainedTotal != null ? res.elevationGainedTotal.round().toString() + "m" : "-",
-                          iconColor: iconColor,
-                        )
+                        if (res.isSelfie)
+                          ListTileRow(
+                            icon: Icons.terrain,
+                            text: res.elevationGainedTotal != null ? res.elevationGainedTotal.round().toString() + "m" : "-",
+                            iconColor: iconColor,
+                          )
                       ],
                   ),
                 ),
@@ -199,11 +200,12 @@ class _ResultsListState extends State<ResultsList> {
                       text: res.name,
                       iconColor: iconColor,
                     ),
-                    ListTileRow(
-                      icon: Icons.location_city,
-                      text: res.startLocation ?? " - ",
-                      iconColor: iconColor,
-                    ),
+                    if (res.isSelfie)
+                      ListTileRow(
+                        icon: Icons.location_city,
+                        text: res.startLocation ?? " - ",
+                        iconColor: iconColor,
+                      ),
                   ],
                 ),
               ),

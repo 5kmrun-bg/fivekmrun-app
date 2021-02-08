@@ -12,7 +12,7 @@ class RunDetailsPage extends StatelessWidget {
 
     ResultsResource results = ResultsResource();
     return FutureBuilder<List<Result>>(
-        future: results.load(id: run.eventId),
+        future: results.getAll(run.eventId),
         builder: (BuildContext context, AsyncSnapshot<List<Result>> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:

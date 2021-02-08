@@ -1,9 +1,6 @@
-const baseUrl = "http://old.5kmrun.bg/5km/";
 const pastEventsUrl = "https://5kmrun.bg/api/5kmrun/results";
 const futureEventsUrl = "https://5kmrun.bg/api/5kmrun/events";
-const runsUrl = baseUrl + "stat.php?id=";
-const resultsUrl = baseUrl + "results.php?event=";
-const userUrl = baseUrl + "usr.php?id=";
+const resultEventsUrl = "https://5kmrun.bg/api/5kmrun/result/";
 
 const endpointBaseUrl = "https://5kmrun.bg/api/5kmrun/";
 const userEndpointUrl = "https://5kmrun.bg/api/selfie/user/";

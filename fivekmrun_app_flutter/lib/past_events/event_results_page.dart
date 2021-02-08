@@ -21,7 +21,7 @@ class _EventResultsPageState extends State<EventResultsPage> {
     return Scaffold(
       appBar: AppBar(title: Text("Резултати")),
       body: FutureBuilder<List<Result>>(
-        future: results.load(id: event.id),
+        future: results.getAll(event.id),
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot<List<Result>> snapshot) {
           switch (snapshot.connectionState) {

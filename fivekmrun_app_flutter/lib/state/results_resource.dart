@@ -1,31 +1,41 @@
-import 'package:fivekmrun_flutter/state/resource.dart';
+import 'dart:convert';
 import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:fivekmrun_flutter/constants.dart' as constants;
+import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:html/dom.dart';
 
-class ResultsResource extends Resource<List<Result>> {
-  @override
-  Future<http.Response> fetch(int id) {
-    return http.get("${constants.resultsUrl}$id&type=1");
+class ResultsResource extends ChangeNotifier {
+  List<Result> value;
+  
+  bool _loading = false;
+
+  bool get loading => _loading;
+  set loading(bool value) {
+    if (_loading != value) {
+      _loading = value;
+      notifyListeners();
+    }
   }
 
-  @override
-  List<Result> parse(Document doc) {
-    final rows = doc.querySelectorAll("div.table-responsive1 table tbody tr");
+  Future<List<Result>> getAll(int eventId) async {
+    this.loading = true;
 
-    var results = rows.map((row) {
-      return Result(
-        position: int.tryParse(row.children[0].text),
-        userId: int.tryParse(row.children[1].text),
-        name: row.children[2].text,
-        time: row.children[3].text,
-        totalRuns: row.children[11].text,
-        sex: row.children[5].text,
-      );
-    }).toList(growable: false);
+    http.Response response =
+      await http.get("${constants.resultEventsUrl}${eventId.toString()}");
+    if (response.statusCode != 200 ||
+        response.headers["content-type"] != "application/json;charset=utf-8;") {
 
-    return results;
+      print('NO RESULTS RECEIVED');
+      //TODO: Fix this when endpoint behaves properly
+      
+      return new List<Result>();
+    }
+
+    String body = utf8.decode(response.bodyBytes);
+    this.loading = false;
+    this.value = Result.listFromEventJson(jsonDecode(body)).toList();  
+    return this.value;
+
   }
 }

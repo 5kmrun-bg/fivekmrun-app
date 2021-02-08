@@ -11,6 +11,7 @@ class Result {
   final String sex;
   final int status;
   final bool isDisqualified;
+  final bool isSelfie;
   int officialPosition;
   String startLocation;
   double elevationLow;
@@ -31,7 +32,8 @@ class Result {
       this.sex,
       this.status = 0,
       this.isDisqualified = false,
-      this.userId = -1});
+      this.userId = -1,
+      this.isSelfie = false});
 
   Result.fromJson(dynamic json)
       : name = json["u_name"] + " " + json["u_surname"],
@@ -51,11 +53,29 @@ class Result {
         distance = json["s_distance"],
         totalDistance = json["s_total_distance"],
         pace = Run.timeInSecondsToPace(json["s_time"] as int),
-        startDate = DateTime.parse(json["s_start_date"]);
+        startDate = DateTime.parse(json["s_start_date"]),
+        isSelfie = true;
 
   static List<Result> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];
     var result = runs.map((d) => Result.fromJson(d)).toList();
+    return result;
+  }
+
+  Result.fromEventJson(dynamic json)
+      : name = json["u_name"] + " " + json["u_surname"],
+        userId = json["r_uid"],
+        time = (json["r_time"] as int).parseSecondsToTimestamp(),
+        position = json["r_finish_pos"],
+        totalRuns = "",
+        sex = json["u_sex"],
+        status = 0,//json["s_type"],
+        isDisqualified = false,//json["s_type"] > 3,
+        pace = Run.timeInSecondsToPace(json["r_time"] as int),
+        isSelfie = false;
+
+  static List<Result> listFromEventJson(List<dynamic> runs) {
+    var result = runs.map((d) => Result.fromEventJson(d)).toList();
     return result;
   }
 
