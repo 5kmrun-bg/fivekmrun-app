@@ -53,25 +53,27 @@ class FutureEventsList extends StatelessWidget {
                       ListTileRow(
                           text: dateFromat.format(event.date),
                           icon: Icons.calendar_today),
-                      ListTileRow(text: event.title, icon: Icons.info),
+                      if (event.title.isNotEmpty)
+                        ListTileRow(text: event.title, icon: Icons.info),
                     ],
                   ),
                 ),
-                Container(
-                  width: 120,
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(10.0),
-                    topRight: const Radius.circular(10.0),
-                  )),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Image.network(
-                      event.imageUrl,
-                      fit: BoxFit.fitWidth,
+                if (event.imageUrl.isNotEmpty)
+                  Container(
+                    width: 120,
+                    decoration: new BoxDecoration(
+                        borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(10.0),
+                      topRight: const Radius.circular(10.0),
+                    )),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5.0),
+                      child: Image.network(
+                        event.imageUrl,
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
