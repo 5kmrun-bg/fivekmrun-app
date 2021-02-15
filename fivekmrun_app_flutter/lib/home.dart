@@ -64,7 +64,7 @@ class TabNavigator extends StatelessWidget {
       key: navigatorKey,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-            builder: routes[settings.name], settings: settings);
+            builder: routes[settings.name], settings: settings, fullscreenDialog: true); // disable back gesture on iOS
       },
     );
   }
