@@ -20,7 +20,7 @@ class Avatar extends StatelessWidget {
                     color: Theme.of(context).accentColor),
                 padding: EdgeInsets.all(2),
                 child: 
-                  (url == null ||url != "") ?
+                  (url.isNotEmpty) ?
                     CircleAvatar(
                         radius: SIZE / 2, backgroundImage: NetworkImage(url)) : Container(),
               )
