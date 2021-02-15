@@ -78,7 +78,7 @@ class Run {
         notes = "",
         pace = timeInSecondsToPace(json["s_time"]),
         isSelfie = true,
-        distance = json["s_total_distance"],
+        distance = json["s_total_distance"] ?? 5000,
         totalTime = timeInSecondsToString(json["s_total_elapsed_time"]); //timeInSecondsToPace(json["r_time"]);
 
   static List<Run> selfieListFromJson(Map<String, dynamic> json) {
