@@ -152,7 +152,7 @@ class ProfileDashboard extends StatelessWidget {
     return Card(
       child: Container(
         height: 200,
-        child: RunsChart(runs: runs),
+        child: RunsChart(runs: runs.take(30).toList()),
       ),
     );
   }

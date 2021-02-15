@@ -49,7 +49,7 @@ class _RunsChartState extends State<RunsChart> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
-          IntrinsicHeight(child: Text("Резултати от бягания", style: subHeadStyle)),
+          IntrinsicHeight(child: Text("Тенденция от последните " + this.widget.runs.length.toString() +" бягания", style: subHeadStyle)),
           IntrinsicHeight(child: Text(this.dataPointLabel)),
           Expanded(
             child: charts.TimeSeriesChart(
