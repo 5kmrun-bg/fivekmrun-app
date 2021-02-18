@@ -245,19 +245,16 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   Widget _buildStravaAuth(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-          height: 100,
-        ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
           child: Text(
-            "За да продължите - следвайте инструкциите за да свържете 5kmRun приложението с вашия Strava профил.\n \nМоля, използвайте Google Chrome при свързването и въведете директно Strava потребителско име и парола. В момента, свързване с други браузъри не сработва успешно.",
+            "За да продължите - следвайте инструкциите и свържете 5kmRun приложението с вашия Strava профил.\n\nМоля, използвайте Google Chrome при свързването и въведете директно Strava потребителско име и парола. В момента, свързване с други браузъри не сработва успешно.\n\nСистемата на селфи отчита  „Elapsed time“, т.е. вашето общо (цялостно) време на бягането, което включва и времето при включена пауза или просто спрял на място! Много хора се заблуждават, че селфи ще им приеме тяхното „Moving Time“, което представлява само времето на движение без включените паузи и спиранията, т.е. случаите, при които се прекъсва бягането с използването на бутона „пауза“ или спиране на място!",
             style: Theme.of(context).textTheme.subtitle,
             textAlign: TextAlign.center,
           ),
         ),
         Container(
-          height: 50,
+          height: 20,
         ),
         RaisedButton(
           color: Colors.transparent,
