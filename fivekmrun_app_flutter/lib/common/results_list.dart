@@ -61,9 +61,10 @@ class _ResultsListState extends State<ResultsList> {
   void _doFilter() {
     setState(() {
       _filteredResults = widget.results
-          .where((res) => res.name
-              .toLowerCase()
-              .contains(_controller.text.toLowerCase() ?? "") || 
+          .where((res) =>
+              res.name
+                  .toLowerCase()
+                  .contains(_controller.text.toLowerCase() ?? "") ||
               res.userId.toString() == (_controller.text ?? "").trim())
           .toList();
       this._userRunIndex =
@@ -137,83 +138,120 @@ class _ResultsListState extends State<ResultsList> {
     }
 
     return GestureDetector(
-    onTap: () {
-      if (res.mapPolyline != null && res.mapPolyline != "") {
-        Navigator.of(context).pushNamed("/details", arguments: res);
-      }
-    },
-    child: Card(
-      color: res.isDisqualified ? Colors.grey.shade800 : Colors.transparent,
-      child: Padding(
-        padding: const EdgeInsets.all(0),
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 10),
-                width: 10,
-                decoration: BoxDecoration(
-                  color: cardColor, 
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(5), 
-                    topLeft: Radius.circular(5)
-                    )
-                  ),
-                ),
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: IntrinsicWidth(
-                  child: Column(
-                      children: <Widget>[
-                        ListTileRow(
-                          icon: CustomIcons.award,
-                          text: position,
-                          iconColor: iconColor,
-                        ),
-                        ListTileRow(
-                          icon: Icons.timer,
-                          text: res.time,
-                          iconColor: iconColor,
-                        ),
-                        if (res.isSelfie)
-                          ListTileRow(
-                            icon: Icons.terrain,
-                            text: res.elevationGainedTotal != null ? res.elevationGainedTotal.round().toString() + "m" : "-",
-                            iconColor: iconColor,
-                          )
-                      ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    ListTileRow(
-                      icon: Icons.perm_identity,
-                      text: res.userId.toString() ?? " - ",
-                      iconColor: iconColor,
+        onTap: () {
+          if (res.mapPolyline != null && res.mapPolyline != "") {
+            Navigator.of(context).pushNamed("/details", arguments: res);
+          }
+        },
+        child: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            if (res.isPatreon)
+              Positioned(
+                  child: Container(
+                    color: iconColor,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 3, bottom: 3, right: 15, left: 15),
+                      child: Row(children: [
+                        Icon(CustomIcons.patreon, size: 9),
+                        Text(" патрон",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold))
+                      ]),
                     ),
-                    ListTileRow(
-                      icon: Icons.person,
-                      text: res.name,
-                      iconColor: iconColor,
-                    ),
-                    if (res.isSelfie)
-                      ListTileRow(
-                        icon: Icons.location_city,
-                        text: res.startLocation ?? " - ",
-                        iconColor: iconColor,
+                  ),
+                  top: 15,
+                  right: 5),
+            if (res.legionerType > 0)
+              Positioned(
+                  child: Icon(
+                    CustomIcons.tshirt,
+                    size: 20,
+                    color: (res.legionerType == 1) ? Colors.blue : Colors.black,
+                  ),
+                  top: 50,
+                  right: 10),
+            Card(
+              color: res.isDisqualified
+                  ? Colors.grey.shade800
+                  : Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.all(0),
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(right: 10),
+                        width: 10,
+                        decoration: BoxDecoration(
+                            color: cardColor,
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(5),
+                                topLeft: Radius.circular(5))),
                       ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: IntrinsicWidth(
+                          child: Column(
+                            children: <Widget>[
+                              ListTileRow(
+                                icon: CustomIcons.award,
+                                text: position,
+                                iconColor: iconColor,
+                              ),
+                              ListTileRow(
+                                icon: Icons.timer,
+                                text: res.time,
+                                iconColor: iconColor,
+                              ),
+                              if (res.isSelfie)
+                                ListTileRow(
+                                  icon: Icons.terrain,
+                                  text: res.elevationGainedTotal != null
+                                      ? res.elevationGainedTotal
+                                              .round()
+                                              .toString() +
+                                          "m"
+                                      : "-",
+                                  iconColor: iconColor,
+                                )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            ListTileRow(
+                              icon: Icons.perm_identity,
+                              text: res.userId.toString() ?? " - ",
+                              iconColor: iconColor,
+                            ),
+                            ListTileRow(
+                              icon: Icons.person,
+                              text: res.name,
+                              iconColor: iconColor,
+                            ),
+                            if (res.isSelfie)
+                              ListTileRow(
+                                icon: Icons.location_city,
+                                text: res.startLocation ?? " - ",
+                                iconColor: iconColor,
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    ));
+            ),
+          ],
+        ));
   }
 }
 
@@ -244,7 +282,8 @@ class SearchBox extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 decoration: new InputDecoration(
-                    hintText: 'Търси по име или номер', border: InputBorder.none),
+                    hintText: 'Търси по име или номер',
+                    border: InputBorder.none),
               ),
             ),
             IconButton(

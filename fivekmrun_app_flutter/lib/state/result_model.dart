@@ -12,6 +12,8 @@ class Result {
   final int status;
   final bool isDisqualified;
   final bool isSelfie;
+  final bool isPatreon;
+  final int legionerType;
   int officialPosition;
   String startLocation;
   double elevationLow;
@@ -33,7 +35,9 @@ class Result {
       this.status = 0,
       this.isDisqualified = false,
       this.userId = -1,
-      this.isSelfie = false});
+      this.isSelfie = false,
+      this.isPatreon = false,
+      this.legionerType = 0});
 
   Result.fromJson(dynamic json)
       : name = json["u_name"] + " " + json["u_surname"],
@@ -54,7 +58,9 @@ class Result {
         totalDistance = json["s_total_distance"],
         pace = Run.timeInSecondsToPace(json["s_time"] as int),
         startDate = DateTime.parse(json["s_start_date"]),
-        isSelfie = true;
+        isSelfie = true,
+        isPatreon = json["p_id"] != null,
+        legionerType = Result.getSelfieLegionerType(json);
 
   static List<Result> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];
@@ -69,10 +75,28 @@ class Result {
         position = json["r_finish_pos"],
         totalRuns = "",
         sex = json["u_sex"],
-        status = 0,//json["s_type"],
-        isDisqualified = false,//json["s_type"] > 3,
+        status = 0, //json["s_type"],
+        isDisqualified = false, //json["s_type"] > 3,
         pace = Run.timeInSecondsToPace(json["r_time"] as int),
-        isSelfie = false;
+        isSelfie = false,
+        isPatreon = json["p_id"] != null,
+        legionerType = Result.getLegionerType(json);
+
+  static int getLegionerType(dynamic json) {
+    return (((json["r_runs"] ?? 0) + (json["u_help"] ?? 0)) < 50)
+        ? 0
+        : (((json["r_runs"] ?? 0) + (json["u_help"] ?? 0)) < 100)
+            ? 1
+            : 2;
+  }
+
+  static int getSelfieLegionerType(dynamic json) {
+    return (((json["u_runs_s"] ?? 0)) < 50)
+        ? 0
+        : ((json["u_runs_s"] ?? 0) < 100)
+            ? 1
+            : 2;
+  }
 
   static List<Result> listFromEventJson(List<dynamic> runs) {
     var result = runs.map((d) => Result.fromEventJson(d)).toList();
