@@ -218,21 +218,22 @@ class _ResultsListState extends State<ResultsList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             ListTileRow(
-                              icon: Icons.perm_identity,
+                              icon: (res.legionerType > 0)
+                                  ? CustomIcons.tshirt
+                                  : Icons.perm_identity,
                               text: res.userId.toString() ?? " - ",
-                              iconColor: iconColor,
+                              iconSize: (res.legionerType > 0) ? 13 : 18,
+                              iconColor: (res.legionerType < 1)
+                                  ? iconColor
+                                  : (res.legionerType < 2)
+                                      ? Colors.blue
+                                      : Colors.black,
                             ),
                             ListTileRow(
-                                icon: (res.legionerType > 0)
-                                    ? CustomIcons.tshirt
-                                    : Icons.person,
-                                text: res.name,
-                                iconColor: (res.legionerType < 1)
-                                    ? iconColor
-                                    : (res.legionerType < 2)
-                                        ? Colors.blue
-                                        : Colors.black,
-                                iconSize: (res.legionerType > 0) ? 12 : 18),
+                              icon: Icons.person,
+                              text: res.name,
+                              iconColor: iconColor,
+                            ),
                             if (res.isSelfie)
                               ListTileRow(
                                 icon: Icons.location_city,
