@@ -178,14 +178,14 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               children: <Widget>[
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(left: 8, right: 8),
                     child: RaisedButton(
                       onPressed: () => this.goToAddEntry(),
                       child: Row(
                         children: [
                           Text("Участвай в класацията", style: TextStyle()),
                           Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                            padding: const EdgeInsets.only(left: 8, right: 8),
                             child: Icon(Icons.add_circle_outline),
                           )
                         ],
@@ -193,26 +193,29 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                     ),
                   ),
                 ),
-                RaisedButton(
-                    onPressed: () => {
-                          launch(
-                            "https://5kmrun.bg/selfie/ofc",
-                          )
-                        },
-                    child: Row(
-                      children: [
-                        Text(
-                          "Подробни\nрезултати",
-                          style: TextStyle(
-                            fontSize: 8,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: OutlineButton(
+                      onPressed: () => {
+                            launch(
+                              "https://5kmrun.bg/selfie/ofc",
+                            )
+                          },
+                      child: Row(
+                        children: [
+                          Text(
+                            "Подробни\nрезултати",
+                            style: TextStyle(
+                              fontSize: 8,
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Icon(Icons.open_in_browser),
-                        )
-                      ],
-                    ))
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Icon(Icons.open_in_browser),
+                          )
+                        ],
+                      )),
+                )
               ],
             )
           ],
