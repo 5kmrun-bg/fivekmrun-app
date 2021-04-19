@@ -164,15 +164,6 @@ class _ResultsListState extends State<ResultsList> {
                   ),
                   top: 15,
                   right: 5),
-            if (res.legionerType > 0)
-              Positioned(
-                  child: Icon(
-                    CustomIcons.tshirt,
-                    size: 20,
-                    color: (res.legionerType == 1) ? Colors.blue : Colors.black,
-                  ),
-                  top: 50,
-                  right: 10),
             Card(
               color: res.isDisqualified
                   ? Colors.grey.shade800
@@ -232,10 +223,16 @@ class _ResultsListState extends State<ResultsList> {
                               iconColor: iconColor,
                             ),
                             ListTileRow(
-                              icon: Icons.person,
-                              text: res.name,
-                              iconColor: iconColor,
-                            ),
+                                icon: (res.legionerType > 0)
+                                    ? CustomIcons.tshirt
+                                    : Icons.person,
+                                text: res.name,
+                                iconColor: (res.legionerType < 1)
+                                    ? iconColor
+                                    : (res.legionerType < 2)
+                                        ? Colors.blue
+                                        : Colors.black,
+                                iconSize: (res.legionerType > 0) ? 12 : 18),
                             if (res.isSelfie)
                               ListTileRow(
                                 icon: Icons.location_city,

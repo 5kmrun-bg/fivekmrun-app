@@ -4,7 +4,9 @@ class ListTileRow extends StatelessWidget {
   final IconData icon;
   final String text;
   final Color iconColor;
-  const ListTileRow({Key key, this.icon, this.text, this.iconColor})
+  final int iconSize;
+  const ListTileRow(
+      {Key key, this.icon, this.text, this.iconColor, this.iconSize = 18})
       : super(key: key);
 
   @override
@@ -19,6 +21,7 @@ class ListTileRow extends StatelessWidget {
             child: Icon(
               icon,
               color: color,
+              size: this.iconSize.toDouble(),
             ),
           ),
         Expanded(
