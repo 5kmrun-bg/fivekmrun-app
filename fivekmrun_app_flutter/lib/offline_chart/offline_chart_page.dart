@@ -6,6 +6,7 @@ import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OfflineChartPage extends StatefulWidget {
   OfflineChartPage({Key key}) : super(key: key);
@@ -180,10 +181,38 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: RaisedButton(
                       onPressed: () => this.goToAddEntry(),
-                      child: Text("Участвай в класацията"),
+                      child: Row(
+                        children: [
+                          Text("Участвай в класацията", style: TextStyle()),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Icon(Icons.add_circle_outline),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
+                RaisedButton(
+                    onPressed: () => {
+                          launch(
+                            "https://5kmrun.bg/selfie/ofc",
+                          )
+                        },
+                    child: Row(
+                      children: [
+                        Text(
+                          "Подробни\nрезултати",
+                          style: TextStyle(
+                            fontSize: 8,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Icon(Icons.open_in_browser),
+                        )
+                      ],
+                    ))
               ],
             )
           ],
