@@ -176,20 +176,18 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
             Expanded(child: this._buildResults()),
             Row(
               children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8),
-                    child: RaisedButton(
-                      onPressed: () => this.goToAddEntry(),
-                      child: Row(
-                        children: [
-                          Text("Участвай в класацията", style: TextStyle()),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8, right: 8),
-                            child: Icon(Icons.add_circle_outline),
-                          )
-                        ],
-                      ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: RaisedButton(
+                    onPressed: () => this.goToAddEntry(),
+                    child: Row(
+                      children: [
+                        Text("Участвай", style: TextStyle()),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 8),
+                          child: Icon(Icons.add_circle_outline),
+                        )
+                      ],
                     ),
                   ),
                 ),
