@@ -64,16 +64,15 @@ class TabNavigator extends StatelessWidget {
       key: navigatorKey,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-            builder: routes[settings.name], settings: settings, fullscreenDialog: true); // disable back gesture on iOS
+            builder: routes[settings.name],
+            settings: settings,
+            fullscreenDialog: true); // disable back gesture on iOS
       },
     );
   }
 }
 
-class _HomeState extends State<Home> with AfterLayoutMixin<Home>{
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-
+class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
   int _selectedIndex = 0;
   TabNavigationHelper _tabHelper;
   List<Widget> _widgetOptions;
@@ -89,7 +88,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home>{
   @override
   void initState() {
     //PushNotificationsManager().init(context);
-    
+
     super.initState();
 
     final userId =
@@ -162,6 +161,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home>{
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.shifting,
+          unselectedItemColor: Colors.white,
           selectedItemColor: selectedColor,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
