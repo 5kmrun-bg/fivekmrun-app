@@ -53,6 +53,10 @@ class FutureEventsList extends StatelessWidget {
                       ListTileRow(
                           text: dateFromat.format(event.date),
                           icon: Icons.calendar_today),
+                      ListTileRow(
+                        text: event.time,
+                        icon: Icons.watch,
+                      ),
                       if (event.title.isNotEmpty)
                         ListTileRow(text: event.title, icon: Icons.info),
                     ],
