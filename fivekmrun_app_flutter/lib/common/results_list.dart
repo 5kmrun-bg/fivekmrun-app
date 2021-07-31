@@ -146,7 +146,7 @@ class _ResultsListState extends State<ResultsList> {
         child: Stack(
           alignment: Alignment.topRight,
           children: [
-            if (res.isPatreon)
+            if (!res.isAnonymous && res.isPatreon)
               Positioned(
                   child: Container(
                     color: iconColor,
@@ -221,7 +221,9 @@ class _ResultsListState extends State<ResultsList> {
                               icon: (res.legionerType > 0)
                                   ? CustomIcons.tshirt
                                   : Icons.perm_identity,
-                              text: res.userId.toString() ?? " - ",
+                              text: (res.isAnonymous || res.userId == null)
+                                  ? " - "
+                                  : res.userId.toString(),
                               iconSize: (res.legionerType > 0) ? 13 : 18,
                               iconColor: (res.legionerType < 1)
                                   ? iconColor
@@ -231,7 +233,7 @@ class _ResultsListState extends State<ResultsList> {
                             ),
                             ListTileRow(
                               icon: Icons.person,
-                              text: res.name,
+                              text: (!res.isAnonymous) ? res.name : "Анонимен",
                               iconColor: iconColor,
                             ),
                             if (res.isSelfie)

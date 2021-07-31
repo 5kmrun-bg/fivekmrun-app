@@ -14,6 +14,7 @@ class Result {
   final bool isSelfie;
   final bool isPatreon;
   final int legionerType;
+  final bool isAnonymous;
   int officialPosition;
   String startLocation;
   double elevationLow;
@@ -37,7 +38,8 @@ class Result {
       this.userId = -1,
       this.isSelfie = false,
       this.isPatreon = false,
-      this.legionerType = 0});
+      this.legionerType = 0,
+      this.isAnonymous = false});
 
   Result.fromJson(dynamic json)
       : name = json["u_name"] + " " + json["u_surname"],
@@ -59,6 +61,7 @@ class Result {
         pace = Run.timeInSecondsToPace(json["s_time"] as int),
         startDate = DateTime.parse(json["s_start_date"]),
         isSelfie = true,
+        isAnonymous = false,
         isPatreon = json["p_id"] != null,
         legionerType = Result.getSelfieLegionerType(json);
 
@@ -80,7 +83,8 @@ class Result {
         pace = Run.timeInSecondsToPace(json["r_time"] as int),
         isSelfie = false,
         isPatreon = json["p_id"] != null,
-        legionerType = Result.getLegionerType(json);
+        legionerType = Result.getLegionerType(json),
+        isAnonymous = json["r_uid"] == 0;
 
   static int getLegionerType(dynamic json) {
     return (((json["r_runs"] ?? 0) + (json["u_help"] ?? 0)) < 50)
