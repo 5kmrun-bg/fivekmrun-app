@@ -7,7 +7,8 @@ class RunCard extends StatelessWidget {
   final Run run;
   final String title;
 
-  const RunCard({Key key, this.run, @required this.title}) : super(key: key);
+  const RunCard({Key? key, required this.run, required this.title})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,15 +36,15 @@ class RunCard extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-                      child: 
-                      Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
                             run.position.toString(),
-                            style: textTheme.title
-                                .copyWith(color: theme.accentColor), //HACK: hide the label if Selfie but bump the space
+                            style: textTheme.title?.copyWith(
+                                color: theme
+                                    .accentColor), //HACK: hide the label if Selfie but bump the space
                           ),
                           Text("място", style: labelStyle),
                         ],
@@ -72,11 +73,11 @@ class RunCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text(run.pace + " мин/км",
+                            child: Text(run.pace ?? "" + " мин/км",
                                 style: valueStyle,
                                 overflow: TextOverflow.ellipsis),
                           ),
-                          Text(run.time + " мин",
+                          Text(run.time ?? "" + " мин",
                               style: valueStyle,
                               overflow: TextOverflow.ellipsis),
                         ],

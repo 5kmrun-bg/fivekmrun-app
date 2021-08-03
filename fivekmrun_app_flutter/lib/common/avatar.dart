@@ -4,7 +4,7 @@ const double SIZE = 150;
 
 class Avatar extends StatelessWidget {
   final String url;
-  const Avatar({Key key, this.url}) : super(key: key);
+  const Avatar({Key? key, required this.url}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +19,10 @@ class Avatar extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: Theme.of(context).accentColor),
                 padding: EdgeInsets.all(2),
-                child: 
-                  (url.isNotEmpty) ?
-                    CircleAvatar(
-                        radius: SIZE / 2, backgroundImage: NetworkImage(url)) : Container(),
+                child: (url.isNotEmpty)
+                    ? CircleAvatar(
+                        radius: SIZE / 2, backgroundImage: NetworkImage(url))
+                    : Container(),
               )
             : CircularProgressIndicator(),
       ),

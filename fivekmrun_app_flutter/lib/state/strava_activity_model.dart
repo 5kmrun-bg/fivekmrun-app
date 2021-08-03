@@ -5,8 +5,8 @@ class FastestSplitSummary {
   final double distance;
 
   FastestSplitSummary({
-    this.elapsedTime,
-    this.distance,
+    required this.elapsedTime,
+    required this.distance,
   });
 }
 
@@ -15,7 +15,7 @@ class StravaSummaryRun {
   final FastestSplitSummary fastestSplit;
 
   StravaSummaryRun({
-    this.detailedActivity,
-    this.fastestSplit,
+    required this.detailedActivity,
+    required this.fastestSplit,
   });
 }

@@ -17,20 +17,20 @@ class OfflineResultsResource extends ChangeNotifier {
     }
   }
 
-  List<Result> _value;
-  List<Result> get value => _value;
-  set value(List<Result> v) {
+  List<Result>? _value;
+  List<Result>? get value => _value;
+  set value(List<Result>? v) {
     if (_value != v) {
       _value = v;
       notifyListeners();
     }
   }
 
-  Future<List<Result>> getThisWeekResults() async {
+  Future<List<Result>?> getThisWeekResults() async {
     return _loadResultByWeek("");
   }
 
-  Future<List<Result>> getPastWeekResults() async {
+  Future<List<Result>?> getPastWeekResults() async {
     final now = DateTime.now();
     DateTime lastWeek =
         DateTime.now().subtract(Duration(days: now.weekday - 1 + 7));
@@ -47,9 +47,9 @@ class OfflineResultsResource extends ChangeNotifier {
     return ((dayOfYear - date.weekday + 10) / 7).floor();
   }
 
-  Future<List<Result>> _loadResultByWeek(String weekFilter) async {
-    http.Response response =
-        await http.get("${constants.offlineChartEndpointUrl}$weekFilter");
+  Future<List<Result>?> _loadResultByWeek(String weekFilter) async {
+    http.Response response = await http.get(
+        Uri.dataFromString("${constants.offlineChartEndpointUrl}$weekFilter"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
       this.loading = false;

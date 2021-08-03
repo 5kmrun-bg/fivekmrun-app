@@ -14,7 +14,7 @@ description: A mobile application for 5kmRun.bg.
 version: 3.7.0+380
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -26,7 +26,7 @@ dependencies:
 
   provider: ^3.0.0
 
-  http: ^0.12.0+2
+  http: ^0.13.0
 
   collection: ^1.14.11
 
@@ -40,18 +40,23 @@ dependencies:
 
   barcode_flutter: ^1.1.2
 
-  firebase_core: ^0.7.0
-  firebase_analytics: ^7.0.1
+  firebase_core: ^1.4.0
+  firebase_analytics: ^8.2.0
   # firebase_messaging: ^6.0.13
-  firebase_crashlytics: ^0.4.0+1
-
+  firebase_crashlytics: ^2.1.1
   scrollable_positioned_list: ^0.1.9
   flutter_progress_button: ^1.0.0
-  url_launcher: ^5.4.5
+  url_launcher: ^5.7.7
   transparent_image: ^1.0.0
   rate_my_app: ^0.6.0+3
   after_layout: ^1.0.7+2
   geocoder: ^0.2.1
+
+
+dependency_overrides:
+  plugin_platform_interface: ^2.0.0
+  http: ^0.13.0
+
 
 dev_dependencies:
   flutter_test:

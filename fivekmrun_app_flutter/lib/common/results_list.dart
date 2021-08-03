@@ -9,18 +9,18 @@ import 'package:provider/provider.dart';
 class ResultsList extends StatefulWidget {
   final List<Result> results;
 
-  ResultsList({Key key, this.results}) : super(key: key);
+  ResultsList({Key? key, required this.results}) : super(key: key);
 
   @override
   _ResultsListState createState() => _ResultsListState();
 }
 
 class _ResultsListState extends State<ResultsList> {
-  TextEditingController _controller;
+  TextEditingController? _controller;
   ItemScrollController _scrollController = ItemScrollController();
-  List<Result> _filteredResults;
+  List<Result>? _filteredResults;
   int _userRunIndex = -1;
-  int _userId;
+  int? _userId;
   bool _showScrollBtn = false;
 
   void initState() {
@@ -30,7 +30,7 @@ class _ResultsListState extends State<ResultsList> {
     _showScrollBtn = widget.results.any((r) => r.userId == _userId);
     _filteredResults = widget.results;
     _controller = TextEditingController();
-    _controller.addListener(() {
+    _controller?.addListener(() {
       this._doFilter();
     });
     this._doFilter();
@@ -64,18 +64,18 @@ class _ResultsListState extends State<ResultsList> {
           .where((res) =>
               res.name
                   .toLowerCase()
-                  .contains(_controller.text.toLowerCase() ?? "") ||
-              res.userId.toString() == (_controller.text ?? "").trim())
+                  .contains(_controller?.text.toLowerCase() ?? "") ||
+              res.userId.toString() == (_controller?.text ?? "").trim())
           .toList();
       this._userRunIndex =
-          _filteredResults.indexWhere((r) => r.userId == this._userId);
+          _filteredResults!.indexWhere((r) => r.userId == this._userId);
     });
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -84,15 +84,15 @@ class _ResultsListState extends State<ResultsList> {
     return Column(
       children: <Widget>[
         SearchBox(
-          controller: _controller,
+          controller: _controller!,
           showLoacateButton: this._showScrollBtn,
           locateCB: _userRunIndex >= 0 ? _scrollToView : null,
         ),
         Expanded(
-          child: _filteredResults.length > 0
+          child: (_filteredResults?.length ?? 0) > 0
               ? ScrollablePositionedList.builder(
                   itemScrollController: _scrollController,
-                  itemCount: _filteredResults.length,
+                  itemCount: _filteredResults?.length,
                   itemBuilder: resultTileBuilder,
                 )
               : Center(
@@ -104,13 +104,11 @@ class _ResultsListState extends State<ResultsList> {
   }
 
   Widget resultTileBuilder(BuildContext context, int index) {
-    final res = _filteredResults[index];
+    final res = _filteredResults![index];
     final theme = Theme.of(context);
 
     var position = res.position.toString();
-    if (res.officialPosition != null) {
-      position = res.officialPosition.toString();
-    }
+    position = res.officialPosition.toString();
 
     final iconColor =
         res.isDisqualified ? theme.disabledColor : theme.accentColor;
@@ -258,13 +256,13 @@ class _ResultsListState extends State<ResultsList> {
 class SearchBox extends StatelessWidget {
   final TextEditingController controller;
   final bool showLoacateButton;
-  final Function locateCB;
+  final Function? locateCB;
 
   const SearchBox({
-    Key key,
-    this.controller,
-    this.showLoacateButton,
-    this.locateCB,
+    Key? key,
+    required this.controller,
+    required this.showLoacateButton,
+    required this.locateCB,
   }) : super(key: key);
 
   @override
@@ -295,7 +293,7 @@ class SearchBox extends StatelessWidget {
             if (showLoacateButton)
               new IconButton(
                 icon: new Icon(Icons.location_searching),
-                onPressed: locateCB,
+                onPressed: locateCB!(),
               ),
           ],
         ),

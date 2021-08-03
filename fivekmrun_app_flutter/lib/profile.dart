@@ -13,7 +13,7 @@ import 'charts/runs_chart.dart';
 import 'common/milestone.dart';
 
 class ProfileDashboard extends StatelessWidget {
-  const ProfileDashboard({Key key}) : super(key: key);
+  const ProfileDashboard({Key? key}) : super(key: key);
 
   int nextRunsMilestone(int count) {
     if (count <= 50) {
@@ -32,13 +32,15 @@ class ProfileDashboard extends StatelessWidget {
     final userResource = Provider.of<UserResource>(context);
     final runsRes = Provider.of<RunsResource>(context);
 
-    final user = userResource?.value;
+    final user = userResource.value;
     final textTheme = Theme.of(context).textTheme;
 
     final runs = runsRes.value;
     final hasAnyRuns = runs != null && runs.length > 0;
-    final hasOfficialRuns = runs != null && runs.where((r) => !r.isSelfie).length > 0;
-    final hasSelfieRuns = runs != null && runs.where((r) => r.isSelfie).length > 0;
+    final hasOfficialRuns =
+        runs != null && runs.where((r) => !r.isSelfie).length > 0;
+    final hasSelfieRuns =
+        runs != null && runs.where((r) => r.isSelfie).length > 0;
 
     print("HAS ANY RUNS: " + hasAnyRuns.toString());
     final goToSettings = () {
@@ -66,9 +68,16 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToBarcode,
                   ),
                   MilestoneTile(
-                      value: runsRes?.value?.where((r) => r.isSelfie)?.length?.toInt() ?? 0,
-                      milestone: nextRunsMilestone(
-                          runsRes?.value?.where((r) => r.isSelfie)?.length?.toInt() ?? 50),
+                      value: runsRes.value
+                              ?.where((r) => r.isSelfie)
+                              .length
+                              .toInt() ??
+                          0,
+                      milestone: nextRunsMilestone(runsRes.value
+                              ?.where((r) => r.isSelfie)
+                              .length
+                              .toInt() ??
+                          50),
                       title: "Легионер\nselfie"),
                 ],
               ),
@@ -77,7 +86,7 @@ class ProfileDashboard extends StatelessWidget {
               flex: 5,
               child: Column(
                 children: <Widget>[
-                  Avatar(url: user?.avatarUrl),
+                  Avatar(url: user?.avatarUrl ?? ""),
                   Text(
                     user?.name ?? "",
                     style: textTheme.subhead,
@@ -96,9 +105,16 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToSettings,
                   ),
                   MilestoneTile(
-                      value: runsRes?.value?.where((r) => !r.isSelfie)?.length?.toInt() ?? 0,
-                      milestone: nextRunsMilestone(
-                          runsRes?.value?.where((r) => !r.isSelfie)?.length?.toInt() ?? 50),
+                      value: runsRes?.value
+                              ?.where((r) => !r.isSelfie)
+                              ?.length
+                              ?.toInt() ??
+                          0,
+                      milestone: nextRunsMilestone(runsRes?.value
+                              ?.where((r) => !r.isSelfie)
+                              ?.length
+                              ?.toInt() ??
+                          50),
                       title: "Легионер\nсъщинско"),
                 ],
               ),
@@ -106,9 +122,13 @@ class ProfileDashboard extends StatelessWidget {
           ],
         ),
         if (runsRes.loading) Center(child: CircularProgressIndicator()),
-        if (hasOfficialRuns) this.buildRunsCards(runsRes.bestOfficialRun, runsRes.lastOfficialRun, "същинско"),
-        if (hasSelfieRuns) this.buildRunsCards(runsRes.bestSelfieRun, runsRes.lastSelfieRun, "selfie"),
-        if (hasAnyRuns) this.buildRunsChartCard(runs),
+        if (hasOfficialRuns)
+          this.buildRunsCards(
+              runsRes.bestOfficialRun!, runsRes.lastOfficialRun!, "същинско"),
+        if (hasSelfieRuns)
+          this.buildRunsCards(
+              runsRes.bestSelfieRun!, runsRes.lastSelfieRun!, "selfie"),
+        if (hasAnyRuns) this.buildRunsChartCard(runs!),
         if (!runsRes.loading && !hasAnyRuns)
           Row(
             children: <Widget>[
@@ -116,15 +136,14 @@ class ProfileDashboard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Center(
-                    child: Text(
-                        "Все още не сте направили първото си бягане"),
+                    child: Text("Все още не сте направили първото си бягане"),
                   ),
                 ),
               )
             ],
           ),
-        if (hasOfficialRuns) this.buildRunsByRouteCard(runs),
-        if (hasOfficialRuns) this.buildBestTimesCard(runs),
+        if (hasOfficialRuns) this.buildRunsByRouteCard(runs!),
+        if (hasOfficialRuns) this.buildBestTimesCard(runs!),
       ],
     );
   }

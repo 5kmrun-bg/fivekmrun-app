@@ -10,7 +10,7 @@ import 'common/strava_connect.dart';
 import 'state/user_resource.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({Key key}) : super(key: key);
+  SettingsPage({Key? key}) : super(key: key);
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -24,8 +24,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final authResource =
         Provider.of<AuthenticationResource>(context, listen: false);
     final localStorage = new LocalStorageResource();
-    localStorage.isSubscribedForGeneral
-        .then((value) => setState(() => this._pushNotificationsSubscribed = value));
+    localStorage.isSubscribedForGeneral.then(
+        (value) => setState(() => this._pushNotificationsSubscribed = value));
 
     final logout = () async {
       await authResource.logout();

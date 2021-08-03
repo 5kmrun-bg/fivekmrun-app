@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginPreview extends StatelessWidget {
-  LoginPreview({Key key}) : super(key: key);
+  LoginPreview({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class LoginPreview extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 12),
                 child: Text(title, style: textTheme.title),
               ),
-              Hero(tag: "avatar", child: Avatar(url: avatrUrl)),
+              Hero(tag: "avatar", child: Avatar(url: avatrUrl ?? "")),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

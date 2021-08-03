@@ -26,15 +26,15 @@ final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 typedef void ActivityPressedCB(StravaSummaryRun activity);
 
 class AddOfflineEntryPage extends StatefulWidget {
-  AddOfflineEntryPage({Key key}) : super(key: key);
+  AddOfflineEntryPage({Key? key}) : super(key: key);
 
   @override
   _AddOfflineEntryPageState createState() => _AddOfflineEntryPageState();
 }
 
 class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
-  List<StravaSummaryRun> activities;
-  StravaSummaryRun selectedActivity;
+  List<StravaSummaryRun>? activities;
+  StravaSummaryRun? selectedActivity;
   bool isConnectedToStrava = false;
   bool isLoading = true;
 
@@ -78,9 +78,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     if (this.selectedActivity == null) {
       return;
     }
-    StravaSummaryRun runSummary = this.selectedActivity;
+    StravaSummaryRun? runSummary = this.selectedActivity;
 
-    DetailedActivity stravaActivity = this.selectedActivity.detailedActivity;
+    DetailedActivity? stravaActivity = this.selectedActivity?.detailedActivity;
     UserResource userResource =
         Provider.of<UserResource>(context, listen: false);
     AuthenticationResource authResource =
@@ -91,26 +91,30 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
-      elapsedTime: runSummary.fastestSplit.elapsedTime,
-      distance: runSummary.fastestSplit.distance,
-      startDate: DateTime.parse(stravaActivity.startDateLocal),
-      mapPath: stravaActivity.map.polyline,
-      startGeoLocation: stravaActivity.startLatlng,
-      elevationGainedTotal: stravaActivity.totalElevationGain,
-      elevationLow: stravaActivity.elevLow,
-      elevationHigh: stravaActivity.elevHigh,
-      totalDistance: stravaActivity.distance,
-      totalElapsedTime: stravaActivity.elapsedTime,
+      elapsedTime: runSummary?.fastestSplit.elapsedTime ?? 0,
+      distance: runSummary?.fastestSplit.distance ?? 0,
+      startDate: DateTime.parse(stravaActivity?.startDateLocal ?? ""),
+      mapPath: stravaActivity?.map.polyline ?? "",
+      startGeoLocation: stravaActivity?.startLatlng ?? [0],
+      elevationGainedTotal: stravaActivity?.totalElevationGain ?? 0,
+      elevationLow: stravaActivity?.elevLow ?? 0,
+      elevationHigh: stravaActivity?.elevHigh ?? 0,
+      totalDistance: stravaActivity?.distance ?? 0,
+      totalElapsedTime: stravaActivity?.elapsedTime ?? 0,
       startLocation: await googleMapsService.getTownFromGeoLocation(
-          stravaActivity.startLatitude, stravaActivity.startLongitude),
+          stravaActivity?.startLatitude ?? 0,
+          stravaActivity?.startLongitude ?? 0),
+      stravaLink: stravaActivity?.id.toString() ?? "",
     );
 
-    FirebaseCrashlytics.instance.log("5kmRun Submission model: " + jsonEncode(model.toJson()));
+    print("submission model: " + model.toString());
+    FirebaseCrashlytics.instance
+        .log("5kmRun Submission model: " + jsonEncode(model.toJson()));
 
     Map<String, dynamic> result;
     try {
       result = await offlineChartResource.submitEntry(
-          model, authResource.getToken());
+          model, authResource.getToken() ?? "");
     } on Exception catch (e) {
       FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       showDialog(
@@ -176,8 +180,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           },
         );
       } else {
-        FirebaseCrashlytics.instance.recordError(Exception(result["errors"].toString()), StackTrace.current);
-                showDialog(
+        FirebaseCrashlytics.instance.recordError(
+            Exception(result["errors"].toString()), StackTrace.current);
+        showDialog(
           context: context,
           useRootNavigator: true,
           builder: (BuildContext context) {
@@ -192,21 +197,24 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                 text: TextSpan(
                   children: <TextSpan>[
                     TextSpan(
-                        text: 'Грешка при изпращане на данните. Моля, опитайте по-късно.'),
+                        text:
+                            'Грешка при изпращане на данните. Моля, опитайте по-късно.'),
                   ],
                 ),
               ),
-            );},
-                );
+            );
+          },
+        );
       }
     }
 
     if (result["answer"]) {
       FirebaseAnalytics().logEvent(name: "submit_selfie_entry");
       Navigator.of(context).pushNamed("/");
-    }
-    else {
-      FirebaseCrashlytics.instance.recordError(Exception("Error from 5kmrun: " + result.toString()), StackTrace.current);
+    } else {
+      FirebaseCrashlytics.instance.recordError(
+          Exception("Error from 5kmrun: " + result.toString()),
+          StackTrace.current);
     }
   }
 
@@ -272,8 +280,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       children: <Widget>[
         Expanded(
           child: StravaActivityList(
-              activities: this.activities,
-              selectedActivity: this.selectedActivity,
+              activities: this.activities!,
+              selectedActivity: this.selectedActivity!,
               onActivityTap: toggleActivity),
         ),
         SizedBox(
@@ -288,7 +296,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
               animate: true,
               onPressed: this.selectedActivity != null
                   ? () async {
-                      await submitOfflineEntry();
+                      submitOfflineEntry();
                       return () {};
                     }
                   : null,
@@ -306,10 +314,10 @@ class StravaActivityList extends StatelessWidget {
   final ActivityPressedCB onActivityTap;
 
   const StravaActivityList(
-      {Key key,
-      @required this.activities,
-      @required this.selectedActivity,
-      @required this.onActivityTap})
+      {Key? key,
+      required this.activities,
+      required this.selectedActivity,
+      required this.onActivityTap})
       : super(key: key);
 
   @override
@@ -333,10 +341,12 @@ class StravaActivityList extends StatelessWidget {
     final dateString = date != null ? dateFromat.format(date) : "n/a";
     final selectedColor = Colors.blueGrey.shade700;
 
-    final totalTime = activity.detailedActivity.elapsedTime.parseSecondsToTimestamp();
+    final totalTime =
+        activity.detailedActivity.elapsedTime.parseSecondsToTimestamp();
     final totalDistance = activity.detailedActivity.distance.metersToKm();
 
-    final fastestSplitTime = activity.fastestSplit.elapsedTime.parseSecondsToTimestamp();
+    final fastestSplitTime =
+        activity.fastestSplit.elapsedTime.parseSecondsToTimestamp();
     final fastestSplitDistance = activity.fastestSplit.distance.metersToKm();
     return Card(
       color: this.selectedActivity == activity
@@ -351,7 +361,8 @@ class StravaActivityList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ListTileRow(text: activity.detailedActivity.name, icon: Icons.info),
+                  ListTileRow(
+                      text: activity.detailedActivity.name, icon: Icons.info),
                   ListTileRow(text: dateString, icon: Icons.calendar_today),
                   ListTileRow(
                       text: "$fastestSplitDistance / $totalDistance км",

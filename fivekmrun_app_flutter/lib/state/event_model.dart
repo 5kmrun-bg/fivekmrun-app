@@ -8,13 +8,13 @@ class Event {
   final String detailsUrl;
 
   Event({
-    this.id,
-    this.title,
-    this.date,
-    this.time,
-    this.imageUrl,
-    this.location,
-    this.detailsUrl,
+    required this.id,
+    required this.title,
+    required this.date,
+    required this.time,
+    required this.imageUrl,
+    required this.location,
+    required this.detailsUrl,
   });
 
   Event.fromJson(dynamic json)

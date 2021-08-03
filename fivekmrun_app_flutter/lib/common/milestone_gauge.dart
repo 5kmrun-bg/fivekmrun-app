@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class MilestoneGauge extends StatelessWidget {
-  final bool animate;
+  final bool? animate;
   final int value;
   final int milestone;
 
@@ -20,11 +20,11 @@ class MilestoneGauge extends StatelessWidget {
         children: <Widget>[
           charts.PieChart(seriesList,
               animate: animate,
-        defaultRenderer: new charts.ArcRendererConfig(
-            strokeWidthPx: 0,
-            arcWidth: 8,
-            startAngle: 4 / 5 * pi,
-            arcLength: 7 / 5 * pi)),
+              defaultRenderer: new charts.ArcRendererConfig(
+                  strokeWidthPx: 0,
+                  arcWidth: 8,
+                  startAngle: 4 / 5 * pi,
+                  arcLength: 7 / 5 * pi)),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -45,7 +45,7 @@ class MilestoneGauge extends StatelessWidget {
       int value, int milestone, BuildContext context) {
     final data = [
       new GaugeSegment('value', value),
-      new GaugeSegment('milestone', milestone-value),
+      new GaugeSegment('milestone', milestone - value),
     ];
 
     final accentColor = Theme.of(context).accentColor;

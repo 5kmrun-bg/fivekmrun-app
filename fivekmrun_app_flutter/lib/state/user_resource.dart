@@ -19,18 +19,18 @@ class UserResource extends ChangeNotifier {
     }
   }
 
-  User _value;
-  User get value => _value;
-  set value(User v) {
+  User? _value;
+  User? get value => _value;
+  set value(User? v) {
     if (_value != v) {
       _value = v;
       notifyListeners();
     }
   }
 
-  int _currentUserId;
-  int get currentUserId => _currentUserId;
-  set currentUserId(int v) {
+  int? _currentUserId;
+  int? get currentUserId => _currentUserId;
+  set currentUserId(int? v) {
     this._currentUserId = v;
     if (v != null) {
       this.getById(v, true);
@@ -45,7 +45,7 @@ class UserResource extends ChangeNotifier {
     this.loading = false;
   }
 
-  Future<User> getById(int userId, [bool force = false]) async {
+  Future<User?> getById(int userId, [bool force = false]) async {
     if (userId == 0) {
       return null;
     }
@@ -56,16 +56,14 @@ class UserResource extends ChangeNotifier {
 
     this.loading = true;
 
-    http.Response response =
-        await http.get("${constants.userEndpointUrl}$userId");
+    http.Response response = await http
+        .get(Uri.dataFromString("${constants.userEndpointUrl}$userId"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
       this.loading = false;
       //TODO: Fix this when endpoint behaves properly
-      this.value = new User(
-        age: 0,
-        name: " ",
-      );
+      this.value =
+          new User(age: 0, name: " ", donationsCount: 0, id: -1, avatarUrl: "");
       return this.value;
     }
 
@@ -81,16 +79,21 @@ class UserResource extends ChangeNotifier {
   }
 
   void _sendToAnalytics(User user, List<RunSimple> runs) {
-    FirebaseAnalytics().setUserProperty(name: "age", value: user.age.toString().padLeft(2, '0'));
-    FirebaseAnalytics().setUserProperty(name: "donation_total", value: user.donationsCount.toString().padLeft(3, '0'));
-    if ((runs?.length ?? 0) > 0) {
+    FirebaseAnalytics().setUserProperty(
+        name: "age", value: user.age.toString().padLeft(2, '0'));
+    FirebaseAnalytics().setUserProperty(
+        name: "donation_total",
+        value: user.donationsCount.toString().padLeft(3, '0'));
+    if (runs.length > 0) {
       runs.sort((r1, r2) => r1.date.compareTo(r2.date));
-      
+
       RunSimple lastRun = runs.last;
 
-
-      FirebaseAnalytics().setUserProperty(name: "selfie_last_run", value: DateFormat("yyyy-MM-dd").format(lastRun.date));
-      FirebaseAnalytics().setUserProperty(name: "selfie_total_runs", value: runs.length.toString());
+      FirebaseAnalytics().setUserProperty(
+          name: "selfie_last_run",
+          value: DateFormat("yyyy-MM-dd").format(lastRun.date));
+      FirebaseAnalytics().setUserProperty(
+          name: "selfie_total_runs", value: runs.length.toString());
     }
   }
 }

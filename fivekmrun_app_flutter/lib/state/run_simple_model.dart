@@ -10,15 +10,14 @@ class RunSimple {
   final String time;
   final String pace;
 
-
   String get displayDate => dateFromat.format(date);
 
   RunSimple(
-      {this.id,
-      this.date,
-      this.time,
-      this.timeInSeconds,
-      this.pace});
+      {required this.id,
+      required this.date,
+      required this.time,
+      required this.timeInSeconds,
+      required this.pace});
 
   RunSimple.fromJson(dynamic json)
       : id = json["s_id"],

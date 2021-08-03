@@ -25,21 +25,32 @@ class Result {
   int totalDistance;
   String totalTime;
   String pace;
-  DateTime startDate;
+  DateTime? startDate;
 
   Result(
-      {this.name,
-      this.time,
-      this.position,
-      this.totalRuns,
-      this.sex,
+      {required this.name,
+      required this.time,
+      required this.position,
+      required this.totalRuns,
+      required this.sex,
       this.status = 0,
       this.isDisqualified = false,
       this.userId = -1,
       this.isSelfie = false,
       this.isPatreon = false,
       this.legionerType = 0,
-      this.isAnonymous = false});
+      this.isAnonymous = false,
+      this.totalDistance = 0,
+      this.distance = 0,
+      this.totalTime = "",
+      this.pace = "",
+      this.elevationGainedTotal = 0,
+      this.elevationHigh = 0,
+      this.elevationLow = 0,
+      this.mapPolyline = "",
+      this.officialPosition = 0,
+      this.startDate = null,
+      this.startLocation = ""});
 
   Result.fromJson(dynamic json)
       : name = json["u_name"] + " " + json["u_surname"],
@@ -63,7 +74,8 @@ class Result {
         isSelfie = true,
         isAnonymous = false,
         isPatreon = json["p_id"] != null,
-        legionerType = Result.getSelfieLegionerType(json);
+        legionerType = Result.getSelfieLegionerType(json),
+        officialPosition = 0;
 
   static List<Result> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];
@@ -84,7 +96,17 @@ class Result {
         isSelfie = false,
         isPatreon = json["p_id"] != null,
         legionerType = Result.getLegionerType(json),
-        isAnonymous = json["r_uid"] == 0;
+        isAnonymous = json["r_uid"] == 0,
+        mapPolyline = "",
+        elevationLow = 0,
+        elevationHigh = 0,
+        elevationGainedTotal = 0,
+        officialPosition = 0,
+        startLocation = "",
+        startDate = null,
+        totalDistance = 0,
+        distance = 0,
+        totalTime = "";
 
   static int getLegionerType(dynamic json) {
     return (((json["r_runs"] ?? 0) + (json["u_help"] ?? 0)) < 50)

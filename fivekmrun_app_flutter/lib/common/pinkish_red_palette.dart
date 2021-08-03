@@ -22,7 +22,7 @@ class PinkishRedColor extends charts.Color {
   }
 
   charts.Color _getSteppedColor(charts.Color color, int index, int steps,
-      {charts.Color darker, charts.Color lighter}) {
+      {charts.Color? darker, charts.Color? lighter}) {
     final fraction = index / steps;
     return new charts.Color(
       r: color.r + ((255 - color.r) * fraction).round(),
@@ -41,7 +41,7 @@ class PinkishRedColor extends charts.Color {
       charts.Color.fromHex(code: "#c10029"),
       charts.Color.fromHex(code: "#fb4d52"),
       charts.Color.fromHex(code: "#ff827e"),
-    //  charts.Color.fromHex(code: "#ffb4ad"),
+      //  charts.Color.fromHex(code: "#ffb4ad"),
     ];
   }
 }

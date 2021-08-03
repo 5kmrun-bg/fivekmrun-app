@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OfflineChartPage extends StatefulWidget {
-  OfflineChartPage({Key key}) : super(key: key);
+  OfflineChartPage({Key? key}) : super(key: key);
 
   @override
   _OfflineChartPageState createState() => _OfflineChartPageState();
@@ -17,7 +17,7 @@ class OfflineChartPage extends StatefulWidget {
 
 class _OfflineChartPageState extends State<OfflineChartPage> {
   bool thisWeekSelected = true;
-  List<Result> results;
+  List<Result>? results;
   OfflineResultsResource lastWeekResource = OfflineResultsResource();
   OfflineResultsResource thisWeekResource = OfflineResultsResource();
 
@@ -73,7 +73,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                 TextSpan(text: 'Участието в '),
                 TextSpan(
                   text: 'Selfie',
-                  style: textStlyle.copyWith(
+                  style: textStlyle?.copyWith(
                     color: accentColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -146,7 +146,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               TextSpan(text: 'Седмична '),
               TextSpan(
                 text: 'Selfie',
-                style: textStlyle.copyWith(
+                style: textStlyle?.copyWith(
                   color: accentColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -225,10 +225,10 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   Widget _buildResults() {
     if (this.results == null) {
       return Center(child: CircularProgressIndicator());
-    } else if (this.results.length == 0) {
+    } else if (this.results?.length == 0) {
       return Center(child: Text("Няма резултати"));
     } else {
-      return ResultsList(results: this.results);
+      return ResultsList(results: this.results!);
     }
   }
 }
@@ -238,7 +238,11 @@ class SelectButton extends StatelessWidget {
   final bool selected;
   final String text;
 
-  const SelectButton({Key key, this.onPressed, this.selected, this.text})
+  const SelectButton(
+      {Key? key,
+      required this.onPressed,
+      required this.selected,
+      required this.text})
       : super(key: key);
 
   @override
@@ -255,7 +259,7 @@ class SelectButton extends StatelessWidget {
                   style: Theme.of(context).textTheme.subhead,
                   textAlign: TextAlign.center,
                 ),
-                onPressed: this.onPressed,
+                onPressed: this.onPressed(),
               )
             : OutlineButton(
                 padding: btnPdding,
@@ -264,7 +268,7 @@ class SelectButton extends StatelessWidget {
                   style: Theme.of(context).textTheme.subhead,
                   textAlign: TextAlign.center,
                 ),
-                onPressed: this.onPressed,
+                onPressed: this.onPressed(),
               ),
       ),
     );

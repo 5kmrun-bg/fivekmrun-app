@@ -21,6 +21,7 @@ class OfflineChartResource extends ChangeNotifier {
     body += "&elevation_loss=" + model.elevationLow.toString();
     body += "&elevation_gained=" + model.elevationHigh.toString();
     body += "&elevation_gained_total=" + model.elevationGainedTotal.toString();
+    body += "&s_strava_link=" + model.stravaLink;
     body += "&gps=" +
         model.startGeoLocation[0].toString() +
         "," +

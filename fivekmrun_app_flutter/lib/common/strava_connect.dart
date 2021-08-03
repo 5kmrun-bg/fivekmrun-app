@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StravaConnect extends StatefulWidget {
-  StravaConnect({Key key}) : super(key: key);
+  StravaConnect({Key? key}) : super(key: key);
 
   @override
   _StravaConnectState createState() => _StravaConnectState();

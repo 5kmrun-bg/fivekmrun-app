@@ -7,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fivekmrun_flutter/constants.dart' as constants;
 
 class AuthenticationResource extends ChangeNotifier {
-  String _token;
-  int _userId;
+  String? _token;
+  int? _userId;
 
   Future<bool> authenticate(String username, String password) async {
     FirebaseCrashlytics.instance.log("authenticate username - $username");
@@ -49,11 +49,11 @@ class AuthenticationResource extends ChangeNotifier {
     return true;
   }
 
-  String getToken() {
+  String? getToken() {
     return this._token;
   }
 
-  int getUserId() {
+  int? getUserId() {
     return this._userId;
   }
 
@@ -61,14 +61,15 @@ class AuthenticationResource extends ChangeNotifier {
     return this._token != null && this._userId != null;
   }
 
-  void _setUserId(int userId) {
+  void _setUserId(int? userId) {
     this._userId = userId;
     FirebaseCrashlytics.instance.setUserIdentifier(userId?.toString() ?? "");
   }
 
-  void _setToken(String token) {
+  void _setToken(String? token) {
     this._token = token;
-    FirebaseCrashlytics.instance.setCustomKey("hasToken", token != null && token != "");
+    FirebaseCrashlytics.instance
+        .setCustomKey("hasToken", token != null && token != "");
   }
 
   Future<void> logout() async {
@@ -83,7 +84,7 @@ class AuthenticationResource extends ChangeNotifier {
     FirebaseCrashlytics.instance.log("logout() completed");
   }
 
-  Future<void> _onLoginSuccess(int userId, String token) async {
+  Future<void> _onLoginSuccess(int userId, String? token) async {
     this._setUserId(userId);
     this._setToken(token);
 

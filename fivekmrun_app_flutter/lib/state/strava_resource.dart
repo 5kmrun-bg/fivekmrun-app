@@ -72,12 +72,12 @@ class StravaResource extends ChangeNotifier {
   Future<Fault> deAuthenticate() async {
     return _withStrava((strava) async {
       FirebaseCrashlytics.instance.log("Strava deAuthenticate");
-      FirebaseCrashlytics.instance.setCustomKey("stravaUserID", null);
+      FirebaseCrashlytics.instance.setCustomKey("stravaUserID", -1);
 
       Fault result = await strava.deAuthorize();
 
       FirebaseCrashlytics.instance.log(
-          "Strava deAuthenticate result: [${result?.statusCode}]: ${result?.message} ");
+          "Strava deAuthenticate result: [${result.statusCode}]: ${result.message} ");
 
       return result;
     });
@@ -113,13 +113,14 @@ class StravaResource extends ChangeNotifier {
     return StravaSummaryRun(detailedActivity: activity, fastestSplit: summary);
   }
 
-  Future<List<StravaSummaryRun>> getThisWeekActivities() async {
+  Future<List<StravaSummaryRun>?> getThisWeekActivities() async {
     FirebaseCrashlytics.instance.log("Strava get activities");
 
     return _withStrava((strava) async {
       final authOK = await this.authenticate();
       if (!authOK) {
-        FirebaseCrashlytics.instance.log("Strava get activities - authOK: false");
+        FirebaseCrashlytics.instance
+            .log("Strava get activities - authOK: false");
         return null;
       }
 
@@ -145,7 +146,8 @@ class StravaResource extends ChangeNotifier {
             await strava.getLoggedInAthleteActivities(before, after);
 
         if (activities == null) {
-          FirebaseCrashlytics.instance.log("Strava get activities results: null");
+          FirebaseCrashlytics.instance
+              .log("Strava get activities results: null");
 
           return [];
         }
@@ -155,9 +157,8 @@ class StravaResource extends ChangeNotifier {
 
         final runActivites = await Future.wait(activities
             .where((a) =>
-                    a.type == ActivityType.Run &&
-                    a.distance >= stravaFilterMinDistance
-                )
+                a.type == ActivityType.Run &&
+                a.distance >= stravaFilterMinDistance)
             .map((a) => strava.getActivityById(a.id.toString())));
 
         FirebaseCrashlytics.instance.log(

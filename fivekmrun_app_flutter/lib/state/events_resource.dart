@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 abstract class EventsResource extends ChangeNotifier {
   String getEventUrl();
 
-  List<Event> value;
+  late List<Event> value;
 
   bool _loading = false;
 
@@ -23,19 +23,18 @@ abstract class EventsResource extends ChangeNotifier {
     this.loading = true;
 
     http.Response response =
-      await http.get("${this.getEventUrl()}");
+        await http.get(Uri.dataFromString("${this.getEventUrl()}"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
-
       print('NO EVENTS RECEIVED');
       //TODO: Fix this when endpoint behaves properly
-      
-      return new List<Event>();
+
+      return [];
     }
 
     String body = utf8.decode(response.bodyBytes);
     this.loading = false;
-    this.value = Event.listFromJson(jsonDecode(body));  
+    this.value = Event.listFromJson(jsonDecode(body));
     return this.value;
   }
 }

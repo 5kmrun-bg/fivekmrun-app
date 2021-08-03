@@ -30,7 +30,7 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               this._buildLogo(),
-              SizedBox(height: 10), 
+              SizedBox(height: 10),
               Spacer(),
               this.loginWithId ? LoginWithId() : LoginWithUsername(),
               SizedBox(height: 4),
@@ -46,7 +46,12 @@ class _LoginState extends State<Login> {
               Text("Нямате регистрация?"),
               GestureDetector(
                 onTap: () => _loadRegistrationScreen(),
-                child: Text("Регистрирай се сега", style: TextStyle(color: accentColor, fontSize: 14, fontWeight: FontWeight.bold)), )
+                child: Text("Регистрирай се сега",
+                    style: TextStyle(
+                        color: accentColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)),
+              )
             ],
           ),
         ),

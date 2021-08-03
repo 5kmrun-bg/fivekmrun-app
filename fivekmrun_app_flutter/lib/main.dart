@@ -24,7 +24,6 @@ final authRes = AuthenticationResource();
 
 final appAccentColor = Color.fromRGBO(252, 24, 81, 1.0);
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -32,11 +31,11 @@ void main() async {
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   // Pass all uncaught errors to Crashlytics.
-  Function originalOnError = FlutterError.onError;
+  final originalOnError = FlutterError.onError;
   FlutterError.onError = (FlutterErrorDetails errorDetails) async {
     await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
     // Forward to original handler.
-    originalOnError(errorDetails);
+    originalOnError!(errorDetails);
   };
 
   await authRes.loadFromLocalStore();
@@ -61,7 +60,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => authRes),

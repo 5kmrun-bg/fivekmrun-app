@@ -6,7 +6,7 @@ import "package:collection/collection.dart";
 
 class RunsByRouteChart extends StatelessWidget {
   final List<charts.Series> seriesList;
-  final bool animate;
+  final bool? animate;
 
   RunsByRouteChart(this.seriesList, {this.animate});
 
@@ -21,19 +21,21 @@ class RunsByRouteChart extends StatelessWidget {
     final subHeadStyle = theme.textTheme.subhead;
 
     return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Column(children: <Widget>[
-        IntrinsicHeight(child: Text("Бягания по същински трасета", style: subHeadStyle)),
-        Expanded(
-            child: new charts.PieChart(
-              seriesList, 
-              animate: animate, 
-              defaultRenderer: new charts.ArcRendererConfig(
-                arcWidth: 60,
-                arcRendererDecorators: [new charts.ArcLabelDecorator(
-                  outsideLabelStyleSpec: charts.TextStyleSpec(fontSize: 12, color: charts.Color.white)
-                )]),
-              behaviors: [
+        padding: EdgeInsets.all(8.0),
+        child: Column(children: <Widget>[
+          IntrinsicHeight(
+              child: Text("Бягания по същински трасета", style: subHeadStyle)),
+          Expanded(
+              child: new charts.PieChart(seriesList,
+                  animate: animate,
+                  defaultRenderer: new charts.ArcRendererConfig(
+                      arcWidth: 60,
+                      arcRendererDecorators: [
+                        new charts.ArcLabelDecorator(
+                            outsideLabelStyleSpec: charts.TextStyleSpec(
+                                fontSize: 12, color: charts.Color.white))
+                      ]),
+                  behaviors: [
                 new charts.DatumLegend(
                   // Positions for "start" and "end" will be left and right respectively
                   // for widgets with a build context that has directionality ltr.
@@ -52,25 +54,28 @@ class RunsByRouteChart extends StatelessWidget {
                   // This defines the padding around each legend entry.
                   cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
                 )
-        ])),
-    ]));
+              ])),
+        ]));
   }
 
   static List<charts.Series<RunsByRouteEntry, String>> _createData(
       List<Run> runs) {
-    List<RunsByRouteEntry> series = groupBy(runs.where((r) => !r.isSelfie), (r) => r.location)
-        .entries
-        .map((e) => RunsByRouteEntry(e.key, e.value.length))
-        .toList();
+    List<RunsByRouteEntry> series =
+        groupBy<Run, String>(runs.where((r) => !r.isSelfie), (r) => r.location!)
+            .entries
+            .map((e) => RunsByRouteEntry(e.key, e.value.length))
+            .toList();
 
     return [
       new charts.Series<RunsByRouteEntry, String>(
         id: 'RunsByRoute',
-        colorFn: (_, i) => PinkishRedColor().getPalette()[i % PinkishRedColor().getPalette().length],
+        colorFn: (_, i) => PinkishRedColor()
+            .getPalette()[i % PinkishRedColor().getPalette().length],
         domainFn: (RunsByRouteEntry run, _) => run.location,
         measureFn: (RunsByRouteEntry run, _) => run.timeInSeconds,
         data: series,
-        labelAccessorFn: (RunsByRouteEntry run, _) => run.timeInSeconds.toString(),
+        labelAccessorFn: (RunsByRouteEntry run, _) =>
+            run.timeInSeconds.toString(),
       )
     ];
   }
