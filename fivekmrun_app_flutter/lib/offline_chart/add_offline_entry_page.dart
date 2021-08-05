@@ -94,7 +94,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       elapsedTime: runSummary?.fastestSplit.elapsedTime ?? 0,
       distance: runSummary?.fastestSplit.distance ?? 0,
       startDate: DateTime.parse(stravaActivity?.startDateLocal ?? ""),
-      mapPath: stravaActivity?.map.polyline ?? "",
+      mapPath: stravaActivity?.map!.polyline ?? "",
       startGeoLocation: stravaActivity?.startLatlng ?? [0],
       elevationGainedTotal: stravaActivity?.totalElevationGain ?? 0,
       elevationLow: stravaActivity?.elevLow ?? 0,
@@ -337,13 +337,13 @@ class StravaActivityList extends StatelessWidget {
 
   Widget _buildItemsForListView(BuildContext context, int index) {
     final activity = activities[index];
-    final date = DateTime.tryParse(activity.detailedActivity.startDate);
+    final date = DateTime.tryParse(activity.detailedActivity.startDate!);
     final dateString = date != null ? dateFromat.format(date) : "n/a";
     final selectedColor = Colors.blueGrey.shade700;
 
     final totalTime =
-        activity.detailedActivity.elapsedTime.parseSecondsToTimestamp();
-    final totalDistance = activity.detailedActivity.distance.metersToKm();
+        activity.detailedActivity.elapsedTime!.parseSecondsToTimestamp();
+    final totalDistance = activity.detailedActivity.distance!.metersToKm();
 
     final fastestSplitTime =
         activity.fastestSplit.elapsedTime.parseSecondsToTimestamp();
@@ -362,7 +362,7 @@ class StravaActivityList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ListTileRow(
-                      text: activity.detailedActivity.name, icon: Icons.info),
+                      text: activity.detailedActivity.name!, icon: Icons.info),
                   ListTileRow(text: dateString, icon: Icons.calendar_today),
                   ListTileRow(
                       text: "$fastestSplitDistance / $totalDistance км",
@@ -377,7 +377,7 @@ class StravaActivityList extends StatelessWidget {
               width: 140,
               child: Image.network(
                 "https://maps.googleapis.com/maps/api/staticmap?size=140x140&zoom=13&path=weight:3%7Ccolor:blue%7Cenc:" +
-                    activity.detailedActivity.map.polyline +
+                    activity.detailedActivity.map!.polyline! +
                     "&key=" +
                     googleMapsKey,
                 fit: BoxFit.fitWidth,

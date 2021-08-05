@@ -49,7 +49,7 @@ class StravaResource extends ChangeNotifier {
 
       return false;
     } else {
-      FirebaseCrashlytics.instance.setCustomKey("stravaUserID", athlete.id);
+      FirebaseCrashlytics.instance.setCustomKey("stravaUserID", athlete.id!);
       FirebaseCrashlytics.instance
           .log("Strava get activities - atheleteID: ${athlete.id}");
       return true;
@@ -87,7 +87,7 @@ class StravaResource extends ChangeNotifier {
     double bestDistance = 0;
     int bestTime = 999999;
 
-    var splits = activity.splitsMetric;
+    var splits = activity.splitsMetric!;
 
     for (var startIdx = 0; startIdx < splits.length; startIdx++) {
       int endIdx = startIdx;
@@ -95,8 +95,8 @@ class StravaResource extends ChangeNotifier {
       int time = 0;
 
       while (endIdx < splits.length && dist < stravaFilterMinDistance) {
-        dist += splits[endIdx].distance;
-        time += splits[endIdx].elapsedTime;
+        dist += splits[endIdx].distance!;
+        time += splits[endIdx].elapsedTime!;
         endIdx++;
       }
 
@@ -158,7 +158,7 @@ class StravaResource extends ChangeNotifier {
         final runActivites = await Future.wait(activities
             .where((a) =>
                 a.type == ActivityType.Run &&
-                a.distance >= stravaFilterMinDistance)
+                a.distance! >= stravaFilterMinDistance)
             .map((a) => strava.getActivityById(a.id.toString())));
 
         FirebaseCrashlytics.instance.log(
@@ -184,7 +184,7 @@ class StravaResource extends ChangeNotifier {
       return false;
     }
 
-    if (token.expiresAt < DateTime.now().millisecondsSinceEpoch / 1000) {
+    if (token.expiresAt! < DateTime.now().millisecondsSinceEpoch / 1000) {
       return true;
     } else {
       return false;

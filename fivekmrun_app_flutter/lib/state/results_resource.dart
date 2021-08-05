@@ -21,8 +21,8 @@ class ResultsResource extends ChangeNotifier {
   Future<List<Result>> getAll(int eventId) async {
     this.loading = true;
 
-    http.Response response = await http.get(Uri.dataFromString(
-        "${constants.resultEventsUrl}${eventId.toString()}"));
+    http.Response response = await http
+        .get(Uri.parse("${constants.resultEventsUrl}${eventId.toString()}"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
       print('NO RESULTS RECEIVED');

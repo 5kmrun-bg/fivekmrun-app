@@ -54,7 +54,7 @@ class MilestoneGauge extends StatelessWidget {
       new charts.Series<GaugeSegment, String>(
         id: 'Segments',
         colorFn: (GaugeSegment segment, i) =>
-            charts.ColorUtil.fromDartColor(i == 0 ? accentColor : darkerColor),
+            charts.ColorUtil.fromDartColor(i == 0 ? accentColor : darkerColor!),
         domainFn: (GaugeSegment segment, _) => segment.segment,
         measureFn: (GaugeSegment segment, _) => segment.size,
         data: data,

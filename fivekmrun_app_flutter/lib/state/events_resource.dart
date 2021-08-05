@@ -22,8 +22,7 @@ abstract class EventsResource extends ChangeNotifier {
   getAll() async {
     this.loading = true;
 
-    http.Response response =
-        await http.get(Uri.dataFromString("${this.getEventUrl()}"));
+    http.Response response = await http.get(Uri.parse("${this.getEventUrl()}"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
       print('NO EVENTS RECEIVED');

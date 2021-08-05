@@ -48,8 +48,8 @@ class OfflineResultsResource extends ChangeNotifier {
   }
 
   Future<List<Result>?> _loadResultByWeek(String weekFilter) async {
-    http.Response response = await http.get(
-        Uri.dataFromString("${constants.offlineChartEndpointUrl}$weekFilter"));
+    http.Response response = await http
+        .get(Uri.parse("${constants.offlineChartEndpointUrl}$weekFilter"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
       this.loading = false;

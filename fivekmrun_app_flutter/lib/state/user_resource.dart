@@ -56,8 +56,8 @@ class UserResource extends ChangeNotifier {
 
     this.loading = true;
 
-    http.Response response = await http
-        .get(Uri.dataFromString("${constants.userEndpointUrl}$userId"));
+    http.Response response =
+        await http.get(Uri.parse("${constants.userEndpointUrl}$userId"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
       this.loading = false;

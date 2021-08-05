@@ -63,8 +63,8 @@ class RunsResource extends ChangeNotifier {
   }
 
   retrieve5kmRuns(int? userId) async {
-    http.Response response = await http
-        .get(Uri.dataFromString("${constants.runsEndpointUrl}$userId"));
+    http.Response response =
+        await http.get(Uri.parse("${constants.runsEndpointUrl}$userId"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
       print('hello');
@@ -78,8 +78,8 @@ class RunsResource extends ChangeNotifier {
   }
 
   retrieveSelfieRuns(int? userId) async {
-    http.Response response = await http
-        .get(Uri.dataFromString("https://5kmrun.bg/api/selfie/user/$userId"));
+    http.Response response =
+        await http.get(Uri.parse("https://5kmrun.bg/api/selfie/user/$userId"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
       print('hello');

@@ -103,7 +103,7 @@ PODS:
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - PromisesObjC (1.2.12)
-  - rate_my_app (0.1):
+  - rate_my_app (1.1.1):
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
@@ -174,7 +174,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: eea970f4a389963963bffe8d8fabe43540678b9c
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  rate_my_app: 45513a2f4d9a55b7b46d19b64fc13882fd101157
+  rate_my_app: 8e49687f3520c56352f974f0cb401afea07cd496
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef

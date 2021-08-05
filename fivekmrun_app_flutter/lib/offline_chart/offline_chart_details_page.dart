@@ -60,7 +60,7 @@ class OfflineChartDetailsPage extends StatelessWidget {
                             DetailsTile(
                               title: "дата",
                               value: DateFormat("dd.MM.yyyy")
-                                  .format(result.startDate),
+                                  .format(result.startDate!),
                               accentColor: iconColor,
                             ),
                             DetailsTile(
@@ -116,7 +116,8 @@ class OfflineChartDetailsPage extends StatelessWidget {
                         children: <Widget>[
                           DetailsTile(
                             title: "час",
-                            value: DateFormat("HH:mm").format(result.startDate),
+                            value:
+                                DateFormat("HH:mm").format(result.startDate!),
                             accentColor: iconColor,
                           ),
                           DetailsTile(

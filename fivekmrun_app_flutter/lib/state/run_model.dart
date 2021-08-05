@@ -22,7 +22,7 @@ class Run {
   int? differenceFromPrevious;
   int? differenceFromBest;
 
-  String get displayDate => dateFromat.format(date);
+  String get displayDate => dateFromat.format(date!);
 
   Run(
       {this.date,

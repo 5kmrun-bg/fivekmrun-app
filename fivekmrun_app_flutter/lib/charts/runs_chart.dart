@@ -63,7 +63,7 @@ class _RunsChartState extends State<RunsChart> {
             IntrinsicHeight(child: Text(this.dataPointLabel)),
             Expanded(
               child: charts.TimeSeriesChart(
-                seriesList,
+                seriesList!,
                 animate: animate,
                 behaviors: [
                   // Optional - Configures a [LinePointHighlighter] behavior with a
@@ -94,8 +94,8 @@ class _RunsChartState extends State<RunsChart> {
                   )
                 ],
                 primaryMeasureAxis: new charts.NumericAxisSpec(
-                    viewport:
-                        new charts.NumericExtents(lowestValues, highestValues),
+                    viewport: new charts.NumericExtents(
+                        lowestValues!, highestValues!),
                     renderSpec: charts.NoneRenderSpec()),
               ),
             )
@@ -115,11 +115,11 @@ class _RunsChartState extends State<RunsChart> {
     return [
       new charts.Series<Run, DateTime>(
         id: 'Runs',
-        colorFn: (Run run, i) => PinkishRedColor().makeShades(runs.length)[i],
-        domainFn: (Run run, _) => run.date,
+        colorFn: (Run run, i) => PinkishRedColor().makeShades(runs.length)[i!],
+        domainFn: (Run run, _) => run.date!,
         measureFn: (Run run, _) => run.timeInSeconds,
         labelAccessorFn: (Run run, _) =>
-            run.timeInSeconds?.parseSecondsToTimestamp(),
+            run.timeInSeconds!.parseSecondsToTimestamp(),
         data: runs,
       )
     ];
