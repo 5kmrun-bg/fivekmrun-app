@@ -74,7 +74,7 @@ class TabNavigator extends StatelessWidget {
 
 class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
   int _selectedIndex = 0;
-  TabNavigationHelper? _tabHelper;
+  late TabNavigationHelper _tabHelper;
   late List<Widget> _widgetOptions;
 
   set selectedIndex(value) {
