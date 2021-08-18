@@ -40,9 +40,9 @@ class StravaResource extends ChangeNotifier {
 
   Future<bool> _assureAuthenticated(Strava strava) async {
     final athlete = await strava.getLoggedInAthlete();
-    if (athlete == null || athlete.id == null) {
+    if (athlete.id == null) {
       final message =
-          "_assureAuthenticated - cannot get athlete fault: [${athlete?.fault?.statusCode}] ${athlete?.fault?.message} - will deAuthenticate";
+          "_assureAuthenticated - cannot get athlete fault: [${athlete.fault.statusCode}] ${athlete.fault.message} - will deAuthenticate";
       FirebaseCrashlytics.instance.recordError(message, StackTrace.current);
 
       await this.deAuthenticate();

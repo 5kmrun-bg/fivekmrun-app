@@ -237,7 +237,7 @@ class _ResultsListState extends State<ResultsList> {
                             if (res.isSelfie)
                               ListTileRow(
                                 icon: Icons.location_city,
-                                text: res.startLocation ?? " - ",
+                                text: res.startLocation,
                                 iconColor: iconColor,
                               ),
                           ],

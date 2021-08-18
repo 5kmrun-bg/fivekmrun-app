@@ -50,7 +50,7 @@ class Result {
       this.mapPolyline = "",
       this.officialPosition = 0,
       this.startDate = null,
-      this.startLocation = ""});
+      this.startLocation = " - "});
 
   Result.fromJson(dynamic json)
       : name = json["u_name"] + " " + json["u_surname"],

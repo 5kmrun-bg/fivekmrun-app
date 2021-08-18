@@ -102,34 +102,34 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
     this._tabHelper = TabNavigationHelper(this);
     this._widgetOptions = <Widget>[
       TabNavigator(
-        navigatorKey: this._tabHelper!.navigatorKeys[AppTab.profile]!,
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.profile]!,
         routes: {
           '/': (context) => ProfileDashboard(),
         },
       ),
       TabNavigator(
-        navigatorKey: this._tabHelper!.navigatorKeys[AppTab.runs]!,
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.runs]!,
         routes: {
           '/': (context) => UserRunsPage(),
           '/run-details': (context) => RunDetailsPage(),
         },
       ),
       TabNavigator(
-          navigatorKey: this._tabHelper!.navigatorKeys[AppTab.offlineChart]!,
+          navigatorKey: this._tabHelper.navigatorKeys[AppTab.offlineChart]!,
           routes: {
             '/': (context) => OfflineChartPage(),
             '/add': (context) => AddOfflineEntryPage(),
             '/details': (context) => OfflineChartDetailsPage(),
           }),
       TabNavigator(
-        navigatorKey: this._tabHelper!.navigatorKeys[AppTab.pastEvents]!,
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.pastEvents]!,
         routes: {
           '/': (context) => PastEventsPage(),
           '/event-results': (context) => EventResultsPage(),
         },
       ),
       TabNavigator(
-        navigatorKey: this._tabHelper!.navigatorKeys[AppTab.futureEvents]!,
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.futureEvents]!,
         routes: {
           '/': (context) => FutureEventsPage(),
         },

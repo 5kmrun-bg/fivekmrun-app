@@ -105,15 +105,15 @@ class ProfileDashboard extends StatelessWidget {
                     onPressed: goToSettings,
                   ),
                   MilestoneTile(
-                      value: runsRes?.value
+                      value: runsRes.value
                               ?.where((r) => !r.isSelfie)
-                              ?.length
-                              ?.toInt() ??
+                              .length
+                              .toInt() ??
                           0,
-                      milestone: nextRunsMilestone(runsRes?.value
+                      milestone: nextRunsMilestone(runsRes.value
                               ?.where((r) => !r.isSelfie)
-                              ?.length
-                              ?.toInt() ??
+                              .length
+                              .toInt() ??
                           50),
                       title: "Легионер\nсъщинско"),
                 ],

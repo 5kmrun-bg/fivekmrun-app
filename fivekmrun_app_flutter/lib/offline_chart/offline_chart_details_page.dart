@@ -122,7 +122,7 @@ class OfflineChartDetailsPage extends StatelessWidget {
                           ),
                           DetailsTile(
                             title: "локация",
-                            value: result.startLocation ?? " - ",
+                            value: result.startLocation,
                             accentColor: iconColor,
                           ),
                           DetailsTile(

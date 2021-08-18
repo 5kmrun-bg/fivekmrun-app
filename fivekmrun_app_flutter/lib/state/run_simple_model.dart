@@ -49,7 +49,7 @@ class RunSimple {
     return ((5000 / timeInSeconds) * 3.6).toStringAsFixed(2);
   }
 
-  static String timeInSecondsToPace(int timeInSeconds) {
+  static String timeInSecondsToPace(int? timeInSeconds) {
     if (timeInSeconds == 0) {
       return "";
     }
