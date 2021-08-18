@@ -108,7 +108,9 @@ class _ResultsListState extends State<ResultsList> {
     final theme = Theme.of(context);
 
     var position = res.position.toString();
-    position = res.officialPosition.toString();
+    if (res.officialPosition != 0) {
+      position = res.officialPosition.toString();
+    }
 
     final iconColor =
         res.isDisqualified ? theme.disabledColor : theme.accentColor;
