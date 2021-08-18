@@ -445,9 +445,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
+      ref: "7b0e96cd3a3b27d166b8c4ac0e2859c42b83aadc"
       resolved-ref: "7b0e96cd3a3b27d166b8c4ac0e2859c42b83aadc"
-      url: "https://github.com/BirdyF/strava_flutter.git"
+      url: "https://github.com/etabakov/strava_flutter.git"
     source: git
     version: "2.0.0"
   stream_channel:

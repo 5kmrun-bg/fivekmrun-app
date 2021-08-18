@@ -39,7 +39,8 @@ dependencies:
 
   strava_flutter: 
       git:
-        url: https://github.com/BirdyF/strava_flutter.git
+        url: https://github.com/etabakov/strava_flutter.git
+        ref: 7b0e96cd3a3b27d166b8c4ac0e2859c42b83aadc
 
   barcode_flutter: ^1.1.2
 
@@ -59,6 +60,10 @@ dependencies:
 dependency_overrides:
   plugin_platform_interface: ^2.0.0
   http: ^0.13.0
+  url_launcher: ^6.0.7
+  shared_preferences: ^2.0.6
+  intl: ^0.17.0
+  cupertino_icons: ^1.0.3
 
 
 dev_dependencies:
