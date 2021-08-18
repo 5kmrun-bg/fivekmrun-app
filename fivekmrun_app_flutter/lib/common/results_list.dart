@@ -293,7 +293,7 @@ class SearchBox extends StatelessWidget {
             if (showLoacateButton)
               new IconButton(
                 icon: new Icon(Icons.location_searching),
-                onPressed: locateCB!(),
+                onPressed: () => locateCB!(),
               ),
           ],
         ),
