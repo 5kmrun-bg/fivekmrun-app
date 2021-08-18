@@ -259,7 +259,7 @@ class SelectButton extends StatelessWidget {
                   style: Theme.of(context).textTheme.subhead,
                   textAlign: TextAlign.center,
                 ),
-                onPressed: this.onPressed(),
+                onPressed: () => this.onPressed(),
               )
             : OutlineButton(
                 padding: btnPdding,
@@ -268,7 +268,7 @@ class SelectButton extends StatelessWidget {
                   style: Theme.of(context).textTheme.subhead,
                   textAlign: TextAlign.center,
                 ),
-                onPressed: this.onPressed(),
+                onPressed: () =>  this.onPressed(),
               ),
       ),
     );
