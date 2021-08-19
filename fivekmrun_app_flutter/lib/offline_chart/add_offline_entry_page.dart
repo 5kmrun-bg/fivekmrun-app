@@ -264,8 +264,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         Container(
           height: 20,
         ),
-        RaisedButton(
-          color: Colors.transparent,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: Colors.transparent, shadowColor: Colors.transparent, padding: EdgeInsets.all(0)),
           child: Image(
             image: AssetImage('assets/btn_strava_connectwith_orange.png'),
           ),

@@ -32,7 +32,7 @@ class LoginPreview extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 12.0),
                     child: Container(
                       width: 60,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         child: Icon(
                           Icons.edit,
                         ),
@@ -44,7 +44,7 @@ class LoginPreview extends StatelessWidget {
                   ),
                   Container(
                     width: 150,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                         child: Text("Напред"),
                         onPressed: () {
                           Navigator.pushNamedAndRemoveUntil(

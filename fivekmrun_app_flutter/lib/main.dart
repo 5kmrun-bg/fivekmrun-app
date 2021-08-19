@@ -22,7 +22,7 @@ import 'package:provider/provider.dart';
 final userRes = UserResource();
 final authRes = AuthenticationResource();
 
-final appAccentColor = Color.fromRGBO(252, 24, 81, 1.0);
+final appAccentColor = Color.fromRGBO(218, 3, 56, 1.0);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,6 +87,14 @@ class MyApp extends StatelessWidget {
             body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
           ),
           errorColor: Colors.red,
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) { 
+                return Colors.white;
+                }
+              )
+            )
+          )
         ),
         initialRoute: _initialRoute,
         routes: {

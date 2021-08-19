@@ -178,7 +178,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () => this.goToAddEntry(),
                     child: Row(
                       children: [
@@ -193,7 +193,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: OutlineButton(
+                  child: OutlinedButton(
                       onPressed: () => {
                             launch(
                               "https://5kmrun.bg/selfie/ofc",
@@ -247,13 +247,11 @@ class SelectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final btnPdding = EdgeInsets.symmetric(vertical: 4, horizontal: 16);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: this.selected
-            ? RaisedButton(
-                padding: btnPdding,
+            ? ElevatedButton(
                 child: Text(
                   this.text,
                   style: Theme.of(context).textTheme.subhead,
@@ -261,8 +259,7 @@ class SelectButton extends StatelessWidget {
                 ),
                 onPressed: () => this.onPressed(),
               )
-            : OutlineButton(
-                padding: btnPdding,
+            : OutlinedButton(
                 child: Text(
                   this.text,
                   style: Theme.of(context).textTheme.subhead,

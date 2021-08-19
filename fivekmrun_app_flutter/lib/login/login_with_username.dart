@@ -81,7 +81,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
           SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
-            child: RaisedButton(
+            child: ElevatedButton(
               onPressed: onPressed,
               child: Text("Напред"),
             ),

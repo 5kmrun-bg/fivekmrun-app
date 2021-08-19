@@ -22,7 +22,7 @@ class DonatePage extends StatelessWidget {
                   textAlign: TextAlign.center,
                 )),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text("Дари с PayPal"),
                 onPressed: () async {
                   FirebaseAnalytics().logEvent(name: "button_donation_clicked");
