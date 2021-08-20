@@ -89,7 +89,7 @@ class ProfileDashboard extends StatelessWidget {
                   Avatar(url: user?.avatarUrl ?? ""),
                   Text(
                     user?.name ?? "",
-                    style: textTheme.subhead,
+                    style: textTheme.subtitle1,
                     textAlign: TextAlign.center,
                   ),
                   Text(""),

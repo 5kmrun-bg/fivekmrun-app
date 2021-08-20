@@ -30,7 +30,6 @@ class _RunsChartState extends State<RunsChart> {
     this.seriesList = _createData(this.widget.runs);
 
     final theme = Theme.of(context);
-    final subHeadStyle = theme.textTheme.subhead;
 
     _onSelectionChanged(charts.SelectionModel model) {
       final selectedDatum = model.selectedDatum;
@@ -59,7 +58,7 @@ class _RunsChartState extends State<RunsChart> {
                     "Тенденция от последните " +
                         this.widget.runs.length.toString() +
                         " бягания",
-                    style: subHeadStyle)),
+                    style: theme.textTheme.subtitle1)),
             IntrinsicHeight(child: Text(this.dataPointLabel)),
             Expanded(
               child: charts.TimeSeriesChart(

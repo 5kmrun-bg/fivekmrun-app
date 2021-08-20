@@ -82,9 +82,9 @@ class MyApp extends StatelessWidget {
             accentIconTheme: IconThemeData(color: Colors.black),
             dividerColor: Colors.black12,
             textTheme: TextTheme(
-              subhead: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              body1: TextStyle(fontSize: 10),
-              body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+              subtitle1: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              bodyText1: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+              bodyText2: TextStyle(fontSize: 10),
             ),
             errorColor: Colors.red,
             outlinedButtonTheme: OutlinedButtonThemeData(style: ButtonStyle(

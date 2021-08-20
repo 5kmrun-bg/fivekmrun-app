@@ -19,10 +19,10 @@ class LoginPreview extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("Влез като", style: textTheme.title),
+              Text("Влез като", style: textTheme.headline6),
               Padding(
                 padding: const EdgeInsets.only(top: 12),
-                child: Text(title, style: textTheme.title),
+                child: Text(title, style: textTheme.headline6),
               ),
               Hero(tag: "avatar", child: Avatar(url: avatrUrl ?? "")),
               Row(
