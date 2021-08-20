@@ -83,8 +83,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
             ),
           ),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
+            TextButton(
               child: new Text("Вход с парола"),
               onPressed: () async {
                 await authResource.logout();
@@ -95,7 +94,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                     .pushNamedAndRemoveUntil("/", (_) => false);
               },
             ),
-            new FlatButton(
+            TextButton(
               child: new Text("Откажи"),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -265,7 +264,7 @@ class SelectButton extends StatelessWidget {
                   style: Theme.of(context).textTheme.subhead,
                   textAlign: TextAlign.center,
                 ),
-                onPressed: () =>  this.onPressed(),
+                onPressed: () => this.onPressed(),
               ),
       ),
     );

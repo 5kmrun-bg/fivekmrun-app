@@ -126,7 +126,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
               content: Text(
                   "Грешка при изпращане на данните. Моля, опитайте по-късно."),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                     child: Text("OK"),
                     onPressed: () => Navigator.of(context).pop())
               ],
@@ -158,7 +158,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
               ),
               actions: <Widget>[
                 // usually buttons at the bottom of the dialog
-                new FlatButton(
+                TextButton(
                   child: new Text("Вход"),
                   onPressed: () async {
                     await authResource.logout();
@@ -169,7 +169,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                         .pushNamedAndRemoveUntil("/", (_) => false);
                   },
                 ),
-                new FlatButton(
+                TextButton(
                   child: new Text("Откажи"),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -189,7 +189,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
             return AlertDialog(
               title: new Text("Грешка при изпращане на сървъра"),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                     child: Text("OK"),
                     onPressed: () => Navigator.of(context).pop())
               ],
@@ -265,7 +265,10 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           height: 20,
         ),
         ElevatedButton(
-          style: ElevatedButton.styleFrom(primary: Colors.transparent, shadowColor: Colors.transparent, padding: EdgeInsets.all(0)),
+          style: ElevatedButton.styleFrom(
+              primary: Colors.transparent,
+              shadowColor: Colors.transparent,
+              padding: EdgeInsets.all(0)),
           child: Image(
             image: AssetImage('assets/btn_strava_connectwith_orange.png'),
           ),

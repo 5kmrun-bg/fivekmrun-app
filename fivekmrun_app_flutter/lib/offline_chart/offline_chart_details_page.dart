@@ -24,9 +24,10 @@ class OfflineChartDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(result.name),
         actions: [
-          FlatButton(
-            child: Icon(Icons.link),
+          IconButton(
             onPressed: () => print("test"),
+            icon: Icon(Icons.link),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
           )
         ],
       ),

@@ -75,27 +75,29 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: '5kmRun.bg',
         theme: ThemeData(
-          primarySwatch: getColor(appAccentColor),
-          brightness: Brightness.dark,
-          backgroundColor: Colors.black,
-          accentColor: appAccentColor,
-          accentIconTheme: IconThemeData(color: Colors.black),
-          dividerColor: Colors.black12,
-          textTheme: TextTheme(
-            subhead: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            body1: TextStyle(fontSize: 10),
-            body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
-          ),
-          errorColor: Colors.red,
-          outlinedButtonTheme: OutlinedButtonThemeData(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) { 
+            primarySwatch: getColor(appAccentColor),
+            brightness: Brightness.dark,
+            backgroundColor: Colors.black,
+            accentColor: appAccentColor,
+            accentIconTheme: IconThemeData(color: Colors.black),
+            dividerColor: Colors.black12,
+            textTheme: TextTheme(
+              subhead: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              body1: TextStyle(fontSize: 10),
+              body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+            ),
+            errorColor: Colors.red,
+            outlinedButtonTheme: OutlinedButtonThemeData(style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+              return Colors.white;
+            }))),
+            textButtonTheme: TextButtonThemeData(style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
                 return Colors.white;
-                }
-              )
-            )
-          )
-        ),
+              }),
+            ))),
         initialRoute: _initialRoute,
         routes: {
           '/': (_) => Login(),

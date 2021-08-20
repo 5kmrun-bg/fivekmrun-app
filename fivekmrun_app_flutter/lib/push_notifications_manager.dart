@@ -4,7 +4,6 @@ import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
 import 'package:flutter/material.dart';
 
 class PushNotificationsManager {
-
   // PushNotificationsManager._();
 
   // factory PushNotificationsManager() => _instance;
@@ -32,7 +31,7 @@ class PushNotificationsManager {
   // //             final data = msg["data"];
   // //             if (data != null) {
   // //             final String routeName = data['routeName'];
-              
+
   // //               // if (data["routeName"] != null && data["routeName"] != "") {
   // //               //   Navigator.pushNamed(context, routeName);
   // //               // }
@@ -59,7 +58,7 @@ class PushNotificationsManager {
   //     // // For testing purposes print the Firebase Messaging token
   //     // String token = await _firebaseMessaging.getToken();
   //     // print("FirebaseMessaging token: $token");
-      
+
   //     // _initialized = true;
   //   }
   // }
@@ -72,8 +71,8 @@ class PushNotificationsManager {
   //       title: Text(title),
   //       content: Text(body),
   //       actions: <Widget>[
-  //         FlatButton(
-  //           child: Text("OK"), 
+  //         TextButton(
+  //           child: Text("OK"),
   //           onPressed: () => Navigator.of(context).pop())
   //       ],));
   //   }
