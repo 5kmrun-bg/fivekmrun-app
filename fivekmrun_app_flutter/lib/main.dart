@@ -45,7 +45,7 @@ void main() async {
   if (authRes.getUserId() != null) {
     FirebaseCrashlytics.instance.setUserIdentifier(userId.toString());
     userRes.currentUserId = userId;
-    initialRoute = "/home";
+    initialRoute = "home";
   }
 
   runZoned(() {
@@ -101,11 +101,11 @@ class MyApp extends StatelessWidget {
         initialRoute: _initialRoute,
         routes: {
           '/': (_) => Login(),
-          '/loginPreview': (_) => LoginPreview(),
-          '/home': (_) => Home(),
-          '/barcode': (_) => BarcodePage(),
-          '/settings': (_) => SettingsPage(),
-          '/donation': (_) => DonatePage(),
+          'loginPreview': (_) => LoginPreview(),
+          'home': (_) => Home(),
+          'barcode': (_) => BarcodePage(),
+          'settings': (_) => SettingsPage(),
+          'donation': (_) => DonatePage(),
         },
       ),
     );

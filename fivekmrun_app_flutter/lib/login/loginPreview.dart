@@ -48,7 +48,7 @@ class LoginPreview extends StatelessWidget {
                         child: Text("Напред"),
                         onPressed: () {
                           Navigator.pushNamedAndRemoveUntil(
-                              context, "/home", (_) => false);
+                              context, "home", (_) => false);
                         }),
                   ),
                 ],

@@ -28,7 +28,7 @@ class _LoginWithIdState extends State<LoginWithId> {
         .authenticateWithUserId(userId);
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;
 
-    Navigator.pushNamed(context, '/loginPreview');
+    Navigator.pushNamed(context, 'loginPreview');
   }
 
   @override

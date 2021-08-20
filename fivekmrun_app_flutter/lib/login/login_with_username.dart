@@ -37,7 +37,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
       if (isAuthenticated) {
         FirebaseAnalytics().logEvent(name: "login");
         setState(() => this.loginError = false);
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamedAndRemoveUntil(context, "home", (_) => false);
       } else {
         setState(() => this.loginError = true);
       }
