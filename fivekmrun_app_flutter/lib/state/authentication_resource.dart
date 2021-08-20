@@ -17,7 +17,7 @@ class AuthenticationResource extends ChangeNotifier {
     HttpClientRequest request =
         await httpClient.postUrl(Uri.parse("https://5kmrun.bg/api/auth"));
     request.headers.set('content-type', 'application/x-www-form-urlencoded');
-    request.write("userEmail=${username}&userPassword=${password}");
+    request.write("userEmail=$username&userPassword=$password");
 
     HttpClientResponse response = await request.close();
     String reply = await response.transform(utf8.decoder).join();
