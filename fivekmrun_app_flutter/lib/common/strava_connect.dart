@@ -63,11 +63,11 @@ class _StravaConnectState extends State<StravaConnect> {
       child: this.isLoading
           ? CircularProgressIndicator()
           : this.isConnectedToStrava
-              ? RaisedButton(
+              ? ElevatedButton(
                   child: Text("disconnect"),
                   onPressed: disconnect,
                 )
-              : RaisedButton(
+              : ElevatedButton(
                   child: Text("connect"),
                   onPressed: connect,
                 ),

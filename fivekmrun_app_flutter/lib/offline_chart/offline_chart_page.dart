@@ -58,7 +58,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   void showLogoutDialog() {
     final authResource =
         Provider.of<AuthenticationResource>(context, listen: false);
-    final textStlyle = Theme.of(context).textTheme.subtitle;
+    final textStlyle = Theme.of(context).textTheme.subtitle2;
     final accentColor = Theme.of(context).accentColor;
     showDialog(
       context: context,
@@ -83,8 +83,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
             ),
           ),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
+            TextButton(
               child: new Text("Вход с парола"),
               onPressed: () async {
                 await authResource.logout();
@@ -95,7 +94,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                     .pushNamedAndRemoveUntil("/", (_) => false);
               },
             ),
-            new FlatButton(
+            TextButton(
               child: new Text("Откажи"),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -133,7 +132,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textStlyle = Theme.of(context).textTheme.title;
+    final textStlyle = Theme.of(context).textTheme.headline6;
     final accentColor = Theme.of(context).accentColor;
 
     return Scaffold(
@@ -178,7 +177,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () => this.goToAddEntry(),
                     child: Row(
                       children: [
@@ -193,7 +192,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: OutlineButton(
+                  child: OutlinedButton(
                       onPressed: () => {
                             launch(
                               "https://5kmrun.bg/selfie/ofc",
@@ -247,28 +246,25 @@ class SelectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final btnPdding = EdgeInsets.symmetric(vertical: 4, horizontal: 16);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: this.selected
-            ? RaisedButton(
-                padding: btnPdding,
+            ? ElevatedButton(
                 child: Text(
                   this.text,
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subtitle1,
                   textAlign: TextAlign.center,
                 ),
                 onPressed: () => this.onPressed(),
               )
-            : OutlineButton(
-                padding: btnPdding,
+            : OutlinedButton(
                 child: Text(
                   this.text,
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subtitle1,
                   textAlign: TextAlign.center,
                 ),
-                onPressed: () =>  this.onPressed(),
+                onPressed: () => this.onPressed(),
               ),
       ),
     );

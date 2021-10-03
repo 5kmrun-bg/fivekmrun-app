@@ -44,11 +44,11 @@ class ProfileDashboard extends StatelessWidget {
 
     print("HAS ANY RUNS: " + hasAnyRuns.toString());
     final goToSettings = () {
-      Navigator.of(context, rootNavigator: true).pushNamed("/settings");
+      Navigator.of(context, rootNavigator: true).pushNamed("settings");
     };
 
     final goToBarcode = () {
-      Navigator.of(context, rootNavigator: true).pushNamed("/barcode");
+      Navigator.of(context, rootNavigator: true).pushNamed("barcode");
     };
 
     return ListView(
@@ -89,7 +89,7 @@ class ProfileDashboard extends StatelessWidget {
                   Avatar(url: user?.avatarUrl ?? ""),
                   Text(
                     user?.name ?? "",
-                    style: textTheme.subhead,
+                    style: textTheme.subtitle1,
                     textAlign: TextAlign.center,
                   ),
                   Text(""),

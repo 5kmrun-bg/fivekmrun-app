@@ -13,13 +13,13 @@ class DetailsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subHeadStyle = Theme.of(context).textTheme.body1;
+    final textTheme = Theme.of(context).textTheme;
 
     return Column(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: 12),
-          child: Text(this.title, style: subHeadStyle),
+          child: Text(this.title, style: textTheme.bodyText2),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 8),

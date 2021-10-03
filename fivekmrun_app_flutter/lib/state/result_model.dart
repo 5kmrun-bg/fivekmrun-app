@@ -49,7 +49,7 @@ class Result {
       this.elevationLow = 0,
       this.mapPolyline = "",
       this.officialPosition = 0,
-      this.startDate = null,
+      this.startDate,
       this.startLocation = " - "});
 
   Result.fromJson(dynamic json)

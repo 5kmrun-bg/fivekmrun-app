@@ -24,9 +24,10 @@ class OfflineChartDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(result.name),
         actions: [
-          FlatButton(
-            child: Icon(Icons.link),
+          IconButton(
             onPressed: () => print("test"),
+            icon: Icon(Icons.link),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
           )
         ],
       ),
@@ -185,7 +186,7 @@ class CircleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle =
-        Theme.of(context).textTheme.subhead?.copyWith(color: Colors.black);
+        Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black);
     return Container(
       padding: EdgeInsets.all(24),
       child: Column(
@@ -221,7 +222,7 @@ class IconText extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Text(
             text,
-            style: theme.textTheme.title,
+            style: theme.textTheme.headline6,
           ),
         ),
       ],
@@ -243,13 +244,13 @@ class ComapreTime extends StatelessWidget {
         ? Color.fromRGBO(0, 173, 25, 1)
         : Color.fromRGBO(250, 32, 87, 1);
 
-    final numberStyle = textTheme.subtitle?.copyWith(color: color);
+    final numberStyle = textTheme.subtitle2?.copyWith(color: color);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
           text,
-          style: textTheme.subtitle,
+          style: textTheme.subtitle2,
         ),
         Text(
           Run.timeInSecondsToString(time, sign: true),

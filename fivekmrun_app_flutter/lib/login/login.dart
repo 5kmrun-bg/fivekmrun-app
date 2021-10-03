@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
               SizedBox(height: 4),
               SizedBox(
                 width: double.infinity,
-                child: OutlineButton(
+                child: OutlinedButton(
                   child:
                       Text(this.loginWithId ? "влез с парола" : "влез с номер"),
                   onPressed: this._toggleLogin,

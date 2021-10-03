@@ -60,7 +60,7 @@ class RunDetailsPage extends StatelessWidget {
                           right: 0,
                           child: Text(
                             "Позиция",
-                            style: theme.textTheme.title,
+                            style: theme.textTheme.headline6,
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -79,7 +79,7 @@ class RunDetailsPage extends StatelessWidget {
                     SizedBox(height: 10),
                     Text(
                       "Темпо",
-                      style: theme.textTheme.subtitle,
+                      style: theme.textTheme.subtitle2,
                     ),
                   ],
                 ),
@@ -89,7 +89,7 @@ class RunDetailsPage extends StatelessWidget {
                     SizedBox(height: 10),
                     Text(
                       "Време",
-                      style: theme.textTheme.subtitle,
+                      style: theme.textTheme.subtitle2,
                     ),
                   ],
                 ),
@@ -99,7 +99,7 @@ class RunDetailsPage extends StatelessWidget {
                     SizedBox(height: 10),
                     Text(
                       "Скорост",
-                      style: theme.textTheme.subtitle,
+                      style: theme.textTheme.subtitle2,
                     )
                   ],
                 ),
@@ -157,7 +157,7 @@ class CircleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle =
-        Theme.of(context).textTheme.subhead?.copyWith(color: Colors.black);
+        Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black);
     return Container(
       padding: EdgeInsets.all(24),
       child: Column(
@@ -193,7 +193,7 @@ class IconText extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Text(
             text,
-            style: theme.textTheme.subtitle,
+            style: theme.textTheme.subtitle2,
           ),
         ),
       ],
@@ -215,13 +215,13 @@ class CompareTime extends StatelessWidget {
         ? Color.fromRGBO(0, 173, 25, 1)
         : Color.fromRGBO(250, 32, 87, 1);
 
-    final numberStyle = textTheme.subtitle?.copyWith(color: color);
+    final numberStyle = textTheme.subtitle2?.copyWith(color: color);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
           text,
-          style: textTheme.subtitle,
+          style: textTheme.subtitle2,
         ),
         Text(
           Run.timeInSecondsToString(time, sign: true),
@@ -247,11 +247,11 @@ class RunDetail extends StatelessWidget {
       children: <Widget>[
         Text(
           label,
-          style: textTheme.subtitle,
+          style: textTheme.subtitle2,
         ),
         Text(
           value,
-          style: textTheme.subtitle,
+          style: textTheme.subtitle2,
         ),
       ],
     );

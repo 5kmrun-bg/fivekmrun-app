@@ -19,10 +19,10 @@ class LoginPreview extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("Влез като", style: textTheme.title),
+              Text("Влез като", style: textTheme.headline6),
               Padding(
                 padding: const EdgeInsets.only(top: 12),
-                child: Text(title, style: textTheme.title),
+                child: Text(title, style: textTheme.headline6),
               ),
               Hero(tag: "avatar", child: Avatar(url: avatrUrl ?? "")),
               Row(
@@ -32,7 +32,7 @@ class LoginPreview extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 12.0),
                     child: Container(
                       width: 60,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         child: Icon(
                           Icons.edit,
                         ),
@@ -44,11 +44,11 @@ class LoginPreview extends StatelessWidget {
                   ),
                   Container(
                     width: 150,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                         child: Text("Напред"),
                         onPressed: () {
                           Navigator.pushNamedAndRemoveUntil(
-                              context, "/home", (_) => false);
+                              context, "home", (_) => false);
                         }),
                   ),
                 ],

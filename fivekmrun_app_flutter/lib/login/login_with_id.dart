@@ -28,12 +28,12 @@ class _LoginWithIdState extends State<LoginWithId> {
         .authenticateWithUserId(userId);
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;
 
-    Navigator.pushNamed(context, '/loginPreview');
+    Navigator.pushNamed(context, 'loginPreview');
   }
 
   @override
   Widget build(BuildContext context) {
-    final textStlyle = Theme.of(context).textTheme.subtitle;
+    final textStlyle = Theme.of(context).textTheme.subtitle2;
     final accentColor = Theme.of(context).accentColor;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,7 +64,7 @@ class _LoginWithIdState extends State<LoginWithId> {
         SizedBox(height: 18),
         SizedBox(
           width: double.infinity,
-          child: RaisedButton(onPressed: onPressed, child: Text("Напред")),
+          child: ElevatedButton(onPressed: onPressed, child: Text("Напред")),
         ),
       ],
     );

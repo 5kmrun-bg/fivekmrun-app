@@ -37,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
     };
 
     final goToDonation = () {
-      Navigator.of(context, rootNavigator: true).pushNamed("/donation");
+      Navigator.of(context, rootNavigator: true).pushNamed("donation");
     };
 
     final dividerColor = Theme.of(context).accentColor;

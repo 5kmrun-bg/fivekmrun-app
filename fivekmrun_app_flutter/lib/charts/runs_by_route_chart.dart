@@ -18,13 +18,13 @@ class RunsByRouteChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final subHeadStyle = theme.textTheme.subhead;
+    final subTitleStyle = theme.textTheme.subtitle1;
 
     return Padding(
         padding: EdgeInsets.all(8.0),
         child: Column(children: <Widget>[
           IntrinsicHeight(
-              child: Text("Бягания по същински трасета", style: subHeadStyle)),
+              child: Text("Бягания по същински трасета", style: subTitleStyle)),
           Expanded(
               child: new charts.PieChart(seriesList,
                   animate: animate,

@@ -31,7 +31,7 @@ class ListTileRow extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: Text(text, style: theme.textTheme.subtitle),
+            child: Text(text, style: theme.textTheme.subtitle2),
           ),
         ),
       ],

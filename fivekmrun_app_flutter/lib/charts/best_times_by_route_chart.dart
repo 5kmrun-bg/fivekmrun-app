@@ -20,15 +20,14 @@ class BestTimesByRouteChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final subHeadStyle = theme.textTheme.subhead;
 
     return Padding(
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
             IntrinsicHeight(
-                child:
-                    Text("Рекорди по същински трасета", style: subHeadStyle)),
+                child: Text("Рекорди по същински трасета",
+                    style: theme.textTheme.subtitle1)),
             Expanded(
                 child: charts.BarChart(seriesList,
                     animate: this.animate,
