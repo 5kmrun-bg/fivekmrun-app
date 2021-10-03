@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:strava_flutter/Models/activity.dart';
+import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
 import '../common/int_extensions.dart';
 import '../common/double_extensions.dart';
 
@@ -96,14 +96,14 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       startDate: DateTime.parse(stravaActivity?.startDateLocal ?? ""),
       mapPath: stravaActivity?.map!.polyline ?? "",
       startGeoLocation: stravaActivity?.startLatlng ?? [0],
-      elevationGainedTotal: stravaActivity?.totalElevationGain ?? 0,
+      elevationGainedTotal: 0, //stravaActivity?.totalElevationGain ?? 0,
       elevationLow: stravaActivity?.elevLow ?? 0,
       elevationHigh: stravaActivity?.elevHigh ?? 0,
-      totalDistance: stravaActivity?.distance ?? 0,
+      totalDistance: 0, //stravaActivity?.distance ?? 0,
       totalElapsedTime: stravaActivity?.elapsedTime ?? 0,
       startLocation: await googleMapsService.getTownFromGeoLocation(
-          stravaActivity?.startLatitude ?? 0,
-          stravaActivity?.startLongitude ?? 0),
+          0, //stravaActivity?.startLatitude ?? 0,
+          0), //stravaActivity?.startLongitude ?? 0),
       stravaLink: stravaActivity?.id.toString() ?? "",
     );
 

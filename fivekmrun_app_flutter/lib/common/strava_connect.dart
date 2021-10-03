@@ -51,7 +51,7 @@ class _StravaConnectState extends State<StravaConnect> {
 
       this.setState(() => this.isLoading = true);
 
-      await strava.deAuthenticate();
+      strava.deAuthenticate();
 
       this.setState(() {
         this.isLoading = false;

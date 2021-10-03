@@ -1,8 +1,8 @@
-import 'package:strava_flutter/Models/activity.dart';
+import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
 
 class FastestSplitSummary {
   final int elapsedTime;
-  final double distance;
+  final int distance;
 
   FastestSplitSummary({
     required this.elapsedTime,
