@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class ListTileRow extends StatelessWidget {
   final IconData icon;
   final String text;
-  final Color iconColor;
+  final Color? iconColor;
   final int iconSize;
   const ListTileRow(
-      {Key key, this.icon, this.text, this.iconColor, this.iconSize = 18})
+      {Key? key,
+      required this.icon,
+      required this.text,
+      this.iconColor,
+      this.iconSize = 18})
       : super(key: key);
 
   @override
@@ -27,7 +31,7 @@ class ListTileRow extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: Text(text, style: theme.textTheme.subtitle),
+            child: Text(text, style: theme.textTheme.subtitle2),
           ),
         ),
       ],

@@ -5,14 +5,14 @@ import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 
 class RunDetailsPage extends StatelessWidget {
-  const RunDetailsPage({Key key}) : super(key: key);
+  const RunDetailsPage({Key? key}) : super(key: key);
 
   Widget buildPositionGauge(Run run) {
     if (run.isSelfie) return SizedBox.shrink();
 
     ResultsResource results = ResultsResource();
     return FutureBuilder<List<Result>>(
-        future: results.getAll(run.eventId),
+        future: results.getAll(run.eventId!),
         builder: (BuildContext context, AsyncSnapshot<List<Result>> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -26,16 +26,17 @@ class RunDetailsPage extends StatelessWidget {
               );
             case ConnectionState.done:
               if (snapshot.hasError)
-                return MilestoneGauge(run.position, 400);
+                return MilestoneGauge(run.position!, 400);
               else
-                return MilestoneGauge(run.position, snapshot.data.length);
+                return MilestoneGauge(
+                    run.position!, snapshot.data?.length ?? 0);
           }
         });
   }
 
   @override
   Widget build(BuildContext context) {
-    final Run run = ModalRoute.of(context).settings.arguments;
+    final Run run = ModalRoute.of(context)?.settings.arguments as Run;
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -59,7 +60,7 @@ class RunDetailsPage extends StatelessWidget {
                           right: 0,
                           child: Text(
                             "Позиция",
-                            style: theme.textTheme.title,
+                            style: theme.textTheme.headline6,
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -74,31 +75,31 @@ class RunDetailsPage extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    CircleWidget(run.pace, "мин/км"),
+                    CircleWidget(run.pace!, "мин/км"),
                     SizedBox(height: 10),
                     Text(
                       "Темпо",
-                      style: theme.textTheme.subtitle,
+                      style: theme.textTheme.subtitle2,
                     ),
                   ],
                 ),
                 Column(
                   children: <Widget>[
-                    CircleWidget(run.time, "мин"),
+                    CircleWidget(run.time!, "мин"),
                     SizedBox(height: 10),
                     Text(
                       "Време",
-                      style: theme.textTheme.subtitle,
+                      style: theme.textTheme.subtitle2,
                     ),
                   ],
                 ),
                 Column(
                   children: <Widget>[
-                    CircleWidget(run.speed, "км/ч"),
+                    CircleWidget(run.speed!, "км/ч"),
                     SizedBox(height: 10),
                     Text(
                       "Скорост",
-                      style: theme.textTheme.subtitle,
+                      style: theme.textTheme.subtitle2,
                     )
                   ],
                 ),
@@ -114,7 +115,7 @@ class RunDetailsPage extends StatelessWidget {
                 ),
                 IconText(
                   icon: Icons.pin_drop,
-                  text: (run.isSelfie) ? "Selfie" : run.location,
+                  text: (run.isSelfie) ? "Selfie" : run.location!,
                 ),
               ],
             ),
@@ -122,10 +123,10 @@ class RunDetailsPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  IconText(icon: Icons.watch, text: run.totalTime + " мин"),
+                  IconText(icon: Icons.watch, text: run.totalTime! + " мин"),
                   IconText(
                       icon: Icons.straighten,
-                      text: (run.distance / 1000).toStringAsFixed(2) + " км"),
+                      text: (run.distance! / 1000).toStringAsFixed(2) + " км"),
                 ],
               ),
             SizedBox(height: 20),
@@ -156,7 +157,7 @@ class CircleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle =
-        Theme.of(context).textTheme.subhead.copyWith(color: Colors.black);
+        Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black);
     return Container(
       padding: EdgeInsets.all(24),
       child: Column(
@@ -176,7 +177,8 @@ class CircleWidget extends StatelessWidget {
 class IconText extends StatelessWidget {
   final IconData icon;
   final String text;
-  const IconText({Key key, this.icon, this.text}) : super(key: key);
+  const IconText({Key? key, required this.icon, required this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +193,7 @@ class IconText extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Text(
             text,
-            style: theme.textTheme.subtitle,
+            style: theme.textTheme.subtitle2,
           ),
         ),
       ],
@@ -202,7 +204,8 @@ class IconText extends StatelessWidget {
 class CompareTime extends StatelessWidget {
   final int time;
   final String text;
-  const CompareTime({Key key, this.time, this.text}) : super(key: key);
+  const CompareTime({Key? key, required this.time, required this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -212,13 +215,13 @@ class CompareTime extends StatelessWidget {
         ? Color.fromRGBO(0, 173, 25, 1)
         : Color.fromRGBO(250, 32, 87, 1);
 
-    final numberStyle = textTheme.subtitle.copyWith(color: color);
+    final numberStyle = textTheme.subtitle2?.copyWith(color: color);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
           text,
-          style: textTheme.subtitle,
+          style: textTheme.subtitle2,
         ),
         Text(
           Run.timeInSecondsToString(time, sign: true),
@@ -232,7 +235,8 @@ class CompareTime extends StatelessWidget {
 class RunDetail extends StatelessWidget {
   final String value;
   final String label;
-  const RunDetail({Key key, this.value, this.label}) : super(key: key);
+  const RunDetail({Key? key, required this.value, required this.label})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -243,11 +247,11 @@ class RunDetail extends StatelessWidget {
       children: <Widget>[
         Text(
           label,
-          style: textTheme.subtitle,
+          style: textTheme.subtitle2,
         ),
         Text(
           value,
-          style: textTheme.subtitle,
+          style: textTheme.subtitle2,
         ),
       ],
     );

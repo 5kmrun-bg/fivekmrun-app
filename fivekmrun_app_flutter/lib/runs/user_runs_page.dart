@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UserRunsPage extends StatelessWidget {
-  const UserRunsPage({Key key}) : super(key: key);
+  const UserRunsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +15,11 @@ class UserRunsPage extends StatelessWidget {
           if (runsResource.loading) {
             return Center(child: CircularProgressIndicator());
           } else if (runsResource.value == null ||
-              runsResource.value.length == 0) {
-            return Center(child: Text("Все още не сте направили първото си бягане"));
+              runsResource.value?.length == 0) {
+            return Center(
+                child: Text("Все още не сте направили първото си бягане"));
           } else {
-            return UserRunsList(runs: runsResource.value);
+            return UserRunsList(runs: runsResource.value!);
           }
         }));
   }
@@ -26,15 +27,15 @@ class UserRunsPage extends StatelessWidget {
 
 class UserRunsList extends StatelessWidget {
   const UserRunsList({
-    Key key,
-    @required this.runs,
+    Key? key,
+    required this.runs,
   }) : super(key: key);
 
   final List<Run> runs;
 
   @override
   Widget build(BuildContext context) {
-    runs.sort((r1, r2) => r2.date.compareTo(r1.date));
+    runs.sort((r1, r2) => r2.date?.compareTo(r1.date!) ?? 0);
 
     final accentColor = Theme.of(context).accentColor;
     final darkerColor = Colors.white;
@@ -46,35 +47,33 @@ class UserRunsList extends StatelessWidget {
         return Card(
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(
-                    color: run.isSelfie ? accentColor : darkerColor,
-                    style: BorderStyle.solid,
-                    width: 1.0,
-                ),
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(4.0),
+              border: Border.all(
+                color: run.isSelfie ? accentColor : darkerColor,
+                style: BorderStyle.solid,
+                width: 1.0,
+              ),
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(4.0),
             ),
             child: ListTile(
-              onTap: () =>
-                  Navigator.of(context).pushNamed("/run-details", arguments: run),
+              onTap: () => Navigator.of(context)
+                  .pushNamed("/run-details", arguments: run),
               title: Column(
                 children: <Widget>[
                   if (!run.isSelfie)
                     ListTileRow(
                       icon: Icons.pin_drop,
-                      text: run.location,
-                    ) else
-                    ListTileRow(
-                      icon: Icons.pin_drop,
-                      text: "Selfie"
-                    ),
+                      text: run.location!,
+                    )
+                  else
+                    ListTileRow(icon: Icons.pin_drop, text: "Selfie"),
                   ListTileRow(
                     icon: Icons.calendar_today,
                     text: run.displayDate,
                   ),
                   ListTileRow(
                     icon: Icons.timer,
-                    text: run.time + " мин",
+                    text: run.time! + " мин",
                   ),
                 ],
               ),

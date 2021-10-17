@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
 class PastEventsPage extends StatelessWidget {
-  const PastEventsPage({Key key}) : super(key: key);
+  const PastEventsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,8 @@ class PastEventsPage extends StatelessWidget {
 
 class PastEventsList extends StatelessWidget {
   const PastEventsList({
-    Key key,
-    @required this.events,
+    Key? key,
+    required this.events,
   }) : super(key: key);
 
   final List<Event> events;

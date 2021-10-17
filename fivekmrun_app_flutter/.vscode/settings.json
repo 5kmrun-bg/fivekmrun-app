@@ -1,0 +1,8 @@
+{
+  "dart.flutterRunAdditionalArgs": ["--no-sound-null-safety"],
+  "dart.vmAdditionalArgs": ["--no-sound-null-safety"],
+  "[dart]": {
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.formatOnSave": true
+  }
+}

@@ -5,7 +5,11 @@ class MilestoneTile extends StatelessWidget {
   final int value;
   final int milestone;
   final String title;
-  const MilestoneTile({Key key, this.value, this.milestone, this.title})
+  const MilestoneTile(
+      {Key? key,
+      required this.value,
+      required this.milestone,
+      required this.title})
       : super(key: key);
 
   @override

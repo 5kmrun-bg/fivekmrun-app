@@ -22,8 +22,7 @@ import 'package:provider/provider.dart';
 final userRes = UserResource();
 final authRes = AuthenticationResource();
 
-final appAccentColor = Color.fromRGBO(252, 24, 81, 1.0);
-
+final appAccentColor = Color.fromRGBO(218, 3, 56, 1.0);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,11 +31,11 @@ void main() async {
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   // Pass all uncaught errors to Crashlytics.
-  Function originalOnError = FlutterError.onError;
+  final originalOnError = FlutterError.onError;
   FlutterError.onError = (FlutterErrorDetails errorDetails) async {
     await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
     // Forward to original handler.
-    originalOnError(errorDetails);
+    originalOnError!(errorDetails);
   };
 
   await authRes.loadFromLocalStore();
@@ -46,7 +45,7 @@ void main() async {
   if (authRes.getUserId() != null) {
     FirebaseCrashlytics.instance.setUserIdentifier(userId.toString());
     userRes.currentUserId = userId;
-    initialRoute = "/home";
+    initialRoute = "home";
   }
 
   runZoned(() {
@@ -61,7 +60,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => authRes),
@@ -77,27 +75,37 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: '5kmRun.bg',
         theme: ThemeData(
-          primarySwatch: getColor(appAccentColor),
-          brightness: Brightness.dark,
-          backgroundColor: Colors.black,
-          accentColor: appAccentColor,
-          accentIconTheme: IconThemeData(color: Colors.black),
-          dividerColor: Colors.black12,
-          textTheme: TextTheme(
-            subhead: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            body1: TextStyle(fontSize: 10),
-            body2: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
-          ),
-          errorColor: Colors.red,
-        ),
+            primarySwatch: getColor(appAccentColor),
+            brightness: Brightness.dark,
+            backgroundColor: Colors.black,
+            accentColor: appAccentColor,
+            accentIconTheme: IconThemeData(color: Colors.black),
+            dividerColor: Colors.black12,
+            textTheme: TextTheme(
+              subtitle1: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              bodyText1: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+              bodyText2: TextStyle(fontSize: 10),
+            ),
+            errorColor: Colors.red,
+            outlinedButtonTheme: OutlinedButtonThemeData(style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+              return Colors.white;
+            }))),
+            textButtonTheme: TextButtonThemeData(style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                return Colors.white;
+              }),
+            ))),
         initialRoute: _initialRoute,
         routes: {
           '/': (_) => Login(),
-          '/loginPreview': (_) => LoginPreview(),
-          '/home': (_) => Home(),
-          '/barcode': (_) => BarcodePage(),
-          '/settings': (_) => SettingsPage(),
-          '/donation': (_) => DonatePage(),
+          'loginPreview': (_) => LoginPreview(),
+          'home': (_) => Home(),
+          'barcode': (_) => BarcodePage(),
+          'settings': (_) => SettingsPage(),
+          'donation': (_) => DonatePage(),
         },
       ),
     );

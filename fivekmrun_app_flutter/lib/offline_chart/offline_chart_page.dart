@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OfflineChartPage extends StatefulWidget {
-  OfflineChartPage({Key key}) : super(key: key);
+  OfflineChartPage({Key? key}) : super(key: key);
 
   @override
   _OfflineChartPageState createState() => _OfflineChartPageState();
@@ -17,7 +17,7 @@ class OfflineChartPage extends StatefulWidget {
 
 class _OfflineChartPageState extends State<OfflineChartPage> {
   bool thisWeekSelected = true;
-  List<Result> results;
+  List<Result>? results;
   OfflineResultsResource lastWeekResource = OfflineResultsResource();
   OfflineResultsResource thisWeekResource = OfflineResultsResource();
 
@@ -58,7 +58,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   void showLogoutDialog() {
     final authResource =
         Provider.of<AuthenticationResource>(context, listen: false);
-    final textStlyle = Theme.of(context).textTheme.subtitle;
+    final textStlyle = Theme.of(context).textTheme.subtitle2;
     final accentColor = Theme.of(context).accentColor;
     showDialog(
       context: context,
@@ -73,7 +73,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                 TextSpan(text: 'Участието в '),
                 TextSpan(
                   text: 'Selfie',
-                  style: textStlyle.copyWith(
+                  style: textStlyle?.copyWith(
                     color: accentColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -83,8 +83,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
             ),
           ),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
+            TextButton(
               child: new Text("Вход с парола"),
               onPressed: () async {
                 await authResource.logout();
@@ -95,7 +94,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                     .pushNamedAndRemoveUntil("/", (_) => false);
               },
             ),
-            new FlatButton(
+            TextButton(
               child: new Text("Откажи"),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -133,7 +132,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textStlyle = Theme.of(context).textTheme.title;
+    final textStlyle = Theme.of(context).textTheme.headline6;
     final accentColor = Theme.of(context).accentColor;
 
     return Scaffold(
@@ -146,7 +145,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               TextSpan(text: 'Седмична '),
               TextSpan(
                 text: 'Selfie',
-                style: textStlyle.copyWith(
+                style: textStlyle?.copyWith(
                   color: accentColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -178,7 +177,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () => this.goToAddEntry(),
                     child: Row(
                       children: [
@@ -193,7 +192,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: OutlineButton(
+                  child: OutlinedButton(
                       onPressed: () => {
                             launch(
                               "https://5kmrun.bg/selfie/ofc",
@@ -225,10 +224,10 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   Widget _buildResults() {
     if (this.results == null) {
       return Center(child: CircularProgressIndicator());
-    } else if (this.results.length == 0) {
+    } else if (this.results?.length == 0) {
       return Center(child: Text("Няма резултати"));
     } else {
-      return ResultsList(results: this.results);
+      return ResultsList(results: this.results!);
     }
   }
 }
@@ -238,33 +237,34 @@ class SelectButton extends StatelessWidget {
   final bool selected;
   final String text;
 
-  const SelectButton({Key key, this.onPressed, this.selected, this.text})
+  const SelectButton(
+      {Key? key,
+      required this.onPressed,
+      required this.selected,
+      required this.text})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final btnPdding = EdgeInsets.symmetric(vertical: 4, horizontal: 16);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: this.selected
-            ? RaisedButton(
-                padding: btnPdding,
+            ? ElevatedButton(
                 child: Text(
                   this.text,
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subtitle1,
                   textAlign: TextAlign.center,
                 ),
-                onPressed: this.onPressed,
+                onPressed: () => this.onPressed(),
               )
-            : OutlineButton(
-                padding: btnPdding,
+            : OutlinedButton(
                 child: Text(
                   this.text,
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subtitle1,
                   textAlign: TextAlign.center,
                 ),
-                onPressed: this.onPressed,
+                onPressed: () => this.onPressed(),
               ),
       ),
     );

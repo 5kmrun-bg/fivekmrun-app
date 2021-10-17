@@ -5,24 +5,24 @@ final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
 class Run {
   final int id;
-  final int eventId;
-  final DateTime date;
-  final int timeInSeconds;
-  final String time;
-  final String location;
-  final int position;
-  final String speed;
-  final String notes;
-  final String pace;
+  final int? eventId;
+  final DateTime? date;
+  final int? timeInSeconds;
+  final String? time;
+  final String? location;
+  final int? position;
+  final String? speed;
+  final String? notes;
+  final String? pace;
   final bool isSelfie;
-  final int distance;
-  final String totalTime;
+  final int? distance;
+  final String? totalTime;
 
   // Calculated
-  int differenceFromPrevious;
-  int differenceFromBest;
+  int? differenceFromPrevious;
+  int? differenceFromBest;
 
-  String get displayDate => dateFromat.format(date);
+  String get displayDate => dateFromat.format(date!);
 
   Run(
       {this.date,
@@ -36,7 +36,7 @@ class Run {
       this.speed,
       this.notes,
       this.pace,
-      this.isSelfie,
+      this.isSelfie = false,
       this.distance,
       this.totalTime})
       : id = ("$date#$time#$location").hashCode;
@@ -66,11 +66,11 @@ class Run {
 
   Run.fromSelfieJson(dynamic json)
       : id = json["s_id"],
-        eventId = null,//json["r_eventid"],
+        eventId = null, //json["r_eventid"],
         date = DateTime.parse(json["s_start_date"]),
         time = timeInSecondsToString(json["s_time"]),
         timeInSeconds = json["s_time"],
-        location = "",//json["n_name"],
+        location = "", //json["n_name"],
         differenceFromBest = json[""],
         differenceFromPrevious = json[""],
         position = json["s_finish_pos"],
@@ -79,7 +79,8 @@ class Run {
         pace = timeInSecondsToPace(json["s_time"]),
         isSelfie = true,
         distance = json["s_total_distance"] ?? 5000,
-        totalTime = timeInSecondsToString(json["s_total_elapsed_time"]); //timeInSecondsToPace(json["r_time"]);
+        totalTime = timeInSecondsToString(json[
+            "s_total_elapsed_time"]); //timeInSecondsToPace(json["r_time"]);
 
   static List<Run> selfieListFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runs"];
@@ -116,7 +117,7 @@ class Run {
     if (timeInSeconds == 0 || timeInSeconds == null) {
       return "";
     }
-    
+
     double paceDouble = timeInSeconds / 5.0;
     final duration = Duration(seconds: paceDouble.toInt());
     String pace = duration.toString().substring(2, 7);
@@ -125,8 +126,7 @@ class Run {
   }
 
   static String distanceToString(int distance) {
-    if (distance == null)
-      return "";
+    if (distance == null) return "";
 
     return (distance / 1000).toStringAsFixed(2);
   }

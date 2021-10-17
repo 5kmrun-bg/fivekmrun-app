@@ -1,12 +1,12 @@
-import 'package:strava_flutter/Models/activity.dart';
+import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
 
 class FastestSplitSummary {
   final int elapsedTime;
   final double distance;
 
   FastestSplitSummary({
-    this.elapsedTime,
-    this.distance,
+    required this.elapsedTime,
+    required this.distance,
   });
 }
 
@@ -15,7 +15,7 @@ class StravaSummaryRun {
   final FastestSplitSummary fastestSplit;
 
   StravaSummaryRun({
-    this.detailedActivity,
-    this.fastestSplit,
+    required this.detailedActivity,
+    required this.fastestSplit,
   });
 }

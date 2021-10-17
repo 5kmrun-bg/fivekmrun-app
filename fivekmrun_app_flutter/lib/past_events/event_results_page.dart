@@ -5,7 +5,7 @@ import 'package:fivekmrun_flutter/state/results_resource.dart';
 import 'package:flutter/material.dart';
 
 class EventResultsPage extends StatefulWidget {
-  EventResultsPage({Key key}) : super(key: key);
+  EventResultsPage({Key? key}) : super(key: key);
 
   @override
   _EventResultsPageState createState() => _EventResultsPageState();
@@ -16,7 +16,7 @@ class _EventResultsPageState extends State<EventResultsPage> {
 
   @override
   Widget build(BuildContext context) {
-    Event event = ModalRoute.of(context).settings.arguments;
+    Event event = ModalRoute.of(context)?.settings.arguments as Event;
 
     return Scaffold(
       appBar: AppBar(title: Text("Резултати")),
@@ -36,7 +36,7 @@ class _EventResultsPageState extends State<EventResultsPage> {
                   textAlign: TextAlign.center,
                 );
               else
-                return ResultsList(results: snapshot.data);
+                return ResultsList(results: snapshot.data!);
           }
         },
       ),

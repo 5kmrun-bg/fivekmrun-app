@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StravaConnect extends StatefulWidget {
-  StravaConnect({Key key}) : super(key: key);
+  StravaConnect({Key? key}) : super(key: key);
 
   @override
   _StravaConnectState createState() => _StravaConnectState();
@@ -51,7 +51,7 @@ class _StravaConnectState extends State<StravaConnect> {
 
       this.setState(() => this.isLoading = true);
 
-      await strava.deAuthenticate();
+      strava.deAuthenticate();
 
       this.setState(() {
         this.isLoading = false;
@@ -63,11 +63,11 @@ class _StravaConnectState extends State<StravaConnect> {
       child: this.isLoading
           ? CircularProgressIndicator()
           : this.isConnectedToStrava
-              ? RaisedButton(
+              ? ElevatedButton(
                   child: Text("disconnect"),
                   onPressed: disconnect,
                 )
-              : RaisedButton(
+              : ElevatedButton(
                   child: Text("connect"),
                   onPressed: connect,
                 ),

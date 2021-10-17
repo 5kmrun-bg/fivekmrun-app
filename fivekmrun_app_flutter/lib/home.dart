@@ -21,7 +21,7 @@ import 'package:provider/provider.dart';
 enum AppTab { profile, runs, futureEvents, pastEvents, offlineChart }
 
 class Home extends StatefulWidget {
-  Home({Key key}) : super(key: key);
+  Home({Key? key}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -44,8 +44,8 @@ class TabNavigationHelper {
     this._home.selectedIndex = tab.index;
   }
 
-  pushToTab(AppTab tab, String routeName, {Object arguments}) {
-    navigatorKeys[tab].currentState.pushNamedAndRemoveUntil(
+  pushToTab(AppTab tab, String routeName, {Object? arguments}) {
+    navigatorKeys[tab]!.currentState!.pushNamedAndRemoveUntil(
         routeName, ModalRoute.withName('/'),
         arguments: arguments);
   }
@@ -55,7 +55,7 @@ class TabNavigator extends StatelessWidget {
   final Map<String, WidgetBuilder> routes;
   final GlobalKey<NavigatorState> navigatorKey;
   const TabNavigator(
-      {Key key, @required this.routes, @required this.navigatorKey})
+      {Key? key, @required required this.routes, required this.navigatorKey})
       : super(key: key);
 
   @override
@@ -64,7 +64,7 @@ class TabNavigator extends StatelessWidget {
       key: navigatorKey,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-            builder: routes[settings.name],
+            builder: routes[settings.name]!,
             settings: settings,
             fullscreenDialog: true); // disable back gesture on iOS
       },
@@ -74,8 +74,8 @@ class TabNavigator extends StatelessWidget {
 
 class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
   int _selectedIndex = 0;
-  TabNavigationHelper _tabHelper;
-  List<Widget> _widgetOptions;
+  late TabNavigationHelper _tabHelper;
+  late List<Widget> _widgetOptions;
 
   set selectedIndex(value) {
     if (value != _selectedIndex) {
@@ -102,34 +102,34 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
     this._tabHelper = TabNavigationHelper(this);
     this._widgetOptions = <Widget>[
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.profile],
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.profile]!,
         routes: {
           '/': (context) => ProfileDashboard(),
         },
       ),
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.runs],
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.runs]!,
         routes: {
           '/': (context) => UserRunsPage(),
           '/run-details': (context) => RunDetailsPage(),
         },
       ),
       TabNavigator(
-          navigatorKey: this._tabHelper.navigatorKeys[AppTab.offlineChart],
+          navigatorKey: this._tabHelper.navigatorKeys[AppTab.offlineChart]!,
           routes: {
             '/': (context) => OfflineChartPage(),
             '/add': (context) => AddOfflineEntryPage(),
             '/details': (context) => OfflineChartDetailsPage(),
           }),
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.pastEvents],
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.pastEvents]!,
         routes: {
           '/': (context) => PastEventsPage(),
           '/event-results': (context) => EventResultsPage(),
         },
       ),
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.futureEvents],
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.futureEvents]!,
         routes: {
           '/': (context) => FutureEventsPage(),
         },
@@ -149,11 +149,10 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
   @override
   Widget build(BuildContext context) {
     var selectedColor = Theme.of(context).accentColor;
-    return Provider(
-      create: (_) => _tabHelper,
+    return Provider.value(
+      value: _tabHelper,
       child: Scaffold(
         body: Center(
-          // child: _widgetOptions.elementAt(_selectedIndex),
           child: IndexedStack(
             index: _selectedIndex,
             children: _widgetOptions,

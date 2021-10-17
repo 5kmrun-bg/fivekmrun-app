@@ -4,18 +4,22 @@ class DetailsTile extends StatelessWidget {
   final String title;
   final String value;
   final Color accentColor;
-  const DetailsTile({Key key, this.title, this.value, this.accentColor})
+  const DetailsTile(
+      {Key? key,
+      required this.title,
+      required this.value,
+      required this.accentColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final subHeadStyle = Theme.of(context).textTheme.body1;
+    final textTheme = Theme.of(context).textTheme;
 
     return Column(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: 12),
-          child: Text(this.title, style: subHeadStyle),
+          child: Text(this.title, style: textTheme.bodyText2),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 8),

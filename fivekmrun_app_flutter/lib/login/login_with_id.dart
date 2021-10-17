@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginWithId extends StatefulWidget {
-  LoginWithId({Key key}) : super(key: key);
+  LoginWithId({Key? key}) : super(key: key);
 
   @override
   _LoginWithIdState createState() => _LoginWithIdState();
@@ -28,12 +28,12 @@ class _LoginWithIdState extends State<LoginWithId> {
         .authenticateWithUserId(userId);
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;
 
-    Navigator.pushNamed(context, '/loginPreview');
+    Navigator.pushNamed(context, 'loginPreview');
   }
 
   @override
   Widget build(BuildContext context) {
-    final textStlyle = Theme.of(context).textTheme.subtitle;
+    final textStlyle = Theme.of(context).textTheme.subtitle2;
     final accentColor = Theme.of(context).accentColor;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,7 +52,7 @@ class _LoginWithIdState extends State<LoginWithId> {
               TextSpan(text: 'Участието в '),
               TextSpan(
                 text: 'Selfie',
-                style: textStlyle.copyWith(
+                style: textStlyle?.copyWith(
                   color: accentColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -64,7 +64,7 @@ class _LoginWithIdState extends State<LoginWithId> {
         SizedBox(height: 18),
         SizedBox(
           width: double.infinity,
-          child: RaisedButton(onPressed: onPressed, child: Text("Напред")),
+          child: ElevatedButton(onPressed: onPressed, child: Text("Напред")),
         ),
       ],
     );

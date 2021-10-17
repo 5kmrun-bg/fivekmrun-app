@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:strava_flutter/Models/activity.dart';
+import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
 import '../common/int_extensions.dart';
 import '../common/double_extensions.dart';
 
@@ -26,15 +26,15 @@ final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 typedef void ActivityPressedCB(StravaSummaryRun activity);
 
 class AddOfflineEntryPage extends StatefulWidget {
-  AddOfflineEntryPage({Key key}) : super(key: key);
+  AddOfflineEntryPage({Key? key}) : super(key: key);
 
   @override
   _AddOfflineEntryPageState createState() => _AddOfflineEntryPageState();
 }
 
 class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
-  List<StravaSummaryRun> activities;
-  StravaSummaryRun selectedActivity;
+  List<StravaSummaryRun>? activities;
+  StravaSummaryRun? selectedActivity;
   bool isConnectedToStrava = false;
   bool isLoading = true;
 
@@ -78,9 +78,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     if (this.selectedActivity == null) {
       return;
     }
-    StravaSummaryRun runSummary = this.selectedActivity;
+    StravaSummaryRun? runSummary = this.selectedActivity;
 
-    DetailedActivity stravaActivity = this.selectedActivity.detailedActivity;
+    DetailedActivity? stravaActivity = this.selectedActivity?.detailedActivity;
     UserResource userResource =
         Provider.of<UserResource>(context, listen: false);
     AuthenticationResource authResource =
@@ -91,26 +91,30 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
-      elapsedTime: runSummary.fastestSplit.elapsedTime,
-      distance: runSummary.fastestSplit.distance,
-      startDate: DateTime.parse(stravaActivity.startDateLocal),
-      mapPath: stravaActivity.map.polyline,
-      startGeoLocation: stravaActivity.startLatlng,
-      elevationGainedTotal: stravaActivity.totalElevationGain,
-      elevationLow: stravaActivity.elevLow,
-      elevationHigh: stravaActivity.elevHigh,
-      totalDistance: stravaActivity.distance,
-      totalElapsedTime: stravaActivity.elapsedTime,
+      elapsedTime: runSummary?.fastestSplit.elapsedTime ?? 0,
+      distance: runSummary?.fastestSplit.distance ?? 0,
+      startDate: DateTime.parse(stravaActivity?.startDateLocal ?? ""),
+      mapPath: stravaActivity?.map!.polyline ?? "",
+      startGeoLocation: stravaActivity?.startLatlng ?? [0],
+      elevationGainedTotal: stravaActivity?.totalElevationGain ?? 0,
+      elevationLow: stravaActivity?.elevLow ?? 0,
+      elevationHigh: stravaActivity?.elevHigh ?? 0,
+      totalDistance: stravaActivity?.distance ?? 0,
+      totalElapsedTime: stravaActivity?.elapsedTime ?? 0,
       startLocation: await googleMapsService.getTownFromGeoLocation(
-          stravaActivity.startLatitude, stravaActivity.startLongitude),
+          stravaActivity?.startLatlng?.first ?? 0,
+          stravaActivity?.startLatlng?.last ?? 0),
+      stravaLink: stravaActivity?.id.toString() ?? "",
     );
 
-    FirebaseCrashlytics.instance.log("5kmRun Submission model: " + jsonEncode(model.toJson()));
+    print("submission model: " + model.toString());
+    FirebaseCrashlytics.instance
+        .log("5kmRun Submission model: " + jsonEncode(model.toJson()));
 
     Map<String, dynamic> result;
     try {
       result = await offlineChartResource.submitEntry(
-          model, authResource.getToken());
+          model, authResource.getToken() ?? "");
     } on Exception catch (e) {
       FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       showDialog(
@@ -122,7 +126,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
               content: Text(
                   "Грешка при изпращане на данните. Моля, опитайте по-късно."),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                     child: Text("OK"),
                     onPressed: () => Navigator.of(context).pop())
               ],
@@ -135,7 +139,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       if (result["errors"].contains("403")) {
         FirebaseCrashlytics.instance.recordError(
             Exception("Unexpected invalid 5kmRun token"), StackTrace.current);
-        final textStlyle = Theme.of(context).textTheme.subtitle;
+        final textStlyle = Theme.of(context).textTheme.subtitle2;
         showDialog(
           context: context,
           useRootNavigator: true,
@@ -154,7 +158,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
               ),
               actions: <Widget>[
                 // usually buttons at the bottom of the dialog
-                new FlatButton(
+                TextButton(
                   child: new Text("Вход"),
                   onPressed: () async {
                     await authResource.logout();
@@ -165,7 +169,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                         .pushNamedAndRemoveUntil("/", (_) => false);
                   },
                 ),
-                new FlatButton(
+                TextButton(
                   child: new Text("Откажи"),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -176,15 +180,16 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           },
         );
       } else {
-        FirebaseCrashlytics.instance.recordError(Exception(result["errors"].toString()), StackTrace.current);
-                showDialog(
+        FirebaseCrashlytics.instance.recordError(
+            Exception(result["errors"].toString()), StackTrace.current);
+        showDialog(
           context: context,
           useRootNavigator: true,
           builder: (BuildContext context) {
             return AlertDialog(
               title: new Text("Грешка при изпращане на сървъра"),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                     child: Text("OK"),
                     onPressed: () => Navigator.of(context).pop())
               ],
@@ -192,21 +197,24 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                 text: TextSpan(
                   children: <TextSpan>[
                     TextSpan(
-                        text: 'Грешка при изпращане на данните. Моля, опитайте по-късно.'),
+                        text:
+                            'Грешка при изпращане на данните. Моля, опитайте по-късно.'),
                   ],
                 ),
               ),
-            );},
-                );
+            );
+          },
+        );
       }
     }
 
     if (result["answer"]) {
       FirebaseAnalytics().logEvent(name: "submit_selfie_entry");
       Navigator.of(context).pushNamed("/");
-    }
-    else {
-      FirebaseCrashlytics.instance.recordError(Exception("Error from 5kmrun: " + result.toString()), StackTrace.current);
+    } else {
+      FirebaseCrashlytics.instance.recordError(
+          Exception("Error from 5kmrun: " + result.toString()),
+          StackTrace.current);
     }
   }
 
@@ -249,15 +257,18 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
           child: Text(
             "За да продължите - следвайте инструкциите и свържете 5kmRun приложението с вашия Strava профил.\n\nМоля, използвайте Google Chrome при свързването и въведете директно Strava потребителско име и парола. В момента, свързване с други браузъри не сработва успешно.\n\nСистемата на селфи отчита  „Elapsed time“, т.е. вашето общо (цялостно) време на бягането, което включва и времето при включена пауза или просто спрял на място! Много хора се заблуждават, че селфи ще им приеме тяхното „Moving Time“, което представлява само времето на движение без включените паузи и спиранията, т.е. случаите, при които се прекъсва бягането с използването на бутона „пауза“ или спиране на място!",
-            style: Theme.of(context).textTheme.subtitle,
+            style: Theme.of(context).textTheme.subtitle2,
             textAlign: TextAlign.center,
           ),
         ),
         Container(
           height: 20,
         ),
-        RaisedButton(
-          color: Colors.transparent,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              primary: Colors.transparent,
+              shadowColor: Colors.transparent,
+              padding: EdgeInsets.all(0)),
           child: Image(
             image: AssetImage('assets/btn_strava_connectwith_orange.png'),
           ),
@@ -272,7 +283,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       children: <Widget>[
         Expanded(
           child: StravaActivityList(
-              activities: this.activities,
+              activities: this.activities!,
               selectedActivity: this.selectedActivity,
               onActivityTap: toggleActivity),
         ),
@@ -288,7 +299,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
               animate: true,
               onPressed: this.selectedActivity != null
                   ? () async {
-                      await submitOfflineEntry();
+                      submitOfflineEntry();
                       return () {};
                     }
                   : null,
@@ -302,14 +313,14 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
 class StravaActivityList extends StatelessWidget {
   final List<StravaSummaryRun> activities;
-  final StravaSummaryRun selectedActivity;
+  final StravaSummaryRun? selectedActivity;
   final ActivityPressedCB onActivityTap;
 
   const StravaActivityList(
-      {Key key,
-      @required this.activities,
-      @required this.selectedActivity,
-      @required this.onActivityTap})
+      {Key? key,
+      required this.activities,
+      required this.selectedActivity,
+      required this.onActivityTap})
       : super(key: key);
 
   @override
@@ -329,14 +340,16 @@ class StravaActivityList extends StatelessWidget {
 
   Widget _buildItemsForListView(BuildContext context, int index) {
     final activity = activities[index];
-    final date = DateTime.tryParse(activity.detailedActivity.startDate);
+    final date = DateTime.tryParse(activity.detailedActivity.startDate!);
     final dateString = date != null ? dateFromat.format(date) : "n/a";
     final selectedColor = Colors.blueGrey.shade700;
 
-    final totalTime = activity.detailedActivity.elapsedTime.parseSecondsToTimestamp();
-    final totalDistance = activity.detailedActivity.distance.metersToKm();
+    final totalTime =
+        activity.detailedActivity.elapsedTime!.parseSecondsToTimestamp();
+    final totalDistance = activity.detailedActivity.distance!.metersToKm();
 
-    final fastestSplitTime = activity.fastestSplit.elapsedTime.parseSecondsToTimestamp();
+    final fastestSplitTime =
+        activity.fastestSplit.elapsedTime.parseSecondsToTimestamp();
     final fastestSplitDistance = activity.fastestSplit.distance.metersToKm();
     return Card(
       color: this.selectedActivity == activity
@@ -351,7 +364,8 @@ class StravaActivityList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ListTileRow(text: activity.detailedActivity.name, icon: Icons.info),
+                  ListTileRow(
+                      text: activity.detailedActivity.name!, icon: Icons.info),
                   ListTileRow(text: dateString, icon: Icons.calendar_today),
                   ListTileRow(
                       text: "$fastestSplitDistance / $totalDistance км",
@@ -366,7 +380,7 @@ class StravaActivityList extends StatelessWidget {
               width: 140,
               child: Image.network(
                 "https://maps.googleapis.com/maps/api/staticmap?size=140x140&zoom=13&path=weight:3%7Ccolor:blue%7Cenc:" +
-                    activity.detailedActivity.map.polyline +
+                    activity.detailedActivity.map!.polyline! +
                     "&key=" +
                     googleMapsKey,
                 fit: BoxFit.fitWidth,

@@ -6,8 +6,8 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import '../common/int_extensions.dart';
 
 class BestTimesByRouteChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
-  final bool animate;
+  final List<charts.Series<dynamic, String>> seriesList;
+  final bool? animate;
 
   BestTimesByRouteChart(this.seriesList, {this.animate});
 
@@ -20,34 +20,40 @@ class BestTimesByRouteChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final subHeadStyle = theme.textTheme.subhead;
 
     return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          IntrinsicHeight(child: Text("Рекорди по същински трасета", style: subHeadStyle)),
-          Expanded(
-              child: charts.BarChart(seriesList,
-                  animate: this.animate,
-                  vertical: false,
-                  barRendererDecorator: new charts.BarLabelDecorator<String>(),
-                  // Hide domain axis.
-                  domainAxis: new charts.OrdinalAxisSpec(
-                      renderSpec: new charts.NoneRenderSpec()),
-                  primaryMeasureAxis: new charts.NumericAxisSpec(
-                      renderSpec: charts.NoneRenderSpec())))
-        ],
-    ));
+        padding: EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            IntrinsicHeight(
+                child: Text("Рекорди по същински трасета",
+                    style: theme.textTheme.subtitle1)),
+            Expanded(
+                child: charts.BarChart(seriesList,
+                    animate: this.animate,
+                    vertical: false,
+                    barRendererDecorator:
+                        new charts.BarLabelDecorator<String>(),
+                    // Hide domain axis.
+                    domainAxis: new charts.OrdinalAxisSpec(
+                        renderSpec: new charts.NoneRenderSpec()),
+                    primaryMeasureAxis: new charts.NumericAxisSpec(
+                        renderSpec: charts.NoneRenderSpec())))
+          ],
+        ));
   }
 
   static List<charts.Series<BestTimeByRouteEntry, String>> _createData(
       List<Run> runs) {
-    List<BestTimeByRouteEntry> series = groupBy(runs.where((r) => !r.isSelfie), (r) => r.location)
-        .entries
-        .map((e) => BestTimeByRouteEntry(e.key,
-            minBy<Run, int>(e.value, (r) => r.timeInSeconds).timeInSeconds))
-        .toList();
+    List<BestTimeByRouteEntry> series =
+        groupBy<Run, String>(runs.where((r) => !r.isSelfie), (r) => r.location!)
+            .entries
+            .map((e) => BestTimeByRouteEntry(
+                e.key,
+                minBy<Run, int>(e.value, (r) => r.timeInSeconds ?? 0)
+                        ?.timeInSeconds ??
+                    0))
+            .toList();
 
     return [
       new charts.Series<BestTimeByRouteEntry, String>(

@@ -7,15 +7,16 @@ class RunCard extends StatelessWidget {
   final Run run;
   final String title;
 
-  const RunCard({Key key, this.run, @required this.title}) : super(key: key);
+  const RunCard({Key? key, required this.run, required this.title})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final iconColor = theme.accentColor;
     final textTheme = theme.textTheme;
-    final labelStyle = theme.textTheme.body1;
-    final valueStyle = theme.textTheme.body2;
+    final labelStyle = theme.textTheme.bodyText2;
+    final valueStyle = theme.textTheme.bodyText1;
 
     return GestureDetector(
       onTap: () {
@@ -29,21 +30,21 @@ class RunCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              Text(title, style: textTheme.subhead),
+              Text(title, style: textTheme.subtitle1),
               Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-                      child: 
-                      Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
                             run.position.toString(),
-                            style: textTheme.title
-                                .copyWith(color: theme.accentColor), //HACK: hide the label if Selfie but bump the space
+                            style: textTheme.headline6?.copyWith(
+                                color: theme
+                                    .accentColor), //HACK: hide the label if Selfie but bump the space
                           ),
                           Text("място", style: labelStyle),
                         ],
@@ -72,11 +73,11 @@ class RunCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text(run.pace + " мин/км",
+                            child: Text(run.pace ?? "" + " мин/км",
                                 style: valueStyle,
                                 overflow: TextOverflow.ellipsis),
                           ),
-                          Text(run.time + " мин",
+                          Text(run.time ?? "" + " мин",
                               style: valueStyle,
                               overflow: TextOverflow.ellipsis),
                         ],

@@ -4,14 +4,15 @@ import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class OfflineChartDetailsPage extends StatelessWidget {
-  OfflineChartDetailsPage({Key key}) : super(key: key);
+  OfflineChartDetailsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Result result = ModalRoute.of(context).settings.arguments;
+    final Result result = ModalRoute.of(context)?.settings.arguments as Result;
     final iconColor = Theme.of(context).accentColor;
     final imgSize = MediaQuery.of(context).size.width.round() - 32;
 
@@ -21,7 +22,19 @@ class OfflineChartDetailsPage extends StatelessWidget {
             "&key=" +
             googleMapsKey;
     return Scaffold(
-      appBar: AppBar(title: Text(result.name)),
+      appBar: AppBar(
+        title: Text(result.name),
+        actions: [
+          if (result.stravaLink != null && result.stravaLink != "")
+            IconButton(
+              onPressed: () => launch(
+                  "https://www.strava.com/activities/" + result.stravaLink!,
+                  forceSafariVC: false),
+              icon: Icon(Icons.link),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+            )
+        ],
+      ),
       body: ListView(children: <Widget>[
         Center(
           child: Padding(
@@ -51,7 +64,8 @@ class OfflineChartDetailsPage extends StatelessWidget {
                           children: <Widget>[
                             DetailsTile(
                               title: "дата",
-                              value: DateFormat("dd.MM.yyyy").format(result.startDate),
+                              value: DateFormat("dd.MM.yyyy")
+                                  .format(result.startDate!),
                               accentColor: iconColor,
                             ),
                             DetailsTile(
@@ -78,7 +92,10 @@ class OfflineChartDetailsPage extends StatelessWidget {
                             DetailsTile(
                               title: "общо изкачване",
                               value: result.elevationGainedTotal != null
-                                  ? result.elevationGainedTotal.round().toString() + " m"
+                                  ? result.elevationGainedTotal
+                                          .round()
+                                          .toString() +
+                                      " m"
                                   : "-",
                               accentColor: iconColor,
                             ),
@@ -104,12 +121,13 @@ class OfflineChartDetailsPage extends StatelessWidget {
                         children: <Widget>[
                           DetailsTile(
                             title: "час",
-                            value: DateFormat("HH:mm").format(result.startDate),
+                            value:
+                                DateFormat("HH:mm").format(result.startDate!),
                             accentColor: iconColor,
                           ),
                           DetailsTile(
                             title: "локация",
-                            value: result.startLocation ?? " - ",
+                            value: result.startLocation,
                             accentColor: iconColor,
                           ),
                           DetailsTile(
@@ -171,7 +189,8 @@ class CircleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.subhead.copyWith(color: Colors.black);
+    final textStyle =
+        Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black);
     return Container(
       padding: EdgeInsets.all(24),
       child: Column(
@@ -191,7 +210,8 @@ class CircleWidget extends StatelessWidget {
 class IconText extends StatelessWidget {
   final IconData icon;
   final String text;
-  const IconText({Key key, this.icon, this.text}) : super(key: key);
+  const IconText({Key? key, required this.icon, required this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +226,7 @@ class IconText extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Text(
             text,
-            style: theme.textTheme.title,
+            style: theme.textTheme.headline6,
           ),
         ),
       ],
@@ -217,22 +237,24 @@ class IconText extends StatelessWidget {
 class ComapreTime extends StatelessWidget {
   final int time;
   final String text;
-  const ComapreTime({Key key, this.time, this.text}) : super(key: key);
+  const ComapreTime({Key? key, required this.time, required this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final color =
-        time < 0 ? Color.fromRGBO(0, 173, 25, 1) : Color.fromRGBO(250, 32, 87, 1);
+    final color = time < 0
+        ? Color.fromRGBO(0, 173, 25, 1)
+        : Color.fromRGBO(250, 32, 87, 1);
 
-    final numberStyle = textTheme.subtitle.copyWith(color: color);
+    final numberStyle = textTheme.subtitle2?.copyWith(color: color);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
           text,
-          style: textTheme.subtitle,
+          style: textTheme.subtitle2,
         ),
         Text(
           Run.timeInSecondsToString(time, sign: true),

@@ -3,28 +3,29 @@ import 'package:fivekmrun_flutter/constants.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:fivekmrun_flutter/state/strava_activity_model.dart';
 import 'package:flutter/material.dart';
-import 'package:strava_flutter/Models/activity.dart';
-import 'package:strava_flutter/Models/fault.dart';
-import 'package:strava_flutter/Models/token.dart';
-import 'package:strava_flutter/strava.dart';
+import 'package:strava_flutter/domain/model/model_authentication_response.dart';
+import 'package:strava_flutter/domain/model/model_authentication_scopes.dart';
+import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
+import 'package:strava_flutter/strava_client.dart';
 
-typedef StravaCallback<T> = Future<T> Function(Strava strava);
+typedef StravaCallback<T> = Future<T> Function(StravaClient strava);
 
 class StravaResource extends ChangeNotifier {
+  static StravaClient? strava;
+
   Future<T> _withStrava<T>(StravaCallback<T> fn) async {
-    Strava strava = Strava(false, stravaSecret);
-    try {
-      return await fn(strava);
-    } finally {
-      strava.dispose();
+    if (strava == null) {
+      strava = StravaClient(clientId: stravaClientId, secret: stravaSecret);
     }
+    try {
+      return await fn(strava!);
+    } finally {}
   }
 
   Future<bool> isAuthenticated() async {
     return _withStrava((strava) async {
-      final token = await strava.getStoredToken();
+      final token = await strava.getStravaAuthToken();
       final hasValidToken = token != null &&
-          token.accessToken != null &&
           token.accessToken != "null" &&
           !this._isTokenExpired(token);
 
@@ -38,30 +39,28 @@ class StravaResource extends ChangeNotifier {
     });
   }
 
-  Future<bool> _assureAuthenticated(Strava strava) async {
-    final athlete = await strava.getLoggedInAthlete();
-    if (athlete == null || athlete.id == null) {
-      final message =
-          "_assureAuthenticated - cannot get athlete fault: [${athlete?.fault?.statusCode}] ${athlete?.fault?.message} - will deAuthenticate";
-      FirebaseCrashlytics.instance.recordError(message, StackTrace.current);
+  Future<bool> _assureAuthenticated(StravaClient strava) async {
+    final athlete = await strava.athletes.getAuthenticatedAthlete();
 
-      await this.deAuthenticate();
-
-      return false;
-    } else {
-      FirebaseCrashlytics.instance.setCustomKey("stravaUserID", athlete.id);
-      FirebaseCrashlytics.instance
-          .log("Strava get activities - atheleteID: ${athlete.id}");
-      return true;
-    }
+    FirebaseCrashlytics.instance.setCustomKey("stravaUserID", athlete.id);
+    FirebaseCrashlytics.instance
+        .log("Strava get activities - atheleteID: ${athlete.id}");
+    return true;
   }
 
   Future<bool> authenticate() async {
     FirebaseCrashlytics.instance.log("Strava authenticate started");
 
     return _withStrava((strava) async {
-      bool isAuthOk = await strava.oauth(stravaClientId,
-          'read_all,activity:read_all,profile:read_all', stravaSecret, 'auto');
+      final scopes = [
+        AuthenticationScope.read_all,
+        AuthenticationScope.activity_read_all,
+        AuthenticationScope.profile_read_all
+      ];
+      final isAuthOk = await strava.authentication
+          .authenticate(scopes: scopes, redirectUrl: "fivekmrun://redirect")
+          .then((t) => true)
+          .onError((error, stackTrace) => false);
 
       FirebaseCrashlytics.instance.log("Strava authenticate result: $isAuthOk");
 
@@ -69,17 +68,12 @@ class StravaResource extends ChangeNotifier {
     });
   }
 
-  Future<Fault> deAuthenticate() async {
+  void deAuthenticate() async {
     return _withStrava((strava) async {
       FirebaseCrashlytics.instance.log("Strava deAuthenticate");
-      FirebaseCrashlytics.instance.setCustomKey("stravaUserID", null);
+      FirebaseCrashlytics.instance.setCustomKey("stravaUserID", -1);
 
-      Fault result = await strava.deAuthorize();
-
-      FirebaseCrashlytics.instance.log(
-          "Strava deAuthenticate result: [${result?.statusCode}]: ${result?.message} ");
-
-      return result;
+      await strava.authentication.deAuthorize();
     });
   }
 
@@ -87,7 +81,7 @@ class StravaResource extends ChangeNotifier {
     double bestDistance = 0;
     int bestTime = 999999;
 
-    var splits = activity.splitsMetric;
+    var splits = activity.splitsMetric!;
 
     for (var startIdx = 0; startIdx < splits.length; startIdx++) {
       int endIdx = startIdx;
@@ -95,8 +89,8 @@ class StravaResource extends ChangeNotifier {
       int time = 0;
 
       while (endIdx < splits.length && dist < stravaFilterMinDistance) {
-        dist += splits[endIdx].distance;
-        time += splits[endIdx].elapsedTime;
+        dist += splits[endIdx].distance!;
+        time += splits[endIdx].elapsedTime!;
         endIdx++;
       }
 
@@ -113,13 +107,14 @@ class StravaResource extends ChangeNotifier {
     return StravaSummaryRun(detailedActivity: activity, fastestSplit: summary);
   }
 
-  Future<List<StravaSummaryRun>> getThisWeekActivities() async {
+  Future<List<StravaSummaryRun>?> getThisWeekActivities() async {
     FirebaseCrashlytics.instance.log("Strava get activities");
 
     return _withStrava((strava) async {
       final authOK = await this.authenticate();
       if (!authOK) {
-        FirebaseCrashlytics.instance.log("Strava get activities - authOK: false");
+        FirebaseCrashlytics.instance
+            .log("Strava get activities - authOK: false");
         return null;
       }
 
@@ -130,22 +125,19 @@ class StravaResource extends ChangeNotifier {
       }
 
       final now = DateTime.now();
-      int before =
-          now.difference(DateTime.fromMillisecondsSinceEpoch(0)).inSeconds;
-      int after = now
-          .subtract(Duration(
-              days: now.weekday - 1,
-              hours: now.hour,
-              minutes: now.minute,
-              seconds: now.second))
-          .difference(DateTime.fromMillisecondsSinceEpoch(0))
-          .inSeconds;
+      DateTime before = now;
+      DateTime after = now.subtract(Duration(
+          days: now.weekday - 1,
+          hours: now.hour,
+          minutes: now.minute,
+          seconds: now.second));
       try {
-        final activities =
-            await strava.getLoggedInAthleteActivities(before, after);
+        final activities = await strava.activities
+            .listLoggedInAthleteActivities(before, after, 1, 100);
 
         if (activities == null) {
-          FirebaseCrashlytics.instance.log("Strava get activities results: null");
+          FirebaseCrashlytics.instance
+              .log("Strava get activities results: null");
 
           return [];
         }
@@ -155,10 +147,9 @@ class StravaResource extends ChangeNotifier {
 
         final runActivites = await Future.wait(activities
             .where((a) =>
-                    a.type == ActivityType.Run &&
-                    a.distance >= stravaFilterMinDistance
-                )
-            .map((a) => strava.getActivityById(a.id.toString())));
+                a.type!.toLowerCase() == "run" &&
+                a.distance! >= stravaFilterMinDistance)
+            .map((a) => strava.activities.getActivity(a.id!)));
 
         FirebaseCrashlytics.instance.log(
             "Strava get filtered activities results: ${runActivites.length}");
@@ -177,9 +168,9 @@ class StravaResource extends ChangeNotifier {
     });
   }
 
-  bool _isTokenExpired(Token token) {
+  bool _isTokenExpired(TokenResponse? token) {
     // when it is the first run or after a deAuthotrize
-    if (token.expiresAt == null) {
+    if (token == null) {
       return false;
     }
 

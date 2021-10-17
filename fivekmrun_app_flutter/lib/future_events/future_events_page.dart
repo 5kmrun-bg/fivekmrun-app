@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
 class FutureEventsPage extends StatelessWidget {
-  const FutureEventsPage({Key key}) : super(key: key);
+  const FutureEventsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +29,8 @@ class FutureEventsPage extends StatelessWidget {
 
 class FutureEventsList extends StatelessWidget {
   const FutureEventsList({
-    Key key,
-    @required this.events,
+    Key? key,
+    required this.events,
   }) : super(key: key);
 
   final List<Event> events;
@@ -38,7 +38,7 @@ class FutureEventsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: events?.length ?? 0,
+      itemCount: events.length,
       itemBuilder: (BuildContext context, int i) {
         final Event event = events[i];
         return Card(
