@@ -28,7 +28,8 @@ class OfflineChartDetailsPage extends StatelessWidget {
           if (result.stravaLink != null && result.stravaLink != "")
             IconButton(
               onPressed: () => launch(
-                  "https://www.strava.com/activities/" + result.stravaLink!),
+                  "https://www.strava.com/activities/" + result.stravaLink!,
+                  forceSafariVC: false),
               icon: Icon(Icons.link),
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
             )
