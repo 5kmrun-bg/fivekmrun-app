@@ -16,5 +16,5 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 ## Production Build Commands
-- Android: `flutter build appbundle --release --no-shrink`
-- iOS: `flutter build ios`
+- Android: `flutter build appbundle --release --no-shrink --no-sound-null-safety`
+- iOS: `flutter build ios --release --no-sound-null-safety`
