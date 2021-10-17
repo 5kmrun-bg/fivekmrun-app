@@ -31,6 +31,14 @@ class DonatePage extends StatelessWidget {
                       forceSafariVC: false);
                 },
               ),
+              ElevatedButton(
+                child: Text("Дари с Patreon"),
+                onPressed: () async {
+                  FirebaseAnalytics().logEvent(name: "button_donation_clicked");
+                  await launch("https://www.patreon.com/5kmrun",
+                      forceSafariVC: false);
+                },
+              ),
             ],
           ),
         ));
