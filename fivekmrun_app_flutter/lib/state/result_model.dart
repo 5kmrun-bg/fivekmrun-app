@@ -1,5 +1,4 @@
 import 'package:fivekmrun_flutter/state/run_model.dart';
-
 import '../common/int_extensions.dart';
 
 class Result {
@@ -26,6 +25,7 @@ class Result {
   String totalTime;
   String pace;
   DateTime? startDate;
+  final String? stravaLink;
 
   Result(
       {required this.name,
@@ -50,7 +50,8 @@ class Result {
       this.mapPolyline = "",
       this.officialPosition = 0,
       this.startDate,
-      this.startLocation = " - "});
+      this.startLocation = " - ",
+      this.stravaLink});
 
   Result.fromJson(dynamic json)
       : name = json["u_name"] + " " + json["u_surname"],
@@ -75,7 +76,8 @@ class Result {
         isAnonymous = false,
         isPatreon = json["p_id"] != null,
         legionerType = Result.getSelfieLegionerType(json),
-        officialPosition = 0;
+        officialPosition = 0,
+        stravaLink = json["s_strava_link"];
 
   static List<Result> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];
@@ -106,7 +108,8 @@ class Result {
         startDate = null,
         totalDistance = 0,
         distance = 0,
-        totalTime = "";
+        totalTime = "",
+        stravaLink = null;
 
   static int getLegionerType(dynamic json) {
     return (((json["r_runs"] ?? 0) + (json["u_help"] ?? 0)) < 50)

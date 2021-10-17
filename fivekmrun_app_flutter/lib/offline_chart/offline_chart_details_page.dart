@@ -4,6 +4,7 @@ import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class OfflineChartDetailsPage extends StatelessWidget {
@@ -24,11 +25,13 @@ class OfflineChartDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(result.name),
         actions: [
-          IconButton(
-            onPressed: () => print("test"),
-            icon: Icon(Icons.link),
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-          )
+          if (result.stravaLink != null && result.stravaLink != "")
+            IconButton(
+              onPressed: () => launch(
+                  "https://www.strava.com/activities/" + result.stravaLink!),
+              icon: Icon(Icons.link),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+            )
         ],
       ),
       body: ListView(children: <Widget>[
