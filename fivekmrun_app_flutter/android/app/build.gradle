@@ -44,9 +44,8 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "bg.fivekmpark.fivekmrun"
-        minSdkVersion 16
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
