@@ -1,7 +1,7 @@
 class OfflineChartSubmissionModel {
   final String userId;
   final int elapsedTime;
-  final int distance;
+  final double distance;
   final DateTime startDate;
   final String mapPath;
   final List<double> startGeoLocation;

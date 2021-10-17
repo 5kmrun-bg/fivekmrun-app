@@ -3,6 +3,7 @@ import 'package:fivekmrun_flutter/constants.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:fivekmrun_flutter/state/strava_activity_model.dart';
 import 'package:flutter/material.dart';
+import 'package:strava_flutter/domain/model/model_authentication_response.dart';
 import 'package:strava_flutter/domain/model/model_authentication_scopes.dart';
 import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
 import 'package:strava_flutter/strava_client.dart';
@@ -10,22 +11,23 @@ import 'package:strava_flutter/strava_client.dart';
 typedef StravaCallback<T> = Future<T> Function(StravaClient strava);
 
 class StravaResource extends ChangeNotifier {
+  static StravaClient? strava;
+
   Future<T> _withStrava<T>(StravaCallback<T> fn) async {
-    StravaClient strava =
-        StravaClient(clientId: stravaClientId, secret: stravaSecret);
+    if (strava == null) {
+      strava = StravaClient(clientId: stravaClientId, secret: stravaSecret);
+    }
     try {
-      return await fn(strava);
+      return await fn(strava!);
     } finally {}
   }
 
   Future<bool> isAuthenticated() async {
     return _withStrava((strava) async {
-      //final token = await strava.getStoredToken();
-      final hasValidToken = true;
-      // token != null &&
-      //     token.accessToken != null &&
-      //     token.accessToken != "null" &&
-      //     !this._isTokenExpired(token);
+      final token = await strava.getStravaAuthToken();
+      final hasValidToken = token != null &&
+          token.accessToken != "null" &&
+          !this._isTokenExpired(token);
 
       if (!hasValidToken) {
         return false;
@@ -51,7 +53,7 @@ class StravaResource extends ChangeNotifier {
 
     return _withStrava((strava) async {
       final scopes = [
-        AuthenticationScope.activity_read_all,
+        AuthenticationScope.read_all,
         AuthenticationScope.activity_read_all,
         AuthenticationScope.profile_read_all
       ];
@@ -76,14 +78,14 @@ class StravaResource extends ChangeNotifier {
   }
 
   StravaSummaryRun createSummaryActivity(DetailedActivity activity) {
-    int bestDistance = 0;
+    double bestDistance = 0;
     int bestTime = 999999;
 
     var splits = activity.splitsMetric!;
 
     for (var startIdx = 0; startIdx < splits.length; startIdx++) {
       int endIdx = startIdx;
-      int dist = 0;
+      double dist = 0;
       int time = 0;
 
       while (endIdx < splits.length && dist < stravaFilterMinDistance) {
@@ -145,7 +147,8 @@ class StravaResource extends ChangeNotifier {
 
         final runActivites = await Future.wait(activities
             .where((a) =>
-                a.type == "run" && a.distance! >= stravaFilterMinDistance)
+                a.type!.toLowerCase() == "run" &&
+                a.distance! >= stravaFilterMinDistance)
             .map((a) => strava.activities.getActivity(a.id!)));
 
         FirebaseCrashlytics.instance.log(
@@ -163,5 +166,18 @@ class StravaResource extends ChangeNotifier {
         FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       }
     });
+  }
+
+  bool _isTokenExpired(TokenResponse? token) {
+    // when it is the first run or after a deAuthotrize
+    if (token == null) {
+      return false;
+    }
+
+    if (token.expiresAt < DateTime.now().millisecondsSinceEpoch / 1000) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -96,14 +96,14 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       startDate: DateTime.parse(stravaActivity?.startDateLocal ?? ""),
       mapPath: stravaActivity?.map!.polyline ?? "",
       startGeoLocation: stravaActivity?.startLatlng ?? [0],
-      elevationGainedTotal: 0, //stravaActivity?.totalElevationGain ?? 0,
+      elevationGainedTotal: stravaActivity?.totalElevationGain ?? 0,
       elevationLow: stravaActivity?.elevLow ?? 0,
       elevationHigh: stravaActivity?.elevHigh ?? 0,
-      totalDistance: 0, //stravaActivity?.distance ?? 0,
+      totalDistance: stravaActivity?.distance ?? 0,
       totalElapsedTime: stravaActivity?.elapsedTime ?? 0,
       startLocation: await googleMapsService.getTownFromGeoLocation(
-          0, //stravaActivity?.startLatitude ?? 0,
-          0), //stravaActivity?.startLongitude ?? 0),
+          stravaActivity?.startLatlng?.first ?? 0,
+          stravaActivity?.startLatlng?.last ?? 0),
       stravaLink: stravaActivity?.id.toString() ?? "",
     );
 
@@ -284,7 +284,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         Expanded(
           child: StravaActivityList(
               activities: this.activities!,
-              selectedActivity: this.selectedActivity!,
+              selectedActivity: this.selectedActivity,
               onActivityTap: toggleActivity),
         ),
         SizedBox(
@@ -313,7 +313,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
 class StravaActivityList extends StatelessWidget {
   final List<StravaSummaryRun> activities;
-  final StravaSummaryRun selectedActivity;
+  final StravaSummaryRun? selectedActivity;
   final ActivityPressedCB onActivityTap;
 
   const StravaActivityList(
