@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:strava_flutter/domain/model/model_authentication_response.dart';
 import 'package:strava_flutter/domain/model/model_authentication_scopes.dart';
 import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
+import 'package:strava_flutter/domain/model/model_detailed_athlete.dart';
 import 'package:strava_flutter/strava_client.dart';
 
 typedef StravaCallback<T> = Future<T> Function(StravaClient strava);
@@ -40,7 +41,14 @@ class StravaResource extends ChangeNotifier {
   }
 
   Future<bool> _assureAuthenticated(StravaClient strava) async {
-    final athlete = await strava.athletes.getAuthenticatedAthlete();
+    DetailedAthlete athlete;
+    try {
+      athlete = await strava.athletes.getAuthenticatedAthlete();
+    } catch (e) {
+      this.deAuthenticate();
+      this.authenticate();
+      athlete = await strava.athletes.getAuthenticatedAthlete();
+    }
 
     FirebaseCrashlytics.instance.setCustomKey("stravaUserID", athlete.id);
     FirebaseCrashlytics.instance
@@ -58,7 +66,7 @@ class StravaResource extends ChangeNotifier {
         AuthenticationScope.profile_read_all
       ];
       final isAuthOk = await strava.authentication
-          .authenticate(scopes: scopes, redirectUrl: "fivekmrun://redirect")
+          .authenticate(scopes: scopes, redirectUrl: "fivekmrun://redirect/")
           .then((t) => true)
           .onError((error, stackTrace) => false);
 
