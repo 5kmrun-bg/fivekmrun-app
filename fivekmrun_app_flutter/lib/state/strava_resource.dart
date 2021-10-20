@@ -68,7 +68,11 @@ class StravaResource extends ChangeNotifier {
       final isAuthOk = await strava.authentication
           .authenticate(scopes: scopes, redirectUrl: "fivekmrun://redirect/")
           .then((t) => true)
-          .onError((error, stackTrace) => false);
+          .onError((error, stackTrace) {
+        FirebaseCrashlytics.instance.recordError(error, stackTrace);
+        strava.authentication.deAuthorize();
+        return false;
+      });
 
       FirebaseCrashlytics.instance.log("Strava authenticate result: $isAuthOk");
 
