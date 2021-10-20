@@ -87,14 +87,14 @@ class StravaResource extends ChangeNotifier {
 
   StravaSummaryRun createSummaryActivity(DetailedActivity activity) {
     double bestDistance = 0;
-    int bestTime = 999999;
+    double bestTime = 999999;
 
     var splits = activity.splitsMetric!;
 
     for (var startIdx = 0; startIdx < splits.length; startIdx++) {
       int endIdx = startIdx;
       double dist = 0;
-      int time = 0;
+      double time = 0;
 
       while (endIdx < splits.length && dist < stravaFilterMinDistance) {
         dist += splits[endIdx].distance!;

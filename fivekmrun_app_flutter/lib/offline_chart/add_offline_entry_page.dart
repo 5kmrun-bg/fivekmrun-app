@@ -91,7 +91,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
-      elapsedTime: runSummary?.fastestSplit.elapsedTime ?? 0,
+      elapsedTime: runSummary?.fastestSplit.elapsedTime.floor() ?? 0,
       distance: runSummary?.fastestSplit.distance ?? 0,
       startDate: DateTime.parse(stravaActivity?.startDateLocal ?? ""),
       mapPath: stravaActivity?.map!.polyline ?? "",
@@ -349,7 +349,7 @@ class StravaActivityList extends StatelessWidget {
     final totalDistance = activity.detailedActivity.distance!.metersToKm();
 
     final fastestSplitTime =
-        activity.fastestSplit.elapsedTime.parseSecondsToTimestamp();
+        activity.fastestSplit.elapsedTime.floor().parseSecondsToTimestamp();
     final fastestSplitDistance = activity.fastestSplit.distance.metersToKm();
     return Card(
       color: this.selectedActivity == activity
