@@ -137,6 +137,11 @@ class _ResultsListState extends State<ResultsList> {
         cardColor = Colors.white;
     }
 
+    Color shirtColor = iconColor;
+    if (res.legionerType == 1) shirtColor = Colors.blue;
+    if (res.legionerType == 2) shirtColor = Colors.black;
+    if (res.legionerType == 3) shirtColor = Colors.green;
+
     return GestureDetector(
         onTap: () {
           if (res.mapPolyline != null && res.mapPolyline != "") {
@@ -218,19 +223,14 @@ class _ResultsListState extends State<ResultsList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             ListTileRow(
-                              icon: (res.legionerType > 0)
-                                  ? CustomIcons.tshirt
-                                  : Icons.perm_identity,
-                              text: (res.isAnonymous || res.userId == null)
-                                  ? " - "
-                                  : res.userId.toString(),
-                              iconSize: (res.legionerType > 0) ? 13 : 18,
-                              iconColor: (res.legionerType < 1)
-                                  ? iconColor
-                                  : (res.legionerType < 2)
-                                      ? Colors.blue
-                                      : Colors.black,
-                            ),
+                                icon: (res.legionerType > 0)
+                                    ? CustomIcons.tshirt
+                                    : Icons.perm_identity,
+                                text: (res.isAnonymous || res.userId == null)
+                                    ? " - "
+                                    : res.userId.toString(),
+                                iconSize: (res.legionerType > 0) ? 13 : 18,
+                                iconColor: shirtColor),
                             ListTileRow(
                               icon: Icons.person,
                               text: (!res.isAnonymous) ? res.name : "Анонимен",

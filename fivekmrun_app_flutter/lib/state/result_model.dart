@@ -112,19 +112,22 @@ class Result {
         stravaLink = null;
 
   static int getLegionerType(dynamic json) {
-    return (((json["r_runs"] ?? 0) + (json["u_help"] ?? 0)) < 50)
-        ? 0
-        : (((json["r_runs"] ?? 0) + (json["u_help"] ?? 0)) < 100)
-            ? 1
-            : 2;
+    var totalRuns = ((json["r_runs"] ?? 0) + (json["u_help"] ?? 0));
+    return totalRunsToEnum(totalRuns);
   }
 
   static int getSelfieLegionerType(dynamic json) {
-    return (((json["u_runs_s"] ?? 0)) < 50)
-        ? 0
-        : ((json["u_runs_s"] ?? 0) < 100)
-            ? 1
-            : 2;
+    var totalRuns = json["u_runs_s"];
+    return totalRunsToEnum(totalRuns);
+  }
+
+  static int totalRunsToEnum(int totalRuns) {
+    if (totalRuns < 50) return 0;
+    if (totalRuns >= 50 && totalRuns < 100) return 1;
+    if (totalRuns >= 100 && totalRuns < 250) return 2;
+    if (totalRuns >= 250) return 3;
+
+    return 0;
   }
 
   static List<Result> listFromEventJson(List<dynamic> runs) {
