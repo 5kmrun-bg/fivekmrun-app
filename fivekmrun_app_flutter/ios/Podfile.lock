@@ -168,7 +168,7 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: fe77f42da6329d6d83d21fd9d621a6b704413bfc
   FirebaseCrashlytics: 6fac03d1eef054833b71c929c93ab95c12989728
   FirebaseInstallations: 2563cb18a723ef9c6ef18318a49519b75dce613c
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   geocoder: 3cfab70531a0b367e917bafe82df4c30f6d4c45a
   GoogleAppMeasurement: 2be61ce546ad074dbe4dd545f222ac6033bb1d9e
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
