@@ -11,7 +11,7 @@ description: A mobile application for 5kmRun.bg.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 3.8.2+392
+version: 3.8.3+393
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -43,7 +43,7 @@ dependencies:
   strava_flutter: 
       git:
         url: https://github.com/etabakov/strava_flutter.git
-        ref: c2f0e64894e3be7acdb9c9785d002f470f53a5b4
+        ref: 55fbbc06ababc035b929291180b07f8af54c022f
         
   barcode_flutter: ^1.1.2
 
