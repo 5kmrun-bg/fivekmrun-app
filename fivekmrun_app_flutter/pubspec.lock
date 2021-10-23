@@ -461,8 +461,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "5fc6b043db15d02408d0eceebea672c0ea88676d"
-      resolved-ref: "5fc6b043db15d02408d0eceebea672c0ea88676d"
+      ref: "55fbbc06ababc035b929291180b07f8af54c022f"
+      resolved-ref: "55fbbc06ababc035b929291180b07f8af54c022f"
       url: "https://github.com/etabakov/strava_flutter.git"
     source: git
     version: "2.0.0"
