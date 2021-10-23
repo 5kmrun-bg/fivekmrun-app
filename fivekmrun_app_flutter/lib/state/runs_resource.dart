@@ -62,7 +62,7 @@ class RunsResource extends ChangeNotifier {
     return runs;
   }
 
-  retrieve5kmRuns(int? userId) async {
+  Future<List<Run>> retrieve5kmRuns(int? userId) async {
     http.Response response =
         await http.get(Uri.parse("${constants.runsEndpointUrl}$userId"));
     if (response.statusCode != 200 ||
@@ -77,7 +77,7 @@ class RunsResource extends ChangeNotifier {
     return Run.listFromJson(jsonDecode(body));
   }
 
-  retrieveSelfieRuns(int? userId) async {
+  Future<List<Run>> retrieveSelfieRuns(int? userId) async {
     http.Response response =
         await http.get(Uri.parse("https://5kmrun.bg/api/selfie/user/$userId"));
     if (response.statusCode != 200 ||
