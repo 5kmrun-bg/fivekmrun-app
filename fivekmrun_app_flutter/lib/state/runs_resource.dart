@@ -29,7 +29,7 @@ class RunsResource extends ChangeNotifier {
 
   List<Run>? value;
 
-  bool _loading = false;
+  bool _loading = true;
 
   bool get loading => _loading;
   set loading(bool value) {
@@ -41,14 +41,12 @@ class RunsResource extends ChangeNotifier {
 
   clear() {
     this.value = null;
-    this.loading = false;
+    this.loading = true;
     this._bestOfficialRun = null;
     this._lastOfficialRun = null;
   }
 
   Future<List<Run>> getByUserId(int? userId) async {
-    this.loading = true;
-
     List<Run> runs = (await this.retrieve5kmRuns(userId)) ?? [];
     List<Run> selfieRuns = await this.retrieveSelfieRuns(userId);
     runs.addAll(selfieRuns.where((r) => r.timeInSeconds != null));

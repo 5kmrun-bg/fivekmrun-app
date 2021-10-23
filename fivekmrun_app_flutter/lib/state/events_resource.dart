@@ -9,7 +9,7 @@ abstract class EventsResource extends ChangeNotifier {
 
   late List<Event> value;
 
-  bool _loading = false;
+  bool _loading = true;
 
   bool get loading => _loading;
   set loading(bool value) {
@@ -20,8 +20,6 @@ abstract class EventsResource extends ChangeNotifier {
   }
 
   getAll() async {
-    this.loading = true;
-
     http.Response response = await http.get(Uri.parse("${this.getEventUrl()}"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {

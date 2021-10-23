@@ -9,7 +9,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 
 class UserResource extends ChangeNotifier {
-  bool _loading = false;
+  bool _loading = true;
 
   bool get loading => _loading;
   set loading(bool value) {
@@ -42,7 +42,7 @@ class UserResource extends ChangeNotifier {
   clear() {
     this.currentUserId = null;
     this.value = null;
-    this.loading = false;
+    this.loading = true;
   }
 
   Future<User?> getById(int userId, [bool force = false]) async {
@@ -53,8 +53,6 @@ class UserResource extends ChangeNotifier {
     if (!force && userId != 0 && userId == currentUserId) {
       return value;
     }
-
-    this.loading = true;
 
     http.Response response =
         await http.get(Uri.parse("${constants.userEndpointUrl}$userId"));
