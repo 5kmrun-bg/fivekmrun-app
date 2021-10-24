@@ -47,7 +47,7 @@ class RunsResource extends ChangeNotifier {
   }
 
   Future<List<Run>> getByUserId(int? userId) async {
-    List<Run> runs = (await this.retrieve5kmRuns(userId)) ?? [];
+    List<Run> runs = (await this.retrieve5kmRuns(userId));
     List<Run> selfieRuns = await this.retrieveSelfieRuns(userId);
     runs.addAll(selfieRuns.where((r) => r.timeInSeconds != null));
 
