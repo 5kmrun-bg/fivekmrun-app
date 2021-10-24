@@ -43,7 +43,7 @@ dependencies:
   strava_flutter: 
       git:
         url: https://github.com/etabakov/strava_flutter.git
-        ref: 55fbbc06ababc035b929291180b07f8af54c022f
+        ref: 94ba88c934e021182b4b6abc14287a6cb08dcdea
         
   barcode_flutter: ^1.1.2
 
@@ -52,13 +52,12 @@ dependencies:
   # firebase_messaging: ^6.0.13
   firebase_crashlytics: ^2.1.1
   scrollable_positioned_list: ^0.1.9
-  flutter_progress_button: ^1.0.0
   url_launcher: ^6.0.7
   transparent_image: ^1.0.0
   rate_my_app: ^1.1.1
   after_layout: ^1.0.7+2
   geocoder: ^0.2.1
-
+  progress_state_button: ^1.0.3  
 
 dependency_overrides:
   plugin_platform_interface: ^2.0.0

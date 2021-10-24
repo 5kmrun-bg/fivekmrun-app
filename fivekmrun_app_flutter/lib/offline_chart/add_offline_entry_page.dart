@@ -14,8 +14,9 @@ import 'package:fivekmrun_flutter/state/strava_activity_model.dart';
 import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_state_button/iconed_button.dart';
+import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
 import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
 import '../common/int_extensions.dart';
@@ -37,6 +38,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   StravaSummaryRun? selectedActivity;
   bool isConnectedToStrava = false;
   bool isLoading = true;
+  ButtonState submitButtonState = ButtonState.idle;
 
   @override
   void didChangeDependencies() async {
@@ -75,6 +77,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   }
 
   void submitOfflineEntry() async {
+    setState(() {
+      submitButtonState = ButtonState.loading;
+    });
     if (this.selectedActivity == null) {
       return;
     }
@@ -136,6 +141,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     }
 
     if (result["errors"] != null && result["errors"].length > 0) {
+      setState(() {
+        submitButtonState = ButtonState.fail;
+      });
       if (result["errors"].contains("403")) {
         FirebaseCrashlytics.instance.recordError(
             Exception("Unexpected invalid 5kmRun token"), StackTrace.current);
@@ -209,9 +217,17 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     }
 
     if (result["answer"]) {
+      setState(() {
+        submitButtonState = ButtonState.success;
+      });
+      submitButtonState = ButtonState.success;
       FirebaseAnalytics().logEvent(name: "submit_selfie_entry");
       Navigator.of(context).pushNamed("/");
     } else {
+      setState(() {
+        submitButtonState = ButtonState.fail;
+      });
+      submitButtonState = ButtonState.fail;
       FirebaseCrashlytics.instance.recordError(
           Exception("Error from 5kmrun: " + result.toString()),
           StackTrace.current);
@@ -279,6 +295,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   }
 
   Widget _buildList(BuildContext context) {
+    var selectedColor = Theme.of(context).accentColor;
+
     return Column(
       children: <Widget>[
         Expanded(
@@ -291,12 +309,27 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.all(8),
-            child: ProgressButton(
-              defaultWidget: const Text("Участвай с избраното бягане"),
-              progressWidget: const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
-              type: ProgressButtonType.Raised,
-              animate: true,
+            child: ProgressButton.icon(
+              iconedButtons: {
+                ButtonState.idle: IconedButton(
+                    text: "Участвай с избраното бягане",
+                    icon: Icon(Icons.send, color: Colors.white),
+                    color: selectedColor),
+                ButtonState.loading:
+                    IconedButton(text: "Изпращане", color: selectedColor),
+                ButtonState.fail: IconedButton(
+                    text: "Грешка при качване",
+                    icon: Icon(Icons.cancel, color: Colors.white),
+                    color: selectedColor),
+                ButtonState.success: IconedButton(
+                    text: "",
+                    icon: Icon(
+                      Icons.check_circle,
+                      color: Colors.white,
+                    ),
+                    color: Colors.green.shade400)
+              },
+              state: submitButtonState,
               onPressed: this.selectedActivity != null
                   ? () async {
                       submitOfflineEntry();

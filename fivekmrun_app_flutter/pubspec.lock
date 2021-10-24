@@ -211,13 +211,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.4"
-  flutter_progress_button:
-    dependency: "direct main"
-    description:
-      name: flutter_progress_button
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   flutter_rating_bar:
     dependency: transitive
     description:
@@ -375,6 +368,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.3"
+  progress_state_button:
+    dependency: "direct main"
+    description:
+      name: progress_state_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   provider:
     dependency: "direct main"
     description:
@@ -461,8 +461,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "55fbbc06ababc035b929291180b07f8af54c022f"
-      resolved-ref: "55fbbc06ababc035b929291180b07f8af54c022f"
+      ref: "94ba88c934e021182b4b6abc14287a6cb08dcdea"
+      resolved-ref: "94ba88c934e021182b4b6abc14287a6cb08dcdea"
       url: "https://github.com/etabakov/strava_flutter.git"
     source: git
     version: "2.0.0"
