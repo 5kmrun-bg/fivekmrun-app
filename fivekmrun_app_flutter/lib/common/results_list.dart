@@ -157,17 +157,13 @@ class _ResultsListState extends State<ResultsList> {
                     color: iconColor,
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          top: 3, bottom: 3, right: 15, left: 15),
+                          top: 3, bottom: 3, right: 10, left: 10),
                       child: Row(children: [
-                        Icon(CustomIcons.patreon, size: 9),
-                        Text(" патрон",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold))
+                        Icon(CustomIcons.hand_holding_heart, size: 12),
                       ]),
                     ),
                   ),
-                  top: 15,
+                  top: 10,
                   right: 5),
             Card(
               color: res.isDisqualified
