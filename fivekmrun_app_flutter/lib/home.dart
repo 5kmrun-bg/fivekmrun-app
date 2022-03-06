@@ -1,6 +1,7 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:fivekmrun_flutter/app_rating_manager.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
+import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/offline_chart/add_offline_entry_page.dart';
 import 'package:fivekmrun_flutter/offline_chart/offline_chart_details_page.dart';
 import 'package:fivekmrun_flutter/offline_chart/offline_chart_page.dart';
@@ -18,7 +19,7 @@ import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum AppTab { profile, runs, futureEvents, pastEvents, offlineChart }
+enum AppTab { profile, runs, futureEvents, pastEvents, offlineChart, donate }
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -33,7 +34,8 @@ class TabNavigationHelper {
     AppTab.runs: GlobalKey<NavigatorState>(),
     AppTab.futureEvents: GlobalKey<NavigatorState>(),
     AppTab.pastEvents: GlobalKey<NavigatorState>(),
-    AppTab.offlineChart: GlobalKey<NavigatorState>()
+    AppTab.offlineChart: GlobalKey<NavigatorState>(),
+    AppTab.donate: GlobalKey<NavigatorState>(),
   };
 
   _HomeState _home;
@@ -134,6 +136,12 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
           '/': (context) => FutureEventsPage(),
         },
       ),
+      TabNavigator(
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.donate]!,
+        routes: {
+          '/': (context) => DonatePage(),
+        },
+      ),
     ];
   }
 
@@ -182,6 +190,10 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),
               label: 'Събития',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CustomIcons.hand_holding_heart),
+              label: 'Подкрепи',
             ),
           ],
           currentIndex: _selectedIndex,

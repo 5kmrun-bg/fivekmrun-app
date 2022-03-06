@@ -76,14 +76,6 @@ class _SettingsPageState extends State<SettingsPage> {
             StravaConnect(),
             Divider(color: dividerColor),
             Row(children: <Widget>[
-              Text("Дарения"),
-              IconButton(
-                icon: const Icon(Icons.favorite),
-                onPressed: goToDonation,
-              ),
-            ]),
-            Divider(color: dividerColor),
-            Row(children: <Widget>[
               Text("Изход"),
               IconButton(
                 icon: const Icon(Icons.exit_to_app),

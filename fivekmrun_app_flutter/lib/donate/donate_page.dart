@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -7,40 +8,149 @@ class DonatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ButtonStyle secondaryStyle = ElevatedButton.styleFrom(
+        primary: Colors.transparent,
+        side: BorderSide(
+          width: 1.0,
+          color: Colors.white,
+        ));
+
     return Scaffold(
-        appBar: AppBar(
-            leading: BackButton(color: Colors.white), title: Text("Дарение")),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
+      appBar: AppBar(title: Text("Подкрепи ни")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0, left: 16.0, top: 16),
+              child: Column(children: [
+                Center(
                     child: Text(
-                  "Това приложение и цялата дейност на 5kmRun се издържа изцяло от дарения и доброволен труд. Можете да подкрепите нашите усилия като дарите избрана от вас сума бързо, лесно и надеждно.",
+                  "Това приложение и цялата дейност на 5kmRun се издържа изцяло от дарения и доброволен труд. Можете да подкрепите нашите усилия, чрез някой от изброените по-долу начини.",
                   textAlign: TextAlign.center,
                 )),
-              ),
-              ElevatedButton(
-                child: Text("Дари с PayPal"),
-                onPressed: () async {
-                  FirebaseAnalytics().logEvent(name: "button_donation_clicked");
-                  await launch(
-                      "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U9KNHBAU8VMFS&source=url",
-                      forceSafariVC: false);
-                },
-              ),
-              ElevatedButton(
-                child: Text("Дари с Patreon"),
-                onPressed: () async {
-                  FirebaseAnalytics().logEvent(name: "button_donation_clicked");
-                  await launch("https://www.patreon.com/5kmrun",
-                      forceSafariVC: false);
-                },
-              ),
-            ],
-          ),
-        ));
+                Padding(
+                  padding: const EdgeInsets.only(top: 32.0),
+                  child: Row(children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: 120),
+                      child: ElevatedButton(
+                        child: Row(
+                          children: [
+                            Icon(CustomIcons.patreon, size: 16),
+                            Text(" Patreon"),
+                          ],
+                        ),
+                        onPressed: () async {
+                          FirebaseAnalytics()
+                              .logEvent(name: "button_donation_clicked");
+                          await launch("https://www.patreon.com/5kmrun",
+                              forceSafariVC: false);
+                        },
+                      ),
+                    ),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Можете да направите регулярно дарения на малка сума всеки месец.",
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
+                Row(children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: 120),
+                    child: ElevatedButton(
+                      style: secondaryStyle,
+                      child: Row(
+                        children: [
+                          Icon(CustomIcons.paypal, size: 16),
+                          Text(" PayPal"),
+                        ],
+                      ),
+                      onPressed: () async {
+                        FirebaseAnalytics()
+                            .logEvent(name: "button_donation_clicked");
+                        await launch(
+                            "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U9KNHBAU8VMFS&source=url",
+                            forceSafariVC: false);
+                      },
+                    ),
+                  ),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                          "Можете да направите еднократно или регулярно дарение на сума по ваш избор."),
+                    ),
+                  )
+                ]),
+                Row(
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: 120),
+                      child: ElevatedButton(
+                        style: secondaryStyle,
+                        child: Row(
+                          children: [
+                            Icon(Icons.shopping_bag),
+                            Text(" Фен магазин"),
+                          ],
+                        ),
+                        onPressed: () async {
+                          FirebaseAnalytics().logEvent(
+                              name: "button_donation_fanshop_clicked");
+                          await launch(
+                              "https://www.bryzoshop.bg/bg-catalog-details-9.html",
+                              forceSafariVC: false);
+                        },
+                      ),
+                    ),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            "Всяка покупка на артикул на нашия фен магазин подпомага дейностите на 5kmrun и ни помага да стигнем безплатно до хиляди хора в България."),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: 120),
+                      child: ElevatedButton(
+                        style: secondaryStyle,
+                        child: Row(
+                          children: [
+                            Icon(Icons.directions_run),
+                            Text(" XL бягане"),
+                          ],
+                        ),
+                        onPressed: () async {
+                          FirebaseAnalytics()
+                              .logEvent(name: "button_donation_xlrun_clicked");
+                          await launch("https://5kmrun.bg/xlrun/events",
+                              forceSafariVC: false);
+                        },
+                      ),
+                    ),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            "Всеки месец в района на София организираме предизвикателства в различни дължини, терени и натоварвания. Таксата за участие изцяло подпомага дейностите на 5kmrun."),
+                      ),
+                    )
+                  ],
+                ),
+              ]),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
