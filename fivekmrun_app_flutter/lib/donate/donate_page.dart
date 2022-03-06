@@ -37,14 +37,13 @@ class DonatePage extends StatelessWidget {
                       child: ElevatedButton(
                         child: Row(
                           children: [
-                            Icon(CustomIcons.patreon, size: 16),
-                            Text(" Patreon"),
+                            Text("Стани Патрон"),
                           ],
                         ),
                         onPressed: () async {
                           FirebaseAnalytics()
-                              .logEvent(name: "button_donation_clicked");
-                          await launch("https://www.patreon.com/5kmrun",
+                              .logEvent(name: "button_donation_5kmrun_clicked");
+                          await launch("https://5kmrun.bg/dariteli",
                               forceSafariVC: false);
                         },
                       ),
@@ -53,7 +52,7 @@ class DonatePage extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Можете да направите регулярно дарения на малка сума всеки месец.",
+                          "Можете да направите годишно дарение на стойност 24лв., което ще ви отреди званието 'Патрон' за следващите 12 месеца. Сумата можете да дарите на място при същинските бягания или по банков път.",
                         ),
                       ),
                     ),
@@ -72,7 +71,7 @@ class DonatePage extends StatelessWidget {
                       ),
                       onPressed: () async {
                         FirebaseAnalytics()
-                            .logEvent(name: "button_donation_clicked");
+                            .logEvent(name: "button_donation_paypal_clicked");
                         await launch(
                             "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U9KNHBAU8VMFS&source=url",
                             forceSafariVC: false);
