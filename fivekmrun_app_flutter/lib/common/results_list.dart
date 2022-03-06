@@ -137,34 +137,31 @@ class _ResultsListState extends State<ResultsList> {
         cardColor = Colors.white;
     }
 
-    Color shirtColor = iconColor;
-    if (res.legionerType == 1) shirtColor = Colors.blue;
-    if (res.legionerType == 2) shirtColor = Colors.black;
-    if (res.legionerType == 3) shirtColor = Colors.green;
+    Color shirtColor = legionerColor(iconColor, res);
 
     return GestureDetector(
         onTap: () {
-          if (res.mapPolyline != null && res.mapPolyline != "") {
+          if (res.mapPolyline != "") {
             Navigator.of(context).pushNamed("/details", arguments: res);
           }
         },
         child: Stack(
           alignment: Alignment.topRight,
           children: [
-            if (!res.isAnonymous && res.isPatreon)
-              Positioned(
-                  child: Container(
-                    color: iconColor,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 3, bottom: 3, right: 10, left: 10),
-                      child: Row(children: [
-                        Icon(CustomIcons.hand_holding_heart, size: 12),
-                      ]),
-                    ),
-                  ),
-                  top: 10,
-                  right: 5),
+            // if (!res.isAnonymous && res.isPatreon)
+            //   Positioned(
+            //       child: Container(
+            //         color: iconColor,
+            //         child: Padding(
+            //           padding: const EdgeInsets.only(
+            //               top: 3, bottom: 3, right: 10, left: 10),
+            //           child: Row(children: [
+            //             Icon(CustomIcons.hand_holding_heart, size: 12),
+            //           ]),
+            //         ),
+            //       ),
+            //       top: 10,
+            //       right: 5),
             Card(
               color: res.isDisqualified
                   ? Colors.grey.shade800
@@ -202,12 +199,10 @@ class _ResultsListState extends State<ResultsList> {
                               if (res.isSelfie)
                                 ListTileRow(
                                   icon: Icons.terrain,
-                                  text: res.elevationGainedTotal != null
-                                      ? res.elevationGainedTotal
-                                              .round()
-                                              .toString() +
-                                          "m"
-                                      : "-",
+                                  text: res.elevationGainedTotal
+                                          .round()
+                                          .toString() +
+                                      "m",
                                   iconColor: iconColor,
                                 )
                             ],
@@ -228,7 +223,9 @@ class _ResultsListState extends State<ResultsList> {
                                 iconSize: (res.legionerType > 0) ? 13 : 18,
                                 iconColor: shirtColor),
                             ListTileRow(
-                              icon: Icons.person,
+                              icon: (res.isPatreon)
+                                  ? CustomIcons.hand_holding_heart
+                                  : Icons.person,
                               text: (!res.isAnonymous) ? res.name : "Анонимен",
                               iconColor: iconColor,
                             ),
@@ -248,6 +245,30 @@ class _ResultsListState extends State<ResultsList> {
             ),
           ],
         ));
+  }
+
+  Color legionerColor(Color defaultColor, Result res) {
+    Color legionerColor = defaultColor;
+    int totalRuns = int.tryParse(res.totalRuns) ?? 0;
+    print("TOTAL RUNS: " + totalRuns.toString());
+
+    if (totalRuns >= 50 && totalRuns < 100)
+      legionerColor = Color.fromRGBO(36, 132, 208, 1);
+    if (totalRuns >= 100 && totalRuns < 200)
+      legionerColor = Color.fromRGBO(202, 202, 202, 1);
+    if (totalRuns >= 200 && totalRuns < 300)
+      legionerColor = Color.fromRGBO(65, 170, 71, 1);
+    if (totalRuns >= 300 && totalRuns < 400)
+      legionerColor = Color.fromRGBO(129, 74, 177, 1);
+    if (totalRuns >= 400 && totalRuns < 500)
+      legionerColor = Color.fromRGBO(255, 22, 17, 1);
+    if (totalRuns >= 500 && totalRuns < 600)
+      legionerColor = Color.fromRGBO(222, 198, 62, 1);
+    if (totalRuns >= 600) legionerColor = Color.fromRGBO(50, 173, 159, 1);
+
+    print("COLOR: " + legionerColor.toString());
+
+    return legionerColor;
   }
 }
 

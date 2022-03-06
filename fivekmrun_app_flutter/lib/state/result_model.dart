@@ -53,13 +53,14 @@ class Result {
       this.startLocation = " - ",
       this.stravaLink});
 
+  // For Selfie
   Result.fromJson(dynamic json)
       : name = json["u_name"] + " " + json["u_surname"],
         userId = json["s_uid"],
         time = (json["s_time"] as int).parseSecondsToTimestamp(),
         totalTime = _getNonZeroTime(json, "s_total_elapsed_time"),
         position = json["s_finish_pos"],
-        totalRuns = "",
+        totalRuns = json["u_runs_s"].toString(),
         sex = json["u_sex"],
         status = json["s_type"],
         isDisqualified = json["s_type"] > 3,
@@ -74,10 +75,21 @@ class Result {
         startDate = DateTime.parse(json["s_start_date"]),
         isSelfie = true,
         isAnonymous = false,
-        isPatreon = json["p_id"] != null,
+        isPatreon = checkPatreonship(json),
         legionerType = Result.getSelfieLegionerType(json),
         officialPosition = 0,
         stravaLink = json["s_strava_link"];
+
+  static bool checkPatreonship(json) {
+    print("patreonship" +
+        json["s_uid"].toString() +
+        ": " +
+        json["p_id"].toString() +
+        " " +
+        json["u_daritel"].toString());
+    return json["p_id"] != null ||
+        (json["u_daritel"] ?? 0) >= DateTime.now().millisecondsSinceEpoch;
+  }
 
   static List<Result> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];
@@ -85,6 +97,7 @@ class Result {
     return result;
   }
 
+  // For official
   Result.fromEventJson(dynamic json)
       : name = json["u_name"] + " " + json["u_surname"],
         userId = json["r_uid"],
