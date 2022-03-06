@@ -361,7 +361,9 @@ class StravaActivityList extends StatelessWidget {
     if (activities == null) {
       return Center(child: CircularProgressIndicator());
     } else if (activities.length == 0) {
-      return Text("Няма подходящи бягания");
+      return Padding(
+          padding: EdgeInsets.only(top: 24),
+          child: Text("Няма подходящи бягания"));
     } else {
       return ListView.builder(
         scrollDirection: Axis.vertical,
