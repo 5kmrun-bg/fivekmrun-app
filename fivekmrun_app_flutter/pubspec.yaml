@@ -49,7 +49,7 @@ dependencies:
 
   firebase_core: ^1.4.0
   firebase_analytics: ^8.2.0
-  # firebase_messaging: ^6.0.13
+  firebase_messaging: ^11.2.8
   firebase_crashlytics: ^2.1.1
   scrollable_positioned_list: ^0.1.9
   url_launcher: ^6.0.7

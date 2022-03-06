@@ -8,6 +8,7 @@ import 'package:fivekmrun_flutter/home.dart';
 import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/login/login.dart';
 import 'package:fivekmrun_flutter/login/loginPreview.dart';
+import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/settings_page.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/events_resource.dart';
@@ -55,11 +56,14 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final String _initialRoute;
+  static final navKey = new GlobalKey<NavigatorState>();
 
   MyApp(this._initialRoute);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    PushNotificationsManager().init(context);
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => authRes),
@@ -72,6 +76,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => StravaResource()),
       ],
       child: MaterialApp(
+        navigatorKey: MyApp.navKey,
         debugShowCheckedModeBanner: false,
         title: '5kmRun.bg',
         theme: ThemeData(
