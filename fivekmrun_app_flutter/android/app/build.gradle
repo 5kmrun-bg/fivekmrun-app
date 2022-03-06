@@ -45,8 +45,9 @@ android {
 
     defaultConfig {
         applicationId "bg.fivekmpark.fivekmrun"
-        minSdkVersion 26
-        targetSdkVersion 29
+        minSdkVersion localProperties.getProperty('flutter.minSdkVersion').toInteger()
+        targetSdkVersion localProperties.getProperty('flutter.targetSdkVersion').toInteger()
+ 
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
