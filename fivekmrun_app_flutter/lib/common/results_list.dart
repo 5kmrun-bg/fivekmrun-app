@@ -250,7 +250,7 @@ class _ResultsListState extends State<ResultsList> {
   Color legionerColor(Color defaultColor, Result res) {
     Color legionerColor = defaultColor;
     int totalRuns = int.tryParse(res.totalRuns) ?? 0;
-    print("TOTAL RUNS: " + totalRuns.toString());
+    // print("TOTAL RUNS: " + totalRuns.toString());
 
     if (totalRuns >= 50 && totalRuns < 100)
       legionerColor = Color.fromRGBO(36, 132, 208, 1);
@@ -266,7 +266,7 @@ class _ResultsListState extends State<ResultsList> {
       legionerColor = Color.fromRGBO(222, 198, 62, 1);
     if (totalRuns >= 600) legionerColor = Color.fromRGBO(50, 173, 159, 1);
 
-    print("COLOR: " + legionerColor.toString());
+    // print("COLOR: " + legionerColor.toString());
 
     return legionerColor;
   }

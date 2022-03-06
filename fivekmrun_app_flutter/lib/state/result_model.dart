@@ -81,12 +81,12 @@ class Result {
         stravaLink = json["s_strava_link"];
 
   static bool checkPatreonship(json) {
-    print("patreonship" +
-        json["s_uid"].toString() +
-        ": " +
-        json["p_id"].toString() +
-        " " +
-        json["u_daritel"].toString());
+    // print("patreonship" +
+    //     json["s_uid"].toString() +
+    //     ": " +
+    //     json["p_id"].toString() +
+    //     " " +
+    //     json["u_daritel"].toString());
     return json["p_id"] != null ||
         (json["u_daritel"] ?? 0) >= DateTime.now().millisecondsSinceEpoch;
   }
