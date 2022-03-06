@@ -32,6 +32,8 @@ class CustomIcons {
       IconData(0xf1ed, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData patreon =
       IconData(0xf3d9, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData strava =
+      IconData(0xf428, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData hand_holding_heart =
       IconData(0xf4be, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tshirt =

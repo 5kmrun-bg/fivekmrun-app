@@ -1,11 +1,12 @@
+import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/offline_chart/details_tile.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OfflineChartDetailsPage extends StatelessWidget {
   OfflineChartDetailsPage({Key? key}) : super(key: key);
@@ -23,15 +24,24 @@ class OfflineChartDetailsPage extends StatelessWidget {
             googleMapsKey;
     return Scaffold(
       appBar: AppBar(
-        title: Text(result.name),
+        title: Text(result.name, style: TextStyle(fontSize: 16)),
         actions: [
+          IconButton(
+            onPressed: () => launch(
+                "https://5kmrun.bg/selfie/user/" + result.userId.toString(),
+                forceSafariVC: false),
+            icon: Icon(Icons.person),
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+            iconSize: 20,
+          ),
           if (result.stravaLink != null && result.stravaLink != "")
             IconButton(
               onPressed: () => launch(
                   "https://www.strava.com/activities/" + result.stravaLink!,
                   forceSafariVC: false),
-              icon: Icon(Icons.link),
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              icon: Icon(CustomIcons.strava),
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+              iconSize: 20,
             )
         ],
       ),
