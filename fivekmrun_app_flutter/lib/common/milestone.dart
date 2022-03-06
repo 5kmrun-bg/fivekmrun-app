@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/common/legioner_status_helper.dart';
 import 'package:fivekmrun_flutter/common/milestone_gauge.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,11 @@ class MilestoneTile extends StatelessWidget {
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
-        MilestoneGauge(value, milestone),
+        MilestoneGauge(
+            value,
+            milestone,
+            LegionerStatusHelper.getLegionerColor(
+                Theme.of(context).accentColor, value)),
         Positioned(
           bottom: 0,
           child: Text(

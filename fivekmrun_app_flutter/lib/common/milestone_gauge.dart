@@ -7,8 +7,9 @@ class MilestoneGauge extends StatelessWidget {
   final bool? animate;
   final int value;
   final int milestone;
+  final Color accentColor;
 
-  MilestoneGauge(this.value, this.milestone, {this.animate});
+  MilestoneGauge(this.value, this.milestone, this.accentColor, {this.animate});
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +42,13 @@ class MilestoneGauge extends StatelessWidget {
   }
 
   /// Create one series with sample hard coded data.
-  static List<charts.Series<GaugeSegment, String>> _createData(
+  List<charts.Series<GaugeSegment, String>> _createData(
       int value, int milestone, BuildContext context) {
     final data = [
       new GaugeSegment('value', value),
       new GaugeSegment('milestone', milestone - value),
     ];
 
-    final accentColor = Theme.of(context).accentColor;
     final darkerColor = Color.lerp(accentColor, Colors.black, 0.4);
     return [
       new charts.Series<GaugeSegment, String>(

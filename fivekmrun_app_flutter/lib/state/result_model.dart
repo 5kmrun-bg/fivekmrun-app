@@ -12,7 +12,7 @@ class Result {
   final bool isDisqualified;
   final bool isSelfie;
   final bool isPatreon;
-  final int legionerType;
+  final bool isLegioner;
   final bool isAnonymous;
   int officialPosition;
   String startLocation;
@@ -38,7 +38,7 @@ class Result {
       this.userId = -1,
       this.isSelfie = false,
       this.isPatreon = false,
-      this.legionerType = 0,
+      this.isLegioner = false,
       this.isAnonymous = false,
       this.totalDistance = 0,
       this.distance = 0,
@@ -76,7 +76,7 @@ class Result {
         isSelfie = true,
         isAnonymous = false,
         isPatreon = checkPatreonship(json),
-        legionerType = Result.getSelfieLegionerType(json),
+        isLegioner = Result.getSelfieLegionerType(json),
         officialPosition = 0,
         stravaLink = json["s_strava_link"];
 
@@ -98,14 +98,14 @@ class Result {
         userId = json["r_uid"],
         time = (json["r_time"] as int).parseSecondsToTimestamp(),
         position = json["r_finish_pos"],
-        totalRuns = "",
+        totalRuns = ((json["r_runs"] ?? 0) + (json["u_help"] ?? 0)).toString(),
         sex = json["u_sex"],
         status = 0, //json["s_type"],
         isDisqualified = false, //json["s_type"] > 3,
         pace = Run.timeInSecondsToPace(json["r_time"] as int),
         isSelfie = false,
         isPatreon = json["p_id"] != null,
-        legionerType = Result.getLegionerType(json),
+        isLegioner = Result.getLegionerType(json),
         isAnonymous = json["r_uid"] == 0,
         mapPolyline = "",
         elevationLow = 0,
@@ -119,23 +119,14 @@ class Result {
         totalTime = "",
         stravaLink = null;
 
-  static int getLegionerType(dynamic json) {
+  static bool getLegionerType(dynamic json) {
     var totalRuns = ((json["r_runs"] ?? 0) + (json["u_help"] ?? 0));
-    return totalRunsToEnum(totalRuns);
+    return totalRuns >= 50;
   }
 
-  static int getSelfieLegionerType(dynamic json) {
+  static bool getSelfieLegionerType(dynamic json) {
     var totalRuns = json["u_runs_s"];
-    return totalRunsToEnum(totalRuns);
-  }
-
-  static int totalRunsToEnum(int totalRuns) {
-    if (totalRuns < 50) return 0;
-    if (totalRuns >= 50 && totalRuns < 100) return 1;
-    if (totalRuns >= 100 && totalRuns < 250) return 2;
-    if (totalRuns >= 250) return 3;
-
-    return 0;
+    return totalRuns >= 50;
   }
 
   static List<Result> listFromEventJson(List<dynamic> runs) {

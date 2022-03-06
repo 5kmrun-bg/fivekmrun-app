@@ -1,6 +1,7 @@
 import 'package:fivekmrun_flutter/charts/best_times_by_route_chart.dart';
 import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
+import 'package:fivekmrun_flutter/common/legioner_status_helper.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
@@ -14,18 +15,6 @@ import 'common/milestone.dart';
 
 class ProfileDashboard extends StatelessWidget {
   const ProfileDashboard({Key? key}) : super(key: key);
-
-  int nextRunsMilestone(int count) {
-    if (count <= 50) {
-      return 50;
-    } else if (count <= 100) {
-      return 100;
-    } else if (count <= 250) {
-      return 250;
-    } else {
-      return 500;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +62,12 @@ class ProfileDashboard extends StatelessWidget {
                               .length
                               .toInt() ??
                           0,
-                      milestone: nextRunsMilestone(runsRes.value
+                      milestone: LegionerStatusHelper.getNextMilestone(runsRes
+                              .value
                               ?.where((r) => r.isSelfie)
                               .length
                               .toInt() ??
-                          50),
+                          0),
                       title: "Легионер\nselfie"),
                 ],
               ),
@@ -110,11 +100,12 @@ class ProfileDashboard extends StatelessWidget {
                               .length
                               .toInt() ??
                           0,
-                      milestone: nextRunsMilestone(runsRes.value
+                      milestone: LegionerStatusHelper.getNextMilestone(runsRes
+                              .value
                               ?.where((r) => !r.isSelfie)
                               .length
                               .toInt() ??
-                          50),
+                          0),
                       title: "Легионер\nсъщинско"),
                 ],
               ),

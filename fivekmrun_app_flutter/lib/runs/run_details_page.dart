@@ -26,10 +26,11 @@ class RunDetailsPage extends StatelessWidget {
               );
             case ConnectionState.done:
               if (snapshot.hasError)
-                return MilestoneGauge(run.position!, 400);
-              else
                 return MilestoneGauge(
-                    run.position!, snapshot.data?.length ?? 0);
+                    run.position!, 400, Theme.of(context).accentColor);
+              else
+                return MilestoneGauge(run.position!, snapshot.data?.length ?? 0,
+                    Theme.of(context).accentColor);
           }
         });
   }
