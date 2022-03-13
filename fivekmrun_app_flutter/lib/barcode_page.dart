@@ -1,6 +1,6 @@
+import 'package:barcode_widgets/barcode_flutter.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
-import 'package:barcode_flutter/barcode_flutter.dart';
 import 'package:provider/provider.dart';
 
 class BarcodePage extends StatelessWidget {
@@ -14,7 +14,7 @@ class BarcodePage extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(
             leading: BackButton(color: Colors.white),
-            title: Text("Barcode"),
+            title: Text("Баркод"),
             centerTitle: true,
           ),
           backgroundColor: Colors.white,

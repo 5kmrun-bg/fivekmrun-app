@@ -45,7 +45,7 @@ dependencies:
         url: https://github.com/etabakov/strava_flutter.git
         ref: 94ba88c934e021182b4b6abc14287a6cb08dcdea
         
-  barcode_flutter: ^1.1.2
+  barcode_widgets: ^2.0.0
 
   firebase_core: ^1.4.0
   firebase_analytics: ^8.2.0
