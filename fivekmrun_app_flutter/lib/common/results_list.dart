@@ -93,7 +93,7 @@ class _ResultsListState extends State<ResultsList> {
           child: (_filteredResults?.length ?? 0) > 0
               ? ScrollablePositionedList.builder(
                   itemScrollController: _scrollController,
-                  itemCount: _filteredResults?.length,
+                  itemCount: _filteredResults?.length ?? 0,
                   itemBuilder: resultTileBuilder,
                 )
               : Center(

@@ -51,7 +51,7 @@ dependencies:
   firebase_analytics: ^8.2.0
   firebase_messaging: ^11.2.8
   firebase_crashlytics: ^2.1.1
-  scrollable_positioned_list: ^0.1.9
+  scrollable_positioned_list: ^0.2.3
   url_launcher: ^6.0.7
   transparent_image: ^2.0.0
   rate_my_app: ^1.1.1
