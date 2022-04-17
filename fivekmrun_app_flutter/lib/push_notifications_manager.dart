@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fivekmrun_flutter/main.dart';
 import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 class PushNotificationsManager {
   PushNotificationsManager._();
@@ -20,6 +21,7 @@ class PushNotificationsManager {
   bool _initialized = false;
 
   Future<void> init(BuildContext context) async {
+    FlutterAppBadger.removeBadge();
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     if (!_initialized) {
       // For iOS request permission first.

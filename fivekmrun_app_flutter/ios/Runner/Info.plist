@@ -40,6 +40,8 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
+	<key>NSUserNotificationAlertStyle</key>
+	<string>banner</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
