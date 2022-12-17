@@ -108,7 +108,7 @@ class _RunsChartState extends State<RunsChart> {
     lowestValues =
         minBy<Run, int>(runs, (r) => r.timeInSeconds ?? 0)?.timeInSeconds;
     highestValues =
-        maxBy<Run, int>(runs, (r) => r?.timeInSeconds ?? 0)?.timeInSeconds;
+        maxBy<Run, int>(runs, (r) => r.timeInSeconds ?? 0)?.timeInSeconds;
     runs.sort((r1, r2) => r1.date?.compareTo(r2.date!) ?? 0);
 
     return [
