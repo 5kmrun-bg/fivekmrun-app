@@ -6,7 +6,6 @@ import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
-import 'package:fivekmrun_flutter/state/google_maps_service.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_chart_submission_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
@@ -21,6 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
 import '../common/int_extensions.dart';
 import '../common/double_extensions.dart';
+import 'package:geocoding/geocoding.dart';
 
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
@@ -76,6 +76,26 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     });
   }
 
+  Future<String> getActivityLocation(DetailedActivity? activity) async {
+    if (activity == null ||
+        activity.startLatlng == null ||
+        activity.startLatlng!.length != 2) {
+      return "";
+    }
+    var placemark = await placemarkFromCoordinates(
+        activity.startLatlng!.first, activity.startLatlng!.last,
+        localeIdentifier: "en");
+
+    var locality = placemark.first.locality;
+    var country = placemark.first.country;
+
+    if (locality == null || country == null) {
+      return "";
+    } else {
+      return "$locality, $country";
+    }
+  }
+
   void submitOfflineEntry() async {
     setState(() {
       submitButtonState = ButtonState.loading;
@@ -92,7 +112,6 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         Provider.of<AuthenticationResource>(context, listen: false);
     OfflineChartResource offlineChartResource =
         Provider.of<OfflineChartResource>(context, listen: false);
-    GoogleMapsService googleMapsService = GoogleMapsService();
 
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
@@ -106,9 +125,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       elevationHigh: stravaActivity?.elevHigh ?? 0,
       totalDistance: stravaActivity?.distance ?? 0,
       totalElapsedTime: stravaActivity?.elapsedTime ?? 0,
-      startLocation: await googleMapsService.getTownFromGeoLocation(
-          stravaActivity?.startLatlng?.first ?? 0,
-          stravaActivity?.startLatlng?.last ?? 0),
+      startLocation: await getActivityLocation(stravaActivity),
       stravaLink: stravaActivity?.id.toString() ?? "",
     );
 
