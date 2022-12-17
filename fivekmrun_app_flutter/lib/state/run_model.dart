@@ -89,10 +89,6 @@ class Run {
   }
 
   static String timeInSecondsToString(int timeInSeconds, {bool sign = false}) {
-    if (timeInSeconds == null) {
-      return "";
-    }
-
     String signString = "";
     if (sign) {
       signString = timeInSeconds < 0 ? "-" : "+";
@@ -106,7 +102,7 @@ class Run {
   }
 
   static String timeInSecondsToSpeed(int timeInSeconds) {
-    if (timeInSeconds == 0 || timeInSeconds == null) {
+    if (timeInSeconds == 0) {
       return "";
     }
 
@@ -114,7 +110,7 @@ class Run {
   }
 
   static String timeInSecondsToPace(int timeInSeconds) {
-    if (timeInSeconds == 0 || timeInSeconds == null) {
+    if (timeInSeconds == 0) {
       return "";
     }
 
@@ -126,8 +122,6 @@ class Run {
   }
 
   static String distanceToString(int distance) {
-    if (distance == null) return "";
-
     return (distance / 1000).toStringAsFixed(2);
   }
 }
