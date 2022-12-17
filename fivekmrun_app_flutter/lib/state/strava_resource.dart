@@ -139,6 +139,7 @@ class StravaResource extends ChangeNotifier {
       final now = DateTime.now();
       DateTime before = now;
       DateTime after = now.subtract(Duration(
+          //days: 90,
           days: now.weekday - 1,
           hours: now.hour,
           minutes: now.minute,
@@ -146,13 +147,6 @@ class StravaResource extends ChangeNotifier {
       try {
         final activities = await strava.activities
             .listLoggedInAthleteActivities(before, after, 1, 100);
-
-        if (activities == null) {
-          FirebaseCrashlytics.instance
-              .log("Strava get activities results: null");
-
-          return [];
-        }
 
         FirebaseCrashlytics.instance
             .log("Strava get activities results: ${activities.length}");

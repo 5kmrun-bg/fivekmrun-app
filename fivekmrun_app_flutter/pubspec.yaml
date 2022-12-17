@@ -56,10 +56,9 @@ dependencies:
   transparent_image: ^2.0.0
   rate_my_app: ^1.1.1
   after_layout: ^1.0.7+2
-  geocoder: ^0.2.1
   progress_state_button: ^1.0.3  
   flutter_app_badger: ^1.4.0
-
+  geocoding: ^2.0.5
 
 dependency_overrides:
   plugin_platform_interface: ^2.0.0
