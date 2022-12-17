@@ -94,6 +94,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         Provider.of<OfflineChartResource>(context, listen: false);
     GoogleMapsService googleMapsService = GoogleMapsService();
 
+    var segments = stravaActivity?.segmentEfforts?.map((s) => s.id).toList();
+
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
       elapsedTime: runSummary?.fastestSplit.elapsedTime.floor() ?? 0,
@@ -110,9 +112,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           stravaActivity?.startLatlng?.first ?? 0,
           stravaActivity?.startLatlng?.last ?? 0),
       stravaLink: stravaActivity?.id.toString() ?? "",
+      segments: segments,
     );
 
-    print("submission model: " + model.toString());
     FirebaseCrashlytics.instance
         .log("5kmRun Submission model: " + jsonEncode(model.toJson()));
 
