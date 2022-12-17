@@ -9,7 +9,6 @@ import 'package:fivekmrun_flutter/past_events/event_results_page.dart';
 import 'package:fivekmrun_flutter/past_events/past_events_page.dart';
 import 'package:fivekmrun_flutter/future_events/future_events_page.dart';
 import 'package:fivekmrun_flutter/profile.dart';
-import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/runs/run_details_page.dart';
 import 'package:fivekmrun_flutter/runs/user_runs_page.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
@@ -89,8 +88,6 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
 
   @override
   void initState() {
-    //PushNotificationsManager().init(context);
-
     super.initState();
 
     final userId =
