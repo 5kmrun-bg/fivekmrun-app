@@ -12,6 +12,7 @@ class OfflineChartSubmissionModel {
   final double totalDistance;
   final int totalElapsedTime;
   final String stravaLink;
+  final List<int?>? segments;
 
   OfflineChartSubmissionModel(
       {required this.userId,
@@ -26,7 +27,8 @@ class OfflineChartSubmissionModel {
       required this.startLocation,
       required this.totalDistance,
       required this.totalElapsedTime,
-      required this.stravaLink});
+      required this.stravaLink,
+      required this.segments});
 
   Map<String, dynamic> toJson() {
     return {
@@ -40,7 +42,8 @@ class OfflineChartSubmissionModel {
       'elevationHigh': this.elevationHigh,
       'elevationGainedTotal': this.elevationGainedTotal,
       'startLocation': this.startLocation,
-      'stravaLink': this.stravaLink
+      'stravaLink': this.stravaLink,
+      'segments': this.segments.toString()
     };
   }
 }
