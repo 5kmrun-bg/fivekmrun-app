@@ -160,7 +160,11 @@ class StravaResource extends ChangeNotifier {
         final runActivites = await Future.wait(activities
             .where((a) =>
                 a.type!.toLowerCase() == "run" &&
-                a.distance! >= stravaFilterMinDistance)
+                a.distance! >= stravaFilterMinDistance &&
+                a.startLatlng != null &&
+                a.endLatlng != null &&
+                a.manual == false &&
+                a.map != null)
             .map((a) => strava.activities.getActivity(a.id!)));
 
         FirebaseCrashlytics.instance.log(
