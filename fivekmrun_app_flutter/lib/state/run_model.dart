@@ -89,6 +89,10 @@ class Run {
   }
 
   static String timeInSecondsToString(int timeInSeconds, {bool sign = false}) {
+    if (timeInSeconds == null) {
+      return "";
+    }
+
     String signString = "";
     if (sign) {
       signString = timeInSeconds < 0 ? "-" : "+";
