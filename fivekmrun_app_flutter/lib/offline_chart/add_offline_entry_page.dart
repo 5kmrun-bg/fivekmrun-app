@@ -22,6 +22,8 @@ import '../common/int_extensions.dart';
 import '../common/double_extensions.dart';
 import 'package:geocoding/geocoding.dart';
 
+import 'no_results_component.dart';
+
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
 typedef void ActivityPressedCB(StravaSummaryRun activity);
@@ -380,9 +382,7 @@ class StravaActivityList extends StatelessWidget {
     if (activities == null) {
       return Center(child: CircularProgressIndicator());
     } else if (activities.length == 0) {
-      return Padding(
-          padding: EdgeInsets.only(top: 24),
-          child: Text("Няма подходящи бягания"));
+      return NoResultsComponent();
     } else {
       return ListView.builder(
         scrollDirection: Axis.vertical,
