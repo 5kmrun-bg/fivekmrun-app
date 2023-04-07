@@ -59,6 +59,7 @@ dependencies:
   progress_state_button: ^1.0.3  
   flutter_app_badger: ^1.4.0
   geocoding: ^2.0.5
+  file: ^6.1.4
 
 dependency_overrides:
   plugin_platform_interface: ^2.0.0
