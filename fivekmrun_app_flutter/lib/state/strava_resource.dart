@@ -155,10 +155,9 @@ class StravaResource extends ChangeNotifier {
             .where((a) =>
                 a.type!.toLowerCase() == "run" &&
                 a.distance! >= stravaFilterMinDistance &&
-                a.startLatlng != null &&
-                a.endLatlng != null &&
-                a.manual == false &&
-                a.map != null)
+                (a.startLatlng?.isNotEmpty ?? false) &&
+                (a.endLatlng?.isNotEmpty ?? false) &&
+                a.manual == false)
             .map((a) => strava.activities.getActivity(a.id!)));
 
         FirebaseCrashlytics.instance.log(
