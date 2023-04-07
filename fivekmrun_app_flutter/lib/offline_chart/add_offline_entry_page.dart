@@ -18,6 +18,7 @@ import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
 import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
+
 import '../common/int_extensions.dart';
 import '../common/double_extensions.dart';
 import 'package:geocoding/geocoding.dart';
@@ -115,8 +116,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     OfflineChartResource offlineChartResource =
         Provider.of<OfflineChartResource>(context, listen: false);
 
-    var segments = stravaActivity?.segmentEfforts?.map((s) => s.id).toList();
-
+    var segments =
+        stravaActivity?.segmentEfforts?.map((s) => s.segment?.id).toList();
+    print("segments: " + json.encode(segments));
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
       elapsedTime: runSummary?.fastestSplit.elapsedTime.floor() ?? 0,
