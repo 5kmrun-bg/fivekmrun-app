@@ -133,7 +133,7 @@ class ProfileDashboard extends StatelessWidget {
               )
             ],
           ),
-        // if (hasOfficialRuns) this.buildRunsByRouteCard(runs),
+        if (hasOfficialRuns) this.buildRunsByRouteCard(runs),
         if (hasOfficialRuns) this.buildBestTimesCard(runs),
       ],
     );

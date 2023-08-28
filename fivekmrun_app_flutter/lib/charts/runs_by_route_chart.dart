@@ -6,7 +6,7 @@ import 'package:community_charts_flutter/community_charts_flutter.dart'
 import "package:collection/collection.dart";
 
 class RunsByRouteChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
+  final List<charts.Series<dynamic, String>> seriesList;
   final bool? animate;
 
   RunsByRouteChart(this.seriesList, {this.animate});
@@ -27,7 +27,7 @@ class RunsByRouteChart extends StatelessWidget {
           IntrinsicHeight(
               child: Text("Бягания по същински трасета", style: subTitleStyle)),
           Expanded(
-              child: new charts.PieChart(seriesList,
+              child: new charts.PieChart<String>(seriesList,
                   animate: animate,
                   defaultRenderer: new charts.ArcRendererConfig(
                       arcWidth: 60,
