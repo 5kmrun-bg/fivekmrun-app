@@ -35,10 +35,6 @@ class _SettingsPageState extends State<SettingsPage> {
           .pushNamedAndRemoveUntil("/", (_) => false);
     };
 
-    final goToDonation = () {
-      Navigator.of(context, rootNavigator: true).pushNamed("donation");
-    };
-
     final dividerColor = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(

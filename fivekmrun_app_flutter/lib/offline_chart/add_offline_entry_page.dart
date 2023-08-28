@@ -380,9 +380,7 @@ class StravaActivityList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (activities == null) {
-      return Center(child: CircularProgressIndicator());
-    } else if (activities.length == 0) {
+    if (activities.length == 0) {
       return NoResultsComponent();
     } else {
       return ListView.builder(

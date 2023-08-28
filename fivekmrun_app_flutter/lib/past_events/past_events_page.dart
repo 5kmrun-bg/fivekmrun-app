@@ -58,12 +58,12 @@ class PastEventsList extends StatelessWidget {
                       ListTileRow(
                           text: dateFromat.format(events[i].date),
                           icon: Icons.calendar_today),
-                      if (events[i].title != null && events[i].title != "")
+                      if (events[i].title != "")
                         ListTileRow(text: events[i].title, icon: Icons.info),
                     ],
                   ),
                 ),
-                if (events[i].imageUrl != null && events[i].imageUrl != "")
+                if (events[i].imageUrl != "")
                   Container(
                     width: 120,
                     child: ClipRRect(

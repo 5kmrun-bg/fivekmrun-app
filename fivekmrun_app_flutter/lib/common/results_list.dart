@@ -205,7 +205,7 @@ class _ResultsListState extends State<ResultsList> {
                                 icon: (res.isLegioner)
                                     ? CustomIcons.tshirt
                                     : Icons.perm_identity,
-                                text: (res.isAnonymous || res.userId == null)
+                                text: (res.isAnonymous)
                                     ? " - "
                                     : res.userId.toString(),
                                 iconSize: (res.isLegioner) ? 13 : 18,
