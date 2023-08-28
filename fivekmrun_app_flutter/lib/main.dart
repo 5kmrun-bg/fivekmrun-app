@@ -96,6 +96,8 @@ class MyApp extends StatelessWidget {
             )),
             appBarTheme: AppBarTheme(
               backgroundColor: Color.fromRGBO(66, 66, 66, 1), 
+              iconTheme: IconThemeData(color: Colors.white),
+              
               titleTextStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white)), 
             colorScheme: ColorScheme.fromSwatch(primarySwatch: getColor(appAccentColor)).copyWith(secondary: appAccentColor, brightness: Brightness.dark).copyWith(background: Colors.black)),
             
