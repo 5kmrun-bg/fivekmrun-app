@@ -2,7 +2,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fivekmrun_flutter/login/login_with_id.dart';
 import 'package:fivekmrun_flutter/login/login_with_username.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
@@ -14,12 +13,12 @@ class _LoginState extends State<Login> {
   bool loginWithId = false;
 
   _toggleLogin() {
-    this.setState(() => {this.loginWithId = !this.loginWithId});
+    this.setState(() => this.loginWithId = !this.loginWithId);
   }
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(
       body: Center(
@@ -72,7 +71,7 @@ class _LoginState extends State<Login> {
 
   _loadRegistrationScreen() async {
     print("load registration");
-    FirebaseAnalytics().logEvent(name: "open_registration_link");
+    FirebaseAnalytics.instance.logEvent(name: "open_registration_link");
     await launch("https://5kmrun.bg/register");
   }
 }

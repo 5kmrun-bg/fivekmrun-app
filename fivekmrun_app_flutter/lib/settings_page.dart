@@ -39,7 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
       Navigator.of(context, rootNavigator: true).pushNamed("donation");
     };
 
-    final dividerColor = Theme.of(context).accentColor;
+    final dividerColor = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(
         appBar: AppBar(

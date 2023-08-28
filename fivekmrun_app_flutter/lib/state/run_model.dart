@@ -60,7 +60,7 @@ class Run {
 
   static List<Run> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];
-    var result = runs.map((d) => Run.fromJson(d)).toList();
+    var result = List<Run>.from(runs.map((d) => Run.fromJson(d)));
     return result;
   }
 
@@ -80,19 +80,15 @@ class Run {
         isSelfie = true,
         distance = json["s_total_distance"] ?? 5000,
         totalTime = timeInSecondsToString(json[
-            "s_total_elapsed_time"]); //timeInSecondsToPace(json["r_time"]);
+            "s_total_elapsed_time"] ?? 0); //timeInSecondsToPace(json["r_time"]);
 
   static List<Run> selfieListFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runs"];
-    var result = runs.map((d) => Run.fromSelfieJson(d)).toList();
+    var result = List<Run>.from(runs.map((d) => Run.fromSelfieJson(d)));
     return result;
   }
 
   static String timeInSecondsToString(int timeInSeconds, {bool sign = false}) {
-    if (timeInSeconds == null) {
-      return "";
-    }
-
     String signString = "";
     if (sign) {
       signString = timeInSeconds < 0 ? "-" : "+";

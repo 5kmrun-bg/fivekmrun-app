@@ -153,7 +153,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedColor = Theme.of(context).accentColor;
+    var selectedColor = Theme.of(context).colorScheme.secondary;
     return Provider.value(
       value: _tabHelper,
       child: Scaffold(

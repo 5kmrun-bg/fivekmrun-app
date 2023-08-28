@@ -27,10 +27,10 @@ class RunDetailsPage extends StatelessWidget {
             case ConnectionState.done:
               if (snapshot.hasError)
                 return MilestoneGauge(
-                    run.position!, 400, Theme.of(context).accentColor);
+                    run.position!, 400, Theme.of(context).colorScheme.secondary);
               else
                 return MilestoneGauge(run.position!, snapshot.data?.length ?? 0,
-                    Theme.of(context).accentColor);
+                    Theme.of(context).colorScheme.secondary);
           }
         });
   }
@@ -188,7 +188,7 @@ class IconText extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: theme.accentColor,
+          color: theme.colorScheme.secondary,
         ),
         Padding(
           padding: const EdgeInsets.all(8),

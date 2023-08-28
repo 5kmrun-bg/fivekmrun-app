@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/barcode_page.dart';
@@ -49,9 +47,7 @@ void main() async {
     initialRoute = "home";
   }
 
-  runZoned(() {
-    runApp(MyApp(initialRoute));
-  }, onError: FirebaseCrashlytics.instance.recordError);
+  runApp(MyApp(initialRoute));
 }
 
 class MyApp extends StatelessWidget {
@@ -80,11 +76,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: '5kmRun.bg',
         theme: ThemeData(
-            primarySwatch: getColor(appAccentColor),
-            brightness: Brightness.dark,
-            backgroundColor: Colors.black,
-            accentColor: appAccentColor,
-            accentIconTheme: IconThemeData(color: Colors.black),
             dividerColor: Colors.black12,
             textTheme: TextTheme(
               subtitle1: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
@@ -102,7 +93,8 @@ class MyApp extends StatelessWidget {
                   (Set<MaterialState> states) {
                 return Colors.white;
               }),
-            ))),
+            )), 
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: getColor(appAccentColor)).copyWith(secondary: appAccentColor, brightness: Brightness.dark).copyWith(background: Colors.black)),
         initialRoute: _initialRoute,
         routes: {
           '/': (_) => Login(),

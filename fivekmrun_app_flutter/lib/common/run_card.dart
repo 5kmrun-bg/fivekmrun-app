@@ -13,7 +13,7 @@ class RunCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final iconColor = theme.accentColor;
+    final iconColor = theme.colorScheme.secondary;
     final textTheme = theme.textTheme;
     final labelStyle = theme.textTheme.bodyText2;
     final valueStyle = theme.textTheme.bodyText1;
@@ -44,7 +44,7 @@ class RunCard extends StatelessWidget {
                             run.position.toString(),
                             style: textTheme.headline6?.copyWith(
                                 color: theme
-                                    .accentColor), //HACK: hide the label if Selfie but bump the space
+                                    .colorScheme.secondary), //HACK: hide the label if Selfie but bump the space
                           ),
                           Text("място", style: labelStyle),
                         ],

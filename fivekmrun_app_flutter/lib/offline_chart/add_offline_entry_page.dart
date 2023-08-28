@@ -244,7 +244,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         submitButtonState = ButtonState.success;
       });
       submitButtonState = ButtonState.success;
-      FirebaseAnalytics().logEvent(name: "submit_selfie_entry");
+      FirebaseAnalytics.instance.logEvent(name: "submit_selfie_entry");
       Navigator.of(context).pushNamed("/");
     } else {
       setState(() {
@@ -258,10 +258,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   }
 
   void toggleActivity(StravaSummaryRun activity) {
-    this.setState(() => {
-          this.selectedActivity =
+    this.setState(() => this.selectedActivity =
               this.selectedActivity == activity ? null : activity
-        });
+        );
   }
 
   void triggerStravaAuth() {
@@ -318,7 +317,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   }
 
   Widget _buildList(BuildContext context) {
-    var selectedColor = Theme.of(context).accentColor;
+    var selectedColor = Theme.of(context).colorScheme.secondary;
 
     return Column(
       children: <Widget>[

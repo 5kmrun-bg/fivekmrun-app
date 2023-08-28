@@ -114,7 +114,7 @@ class _ResultsListState extends State<ResultsList> {
     }
 
     final iconColor =
-        res.isDisqualified ? theme.disabledColor : theme.accentColor;
+        res.isDisqualified ? theme.disabledColor : theme.colorScheme.secondary;
 
     Color cardColor;
 
@@ -150,20 +150,6 @@ class _ResultsListState extends State<ResultsList> {
         child: Stack(
           alignment: Alignment.topRight,
           children: [
-            // if (!res.isAnonymous && res.isPatreon)
-            //   Positioned(
-            //       child: Container(
-            //         color: iconColor,
-            //         child: Padding(
-            //           padding: const EdgeInsets.only(
-            //               top: 3, bottom: 3, right: 10, left: 10),
-            //           child: Row(children: [
-            //             Icon(CustomIcons.hand_holding_heart, size: 12),
-            //           ]),
-            //         ),
-            //       ),
-            //       top: 10,
-            //       right: 5),
             Card(
               color: res.isDisqualified
                   ? Colors.grey.shade800

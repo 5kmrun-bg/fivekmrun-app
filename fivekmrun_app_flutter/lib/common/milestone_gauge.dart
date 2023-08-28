@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:community_charts_flutter/community_charts_flutter.dart'
+    as charts;
 
 class MilestoneGauge extends StatelessWidget {
   final bool? animate;
@@ -19,7 +20,7 @@ class MilestoneGauge extends StatelessWidget {
       aspectRatio: 1,
       child: Stack(
         children: <Widget>[
-          charts.PieChart(seriesList,
+          charts.PieChart<String>(seriesList,
               animate: animate,
               defaultRenderer: new charts.ArcRendererConfig(
                   strokeWidthPx: 0,
