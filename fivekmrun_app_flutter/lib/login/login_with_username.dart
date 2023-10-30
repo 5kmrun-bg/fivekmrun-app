@@ -4,7 +4,6 @@ import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class LoginWithUsername extends StatefulWidget {
@@ -35,7 +34,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
           .log("authenticate with username result: $isAuthenticated");
 
       if (isAuthenticated) {
-        FirebaseAnalytics().logEvent(name: "login");
+        FirebaseAnalytics.instance.logEvent(name: "login");
         setState(() => this.loginError = false);
         Navigator.pushNamedAndRemoveUntil(context, "home", (_) => false);
       } else {

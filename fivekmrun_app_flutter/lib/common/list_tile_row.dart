@@ -16,18 +16,17 @@ class ListTileRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = this.iconColor != null ? this.iconColor : theme.accentColor;
+    final color = this.iconColor != null ? this.iconColor : theme.colorScheme.secondary;
     return Row(
       children: <Widget>[
-        if (icon != null)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-            child: Icon(
-              icon,
-              color: color,
-              size: this.iconSize.toDouble(),
-            ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+          child: Icon(
+            icon,
+            color: color,
+            size: this.iconSize.toDouble(),
           ),
+        ),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8),

@@ -37,7 +37,7 @@ class UserRunsList extends StatelessWidget {
   Widget build(BuildContext context) {
     runs.sort((r1, r2) => r2.date?.compareTo(r1.date!) ?? 0);
 
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     final darkerColor = Colors.white;
 
     return ListView.builder(

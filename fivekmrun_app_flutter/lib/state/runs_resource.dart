@@ -91,7 +91,7 @@ class RunsResource extends ChangeNotifier {
   }
 
   void _processRuns(List<Run> runs) {
-    if (runs == null || runs.length == 0) {
+    if (runs.length == 0) {
       this._bestOfficialRun = null;
       this._lastOfficialRun = null;
       this._bestSelfieRun = null;

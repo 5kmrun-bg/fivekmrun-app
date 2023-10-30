@@ -77,9 +77,9 @@ class UserResource extends ChangeNotifier {
   }
 
   void _sendToAnalytics(User user, List<RunSimple> runs) {
-    FirebaseAnalytics().setUserProperty(
+    FirebaseAnalytics.instance.setUserProperty(
         name: "age", value: user.age.toString().padLeft(2, '0'));
-    FirebaseAnalytics().setUserProperty(
+    FirebaseAnalytics.instance.setUserProperty(
         name: "donation_total",
         value: user.donationsCount.toString().padLeft(3, '0'));
     if (runs.length > 0) {
@@ -87,10 +87,10 @@ class UserResource extends ChangeNotifier {
 
       RunSimple lastRun = runs.last;
 
-      FirebaseAnalytics().setUserProperty(
+      FirebaseAnalytics.instance.setUserProperty(
           name: "selfie_last_run",
           value: DateFormat("yyyy-MM-dd").format(lastRun.date));
-      FirebaseAnalytics().setUserProperty(
+      FirebaseAnalytics.instance.setUserProperty(
           name: "selfie_total_runs", value: runs.length.toString());
     }
   }

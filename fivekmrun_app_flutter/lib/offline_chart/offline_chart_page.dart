@@ -59,7 +59,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
     final authResource =
         Provider.of<AuthenticationResource>(context, listen: false);
     final textStlyle = Theme.of(context).textTheme.subtitle2;
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     showDialog(
       context: context,
       useRootNavigator: true,
@@ -133,7 +133,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   @override
   Widget build(BuildContext context) {
     final textStlyle = Theme.of(context).textTheme.headline6;
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(
       appBar: AppBar(

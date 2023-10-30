@@ -13,18 +13,17 @@ class Avatar extends StatelessWidget {
       child: SizedBox(
         width: SIZE,
         height: SIZE,
-        child: url != null
-            ? Container(
+        child: Container(
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).accentColor),
+                    color: Theme.of(context).colorScheme.secondary),
                 padding: EdgeInsets.all(2),
                 child: (url.isNotEmpty)
                     ? CircleAvatar(
                         radius: SIZE / 2, backgroundImage: NetworkImage(url))
                     : Container(),
               )
-            : CircularProgressIndicator(),
+            ,
       ),
     );
   }

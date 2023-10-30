@@ -16,7 +16,7 @@ class AppRatingManager {
 
     rateMyApp.init().then((_) {
       if (rateMyApp.shouldOpenDialog) {
-        FirebaseAnalytics().logEvent(name: "review_dialog_open");
+        FirebaseAnalytics.instance.logEvent(name: "review_dialog_open");
         rateMyApp.showRateDialog(context,
             title: 'Харесвате ли приложението?',
             message:
@@ -29,13 +29,13 @@ class AppRatingManager {
           // The button click listener (useful if you want to cancel the click event).
           switch (button) {
             case RateMyAppDialogButton.rate:
-              FirebaseAnalytics().logEvent(name: "review_dialog_rate");
+              FirebaseAnalytics.instance.logEvent(name: "review_dialog_rate");
               break;
             case RateMyAppDialogButton.later:
-              FirebaseAnalytics().logEvent(name: "review_dialog_later");
+              FirebaseAnalytics.instance.logEvent(name: "review_dialog_later");
               break;
             case RateMyAppDialogButton.no:
-              FirebaseAnalytics().logEvent(name: "review_dialog_cancel");
+              FirebaseAnalytics.instance.logEvent(name: "review_dialog_cancel");
               break;
           }
           return true;

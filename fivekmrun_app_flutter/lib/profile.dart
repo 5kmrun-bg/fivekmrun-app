@@ -119,7 +119,7 @@ class ProfileDashboard extends StatelessWidget {
         if (hasSelfieRuns)
           this.buildRunsCards(
               runsRes.bestSelfieRun!, runsRes.lastSelfieRun!, "selfie"),
-        if (hasAnyRuns) this.buildRunsChartCard(runs!),
+        if (hasAnyRuns) this.buildRunsChartCard(runs),
         if (!runsRes.loading && !hasAnyRuns)
           Row(
             children: <Widget>[
@@ -133,8 +133,8 @@ class ProfileDashboard extends StatelessWidget {
               )
             ],
           ),
-        if (hasOfficialRuns) this.buildRunsByRouteCard(runs!),
-        if (hasOfficialRuns) this.buildBestTimesCard(runs!),
+        if (hasOfficialRuns) this.buildRunsByRouteCard(runs),
+        if (hasOfficialRuns) this.buildBestTimesCard(runs),
       ],
     );
   }

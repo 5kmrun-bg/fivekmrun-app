@@ -22,7 +22,7 @@ class MilestoneTile extends StatelessWidget {
             value,
             milestone,
             LegionerStatusHelper.getLegionerColor(
-                Theme.of(context).accentColor, value)),
+                Theme.of(context).colorScheme.secondary, value)),
         Positioned(
           bottom: 0,
           child: Text(

@@ -14,7 +14,7 @@ class OfflineChartDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Result result = ModalRoute.of(context)?.settings.arguments as Result;
-    final iconColor = Theme.of(context).accentColor;
+    final iconColor = Theme.of(context).colorScheme.secondary;
     final imgSize = MediaQuery.of(context).size.width.round() - 32;
 
     final mapUrl =
@@ -101,12 +101,10 @@ class OfflineChartDetailsPage extends StatelessWidget {
                             ),
                             DetailsTile(
                               title: "общо изкачване",
-                              value: result.elevationGainedTotal != null
-                                  ? result.elevationGainedTotal
+                              value: result.elevationGainedTotal
                                           .round()
                                           .toString() +
-                                      " m"
-                                  : "-",
+                                      " m",
                               accentColor: iconColor,
                             ),
                           ],
@@ -230,7 +228,7 @@ class IconText extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: theme.accentColor,
+          color: theme.colorScheme.secondary,
         ),
         Padding(
           padding: const EdgeInsets.all(8),
