@@ -37,6 +37,12 @@ Use flutter cli to run the app on a simulator or a real device:
 - Android: `flutter build appbundle --release --no-shrink`
 - iOS: `flutter build ios --release`
 
+## Contribution Guidelines
+- PRs are most welcome!
+- We aim to have 100% parity between iOS and Android applications. Exceptions are acceptable for OS specific functionalities that doesn't have alternatives or have changed in the behavior.
+- Before starting a major improvement - open an issue to get some feedback on how your idea fits in the needs of the organization.
+- Changes should be tested on both platforms when opening a PR.
+
 ## Community
 
 To get support and ask questions: find us in [Discord](https://discord.gg/n79eCAzWev)
