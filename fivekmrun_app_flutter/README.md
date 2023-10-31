@@ -39,5 +39,5 @@ Use flutter cli to run the app on a simulator or a real device:
 
 ## Community
 
-To get support and ask questions: find us in [Discord](https://discord.gg/a8TNb8K4)
+To get support and ask questions: find us in [Discord](https://discord.gg/n79eCAzWev)
 
