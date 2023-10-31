@@ -8,7 +8,7 @@ The official mobile application for https://5kmrun.bg/ written in Flutter.
 
 - Run `flutter pub get` to install all dependencies.
 
-- Create `fivekmrun_app_flutter\lib\private\secretes.dart` file with the following content:
+- Create `fivekmrun_app_flutter\lib\private\secrets.dart` file with the following content:
 
 ```dart
 const stravaSecret = "<strava_secret>";
