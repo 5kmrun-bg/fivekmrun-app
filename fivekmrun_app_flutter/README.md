@@ -1,20 +1,28 @@
-# fivekmrun_app_flutter
+# 5kmrun.bg 
 
-A new Flutter project.
+The official mobile application for https://5kmrun.bg/ written in Flutter.
 
-## Getting Started
+## Prerequisites
 
-This project is a starting point for a Flutter application.
+- Install [Flutter](https://docs.flutter.dev/get-started/install). Make sure `flutter doctor` does not report any issues (this will require installing Xcode, Android Studio and a bunch of other dependencies).
 
-A few resources to get you started if this is your first Flutter project:
+- Run `flutter pub get` to install all dependencies.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Create `fivekmrun_app_flutter\lib\private\secrets.dart` file with the following content:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```dart
+const stravaSecret = "<strava_secret>";
+const stravaClientId = "<strava_app_id>";
+const googleMapsKey = "<google_maps_key>";
+```
+
+## Running the app
+
+Use flutter cli to run the app on a simulator or a real device:
+
+`flutter run`
 
 ## Production Build Commands
-- Android: `flutter build appbundle --release --no-shrink --no-sound-null-safety`
-- iOS: `flutter build ios --release --no-sound-null-safety`
+- Android: `flutter build appbundle --release --no-shrink`
+- iOS: `flutter build ios --release`
+
