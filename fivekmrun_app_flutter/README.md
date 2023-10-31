@@ -22,3 +22,7 @@ Use flutter cli to run the app on a simulator or a real device:
 
 `flutter run`
 
+## Production Build Commands
+- Android: `flutter build appbundle --release --no-shrink`
+- iOS: `flutter build ios --release`
+
