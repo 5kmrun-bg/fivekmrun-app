@@ -37,3 +37,7 @@ Use flutter cli to run the app on a simulator or a real device:
 - Android: `flutter build appbundle --release --no-shrink`
 - iOS: `flutter build ios --release`
 
+## Community
+
+To get support and ask questions: find us in [Discord](https://discord.gg/a8TNb8K4)
+
