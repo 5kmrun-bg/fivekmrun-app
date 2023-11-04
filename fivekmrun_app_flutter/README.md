@@ -2,6 +2,10 @@
 
 The official mobile application for https://5kmrun.bg/ written in Flutter.
 
+## Contributors
+
+![Contributors](../CONTRIBUTORS.svg)
+
 ## About the app
 The application works with two types of run that happen as part of the 5kmrun.bg organization: 
 
@@ -9,6 +13,7 @@ The application works with two types of run that happen as part of the 5kmrun.bg
  - selfie runs which can be added at any time through the integration with Strava. You have to record 5km long run with GPS track (outdoors only) in your profile and then pick that run from the 5kmrun.bg application
  - the app provides weekly charts, graphs, future, and past events and other useful information around 5kmrun.bg
  - for test purposes, if you don't have account with enough data - you can open every other user account in read-only mode using the "Login with id" functionality. Some ids you can test with: 13731, 2, 18880, 67 (empty profile) 
+
 
 ## Prerequisites
 
