@@ -11,10 +11,14 @@ jobs:
         architecture: x64
     - run: cd fivekmrun_app_flutter && flutter pub get
     - shell: bash
+      env:
+        STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+        STRAVA_SECRET: ${{ secrets.STRAVA_SECRET }}
+        GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
       run: |
         cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
-        const stravaSecret = "strava-secret";
-        const stravaClientId = "strava-client-id";
-        const googleMapsKey = "google-maps-key"; 
+        const stravaSecret = "$STRAVA_SECRET";
+        const stravaClientId = "$STRAVA_CLIENT_ID";
+        const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
         EOF
     - run: cd fivekmrun_app_flutter && flutter build ios --release --no-codesign
