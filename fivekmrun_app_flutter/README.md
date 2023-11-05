@@ -44,7 +44,7 @@ Use flutter cli to run the app on a simulator or a real device:
 
 ## Contribution Guidelines
 - PRs are most welcome!
-- We aim to have 100% parity between iOS and Android applications. Exceptions are acceptable for OS specific functionalities that doesn't have alternatives or have changed in the behavior.
+- We aim to have 100% parity between iOS and Android applications. Exceptions are acceptable for OS specific functionalities that doesn't have alternatives or have changed in the behavior. If you don't have access to macos and ios devices - reach out to a team member to assist you with testing and making sure the app works as expected.
 - Before starting a major improvement - open an issue to get some feedback on how your idea fits in the needs of the organization.
 - Changes should be tested on both platforms when opening a PR.
 
