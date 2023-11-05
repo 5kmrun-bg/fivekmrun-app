@@ -4,8 +4,6 @@ The official mobile application for https://5kmrun.bg/ written in Flutter.
 
 ## Contributors
 
-![Contributors](../CONTRIBUTORS.svg)
-
 ## About the app
 The application works with two types of run that happen as part of the 5kmrun.bg organization: 
 
