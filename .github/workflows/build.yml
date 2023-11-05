@@ -10,7 +10,8 @@ jobs:
         channel: 'stable'
         architecture: x64
     - run: cd fivekmrun_app_flutter && flutter pub get
-    - run: cat >./fivekmrun_app_flutter/lib/private/secrets.dart <<'EOL'
+    - run: touch ./fivekmrun_app_flutter/lib/private/secrets.dart
+    - run: cat > ./fivekmrun_app_flutter/lib/private/secrets.dart <<'EOL'
             const stravaSecret = "strava-secret";
             const stravaClientId = "strava-client-id";
             const googleMapsKey = "google-maps-key"; 
