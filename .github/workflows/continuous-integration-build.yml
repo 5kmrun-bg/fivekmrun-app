@@ -20,7 +20,7 @@ jobs:
         STRAVA_SECRET: ${{ secrets.STRAVA_SECRET }}
         GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
       run: |
-        cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
+        mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
         const stravaSecret = "$STRAVA_SECRET";
         const stravaClientId = "$STRAVA_CLIENT_ID";
         const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
