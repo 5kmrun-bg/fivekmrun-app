@@ -1,5 +1,8 @@
 name: continuous-integration-build
-on: push
+on: 
+  pull_request:
+    branches: [master]
+  push:
 jobs:
   build-apps:
     runs-on: macos-latest
@@ -23,4 +26,3 @@ jobs:
         const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
         EOF
     - run: cd fivekmrun_app_flutter && flutter build ios --release --no-codesign
-    - run: cd fivekmrun_app_flutter && flutter build appbundle --release --no-shrink
