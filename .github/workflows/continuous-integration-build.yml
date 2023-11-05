@@ -3,6 +3,7 @@ on: push
 jobs:
   build-ios:
     runs-on: macos-latest
+    environment: development
     steps:
     - uses: actions/checkout@v3
     - uses: subosito/flutter-action@v2
