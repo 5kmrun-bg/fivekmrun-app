@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/common/results_list.dart';
+import 'package:fivekmrun_flutter/common/select_button.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_results_resource.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
@@ -229,44 +230,5 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
     } else {
       return ResultsList(results: this.results!);
     }
-  }
-}
-
-class SelectButton extends StatelessWidget {
-  final Function onPressed;
-  final bool selected;
-  final String text;
-
-  const SelectButton(
-      {Key? key,
-      required this.onPressed,
-      required this.selected,
-      required this.text})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: this.selected
-            ? ElevatedButton(
-                child: Text(
-                  this.text,
-                  style: Theme.of(context).textTheme.subtitle1,
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: () => this.onPressed(),
-              )
-            : OutlinedButton(
-                child: Text(
-                  this.text,
-                  style: Theme.of(context).textTheme.subtitle1,
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: () => this.onPressed(),
-              ),
-      ),
-    );
   }
 }

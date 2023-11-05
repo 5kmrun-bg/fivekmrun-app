@@ -5,9 +5,8 @@ import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/offline_chart/add_offline_entry_page.dart';
 import 'package:fivekmrun_flutter/offline_chart/offline_chart_details_page.dart';
 import 'package:fivekmrun_flutter/offline_chart/offline_chart_page.dart';
-import 'package:fivekmrun_flutter/past_events/event_results_page.dart';
-import 'package:fivekmrun_flutter/past_events/past_events_page.dart';
-import 'package:fivekmrun_flutter/future_events/future_events_page.dart';
+import 'package:fivekmrun_flutter/events/event_results_page.dart';
+import 'package:fivekmrun_flutter/events/events_page.dart';
 import 'package:fivekmrun_flutter/profile.dart';
 import 'package:fivekmrun_flutter/runs/run_details_page.dart';
 import 'package:fivekmrun_flutter/runs/user_runs_page.dart';
@@ -123,14 +122,8 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
       TabNavigator(
         navigatorKey: this._tabHelper.navigatorKeys[AppTab.pastEvents]!,
         routes: {
-          '/': (context) => PastEventsPage(),
+          '/': (context) => EventsPage(),
           '/event-results': (context) => EventResultsPage(),
-        },
-      ),
-      TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.futureEvents]!,
-        routes: {
-          '/': (context) => FutureEventsPage(),
         },
       ),
       TabNavigator(
@@ -179,10 +172,6 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
             BottomNavigationBarItem(
               icon: Icon(CustomIcons.award),
               label: 'Selfie',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.timer),
-              label: 'Резултати',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),
