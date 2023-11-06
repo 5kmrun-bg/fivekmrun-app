@@ -17,7 +17,7 @@ import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum AppTab { profile, runs, futureEvents, pastEvents, offlineChart, donate }
+enum AppTab { profile, runs, events, offlineChart, donate }
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -30,8 +30,7 @@ class TabNavigationHelper {
   Map<AppTab, GlobalKey<NavigatorState>> navigatorKeys = {
     AppTab.profile: GlobalKey<NavigatorState>(),
     AppTab.runs: GlobalKey<NavigatorState>(),
-    AppTab.futureEvents: GlobalKey<NavigatorState>(),
-    AppTab.pastEvents: GlobalKey<NavigatorState>(),
+    AppTab.events: GlobalKey<NavigatorState>(),
     AppTab.offlineChart: GlobalKey<NavigatorState>(),
     AppTab.donate: GlobalKey<NavigatorState>(),
   };
@@ -120,7 +119,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
             '/details': (context) => OfflineChartDetailsPage(),
           }),
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.pastEvents]!,
+        navigatorKey: this._tabHelper.navigatorKeys[AppTab.events]!,
         routes: {
           '/': (context) => EventsPage(),
           '/event-results': (context) => EventResultsPage(),
