@@ -1,3 +1,0 @@
-[submodule "fivekmrun_app_flutter/lib/private"]
-	path = fivekmrun_app_flutter/lib/private
-	url = https://github.com/etabakov/fivekmrun-app-private.git
