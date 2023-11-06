@@ -2,7 +2,6 @@ name: continuous-integration-build
 on: 
   pull_request:
     branches: [master]
-  push:
 jobs:
   build-apps:
     runs-on: macos-latest
