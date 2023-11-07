@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:barcode_widgets/barcode_flutter.dart';
 import 'package:add_to_google_wallet/widgets/add_to_google_wallet_button.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
@@ -60,6 +62,16 @@ class BarcodePage extends StatelessWidget {
         }
       """;
 
+      Widget buildButton() {
+        if (Platform.isAndroid) {
+          return AddToGoogleWalletButton(
+            pass: pass,
+          );
+        }
+        
+        return SizedBox.shrink();
+      }
+
       return Scaffold(
           appBar: AppBar(
             leading: BackButton(color: Colors.white),
@@ -86,9 +98,7 @@ class BarcodePage extends StatelessWidget {
                     padding: const EdgeInsets.all(20.0),
                     child: Align(
                       alignment: FractionalOffset.bottomCenter,
-                      child: AddToGoogleWalletButton(
-                        pass: pass,
-                      )
+                      child: buildButton()
                     )
                   )
                 )
