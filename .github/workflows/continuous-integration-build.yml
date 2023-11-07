@@ -24,7 +24,7 @@ jobs:
         const stravaClientId = "$STRAVA_CLIENT_ID";
         const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
         EOF
-    - run: cd fivekmrun_app_flutter && flutter build appbundle --release --no-shrink
+    - run: cd fivekmrun_app_flutter && flutter build appbundle --no-shrink
   build-ios:
     runs-on: macos-latest
     environment: development
