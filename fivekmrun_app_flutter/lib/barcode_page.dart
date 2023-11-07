@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:barcode_widgets/barcode_flutter.dart';
 import 'package:add_to_google_wallet/widgets/add_to_google_wallet_button.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class BarcodePage extends StatelessWidget {
-  
   final Uuid uuid = Uuid();
   final issuerId = '3388000000022281825';
   final classId = 'LoyaltyCard';
@@ -66,9 +66,11 @@ class BarcodePage extends StatelessWidget {
         if (Platform.isAndroid) {
           return AddToGoogleWalletButton(
             pass: pass,
+            onSuccess: () => FirebaseAnalytics.instance
+                .logEvent(name: "button_add_to_wallet_clicked"),
           );
         }
-        
+
         return SizedBox.shrink();
       }
 
@@ -82,30 +84,26 @@ class BarcodePage extends StatelessWidget {
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
-              child: Column(children: <Widget>[
-                Text(userName!, style: TextStyle(color: Colors.black)),
-                BarCodeImage(
+                child: Column(children: <Widget>[
+              Text(userName!, style: TextStyle(color: Colors.black)),
+              BarCodeImage(
                   params: Code39BarCodeParams(
-                    userId.toString().padLeft(10, '0'),
-                    lineWidth: 2.0, // width for a single black/white bar (default: 2.0)
-                    barHeight: 90.0, // height for the entire widget (default: 100.0)
-                    withText: false,
-                  )
-                ),
-                Text(userId.toString(), style: TextStyle(color: Colors.black)),
-                Expanded(
+                userId.toString().padLeft(10, '0'),
+                lineWidth:
+                    2.0, // width for a single black/white bar (default: 2.0)
+                barHeight:
+                    90.0, // height for the entire widget (default: 100.0)
+                withText: false,
+              )),
+              Text(userId.toString(), style: TextStyle(color: Colors.black)),
+              Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Align(
-                      alignment: FractionalOffset.bottomCenter,
-                      child: buildButton()
-                    )
-                  )
-                )
-              ]
-            )
-          ),
-        ));
+                      padding: const EdgeInsets.all(20.0),
+                      child: Align(
+                          alignment: FractionalOffset.bottomCenter,
+                          child: buildButton())))
+            ])),
+          ));
     });
   }
 }
