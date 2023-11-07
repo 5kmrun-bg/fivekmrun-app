@@ -10,8 +10,8 @@ import 'package:uuid/uuid.dart';
 class BarcodePage extends StatelessWidget {
   
   final Uuid uuid = Uuid();
-  final issuerId = '';
-  final classId = '';
+  final issuerId = '3388000000022281825';
+  final classId = 'LoyaltyCard';
 
   @override
   Widget build(BuildContext context) {
