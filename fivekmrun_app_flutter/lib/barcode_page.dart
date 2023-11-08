@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 class BarcodePage extends StatelessWidget {
   final Uuid uuid = Uuid();
   final issuerId = '3388000000022281825';
-  final classId = 'LoyaltyCard';
+  final classId = 'MembershipCard';
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +32,11 @@ class BarcodePage extends StatelessWidget {
               {
                 "id": "$issuerId.$objectId",
                 "classId": "$issuerId.$classId",
+                "logo": {
+                  "sourceUri": {
+                    "uri": "https://firebasestorage.googleapis.com/v0/b/kmrunbg.appspot.com/o/1024.png?alt=media&token=bf61b9eb-8369-426b-8d80-2f5ad4036391"
+                  }
+                },
                 "cardTitle": {
                   "defaultValue": {
                     "language": "en-US",
@@ -52,7 +57,7 @@ class BarcodePage extends StatelessWidget {
                 },
                 "barcode": {
                   "type": "CODE_39",
-                  "value": "$userId",
+                  "value": "${formatBarcode(userId)}",
                   "alternateText": "$userId"
                 },
                 "hexBackgroundColor": "#e01f23"
@@ -88,7 +93,7 @@ class BarcodePage extends StatelessWidget {
               Text(userName!, style: TextStyle(color: Colors.black)),
               BarCodeImage(
                   params: Code39BarCodeParams(
-                userId.toString().padLeft(10, '0'),
+                formatBarcode(userId),
                 lineWidth:
                     2.0, // width for a single black/white bar (default: 2.0)
                 barHeight:
@@ -106,4 +111,6 @@ class BarcodePage extends StatelessWidget {
           ));
     });
   }
+
+  String formatBarcode(int? userId) => userId.toString().padLeft(10, '0');
 }
