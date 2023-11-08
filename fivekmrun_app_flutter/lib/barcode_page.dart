@@ -19,6 +19,8 @@ class BarcodePage extends StatelessWidget {
       final user = userResource.value;
       final userId = (user?.id != null) ? user?.id : 0;
       final userName = (user?.name != null) ? user?.name : "";
+      final isUserPatron = (userResource.value?.donationsCount ?? 0) > 0;
+      final userStatus = isUserPatron ? "Патрон" : "Бегач";
 
       final objectId = uuid.v4();
       final pass = """
@@ -46,7 +48,7 @@ class BarcodePage extends StatelessWidget {
                 "subheader": {
                   "defaultValue": {
                     "language": "en-US",
-                    "value": "Бегач"
+                    "value": "$userStatus"
                   }
                 },
                 "header": {
