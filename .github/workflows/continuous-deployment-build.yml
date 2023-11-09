@@ -34,7 +34,7 @@ jobs:
       - name: Sign App Bundle
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > /tmp/keystore.jks
-          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore /tmp/keystore.jks -storepass ${{ secrets.KEYSTORE_PASSWORD }} -keypass ${{ secrets.KEYSTORE_PASSWORD }} build/app/outputs/bundle/release/app-release.aab ${{ secrets.KEYSTORE_ALIAS }}
+          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore /tmp/keystore.jks -storepass ${{ secrets.KEYSTORE_PASSWORD }} -keypass ${{ secrets.KEYSTORE_PASSWORD }} fivekmrun_app_flutter/build/app/outputs/bundle/release/app-release.aab ${{ secrets.KEYSTORE_ALIAS }}
 
       - name: Upload to Google Play
         uses: r0adkll/upload-google-play@v1
