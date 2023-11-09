@@ -2,6 +2,8 @@ name: CD Workflow
 on:
   release:
     types: [published,created]
+  pull_request:
+    branches: [master]
 jobs:
   build:
     runs-on: ubuntu-latest
