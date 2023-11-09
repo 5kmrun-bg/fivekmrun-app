@@ -1,4 +1,4 @@
-name: CD Workflow
+name: CD Workflow 
 on:
   release:
     types: [published,created]
