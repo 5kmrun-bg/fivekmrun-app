@@ -8,27 +8,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: production
-
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
-        uses: subosito/flutter-action@v2
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with: 
           channel: 'stable'
           architecture: x64
 
       - run: cd fivekmrun_app_flutter && flutter pub get
       - shell: bash
-      env:
-        STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-        STRAVA_SECRET: ${{ secrets.STRAVA_SECRET }}
-        GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
-      run: |
-        mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
-        const stravaSecret = "$STRAVA_SECRET";
-        const stravaClientId = "$STRAVA_CLIENT_ID";
-        const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
-        EOF
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_SECRET: ${{ secrets.STRAVA_SECRET }}
+          GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
+        run: |
+          mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
+          const stravaSecret = "$STRAVA_SECRET";
+          const stravaClientId = "$STRAVA_CLIENT_ID";
+          const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
+          EOF
 
       - name: Build appbundle
         run: flutter build appbundle --no-shrink
