@@ -29,7 +29,7 @@ jobs:
           EOF
 
       - name: Build appbundle
-        run: flutter build appbundle --no-shrink
+        run: cd fivekmrun_app_flutter && flutter build appbundle --no-shrink
 
       - name: Sign App Bundle
         run: |
@@ -41,5 +41,5 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: bg.fivekmpark.fivekmrun
-          releaseFiles: build/app/outputs/flutter-apk/app-release.apk
+          releaseFiles: fivekmrun_app_flutter/build/app/outputs/flutter-apk/app-release.apk
           track: production
