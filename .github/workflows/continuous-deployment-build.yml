@@ -23,9 +23,9 @@ jobs:
           GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
         run: |
           mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
-          const stravaSecret = '${{ STRAVA_SECRET }}';
-          const stravaClientId = '${{ STRAVA_CLIENT_ID }}';
-          const googleMapsKey = '${{ GOOGLE_MAPS_KEY }}'; 
+          const stravaSecret = '$STRAVA_SECRET';
+          const stravaClientId = '$STRAVA_CLIENT_ID';
+          const googleMapsKey = '$GOOGLE_MAPS_KEY'; 
           EOF
 
       - name: Build appbundle
