@@ -1,9 +1,8 @@
-name: CD Workflow
+name: Continous Delivery Workflow
 on:
-  release:
-    types: [published,created]
+  workflow_dispatch
 jobs:
-  build:
+  android-build:
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -21,23 +20,26 @@ jobs:
           GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
         run: |
           mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
-          const stravaSecret = "$STRAVA_SECRET";
-          const stravaClientId = "$STRAVA_CLIENT_ID";
-          const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
+          const stravaSecret = '$STRAVA_SECRET';
+          const stravaClientId = '$STRAVA_CLIENT_ID';
+          const googleMapsKey = '$GOOGLE_MAPS_KEY'; 
           EOF
 
+      - name: Replace Firebase config
+        run: rm ./fivekmrun_app_flutter/android/app/google-services.json && echo "${{ secrets.FIREBASE_CONFIG }}" | base64 --decode > ./fivekmrun_app_flutter/android/app/google-services.json
+        
       - name: Build appbundle
-        run: flutter build appbundle --no-shrink
+        run: cd fivekmrun_app_flutter && flutter build appbundle --no-shrink
 
       - name: Sign App Bundle
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > /tmp/keystore.jks
-          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore /tmp/keystore.jks -storepass ${{ secrets.KEYSTORE_PASSWORD }} -keypass ${{ secrets.KEYSTORE_PASSWORD }} build/app/outputs/bundle/release/app-release.aab ${{ secrets.KEYSTORE_ALIAS }}
-
+          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore /tmp/keystore.jks -storepass '${{ secrets.KEYSTORE_PASSWORD }}' -keypass '${{ secrets.KEYSTORE_PASSWORD }}' ./fivekmrun_app_flutter/build/app/outputs/bundle/release/app-release.aab ${{ secrets.KEYSTORE_ALIAS }}
       - name: Upload to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: bg.fivekmpark.fivekmrun
-          releaseFiles: build/app/outputs/flutter-apk/app-release.apk
+          releaseFiles: ./fivekmrun_app_flutter/build/app/outputs/bundle/release/app-release.aab
           track: production
+          status: draft
