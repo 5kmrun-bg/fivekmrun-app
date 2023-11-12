@@ -28,6 +28,9 @@ jobs:
           const googleMapsKey = '$GOOGLE_MAPS_KEY'; 
           EOF
 
+      - name: Replace Firebase config
+        run: rm ./fivekmrun_app_flutter/android/app/google-services.json && echo "${{ secrets.FIREBASE_CONFIG }}" | base64 --decode > ./fivekmrun_app_flutter/android/app/google-services.json
+        
       - name: Build appbundle
         run: cd fivekmrun_app_flutter && flutter build appbundle --no-shrink
 
