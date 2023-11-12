@@ -1,11 +1,8 @@
-name: CD Workflow
+name: Continous Delivery Workflow
 on:
-  release:
-    types: [published,created]
-  pull_request:
-    branches: [master]
+  workflow_dispatch
 jobs:
-  build:
+  android-build:
     runs-on: ubuntu-latest
     environment: production
     steps:
