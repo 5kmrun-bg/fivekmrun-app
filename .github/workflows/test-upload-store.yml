@@ -7,18 +7,14 @@ jobs:
     environment: production
     steps:
       - shell: bash
-        run: touch text.txt
-      - shell: bash
-        env:
-          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-          STRAVA_SECRET: ${{ secrets.STRAVA_SECRET }}
-          GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
-        run: |
-          cat << EOF > ./test.txt
-          const stravaSecret = '$STRAVA_SECRET';
-          const stravaClientId = '$STRAVA_CLIENT_ID';
-          const googleMapsKey = '$GOOGLE_MAPS_KEY'; 
-          EOF
+        run: echo "test" > test.txt
+      - name: Replace string in file
+        uses: MathieuSoysal/replace-string-in-file@v1.0.0
+        with:
+          file: test.txt
+          old-string: '(.*)'
+          new-string: echo "${{ secrets.FIREBASE_CONFIG }}" | base64 --decode
+          
       - shell: bash
         run: 
           cat ./test.txt
