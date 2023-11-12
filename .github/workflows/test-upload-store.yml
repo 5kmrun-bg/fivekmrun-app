@@ -21,4 +21,4 @@ jobs:
           EOF
       - shell: bash
         run: 
-          echo ./test.txt
+          cat ./test.txt
