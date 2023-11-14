@@ -1,6 +1,7 @@
 import 'package:fivekmrun_flutter/charts/best_times_by_route_chart.dart';
 import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
+import 'package:fivekmrun_flutter/common/badges.dart';
 import 'package:fivekmrun_flutter/common/legioner_status_helper.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
@@ -40,6 +41,24 @@ class ProfileDashboard extends StatelessWidget {
       Navigator.of(context, rootNavigator: true).pushNamed("barcode");
     };
 
+    Widget profileBadge() {
+      if (hasMaxBadge(runs)) {
+        return Image(
+            height: 64,
+            alignment: Alignment.bottomRight,
+            image: AssetImage('assets/max-badge.png'));
+      }
+
+      if (hasSelfieBadge(runs)) {
+        return Image(
+            height: 64,
+            alignment: Alignment.bottomRight,
+            image: AssetImage('assets/selfie-badge.png'));
+      }
+
+      return SizedBox.shrink();
+    }
+
     return ListView(
       children: <Widget>[
         Row(
@@ -76,10 +95,19 @@ class ProfileDashboard extends StatelessWidget {
               flex: 5,
               child: Column(
                 children: <Widget>[
-                  Avatar(url: user?.avatarUrl ?? ""),
+                  Stack(
+                    children: <Widget>[
+                      Avatar(url: user?.avatarUrl ?? ""),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: profileBadge(),
+                      )
+                    ],
+                  ),
                   Text(
                     user?.name ?? "",
-                    style: textTheme.subtitle1,
+                    style: textTheme.titleMedium,
                     textAlign: TextAlign.center,
                   ),
                   Text(""),
