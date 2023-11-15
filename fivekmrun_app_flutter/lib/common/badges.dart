@@ -4,23 +4,42 @@ import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 
 bool _hasBadge(List<Run>? runs, bool Function(Run run, DateTime date)) {
+  var hasBadge = false;
   if (runs == null) {
-    return false;
+    return hasBadge;
   }
 
-  DateTime now = DateTime.now();
-  DateTime lastSaturday = now.lastSaturday();
+  var now = DateTime.now();
+  var runsByYear = groupBy(runs, (Run run) => run.date?.year);
 
-  DateTime saturday = lastSaturday;
-  while (saturday.year == now.year) {
-    saturday = saturday.subtract(Duration(days: 7));
-    Run? participated = runs.firstWhereOrNull((run) => Function(run, saturday));
-    if (participated == null) {
-      return false;
+  for (var i = 0; i < runsByYear.length; i++) {
+    DateTime lastSaturday;
+    var year = runsByYear.keys.elementAt(i);
+    if (year == now.year) {
+      lastSaturday = now.lastSaturday();
+    } else {
+      lastSaturday = DateTime(year as int, 12, 31).lastSaturday();
+    }
+
+    var hasBadgeThisYear = true;
+    var saturday = lastSaturday;
+    while (saturday.year == year) {
+      saturday = saturday.subtract(Duration(days: 7));
+      var participated =
+          runs.firstWhereOrNull((run) => Function(run, saturday));
+      if (participated == null) {
+        hasBadgeThisYear = false;
+        break;
+      }
+    }
+
+    if (hasBadgeThisYear) {
+      hasBadge = true;
+      break;
     }
   }
 
-  return true;
+  return hasBadge;
 }
 
 bool hasMaxBadge(List<Run>? runs) {
