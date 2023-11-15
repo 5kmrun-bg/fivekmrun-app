@@ -5,6 +5,6 @@ extension DateTimeExtensions on DateTime {
       date = date.subtract(Duration(days: 1));
     }
 
-    return this;
+    return date;
   }
 }
