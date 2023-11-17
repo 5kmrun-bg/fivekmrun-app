@@ -8,7 +8,7 @@ class NoResultsComponent extends StatelessWidget {
       child: Column(
         children: [
           Text("Няма подходящи бягания!",
-              style: Theme.of(context).textTheme.subtitle1),
+              style: Theme.of(context).textTheme.titleSmall),
           Padding(
             padding: const EdgeInsets.only(
                 left: 36.0, top: 36.0, right: 36.0, bottom: 18.0),

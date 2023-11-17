@@ -15,8 +15,8 @@ class RunCard extends StatelessWidget {
     final theme = Theme.of(context);
     final iconColor = theme.colorScheme.secondary;
     final textTheme = theme.textTheme;
-    final labelStyle = theme.textTheme.bodyText2;
-    final valueStyle = theme.textTheme.bodyText1;
+    final labelStyle = theme.textTheme.bodyMedium;
+    final valueStyle = theme.textTheme.bodyLarge;
 
     return GestureDetector(
       onTap: () {
@@ -30,7 +30,7 @@ class RunCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              Text(title, style: textTheme.subtitle1),
+              Text(title, style: textTheme.titleSmall),
               Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -42,9 +42,9 @@ class RunCard extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             run.position.toString(),
-                            style: textTheme.headline6?.copyWith(
-                                color: theme
-                                    .colorScheme.secondary), //HACK: hide the label if Selfie but bump the space
+                            style: textTheme.titleLarge?.copyWith(
+                                color: theme.colorScheme
+                                    .secondary), //HACK: hide the label if Selfie but bump the space
                           ),
                           Text("място", style: labelStyle),
                         ],

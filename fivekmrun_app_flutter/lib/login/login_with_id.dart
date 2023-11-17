@@ -32,7 +32,7 @@ class _LoginWithIdState extends State<LoginWithId> {
 
   @override
   Widget build(BuildContext context) {
-    final textStlyle = Theme.of(context).textTheme.subtitle2;
+    final textStlyle = Theme.of(context).textTheme.titleSmall;
     final accentColor = Theme.of(context).colorScheme.secondary;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

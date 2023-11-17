@@ -33,7 +33,7 @@ class MilestoneGauge extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(value.toString(), style: textStyle.headline6),
-                Text(milestone.toString(), style: textStyle.subtitle2),
+                Text(milestone.toString(), style: textStyle.titleSmall),
               ],
             ),
           ),
