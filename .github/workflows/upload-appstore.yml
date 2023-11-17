@@ -2,7 +2,7 @@ name: Deploy to App Store
 on:
   workflow_dispatch
 env:
-  FLUTTER_VERSION: '${{ vars.FLUTTER_VERSION }}''
+  FLUTTER_VERSION: '${{ vars.FLUTTER_VERSION }}'
 
 jobs:
   build:
