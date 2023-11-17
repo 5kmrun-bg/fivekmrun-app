@@ -2,8 +2,6 @@ name: continuous-integration-build
 on: 
   pull_request:
     branches: [master]
-env:
-  FLUTTER_VERSION: '3.13.x'
 jobs:
   build-android:
     runs-on: ubuntu-latest
