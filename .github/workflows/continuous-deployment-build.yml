@@ -2,7 +2,7 @@ name: Continous Delivery Workflow
 on:
   workflow_dispatch
 env:
-  FLUTTER_VERSION: '${{ env.FLUTTER_VERSION }}'
+  FLUTTER_VERSION: '${{ vars.FLUTTER_VERSION }}''
 
 jobs:
   android-build:
