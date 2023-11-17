@@ -82,7 +82,6 @@ class MyApp extends StatelessWidget {
             bodyLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
             bodyMedium: TextStyle(fontSize: 10),
           ),
-          errorColor: Colors.red,
           outlinedButtonTheme: OutlinedButtonThemeData(style: ButtonStyle(
               foregroundColor: MaterialStateProperty.resolveWith<Color?>(
                   (Set<MaterialState> states) {
@@ -99,12 +98,13 @@ class MyApp extends StatelessWidget {
               iconTheme: IconThemeData(color: Colors.white),
               titleTextStyle: Theme.of(context)
                   .textTheme
-                  .headline6
+                  .titleLarge
                   ?.copyWith(color: Colors.white)),
           colorScheme: ColorScheme.fromSwatch(
               primarySwatch: getColor(appAccentColor),
               backgroundColor: Colors.black,
               accentColor: appAccentColor,
+              errorColor: Colors.red,
               brightness: Brightness.dark),
         ),
         initialRoute: _initialRoute,

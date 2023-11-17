@@ -234,7 +234,7 @@ class IconText extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Text(
             text,
-            style: theme.textTheme.headline6,
+            style: theme.textTheme.titleLarge,
           ),
         ),
       ],
