@@ -2,6 +2,8 @@ name: continuous-integration-build
 on: 
   pull_request:
     branches: [master]
+env:
+  FLUTTER_VERSION: '3.13.x'
 jobs:
   build-android:
     runs-on: ubuntu-latest
@@ -11,6 +13,7 @@ jobs:
     - uses: subosito/flutter-action@v2
       with: 
         channel: 'stable'
+        flutter-version: ${{ env.FLUTTER_VERSION }}
         architecture: x64
     - run: cd fivekmrun_app_flutter && flutter pub get
     - shell: bash
@@ -33,6 +36,7 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
+        flutter-version: ${{ env.FLUTTER_VERSION }}
         architecture: x64
     - run: cd fivekmrun_app_flutter && flutter pub get
     - shell: bash
