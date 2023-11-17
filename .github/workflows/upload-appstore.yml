@@ -1,0 +1,40 @@
+name: Deploy to App Store
+on:
+  workflow_dispatch
+env:
+  FLUTTER_VERSION: '${{ vars.FLUTTER_VERSION }}''
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with: 
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          architecture: x64
+
+    - run: cd fivekmrun_app_flutter && flutter pub get
+    - shell: bash
+      env:
+        STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+        STRAVA_SECRET: ${{ secrets.STRAVA_SECRET }}
+        GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
+      run: |
+        mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
+        const stravaSecret = "$STRAVA_SECRET";
+        const stravaClientId = "$STRAVA_CLIENT_ID";
+        const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
+        EOF
+    
+    - run: cd fivekmrun_app_flutter && flutter build ios --release --no-codesign
+
+    - name: 'Upload app to TestFlight'
+      uses: apple-actions/upload-testflight-build@v1
+      with: 
+        app-path: 'fivekmrun_app_flutter/build/ios/iphoneos/Runner.app' 
+        issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+        api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+        api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
