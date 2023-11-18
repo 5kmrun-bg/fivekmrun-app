@@ -75,7 +75,8 @@ class MyApp extends StatelessWidget {
         navigatorKey: MyApp.navKey,
         debugShowCheckedModeBanner: false,
         title: '5kmRun.bg',
-        theme: ThemeData(
+        themeMode: ThemeMode.dark,
+        darkTheme: ThemeData(
           dividerColor: Colors.black12,
           textTheme: TextTheme(
             titleSmall: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
