@@ -170,7 +170,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       if (result["errors"].contains("403")) {
         FirebaseCrashlytics.instance.recordError(
             Exception("Unexpected invalid 5kmRun token"), StackTrace.current);
-        final textStlyle = Theme.of(context).textTheme.subtitle2;
+        final textStlyle = Theme.of(context).textTheme.titleSmall;
         showDialog(
           context: context,
           useRootNavigator: true,
@@ -259,8 +259,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
   void toggleActivity(StravaSummaryRun activity) {
     this.setState(() => this.selectedActivity =
-              this.selectedActivity == activity ? null : activity
-        );
+        this.selectedActivity == activity ? null : activity);
   }
 
   void triggerStravaAuth() {
@@ -295,7 +294,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
           child: Text(
             "За да продължите - следвайте инструкциите и свържете 5kmRun приложението с вашия Strava профил.\n\nМоля, използвайте Google Chrome при свързването и въведете директно Strava потребителско име и парола. В момента, свързване с други браузъри не сработва успешно.\n\nСистемата на селфи отчита  „Elapsed time“, т.е. вашето общо (цялостно) време на бягането, което включва и времето при включена пауза или просто спрял на място! Много хора се заблуждават, че селфи ще им приеме тяхното „Moving Time“, което представлява само времето на движение без включените паузи и спиранията, т.е. случаите, при които се прекъсва бягането с използването на бутона „пауза“ или спиране на място!",
-            style: Theme.of(context).textTheme.subtitle2,
+            style: Theme.of(context).textTheme.titleSmall,
             textAlign: TextAlign.center,
           ),
         ),

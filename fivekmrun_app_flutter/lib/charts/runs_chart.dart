@@ -59,7 +59,7 @@ class _RunsChartState extends State<RunsChart> {
                     "Тенденция от последните " +
                         this.widget.runs.length.toString() +
                         " бягания",
-                    style: theme.textTheme.subtitle1)),
+                    style: theme.textTheme.titleSmall)),
             IntrinsicHeight(child: Text(this.dataPointLabel)),
             Expanded(
               child: charts.TimeSeriesChart(

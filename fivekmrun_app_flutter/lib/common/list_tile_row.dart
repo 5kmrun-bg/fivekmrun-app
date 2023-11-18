@@ -16,7 +16,8 @@ class ListTileRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = this.iconColor != null ? this.iconColor : theme.colorScheme.secondary;
+    final color =
+        this.iconColor != null ? this.iconColor : theme.colorScheme.secondary;
     return Row(
       children: <Widget>[
         Padding(
@@ -30,7 +31,7 @@ class ListTileRow extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: Text(text, style: theme.textTheme.subtitle2),
+            child: Text(text, style: theme.textTheme.titleSmall),
           ),
         ),
       ],

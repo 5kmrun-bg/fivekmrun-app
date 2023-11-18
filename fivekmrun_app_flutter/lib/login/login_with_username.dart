@@ -56,7 +56,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
                 "Грешно потребителско име или парола",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Theme.of(context).errorColor,
+                  color: Theme.of(context).colorScheme.error,
                 ),
               ),
             ),

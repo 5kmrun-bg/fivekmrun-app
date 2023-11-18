@@ -21,7 +21,7 @@ class SelectButton extends StatelessWidget {
             ? ElevatedButton(
                 child: Text(
                   this.text,
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.titleSmall,
                   textAlign: TextAlign.center,
                 ),
                 onPressed: () => this.onPressed(),
@@ -29,7 +29,7 @@ class SelectButton extends StatelessWidget {
             : OutlinedButton(
                 child: Text(
                   this.text,
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.titleSmall,
                   textAlign: TextAlign.center,
                 ),
                 onPressed: () => this.onPressed(),

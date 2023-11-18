@@ -19,7 +19,7 @@ class RunsByRouteChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final subTitleStyle = theme.textTheme.subtitle1;
+    final subTitleStyle = theme.textTheme.titleSmall;
 
     return Padding(
         padding: EdgeInsets.all(8.0),

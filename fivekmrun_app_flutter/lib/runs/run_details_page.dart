@@ -26,8 +26,8 @@ class RunDetailsPage extends StatelessWidget {
               );
             case ConnectionState.done:
               if (snapshot.hasError)
-                return MilestoneGauge(
-                    run.position!, 400, Theme.of(context).colorScheme.secondary);
+                return MilestoneGauge(run.position!, 400,
+                    Theme.of(context).colorScheme.secondary);
               else
                 return MilestoneGauge(run.position!, snapshot.data?.length ?? 0,
                     Theme.of(context).colorScheme.secondary);
@@ -61,7 +61,7 @@ class RunDetailsPage extends StatelessWidget {
                           right: 0,
                           child: Text(
                             "Позиция",
-                            style: theme.textTheme.headline6,
+                            style: theme.textTheme.titleLarge,
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -80,7 +80,7 @@ class RunDetailsPage extends StatelessWidget {
                     SizedBox(height: 10),
                     Text(
                       "Темпо",
-                      style: theme.textTheme.subtitle2,
+                      style: theme.textTheme.titleSmall,
                     ),
                   ],
                 ),
@@ -90,7 +90,7 @@ class RunDetailsPage extends StatelessWidget {
                     SizedBox(height: 10),
                     Text(
                       "Време",
-                      style: theme.textTheme.subtitle2,
+                      style: theme.textTheme.titleSmall,
                     ),
                   ],
                 ),
@@ -100,7 +100,7 @@ class RunDetailsPage extends StatelessWidget {
                     SizedBox(height: 10),
                     Text(
                       "Скорост",
-                      style: theme.textTheme.subtitle2,
+                      style: theme.textTheme.titleSmall,
                     )
                   ],
                 ),
@@ -158,7 +158,7 @@ class CircleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle =
-        Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black);
+        Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black);
     return Container(
       padding: EdgeInsets.all(24),
       child: Column(
@@ -194,7 +194,7 @@ class IconText extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Text(
             text,
-            style: theme.textTheme.subtitle2,
+            style: theme.textTheme.titleSmall,
           ),
         ),
       ],
@@ -216,13 +216,13 @@ class CompareTime extends StatelessWidget {
         ? Color.fromRGBO(0, 173, 25, 1)
         : Color.fromRGBO(250, 32, 87, 1);
 
-    final numberStyle = textTheme.subtitle2?.copyWith(color: color);
+    final numberStyle = textTheme.titleSmall?.copyWith(color: color);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
           text,
-          style: textTheme.subtitle2,
+          style: textTheme.titleSmall,
         ),
         Text(
           Run.timeInSecondsToString(time, sign: true),
@@ -248,11 +248,11 @@ class RunDetail extends StatelessWidget {
       children: <Widget>[
         Text(
           label,
-          style: textTheme.subtitle2,
+          style: textTheme.titleSmall,
         ),
         Text(
           value,
-          style: textTheme.subtitle2,
+          style: textTheme.titleSmall,
         ),
       ],
     );
