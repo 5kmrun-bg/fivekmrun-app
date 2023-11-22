@@ -14,14 +14,14 @@ jobs:
         uses: apple-actions/download-provisioning-profiles@v1
         with: 
           bundle-id: 'bg.5kmpark.5kmrun'
-          profile-type: 'IOS_APP_STORE'
+          profile-type: 'IOS_APP_DEVELOPMENT'
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
       
       - name: 'Downloaded Provisioning Profiles'
         run: echo ${{ steps.provisioning.outputs.profiles }}
-        
+
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
