@@ -24,13 +24,13 @@ bool _hasBadge(List<Run>? runs, bool Function(Run run, DateTime date)) {
     var hasBadgeThisYear = true;
     var saturday = lastSaturday;
     while (saturday.year == year) {
-      saturday = saturday.subtract(Duration(days: 7));
       var participated =
           runs.firstWhereOrNull((run) => Function(run, saturday));
       if (participated == null) {
         hasBadgeThisYear = false;
         break;
       }
+      saturday = saturday.subtract(Duration(days: 7));
     }
 
     if (hasBadgeThisYear) {
