@@ -13,14 +13,14 @@ jobs:
         id: provisioning
         uses: apple-actions/download-provisioning-profiles@v1
         with: 
-          bundle-id: 'bg.fivekmpark.fivekmrun'
+          bundle-id: 'bg.5kmpark.5kmrun'
           profile-type: 'IOS_APP_STORE'
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
       
-    #   - name: 'Downloaded Provisioning Profiles'
-    #     run: echo ${{ steps.provisioning.outputs.profiles }}
+      - name: 'Downloaded Provisioning Profiles'
+        run: echo ${{ steps.provisioning.outputs.profiles }}
     #   - uses: actions/checkout@v3
     #   - name: Set up ruby env
     #     uses: ruby/setup-ruby@v1
