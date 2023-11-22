@@ -30,7 +30,9 @@ jobs:
       - run: cd fivekmrun_app_flutter && flutter build appbundle --no-shrink
       - name: Run Unit Tests
         run: cd fivekmrun_app_flutter && flutter test
-      - uses: actions/upload-artifact@v1
+      - name: Upload test failures
+        if: always()
+        uses: actions/upload-artifact@v1
         with:
           name: test-failures
           path: /home/runner/work/fivekmrun-app/fivekmrun-app/fivekmrun_app_flutter/test/common/failures/
@@ -59,7 +61,9 @@ jobs:
       - run: cd fivekmrun_app_flutter && flutter build ios --release --no-codesign
       - name: Run Unit Tests
         run: cd fivekmrun_app_flutter && flutter test
-      - uses: actions/upload-artifact@v1
+      - name: Upload test failures
+        if: always()
+        uses: actions/upload-artifact@v1
         with:
           name: test-failures
           path: /home/runner/work/fivekmrun-app/fivekmrun-app/fivekmrun_app_flutter/test/common/failures/
