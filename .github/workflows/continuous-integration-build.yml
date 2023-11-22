@@ -1,53 +1,57 @@
 name: continuous-integration-build
-on: 
+on:
   pull_request:
     branches: [master]
 env:
-  FLUTTER_VERSION: '${{ vars.FLUTTER_VERSION }}'
+  FLUTTER_VERSION: "${{ vars.FLUTTER_VERSION }}"
 jobs:
   build-android:
     runs-on: ubuntu-latest
     environment: development
     steps:
-    - uses: actions/checkout@v3
-    - uses: subosito/flutter-action@v2
-      with: 
-        channel: 'stable'
-        flutter-version: ${{ env.FLUTTER_VERSION }}
-        architecture: x64
-    - run: cd fivekmrun_app_flutter && flutter pub get
-    - shell: bash
-      env:
-        STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-        STRAVA_SECRET: ${{ secrets.STRAVA_SECRET }}
-        GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
-      run: |
-        mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
-        const stravaSecret = "$STRAVA_SECRET";
-        const stravaClientId = "$STRAVA_CLIENT_ID";
-        const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
-        EOF
-    - run: cd fivekmrun_app_flutter && flutter build appbundle --no-shrink
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          architecture: x64
+      - run: cd fivekmrun_app_flutter && flutter pub get
+      - shell: bash
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_SECRET: ${{ secrets.STRAVA_SECRET }}
+          GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
+        run: |
+          mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
+          const stravaSecret = "$STRAVA_SECRET";
+          const stravaClientId = "$STRAVA_CLIENT_ID";
+          const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
+          EOF
+      - run: cd fivekmrun_app_flutter && flutter build appbundle --no-shrink
+      - name: Run Unit Tests
+        run: cd fivekmrun_app_flutter && flutter test
   build-ios:
     runs-on: macos-latest
     environment: development
     steps:
-    - uses: actions/checkout@v3
-    - uses: subosito/flutter-action@v2
-      with:
-        channel: 'stable'
-        flutter-version: ${{ env.FLUTTER_VERSION }}
-        architecture: x64
-    - run: cd fivekmrun_app_flutter && flutter pub get
-    - shell: bash
-      env:
-        STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-        STRAVA_SECRET: ${{ secrets.STRAVA_SECRET }}
-        GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
-      run: |
-        mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
-        const stravaSecret = "$STRAVA_SECRET";
-        const stravaClientId = "$STRAVA_CLIENT_ID";
-        const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
-        EOF
-    - run: cd fivekmrun_app_flutter && flutter build ios --release --no-codesign
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          architecture: x64
+      - run: cd fivekmrun_app_flutter && flutter pub get
+      - shell: bash
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_SECRET: ${{ secrets.STRAVA_SECRET }}
+          GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
+        run: |
+          mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
+          const stravaSecret = "$STRAVA_SECRET";
+          const stravaClientId = "$STRAVA_CLIENT_ID";
+          const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
+          EOF
+      - run: cd fivekmrun_app_flutter && flutter build ios --release --no-codesign
+      - name: Run Unit Tests
+        run: cd fivekmrun_app_flutter && flutter test
