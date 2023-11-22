@@ -7,7 +7,7 @@ env:
 jobs:
   ios-build:
     runs-on: macOS-latest
-    environment: production
+    environment: production 
     steps:
       - name: 'Download Provisioning Profiles'
         id: provisioning
@@ -21,6 +21,7 @@ jobs:
       
       - name: 'Downloaded Provisioning Profiles'
         run: echo ${{ steps.provisioning.outputs.profiles }}
+        
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
