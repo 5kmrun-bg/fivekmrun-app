@@ -93,7 +93,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
     print("HOME: start loading userId $userId");
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;
     Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
-    Provider.of<FutureEventsResource>(context, listen: false).getAll();
+    Provider.of<AllFutureEventsResource>(context, listen: false).getAll();
     Provider.of<PastEventsResource>(context, listen: false).getAll();
 
     this._tabHelper = TabNavigationHelper(this);

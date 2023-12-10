@@ -26,9 +26,25 @@ class Event {
         detailsUrl = "",
         imageUrl = json["e_sponsor"];
 
+  Event.fromXLJson(d):
+      id = d["e_id"],
+      title = d["n_name"],
+      date = DateTime.fromMillisecondsSinceEpoch(d["e_date"] * 1000),
+      time = d["e_time"],
+      imageUrl = "https://firebasestorage.googleapis.com/v0/b/kmrunbg.appspot.com/o/5kmnew.png?alt=media&token=e95100ec-582f-4c0d-a74e-3c058306c3f4",
+      location = "XLkm Run София",
+      detailsUrl = " ";
+
   static List<Event> listFromJson(dynamic json) {
     List<dynamic> events = json;
     List<Event> result = events.map((d) => Event.fromJson(d)).toList();
+
+    return result;
+  }
+
+  static List<Event> listFromXLJson(dynamic json) {
+    List<dynamic> events = json;
+    List<Event> result = events.map((d) => Event.fromXLJson(d)).toList();
 
     return result;
   }
