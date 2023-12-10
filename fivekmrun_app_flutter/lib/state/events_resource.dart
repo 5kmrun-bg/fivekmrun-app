@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:fivekmrun_flutter/constants.dart' as constants;
 import 'package:flutter/material.dart';
@@ -74,6 +75,18 @@ class XLFutureEventsResource extends EventsResource {
   }
 }
 
+class KidsFutureEventsResource extends EventsResource {
+  @override
+  String getEventUrl() {
+    return constants.kidsFutureEventsUrl;
+  }
+
+  @override
+  List<Event> listFromJsonParser(json) {
+    return Event.listFromKidsJson(json);
+  }
+}
+
 class AllFutureEventsResource extends ChangeNotifier {
   late List<Event> value;
 
@@ -90,9 +103,11 @@ class AllFutureEventsResource extends ChangeNotifier {
   Future<List<Event>> getAll() async {
     var futureEvents = await FutureEventsResource().getAll();
     var xlFutureEvents = await XLFutureEventsResource().getAll();
+    var kidsFutureEvents = await KidsFutureEventsResource().getAll();
 
     this.loading = false;
-    this.value = List<Event>.from(futureEvents)..addAll(xlFutureEvents);
+    this.value = List<Event>.from(futureEvents)..addAll(xlFutureEvents)..addAll(kidsFutureEvents);
+    this.value.sortBy((e) => e.date);
     
     return this.value;
   }

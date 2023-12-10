@@ -31,9 +31,19 @@ class Event {
       title = d["n_name"],
       date = DateTime.fromMillisecondsSinceEpoch(d["e_date"] * 1000),
       time = d["e_time"],
-      imageUrl = "https://firebasestorage.googleapis.com/v0/b/kmrunbg.appspot.com/o/5kmnew.png?alt=media&token=e95100ec-582f-4c0d-a74e-3c058306c3f4",
+      imageUrl = "https://firebasestorage.googleapis.com/v0/b/kmrunbg.appspot.com/o/xl-run-thumbnail-bw.png?alt=media&token=bdccfa3c-9a5a-4792-bb04-bafaaad6442a",
       location = "XLkm Run София",
       detailsUrl = " ";
+
+  Event.fromKidsJson(d):
+      id = d["e_id"],
+      title = d["e_title"],
+      date = DateTime.fromMillisecondsSinceEpoch(d["e_date"] * 1000),
+      time = d["e_time"],
+      imageUrl = "https://firebasestorage.googleapis.com/v0/b/kmrunbg.appspot.com/o/kids-run-bw.png?alt=media&token=a782fe29-6422-4b61-95b1-c4e7f81ddd5c",
+      location = d["n_name"],
+      detailsUrl = " ";
+
 
   static List<Event> listFromJson(dynamic json) {
     List<dynamic> events = json;
@@ -45,6 +55,13 @@ class Event {
   static List<Event> listFromXLJson(dynamic json) {
     List<dynamic> events = json;
     List<Event> result = events.map((d) => Event.fromXLJson(d)).toList();
+
+    return result;
+  }
+
+  static List<Event> listFromKidsJson(dynamic json) {
+    List<dynamic> events = json;
+    List<Event> result = events.map((d) => Event.fromKidsJson(d)).toList();
 
     return result;
   }
