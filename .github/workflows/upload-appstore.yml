@@ -59,7 +59,7 @@ jobs:
           echo -n "${{ vars.IOS_EXPORT_OPTIONS }}" > $RUNNER_TEMP/exportOptions.plist
           echo "Created export options plist: $RUNNER_TEMP/exportOptions.plist"  
       - name: Export ipa
-        run: cd fivekmrun_app_flutter && xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist $RUNNER_TEMP/exportOptions.plist
+        run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist $RUNNER_TEMP/exportOptions.plist
       - name: Publish iOS Artefacts
         uses: actions/upload-artifact@v1
         with:
