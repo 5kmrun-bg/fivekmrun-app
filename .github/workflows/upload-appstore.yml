@@ -44,7 +44,8 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: 'stable'
           architecture: x64
-      - run: cd fivekmrun_app_flutter && flutter pub get
+      - name: 'Install Flutter dependencies'
+        run: cd fivekmrun_app_flutter && flutter pub get
     #TODO: add google analytics production configuration
       - name: Build Flutter
         run: cd fivekmrun_app_flutter && flutter build ios --release --no-codesign
@@ -55,7 +56,7 @@ jobs:
           xcodebuild -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=48HKWHQ6FS -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=1777610c-cb24-460c-85ea-101174d824d0 clean archive CODE_SIGN_IDENTITY="Apple Distribution: 5 KM PARK BG NON-PROFIT ASSOCIATION (48HKWHQ6FS)"
       - name: Create export options plist
         run: |
-          echo -n "$IOS_EXPORT_OPTIONS" > $RUNNER_TEMP/exportOptions.plist
+          echo -n "${{ vars.IOS_EXPORT_OPTIONS }}" > $RUNNER_TEMP/exportOptions.plist
           echo "Created export options plist: $RUNNER_TEMP/exportOptions.plist"  
       - name: Export ipa
         run: cd fivekmrun_app_flutter && xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist $RUNNER_TEMP/exportOptions.plist
