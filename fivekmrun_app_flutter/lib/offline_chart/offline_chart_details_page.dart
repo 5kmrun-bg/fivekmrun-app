@@ -102,9 +102,9 @@ class OfflineChartDetailsPage extends StatelessWidget {
                             DetailsTile(
                               title: "общо изкачване",
                               value: result.elevationGainedTotal
-                                          .round()
-                                          .toString() +
-                                      " m",
+                                      .round()
+                                      .toString() +
+                                  " m",
                               accentColor: iconColor,
                             ),
                           ],
@@ -198,7 +198,7 @@ class CircleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle =
-        Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black);
+        Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black);
     return Container(
       padding: EdgeInsets.all(24),
       child: Column(
@@ -234,7 +234,7 @@ class IconText extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Text(
             text,
-            style: theme.textTheme.headline6,
+            style: theme.textTheme.titleLarge,
           ),
         ),
       ],
@@ -256,13 +256,13 @@ class ComapreTime extends StatelessWidget {
         ? Color.fromRGBO(0, 173, 25, 1)
         : Color.fromRGBO(250, 32, 87, 1);
 
-    final numberStyle = textTheme.subtitle2?.copyWith(color: color);
+    final numberStyle = textTheme.titleSmall?.copyWith(color: color);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
           text,
-          style: textTheme.subtitle2,
+          style: textTheme.titleSmall,
         ),
         Text(
           Run.timeInSecondsToString(time, sign: true),

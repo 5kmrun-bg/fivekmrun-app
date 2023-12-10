@@ -59,7 +59,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   void showLogoutDialog() {
     final authResource =
         Provider.of<AuthenticationResource>(context, listen: false);
-    final textStlyle = Theme.of(context).textTheme.subtitle2;
+    final textStlyle = Theme.of(context).textTheme.titleSmall;
     final accentColor = Theme.of(context).colorScheme.secondary;
     showDialog(
       context: context,
@@ -133,7 +133,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textStlyle = Theme.of(context).textTheme.headline6;
+    final textStlyle = Theme.of(context).textTheme.titleLarge;
     final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(
