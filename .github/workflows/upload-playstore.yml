@@ -1,4 +1,4 @@
-name: Continous Delivery Workflow
+name: Build and Upload to Google Play Store
 on:
   workflow_dispatch
 env:
