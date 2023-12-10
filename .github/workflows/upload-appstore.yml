@@ -60,11 +60,18 @@ jobs:
           echo "Created export options plist: $RUNNER_TEMP/exportOptions.plist"  
       - name: Export ipa
         run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist $RUNNER_TEMP/exportOptions.plist
-      - name: Publish iOS Artefacts
+      - name: Publish iOS Artefacts to GitHub
         uses: actions/upload-artifact@v1
         with:
           name: release-ios
-          path: build-output/ios     
+          path: build-output/ios
+      - name: 'Upload app to TestFlight'
+        uses: apple-actions/upload-testflight-build@v1
+        with: 
+          app-path: 'build-output/ios/5kmRun.bg.ipa' 
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
 
     #   - name: 'Download Provisioning Profiles'
     #     id: provisioning
