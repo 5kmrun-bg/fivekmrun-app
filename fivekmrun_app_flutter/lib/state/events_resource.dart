@@ -19,7 +19,9 @@ abstract class EventsResource extends ChangeNotifier {
     }
   }
 
-  getAll() async {
+  List<Event> listFromJsonParser(dynamic json);
+
+  Future<List<Event>> getAll() async {
     http.Response response = await http.get(Uri.parse("${this.getEventUrl()}"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
@@ -31,7 +33,7 @@ abstract class EventsResource extends ChangeNotifier {
 
     String body = utf8.decode(response.bodyBytes);
     this.loading = false;
-    this.value = Event.listFromJson(jsonDecode(body));
+    this.value = listFromJsonParser(jsonDecode(body));
     return this.value;
   }
 }
@@ -41,11 +43,57 @@ class FutureEventsResource extends EventsResource {
   String getEventUrl() {
     return constants.futureEventsUrl;
   }
+  
+  @override
+  List<Event> listFromJsonParser(json) {
+    return Event.listFromJson(json);
+  }
 }
 
 class PastEventsResource extends EventsResource {
   @override
   String getEventUrl() {
     return constants.pastEventsUrl;
+  }
+  
+  @override
+  List<Event> listFromJsonParser(json) {
+    return Event.listFromJson(json);
+  }
+}
+
+class XLFutureEventsResource extends EventsResource {
+  @override
+  String getEventUrl() {
+    return constants.xlFutureEventsUrl;
+  }
+
+  @override
+  List<Event> listFromJsonParser(json) {
+    return Event.listFromXLJson(json);
+  }
+}
+
+class AllFutureEventsResource extends ChangeNotifier {
+  late List<Event> value;
+
+  bool _loading = true;
+
+  bool get loading => _loading;
+  set loading(bool value) {
+    if (_loading != value) {
+      _loading = value;
+      notifyListeners();
+    }
+  }
+
+  Future<List<Event>> getAll() async {
+    var futureEvents = await FutureEventsResource().getAll();
+    var xlFutureEvents = await XLFutureEventsResource().getAll();
+
+    this.loading = false;
+    this.value = List<Event>.from(futureEvents)..addAll(xlFutureEvents);
+    
+    return this.value;
   }
 }

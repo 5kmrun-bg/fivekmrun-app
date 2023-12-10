@@ -38,7 +38,7 @@ class _EventsPage extends State<EventsPage> {
       );
     }
 
-    return Consumer<FutureEventsResource>(
+    return Consumer<AllFutureEventsResource>(
       builder: (context, eventsResource, child) {
         if (eventsResource.loading) {
           return Center(child: CircularProgressIndicator());
