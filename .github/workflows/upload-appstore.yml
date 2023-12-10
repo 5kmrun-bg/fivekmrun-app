@@ -35,18 +35,18 @@ jobs:
           architecture: x64
     #TODO: add google analytics production configuration
       - name: Build Flutter
-        run: flutter build ios --release --no-codesign
+        run: cd fivekmrun_app_flutter && flutter build ios --release --no-codesign
       - name: Build resolve Swift dependencies
-        run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
+        run: xcodebuild -resolvePackageDependencies -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release
       - name: Build xArchive
         run: |
-          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=48HKWHQ6FS -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=1777610c-cb24-460c-85ea-101174d824d0 clean archive CODE_SIGN_IDENTITY="Apple Distribution: 5 KM PARK BG NON-PROFIT ASSOCIATION (48HKWHQ6FS)"
+          xcodebuild -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=48HKWHQ6FS -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=1777610c-cb24-460c-85ea-101174d824d0 clean archive CODE_SIGN_IDENTITY="Apple Distribution: 5 KM PARK BG NON-PROFIT ASSOCIATION (48HKWHQ6FS)"
       - name: Create export options plist
         run: |
           echo -n "$IOS_EXPORT_OPTIONS" > $RUNNER_TEMP/exportOptions.plist
           echo "Created export options plist: $RUNNER_TEMP/exportOptions.plist"  
       - name: Export ipa
-        run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist $RUNNER_TEMP/exportOptions.plist
+        run: cd fivekmrun_app_flutter && xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist $RUNNER_TEMP/exportOptions.plist
       - name: Publish iOS Artefacts
         uses: actions/upload-artifact@v1
         with:
