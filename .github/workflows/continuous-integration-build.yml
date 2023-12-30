@@ -31,7 +31,7 @@ jobs:
       - name: Run Unit Tests
         run: cd fivekmrun_app_flutter && flutter test
   build-ios:
-    runs-on: macos-latest
+    runs-on: flyci-macos-large-latest-m1
     environment: development
     steps:
       - uses: actions/checkout@v3
