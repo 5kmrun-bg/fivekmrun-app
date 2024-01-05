@@ -10,6 +10,8 @@ import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_shake_animated/flutter_shake_animated.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'charts/runs_chart.dart';
 import 'common/milestone.dart';
@@ -118,10 +120,20 @@ class ProfileDashboard extends StatelessWidget {
               flex: 3,
               child: Column(
                 children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.settings),
-                    onPressed: goToSettings,
-                  ),
+                  Row(children: <Widget>[
+                    if (DateTime.now().month == 12 && DateTime.now().day >= 15 || DateTime.now().month == 1 && DateTime.now().day <= 30)
+                      ShakeWidget(
+                        shakeConstant: ShakeSlowConstant1(),
+                        autoPlay: true,
+                        child: IconButton(
+                          icon: const Icon(Icons.redeem), 
+                          color: Colors.red,
+                          onPressed: () => launchUrl(Uri.parse("https://fivekmrun-wrapped.com/" + user!.id.toString())),)),
+                    IconButton(
+                      icon: const Icon(Icons.settings),
+                      onPressed: goToSettings,
+                    ),
+                  ]),
                   MilestoneTile(
                       value: runsRes.value
                               ?.where((r) => !r.isSelfie)
