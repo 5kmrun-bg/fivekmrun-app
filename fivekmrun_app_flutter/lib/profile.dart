@@ -121,14 +121,20 @@ class ProfileDashboard extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Row(children: <Widget>[
-                    if (DateTime.now().month == 12 && DateTime.now().day >= 15 || DateTime.now().month == 1 && DateTime.now().day <= 30)
+                    if (DateTime.now().month == 1 ||
+                        (DateTime.now().month == 12 &&
+                            DateTime.now().day >= 15))
                       ShakeWidget(
-                        shakeConstant: ShakeSlowConstant1(),
-                        autoPlay: true,
-                        child: IconButton(
-                          icon: const Icon(Icons.redeem), 
-                          color: Colors.red,
-                          onPressed: () => launchUrl(Uri.parse("https://fivekmrun-wrapped.com/" + user!.id.toString())),)),
+                          shakeConstant: ShakeSlowConstant1(),
+                          autoPlay: true,
+                          child: IconButton(
+                            icon: const Icon(Icons.redeem),
+                            color: Colors.red,
+                            onPressed: () => launchUrl(
+                                Uri.parse("https://fivekmrun-wrapped.com/" +
+                                    user!.id.toString()),
+                                mode: LaunchMode.externalApplication),
+                          )),
                     IconButton(
                       icon: const Icon(Icons.settings),
                       onPressed: goToSettings,
