@@ -7,4 +7,13 @@ extension DateTimeExtensions on DateTime {
 
     return date;
   }
+
+  DateTime nextSunday() {
+    DateTime date = this;
+    while (date.weekday != 7) {
+      date = date.add(Duration(days: 1));
+    }
+
+    return date;
+  }
 }

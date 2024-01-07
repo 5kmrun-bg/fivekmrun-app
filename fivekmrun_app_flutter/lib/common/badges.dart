@@ -3,59 +3,90 @@ import 'package:fivekmrun_flutter/common/date_extensions.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 
-bool _hasBadge(List<Run>? runs, bool Function(Run run, DateTime date)) {
-  var hasBadge = false;
-  if (runs == null) {
-    return hasBadge;
+int getSundaysCountInYear(int year) {
+  var date = DateTime(year, 1, 1).nextSunday();
+
+  var sundays = 0;
+  while (date.year == year) {
+    sundays++;
+    date = date.add(Duration(days: 7));
   }
 
-  var now = DateTime.now();
-  var runsByYear = groupBy(runs, (Run run) => run.date?.year);
+  return sundays;
+}
 
-  for (var i = 0; i < runsByYear.length; i++) {
-    DateTime lastSaturday;
-    var year = runsByYear.keys.elementAt(i);
-    if (year == now.year) {
-      lastSaturday = now.lastSaturday();
-    } else {
-      lastSaturday = DateTime(year as int, 12, 31).lastSaturday();
-    }
+int getSaturdaysCountInYear(int year) {
+  var date = DateTime(year, 12, 31).lastSaturday();
 
-    var hasBadgeThisYear = true;
-    var saturday = lastSaturday;
-    while (saturday.year == year) {
-      var participated =
-          runs.firstWhereOrNull((run) => Function(run, saturday));
-      if (participated == null) {
-        hasBadgeThisYear = false;
-        break;
-      }
-      saturday = saturday.subtract(Duration(days: 7));
-    }
-
-    if (hasBadgeThisYear) {
-      hasBadge = true;
-      break;
-    }
+  var sundays = 0;
+  while (date.year == year) {
+    sundays++;
+    date = date.subtract(Duration(days: 7));
   }
 
-  return hasBadge;
+  return sundays;
 }
 
 bool hasMaxBadge(List<Run>? runs) {
-  return _hasBadge(
-      runs,
-      (run, date) =>
-          run.date != null &&
-          !run.isSelfie &&
-          DateUtils.isSameDay(date, run.date as DateTime));
+  if (runs == null) {
+    return false;
+  }
+
+  print("MAX BADGE");
+
+  var yearsWon = <int>[];
+  var officialRunsDates = runs
+      .where((run) => run.date != null && !run.isSelfie)
+      .map((e) => e.date!);
+
+  var yearsToCheck = officialRunsDates.map((date) => date.year).toSet();
+  yearsToCheck.remove(DateTime.now().year);
+
+  for (var year in yearsToCheck) {
+    var expectedRunsCount = getSaturdaysCountInYear(year);
+    var actualRunsCount =
+        officialRunsDates.where((date) => date.year == year).length;
+
+    print("$year expectedRunsCount: $expectedRunsCount");
+    print("$year actualRunsCount: $actualRunsCount");
+
+    if (actualRunsCount >= expectedRunsCount) {
+      yearsWon.add(year);
+    }
+  }
+
+  print(yearsWon);
+  return yearsWon.length > 0;
 }
 
 bool hasSelfieBadge(List<Run>? runs) {
-  return _hasBadge(
-      runs,
-      (run, date) =>
-          run.date != null &&
-          run.isSelfie &&
-          DateUtils.isSameDay(date, run.date as DateTime));
+  if (runs == null) {
+    return false;
+  }
+
+  print("SELFIE BADGE");
+
+  var yearsWon = <int>[];
+  var selfieRunDates = runs
+      .where((run) => run.date != null && run.isSelfie)
+      .map((e) => e.date!.nextSunday());
+
+  var yearsToCheck = selfieRunDates.map((date) => date.year).toSet();
+  yearsToCheck.remove(DateTime.now().year);
+
+  for (var year in yearsToCheck) {
+    var expectedRunsCount = getSundaysCountInYear(year);
+    var actualRunsCount =
+        selfieRunDates.where((date) => date.year == year).length;
+
+    print("$year expectedRunsCount: $expectedRunsCount");
+    print("$year actualRunsCount: $actualRunsCount");
+
+    if (actualRunsCount >= expectedRunsCount) {
+      yearsWon.add(year);
+    }
+  }
+
+  print(yearsWon);
+  return yearsWon.length > 0;
 }
