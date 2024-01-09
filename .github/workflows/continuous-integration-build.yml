@@ -19,6 +19,7 @@ jobs:
       - run: ls -al $RUNNER_TEMP
       - run: |
           PP_PATH=$RUNNER_TEMP/test.txt
+          base64 -v
           echo $PP_PATH
           echo -n dGVzdA== | base64 -d -o $PP_PATH
           cat $PP_PATH
@@ -50,6 +51,7 @@ jobs:
       # - run: cd fivekmrun_app_flutter && flutter pub get
       - run: |
           echo $RUNNER_TEMP
+          base64 -v
           ls -al $RUNNER_TEMP
           PP_PATH=$RUNNER_TEMP/test.txt
           echo $PP_PATH
@@ -70,7 +72,11 @@ jobs:
       - run: echo $RUNNER_TEMP
       - run: ls -al $RUNNER_TEMP
       - run: |
+          echo $RUNNER_TEMP
+          base64 -v
+          ls -al $RUNNER_TEMP
           PP_PATH=$RUNNER_TEMP/test.txt
+          echo $PP_PATH
           echo -n dGVzdA== | base64 -d -o $PP_PATH
           cat $PP_PATH
 
