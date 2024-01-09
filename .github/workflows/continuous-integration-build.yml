@@ -32,7 +32,7 @@ jobs:
       # - run: cd fivekmrun_app_flutter && flutter build appbundle --no-shrink
       # - name: Run Unit Tests
       #   run: cd fivekmrun_app_flutter && flutter test
-  build-ios:
+  build-ios-flyci:
     runs-on: flyci-macos-large-latest-m1
     environment: development
     steps:
@@ -45,6 +45,21 @@ jobs:
       - run: cd fivekmrun_app_flutter && flutter pub get
       - run: echo RUNNER_TEMP=
       - run: echo $RUNNER_TEMP
+
+  build-ios-github-runner:
+    runs-on: macos-latest
+    environment: development
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          architecture: x64
+      - run: cd fivekmrun_app_flutter && flutter pub get
+      - run: echo RUNNER_TEMP=
+      - run: echo $RUNNER_TEMP
+
       # - shell: bash
       #   env:
       #     STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
