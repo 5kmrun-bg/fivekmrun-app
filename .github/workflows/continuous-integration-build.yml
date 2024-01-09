@@ -19,7 +19,8 @@ jobs:
       - run: ls -al $RUNNER_TEMP
       - run: |
           PP_PATH=$RUNNER_TEMP/test.txt
-          echo -n dGVzdA== | base64 --decode --output $PP_PATH
+          echo $PP_PATH
+          echo -n dGVzdA== | base64 -d -o $PP_PATH
           cat $PP_PATH
       # - run: cd fivekmrun_app_flutter && flutter pub get
       # - shell: bash
@@ -47,11 +48,12 @@ jobs:
       #     flutter-version: ${{ env.FLUTTER_VERSION }}
       #     architecture: x64
       # - run: cd fivekmrun_app_flutter && flutter pub get
-      - run: echo $RUNNER_TEMP
-      - run: ls -al $RUNNER_TEMP
       - run: |
+          echo $RUNNER_TEMP
+          ls -al $RUNNER_TEMP
           PP_PATH=$RUNNER_TEMP/test.txt
-          echo -n dGVzdA== | base64 --decode --output $PP_PATH
+          echo $PP_PATH
+          echo -n dGVzdA== | base64 -d -o $PP_PATH
           cat $PP_PATH
 
   build-ios-github-runner:
@@ -69,7 +71,7 @@ jobs:
       - run: ls -al $RUNNER_TEMP
       - run: |
           PP_PATH=$RUNNER_TEMP/test.txt
-          echo -n dGVzdA== | base64 --decode --output $PP_PATH
+          echo -n dGVzdA== | base64 -d -o $PP_PATH
           cat $PP_PATH
 
       # - shell: bash
