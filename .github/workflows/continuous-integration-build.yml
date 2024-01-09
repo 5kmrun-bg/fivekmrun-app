@@ -16,6 +16,11 @@ jobs:
       #     flutter-version: ${{ env.FLUTTER_VERSION }}
       #     architecture: x64
       - run: echo $RUNNER_TEMP
+      - run: ls -al $RUNNER_TEMP
+      - run: |
+          PP_PATH=$RUNNER_TEMP/test.txt
+          echo -n dGVzdA== | base64 --decode --output $PP_PATH
+          cat $PP_PATH
       # - run: cd fivekmrun_app_flutter && flutter pub get
       # - shell: bash
       #   env:
@@ -43,6 +48,11 @@ jobs:
       #     architecture: x64
       # - run: cd fivekmrun_app_flutter && flutter pub get
       - run: echo $RUNNER_TEMP
+      - run: ls -al $RUNNER_TEMP
+      - run: |
+          PP_PATH=$RUNNER_TEMP/test.txt
+          echo -n dGVzdA== | base64 --decode --output $PP_PATH
+          cat $PP_PATH
 
   build-ios-github-runner:
     runs-on: macos-latest
@@ -56,6 +66,11 @@ jobs:
       #     architecture: x64
       # - run: cd fivekmrun_app_flutter && flutter pub get
       - run: echo $RUNNER_TEMP
+      - run: ls -al $RUNNER_TEMP
+      - run: |
+          PP_PATH=$RUNNER_TEMP/test.txt
+          echo -n dGVzdA== | base64 --decode --output $PP_PATH
+          cat $PP_PATH
 
       # - shell: bash
       #   env:
