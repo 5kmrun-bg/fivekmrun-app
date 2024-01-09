@@ -9,13 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          architecture: x64
-      - run: echo RUNNER_TEMP=
+      # - uses: actions/checkout@v3
+      # - uses: subosito/flutter-action@v2
+      #   with:
+      #     channel: "stable"
+      #     flutter-version: ${{ env.FLUTTER_VERSION }}
+      #     architecture: x64
       - run: echo $RUNNER_TEMP
       # - run: cd fivekmrun_app_flutter && flutter pub get
       # - shell: bash
@@ -36,28 +35,26 @@ jobs:
     runs-on: flyci-macos-large-latest-m1
     environment: development
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          architecture: x64
-      - run: cd fivekmrun_app_flutter && flutter pub get
-      - run: echo RUNNER_TEMP=
+      # - uses: actions/checkout@v3
+      # - uses: subosito/flutter-action@v2
+      #   with:
+      #     channel: "stable"
+      #     flutter-version: ${{ env.FLUTTER_VERSION }}
+      #     architecture: x64
+      # - run: cd fivekmrun_app_flutter && flutter pub get
       - run: echo $RUNNER_TEMP
 
   build-ios-github-runner:
     runs-on: macos-latest
     environment: development
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          architecture: x64
-      - run: cd fivekmrun_app_flutter && flutter pub get
-      - run: echo RUNNER_TEMP=
+      # - uses: actions/checkout@v3
+      # - uses: subosito/flutter-action@v2
+      #   with:
+      #     channel: "stable"
+      #     flutter-version: ${{ env.FLUTTER_VERSION }}
+      #     architecture: x64
+      # - run: cd fivekmrun_app_flutter && flutter pub get
       - run: echo $RUNNER_TEMP
 
       # - shell: bash
