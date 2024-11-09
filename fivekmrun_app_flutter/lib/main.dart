@@ -84,13 +84,13 @@ class MyApp extends StatelessWidget {
             bodyMedium: TextStyle(fontSize: 10),
           ),
           outlinedButtonTheme: OutlinedButtonThemeData(style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
+              foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                  (Set<WidgetState> states) {
             return Colors.white;
           }))),
           textButtonTheme: TextButtonThemeData(style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
+            foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
               return Colors.white;
             }),
           )),

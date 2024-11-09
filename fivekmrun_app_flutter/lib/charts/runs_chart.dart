@@ -20,11 +20,11 @@ class RunsChart extends StatefulWidget {
 class _RunsChartState extends State<RunsChart> {
   List<charts.Series<dynamic, DateTime>>? seriesList;
   String dataPointLabel = "";
-  final bool? animate;
+  final bool? animate = true;
   static int? lowestValues;
   static int? highestValues;
 
-  _RunsChartState({this.animate});
+  _RunsChartState();
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,5 @@
-import 'package:collection/collection.dart';
 import 'package:fivekmrun_flutter/common/date_extensions.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
-import 'package:flutter/material.dart';
 
 int getSundaysCountInYear(int year) {
   var date = DateTime(year, 1, 1).nextSunday();
