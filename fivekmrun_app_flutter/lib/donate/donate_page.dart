@@ -9,7 +9,7 @@ class DonatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ButtonStyle secondaryStyle = ElevatedButton.styleFrom(
-        primary: Colors.transparent,
+        backgroundColor: Colors.transparent,
         side: BorderSide(
           width: 1.0,
           color: Colors.white,

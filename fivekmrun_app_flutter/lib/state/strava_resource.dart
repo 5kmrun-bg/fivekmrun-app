@@ -174,6 +174,7 @@ class StravaResource extends ChangeNotifier {
       } on Exception catch (e) {
         FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       }
+      return null;
     });
   }
 

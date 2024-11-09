@@ -86,11 +86,12 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       return "";
     }
     var placemark = await placemarkFromCoordinates(
-        activity.startLatlng!.first, activity.startLatlng!.last,
-        localeIdentifier: "en");
+        activity.startLatlng!.first, activity.startLatlng!.last);
 
     var locality = placemark.first.locality;
     var country = placemark.first.country;
+
+    await setLocaleIdentifier('en_US');
 
     if (locality == null || country == null) {
       return "";
@@ -303,7 +304,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-              primary: Colors.transparent,
+              backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,
               padding: EdgeInsets.all(0)),
           child: Image(
