@@ -77,6 +77,7 @@ class MyApp extends StatelessWidget {
         title: '5kmRun.bg',
         themeMode: ThemeMode.dark,
         darkTheme: ThemeData(
+          useMaterial3: false,
           dividerColor: Colors.black12,
           textTheme: TextTheme(
             titleSmall: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
