@@ -90,8 +90,8 @@ class PushNotificationsManager {
       });
 
       // For testing purposes print the Firebase Messaging token
-      String? token = await FirebaseMessaging.instance.getToken();
-      print("FirebaseMessaging token: $token");
+      // String? token = await FirebaseMessaging.instance.getToken();
+      // print("FirebaseMessaging token: $token");
 
       _initialized = true;
     }
