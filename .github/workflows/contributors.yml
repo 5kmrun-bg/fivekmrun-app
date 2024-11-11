@@ -6,6 +6,8 @@ on:
 jobs:
   contributors:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: wow-actions/contributors-list@v1
         with:
