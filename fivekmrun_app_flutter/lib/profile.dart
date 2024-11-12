@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:fivekmrun_flutter/charts/best_times_by_route_chart.dart';
 import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
@@ -61,128 +64,133 @@ class ProfileDashboard extends StatelessWidget {
       return SizedBox.shrink();
     }
 
-    return ListView(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return ColorfulSafeArea(
+        color: Color.fromRGBO(66, 66, 66, 0.7),
+        overflowRules: OverflowRules.all(true),
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: ListView(
           children: <Widget>[
-            Expanded(
-              flex: 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(CustomIcons.barcode),
-                    onPressed: goToBarcode,
-                  ),
-                  MilestoneTile(
-                      value: runsRes.value
-                              ?.where((r) => r.isSelfie)
-                              .length
-                              .toInt() ??
-                          0,
-                      milestone: LegionerStatusHelper.getNextMilestone(runsRes
-                              .value
-                              ?.where((r) => r.isSelfie)
-                              .length
-                              .toInt() ??
-                          0),
-                      title: "Легионер\nselfie"),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 5,
-              child: Column(
-                children: <Widget>[
-                  Stack(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Avatar(url: user?.avatarUrl ?? ""),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: profileBadge(),
-                      )
+                      IconButton(
+                        icon: Icon(CustomIcons.barcode),
+                        onPressed: goToBarcode,
+                      ),
+                      MilestoneTile(
+                          value: runsRes.value
+                                  ?.where((r) => r.isSelfie)
+                                  .length
+                                  .toInt() ??
+                              0,
+                          milestone: LegionerStatusHelper.getNextMilestone(
+                              runsRes.value
+                                      ?.where((r) => r.isSelfie)
+                                      .length
+                                      .toInt() ??
+                                  0),
+                          title: "Легионер\nselfie"),
                     ],
                   ),
-                  Text(
-                    user?.name ?? "",
-                    style: textTheme.titleMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(""),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Column(
-                children: <Widget>[
-                  Row(children: <Widget>[
-                    if (DateTime.now().month == 1 ||
-                        (DateTime.now().month == 12 &&
-                            DateTime.now().day >= 15))
-                      ShakeWidget(
-                          shakeConstant: ShakeSlowConstant1(),
-                          autoPlay: true,
-                          child: IconButton(
-                            icon: const Icon(Icons.redeem),
-                            color: Colors.red,
-                            onPressed: () => launchUrl(
-                                Uri.parse("https://fivekmrun-wrapped.com/" +
-                                    user!.id.toString()),
-                                mode: LaunchMode.externalApplication),
-                          )),
-                    IconButton(
-                      icon: const Icon(Icons.settings),
-                      onPressed: goToSettings,
-                    ),
-                  ]),
-                  MilestoneTile(
-                      value: runsRes.value
-                              ?.where((r) => !r.isSelfie)
-                              .length
-                              .toInt() ??
-                          0,
-                      milestone: LegionerStatusHelper.getNextMilestone(runsRes
-                              .value
-                              ?.where((r) => !r.isSelfie)
-                              .length
-                              .toInt() ??
-                          0),
-                      title: "Легионер\nсъщинско"),
-                ],
-              ),
-            ),
-          ],
-        ),
-        if (runsRes.loading) Center(child: CircularProgressIndicator()),
-        if (hasOfficialRuns)
-          this.buildRunsCards(
-              runsRes.bestOfficialRun!, runsRes.lastOfficialRun!, "същинско"),
-        if (hasSelfieRuns)
-          this.buildRunsCards(
-              runsRes.bestSelfieRun!, runsRes.lastSelfieRun!, "selfie"),
-        if (hasAnyRuns) this.buildRunsChartCard(runs),
-        if (!runsRes.loading && !hasAnyRuns)
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Center(
-                    child: Text("Все още не сте направили първото си бягане"),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Column(
+                    children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                          Avatar(url: user?.avatarUrl ?? ""),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: profileBadge(),
+                          )
+                        ],
+                      ),
+                      Text(
+                        user?.name ?? "",
+                        style: textTheme.titleMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(""),
+                    ],
                   ),
                 ),
-              )
-            ],
-          ),
-        if (hasOfficialRuns) this.buildRunsByRouteCard(runs),
-        if (hasOfficialRuns) this.buildBestTimesCard(runs),
-      ],
-    );
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    children: <Widget>[
+                      Row(children: <Widget>[
+                        if (DateTime.now().month == 1 ||
+                            (DateTime.now().month == 12 &&
+                                DateTime.now().day >= 15))
+                          ShakeWidget(
+                              shakeConstant: ShakeSlowConstant1(),
+                              autoPlay: true,
+                              child: IconButton(
+                                icon: const Icon(Icons.redeem),
+                                color: Colors.red,
+                                onPressed: () => launchUrl(
+                                    Uri.parse("https://fivekmrun-wrapped.com/" +
+                                        user!.id.toString()),
+                                    mode: LaunchMode.externalApplication),
+                              )),
+                        IconButton(
+                          icon: const Icon(Icons.settings),
+                          onPressed: goToSettings,
+                        ),
+                      ]),
+                      MilestoneTile(
+                          value: runsRes.value
+                                  ?.where((r) => !r.isSelfie)
+                                  .length
+                                  .toInt() ??
+                              0,
+                          milestone: LegionerStatusHelper.getNextMilestone(
+                              runsRes.value
+                                      ?.where((r) => !r.isSelfie)
+                                      .length
+                                      .toInt() ??
+                                  0),
+                          title: "Легионер\nсъщинско"),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            if (runsRes.loading) Center(child: CircularProgressIndicator()),
+            if (hasOfficialRuns)
+              this.buildRunsCards(runsRes.bestOfficialRun!,
+                  runsRes.lastOfficialRun!, "същинско"),
+            if (hasSelfieRuns)
+              this.buildRunsCards(
+                  runsRes.bestSelfieRun!, runsRes.lastSelfieRun!, "selfie"),
+            if (hasAnyRuns) this.buildRunsChartCard(runs),
+            if (!runsRes.loading && !hasAnyRuns)
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Center(
+                        child:
+                            Text("Все още не сте направили първото си бягане"),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            if (hasOfficialRuns) this.buildRunsByRouteCard(runs),
+            if (hasOfficialRuns) this.buildBestTimesCard(runs),
+          ],
+        ));
   }
 
   Widget buildRunsCards(Run bestRun, Run lastRun, String runType) {

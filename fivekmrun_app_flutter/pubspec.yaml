@@ -34,15 +34,15 @@ dependencies:
   shared_preferences: ^2.0.6
 
   community_charts_flutter: ^1.0.1
+  colorful_safe_area: ^1.0.0
 
-      
   intl: ^0.17.0
 
-  strava_flutter: 
-      git:
-        url: https://github.com/etabakov/strava_flutter.git
-        ref: 94ba88c934e021182b4b6abc14287a6cb08dcdea
-        
+  strava_flutter:
+    git:
+      url: https://github.com/etabakov/strava_flutter.git
+      ref: 94ba88c934e021182b4b6abc14287a6cb08dcdea
+
   barcode_widgets: ^2.0.0
 
   firebase_core: ^3.6.0
@@ -54,7 +54,7 @@ dependencies:
   transparent_image: ^2.0.0
   rate_my_app: ^2.0.0
   after_layout: ^1.0.7+2
-  progress_state_button: ^1.0.3  
+  progress_state_button: ^1.0.3
   flutter_app_badger: ^1.4.0
   geocoding: ^3.0.0
   file: ^7.0.1
@@ -70,7 +70,6 @@ dependency_overrides:
   intl: ^0.17.0
   cupertino_icons: ^1.0.3
 
-
 dev_dependencies:
   build_runner: ^2.4.6
   flutter_test:
@@ -80,16 +79,15 @@ dev_dependencies:
   network_image_mock: ^2.1.1
   #flutter_launcher_icons: "^0.7.3"
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
   fonts:
-    - family:  MyFlutterApp
+    - family: MyFlutterApp
       fonts:
-       - asset: fonts/MyFlutterApp.ttf
+        - asset: fonts/MyFlutterApp.ttf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -100,6 +98,6 @@ flutter:
 
 # Generate new app icons command: flutter pub run flutter_launcher_icons:main
 flutter_icons:
-  android: "launcher_icon" 
+  android: "launcher_icon"
   ios: true
   image_path: "assets/logo.png"
