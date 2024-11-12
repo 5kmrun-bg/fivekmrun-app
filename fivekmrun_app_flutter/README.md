@@ -17,7 +17,7 @@ The application works with two types of run that happen as part of the 5kmrun.bg
 
 ## Prerequisites
 
-- Install [Flutter 3.13](https://docs.flutter.dev/get-started/install). Make sure `flutter doctor` does not report any issues (this will require installing Xcode, Android Studio and a bunch of other dependencies).
+- Install [Flutter 3.24](https://docs.flutter.dev/get-started/install). Make sure `flutter doctor` does not report any issues (this will require installing Xcode, Android Studio and a bunch of other dependencies).
 
 - Run `flutter pub get` to install all dependencies.
 
