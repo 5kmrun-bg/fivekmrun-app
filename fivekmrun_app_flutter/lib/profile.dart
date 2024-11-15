@@ -7,6 +7,7 @@ import 'package:fivekmrun_flutter/common/avatar.dart';
 import 'package:fivekmrun_flutter/common/badges.dart';
 import 'package:fivekmrun_flutter/common/legioner_status_helper.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
+import 'package:fivekmrun_flutter/constants.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
@@ -138,8 +139,7 @@ class ProfileDashboard extends StatelessWidget {
                                 icon: const Icon(Icons.redeem),
                                 color: Colors.red,
                                 onPressed: () => launchUrl(
-                                    Uri.parse("https://fivekmrun-wrapped.com/" +
-                                        user!.id.toString()),
+                                    Uri.parse(wrapUrl + user!.id.toString()),
                                     mode: LaunchMode.externalApplication),
                               )),
                         IconButton(
