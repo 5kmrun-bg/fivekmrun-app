@@ -33,7 +33,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 34
+    compileSdkVersion 35
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -46,7 +46,7 @@ android {
     defaultConfig {
         applicationId "bg.fivekmpark.fivekmrun"
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdkVersion 35
  
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
