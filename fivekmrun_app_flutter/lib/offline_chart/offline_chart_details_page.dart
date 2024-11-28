@@ -7,6 +7,8 @@ import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class OfflineChartDetailsPage extends StatelessWidget {
   OfflineChartDetailsPage({Key? key}) : super(key: key);
@@ -73,34 +75,34 @@ class OfflineChartDetailsPage extends StatelessWidget {
                         child: Column(
                           children: <Widget>[
                             DetailsTile(
-                              title: "дата",
+                              title: AppLocalizations.of(context)!.offline_chart_details_page_date,
                               value: DateFormat("dd.MM.yyyy")
                                   .format(result.startDate!),
                               accentColor: iconColor,
                             ),
                             DetailsTile(
-                              title: "позиция",
+                              title: AppLocalizations.of(context)!.offline_chart_details_page_position,
                               value: result.officialPosition.toString(),
                               accentColor: iconColor,
                             ),
                             DetailsTile(
-                              title: "време",
-                              value: '${result.time} мин',
+                              title: AppLocalizations.of(context)!.offline_chart_details_page_time,
+                              value: '${result.time} ${AppLocalizations.of(context)!.min}',
                               accentColor: iconColor,
                             ),
                             if (result.totalTime.isNotEmpty)
                               DetailsTile(
-                                title: "общо време",
-                                value: '${result.totalTime} мин',
+                                title: AppLocalizations.of(context)!.offline_chart_details_page_total_time,
+                                value: '${result.totalTime} ${AppLocalizations.of(context)!.min}',
                                 accentColor: iconColor,
                               ),
                             DetailsTile(
-                              title: "темпо",
-                              value: result.pace + " мин/км",
+                              title: AppLocalizations.of(context)!.offline_chart_details_page_pace,
+                              value: result.pace + " ${AppLocalizations.of(context)!.min_km}",
                               accentColor: iconColor,
                             ),
                             DetailsTile(
-                              title: "общо изкачване",
+                              title: AppLocalizations.of(context)!.offline_chart_details_page_total_elevation_gained,
                               value: result.elevationGainedTotal
                                       .round()
                                       .toString() +
@@ -128,29 +130,29 @@ class OfflineChartDetailsPage extends StatelessWidget {
                           child: Column(
                         children: <Widget>[
                           DetailsTile(
-                            title: "час",
+                            title: AppLocalizations.of(context)!.offline_chart_details_page_hour,
                             value:
                                 DateFormat("HH:mm").format(result.startDate!),
                             accentColor: iconColor,
                           ),
                           DetailsTile(
-                            title: "локация",
+                            title: AppLocalizations.of(context)!.offline_chart_details_page_location,
                             value: result.startLocation,
                             accentColor: iconColor,
                           ),
                           DetailsTile(
-                            title: "дистанция",
+                            title: AppLocalizations.of(context)!.offline_chart_details_page_distance,
                             value: '${result.distance.toString()} m',
                             accentColor: iconColor,
                           ),
                           if (result.totalDistance > result.distance)
                             DetailsTile(
-                              title: "обща дистанция",
+                              title:AppLocalizations.of(context)!.offline_chart_details_page_total_distance,
                               value: '${result.totalDistance.toString()} m',
                               accentColor: iconColor,
                             ),
                           DetailsTile(
-                            title: "денивелация",
+                            title: AppLocalizations.of(context)!.offline_chart_details_page_elevation,
                             value: result.elevationLow.toStringAsFixed(0) +
                                 " m - " +
                                 result.elevationHigh.toStringAsFixed(0) +
@@ -159,20 +161,20 @@ class OfflineChartDetailsPage extends StatelessWidget {
                           ),
                           if (result.status > 0 && result.status <= 2)
                             DetailsTile(
-                              title: "статус",
-                              value: "доказан",
+                              title: AppLocalizations.of(context)!.offline_chart_details_page_status,
+                              value: AppLocalizations.of(context)!.offline_chart_details_page_confirmed,
                               accentColor: iconColor,
                             ),
                           if (result.status == 3)
                             DetailsTile(
-                              title: "статус",
-                              value: "самостоятелен",
+                              title: AppLocalizations.of(context)!.offline_chart_details_page_status,
+                              value: AppLocalizations.of(context)!.offline_chart_details_page_independent,
                               accentColor: iconColor,
                             ),
                           if (result.status > 3 && result.status <= 5)
                             DetailsTile(
-                              title: "статус",
-                              value: "дисквалифициран",
+                              title: AppLocalizations.of(context)!.offline_chart_details_page_status,
+                              value: AppLocalizations.of(context)!.offline_chart_details_page_disqualified,
                               accentColor: iconColor,
                             ),
                         ],

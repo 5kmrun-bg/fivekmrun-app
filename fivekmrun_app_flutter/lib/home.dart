@@ -16,6 +16,7 @@ import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum AppTab { profile, runs, events, offlineChart, donate }
 
@@ -159,14 +160,14 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
           type: BottomNavigationBarType.shifting,
           unselectedItemColor: Colors.white,
           selectedItemColor: selectedColor,
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: 'Профил',
+              label: AppLocalizations.of(context)!.home_label_profile
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.directions_run),
-              label: 'Бягания',
+              label: AppLocalizations.of(context)!.home_label_runs,
             ),
             BottomNavigationBarItem(
               icon: Icon(CustomIcons.award),
@@ -174,11 +175,11 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),
-              label: 'Събития',
+              label: AppLocalizations.of(context)!.home_label_events,
             ),
             BottomNavigationBarItem(
               icon: Icon(CustomIcons.hand_holding_heart),
-              label: 'Подкрепи',
+              label: AppLocalizations.of(context)!.home_label_support,
             ),
           ],
           currentIndex: _selectedIndex,

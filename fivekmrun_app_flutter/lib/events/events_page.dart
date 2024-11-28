@@ -6,6 +6,7 @@ import 'package:fivekmrun_flutter/state/events_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
@@ -52,19 +53,19 @@ class _EventsPage extends State<EventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Събития")),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.events_page_events)),
       body: Center(
         child: Column(
           children: <Widget>[
             Row(
               children: <Widget>[
                 SelectButton(
-                  text: "Минали събития",
+                  text: AppLocalizations.of(context)!.events_page_past_events,
                   onPressed: this.toggleEvents,
                   selected: !this.futureEventSelected,
                 ),
                 SelectButton(
-                  text: "Предстоящи събития",
+                  text: AppLocalizations.of(context)!.events_page_upcoming_events,
                   onPressed: this.toggleEvents,
                   selected: this.futureEventSelected,
                 ),

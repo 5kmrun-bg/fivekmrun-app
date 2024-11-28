@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'charts/runs_chart.dart';
 import 'common/milestone.dart';
@@ -98,7 +99,8 @@ class ProfileDashboard extends StatelessWidget {
                                       .length
                                       .toInt() ??
                                   0),
-                          title: "Легионер\nselfie"),
+                          title: AppLocalizations.of(context)!
+                              .profile_page_legionary_selfie),
                     ],
                   ),
                 ),
@@ -160,7 +162,8 @@ class ProfileDashboard extends StatelessWidget {
                                       .length
                                       .toInt() ??
                                   0),
-                          title: "Легионер\nсъщинско"),
+                          title: AppLocalizations.of(context)!
+                              .profile_page_legionary_official),
                     ],
                   ),
                 ),
@@ -171,11 +174,14 @@ class ProfileDashboard extends StatelessWidget {
             ),
             if (runsRes.loading) Center(child: CircularProgressIndicator()),
             if (hasOfficialRuns)
-              this.buildRunsCards(runsRes.bestOfficialRun!,
-                  runsRes.lastOfficialRun!, "същинско"),
-            if (hasSelfieRuns)
               this.buildRunsCards(
-                  runsRes.bestSelfieRun!, runsRes.lastSelfieRun!, "selfie"),
+                  context,
+                  runsRes.bestOfficialRun!,
+                  runsRes.lastOfficialRun!,
+                  AppLocalizations.of(context)!.profile_page_official),
+            if (hasSelfieRuns)
+              this.buildRunsCards(context, runsRes.bestSelfieRun!,
+                  runsRes.lastSelfieRun!, "selfie"),
             if (hasAnyRuns) this.buildRunsChartCard(runs),
             if (!runsRes.loading && !hasAnyRuns)
               Row(
@@ -184,8 +190,7 @@ class ProfileDashboard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Center(
-                        child:
-                            Text("Все още не сте направили първото си бягане"),
+                        child: Text(AppLocalizations.of(context)!.no_runs),
                       ),
                     ),
                   )
@@ -197,18 +202,21 @@ class ProfileDashboard extends StatelessWidget {
         ));
   }
 
-  Widget buildRunsCards(Run bestRun, Run lastRun, String runType) {
+  Widget buildRunsCards(
+      BuildContext context, Run bestRun, Run lastRun, String runType) {
     return Row(
       children: <Widget>[
         Expanded(
           child: RunCard(
-            title: "Последно " + runType,
+            title:
+                AppLocalizations.of(context)!.profile_page_last_run + runType,
             run: lastRun,
           ),
         ),
         Expanded(
           child: RunCard(
-            title: "Най-добро " + runType,
+            title:
+                AppLocalizations.of(context)!.profile_page_best_run + runType,
             run: bestRun,
           ),
         ),
