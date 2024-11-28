@@ -1,0 +1,138 @@
+{
+    "no_runs": "You haven't recorded your first run yet",
+    "km": "km",
+    "min": "min",
+    "km_per_h": "km/h",
+    "min_km":"min/km",
+    "m": "m",
+    "sofia": "Sofia",
+    "next": "Next",
+
+    "settings_page_notifications":"Notifications",
+    "settings_page_settings":"Settings",
+    "settings_page_strava":"Strava integration",
+    "settings_page_language":"Language",
+    "settings_page_exit":"Exit",
+
+    "profile_page_last_run": "Last ",
+    "profile_page_best_run": "Best ",
+    "profile_page_legionary_selfie": "Legionary\nselfie",
+    "profile_page_legionary_official": "Legionary\nofficial",
+    "profile_page_official": "official",
+
+    "home_label_profile": "Profile",
+    "home_label_runs": "Runs",
+    "home_label_events": "Events",
+    "home_label_support": "Support",
+
+    "barcode_page_barcode":"Barcode",
+    "barcode_page_patron":"Patron",
+    "barcode_page_runner":"Runner",
+
+    "user_runs_page_title": "Your runs",
+
+    "events_page_events": "Events",
+    "events_page_past_events": "Past events",
+    "events_page_upcoming_events": "Upcoming events",
+
+    "events_results_page_results": "Results",
+
+    "login_widget_login_with_password": "login with password",
+    "login_widget_login_with_id": "login with id",
+    "login_widget_no_registration": "You don't have an account?",
+    "login_widget_register": "Sign up now",
+
+    "donate_page_title": "Support us",
+    "donate_page_description": "This application, along with the entire 5kmRun initiative, is fully supported by donations and volunteer work. Explore ways to support us below.",
+    "donate_page_become_a_patron": "Become a Patron",
+    "donate_page_patreon_description": "You can make a yearly donation of 24lv, which will grant you the Patron title for 12 months. Contributions can be made in person at our official runs or via bank transfer.",
+    "donate_page_pay_pal":" PayPal",
+    "donate_page_pay_pal_description": "Support us with a one-off or recurring donation in an amount of your choice",
+    "donate_page_fan_store": "Fan Store",
+    "donate_page_fan_store_description": "Each purchase from our store sustains the work of 5kmRun, helping us reach thousands of people in Bulgaria free of charge.",
+    "donate_page_xl_run": " XL run",
+    "donate_page_xl_run_description": "Each month in Sofia, we organize challenges of varying lengths, terrains and difficulties. The entirety of the participation fee goes towards supporting 5kmrun's efforts ",
+
+    "offline_chart_page_join":"Participate",
+    "offline_chart_page_results":"Full results",
+    "offline_chart_page_no_results":"No results",
+    "offline_chart_page_login":"Login",
+    "offline_chart_page_participation_in":"Participation in ",
+    "offline_chart_page_leaderboard_access":"the leaderboard requires authentication!",
+    "offline_chart_page_cancel":"Cancel",
+    "offline_chart_page_weekly":"Weekly ",
+    "offline_chart_page_leaderboard":" leaderboard",
+    "offline_chart_page_previous_week":"Previous week",
+    "offline_chart_page_current_week":"Current week",
+
+    "add_offline_entry_page_server_error": "Server error",
+    "add_offline_entry_page_data_error": "Something went wrong while sending the data. Please, try again later.",
+    "add_offline_entry_page_ok": "OK",
+    "add_offline_entry_page_authentication_error": "Wrong credentials",
+    "add_offline_entry_page_login_again": "Please login again with your 5kmRun credentials",
+    "add_offline_entry_page_login": "Login",
+    "add_offline_entry_page_cancel": "Cancel",
+    "add_offline_entry_page_server_sending_error": "There was an error reaching the server",
+    "add_offline_entry_page_join_leaderboard": "Join the leaderboard",
+    "add_offline_entry_page_join_leaderboard_instructions": "To proceed, please follow the instructions below to connect the 5kmRun app with your Strava profile:\n\n Use Google Chrome to log in with your Strava credentials. Other browsers are not supported at this time. \n\n The Selfie system tracks the “Elapsed time”, which represents the total time you spend running. This includes any time spent stationary or paused.\nUnlike what you might expect, Selfie does not track “Moving time” or the duration spent actively running, excluding pauses and stops triggered by pressing “Pause” or “Stop”.\n",
+    "add_offline_entry_page_join_with_current_run": "Participate with the chosen run",
+    "add_offline_entry_page_sending": "Send",
+    "add_offline_entry_page_uploading_error": "Uploading error",
+
+    "run_details_page_position": "Position",
+    "run_details_page_pace": "Pace",
+    "run_details_page_time": "Time",
+    "run_details_page_speed": "Speed",
+
+    "offline_chart_details_page_date": "date",
+    "offline_chart_details_page_position": "position",
+    "offline_chart_details_page_time": "time",
+    "offline_chart_details_page_total_time": "total time",
+    "offline_chart_details_page_pace": "pace",
+    "offline_chart_details_page_total_elevation_gained": "total elevation",
+    "offline_chart_details_page_hour": "hour",
+    "offline_chart_details_page_location": "location",
+    "offline_chart_details_page_distance": "distance",
+    "offline_chart_details_page_total_distance": "total distance",
+    "offline_chart_details_page_elevation": "elevation",
+    "offline_chart_details_page_status": "status",
+    "offline_chart_details_page_confirmed": "confirmed",
+    "offline_chart_details_page_independent": "independent",
+    "offline_chart_details_page_disqualified": "disqualified",
+
+    "results_list_no_results": "No results",
+    "results_list_anonymous":"Anonymous",
+    "results_list_search_bar":"Search by name or id",
+
+    "no_results_component_no_suitable_runs": "No suitable runs!",
+    "no_results_component_participation_requirements":"You can join the leaderboard if your runs meet the following requirements:",
+    "no_results_component_requirements":"1. The run has been uploaded to Strava and took place this week.\n\n2. The run is of type Run and is not on a treadmill.\n\n3. The length of the run is at least 5 km.\n\n4. The run has a map that is visible to all users.",
+
+    "login_with_id_widget_personal_id": "personal id",
+    "login_with_id_widget_participation": "Access to the ",
+    "login_with_id_widget_authentication": " leaderboard requires a password!",
+
+    "login_with_username_widget_wrong_auth": "Wrong username or password",
+    "login_with_username_widget_password": "password",
+
+    "login_preview_widget_year": "yr.",
+    "login_preview_widget_loading": "loading ...",
+    "login_preview_widget_login_as": "Sign in as",
+
+    "best_time_by_route_chart_widget_records": "Records on main routes",
+
+    "run_card_widget_place": "place",
+
+    "app_rating_manager_title":"Are you enjoying the app?" ,
+    "app_rating_manager_message": "Help us enhance your experience by sharing your thoughts!",
+    "app_rating_manager_rate_button": "Yes, of course",
+    "app_rating_manager_no_button": "No, thank you",
+    "app_rating_manager_later_button": "Later",
+
+    "runs_by_route_chart_title": "Runs on main routes",
+
+    "runs_chart_date": "Date: ",
+    "runs_chart_time": "\nTime: ",
+    "runs_chart_trend": "Trend from last ",
+    "runs_chart_runs": " runs"
+}

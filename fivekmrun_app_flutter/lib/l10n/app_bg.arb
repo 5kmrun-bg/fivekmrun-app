@@ -1,0 +1,138 @@
+{
+  "no_runs": "Все още не сте направили първото си бягане",
+  "km": "км",
+  "min": "мин",
+  "km_per_h": "км/ч",
+  "min_km":"мин/км",
+  "m": "m",
+  "sofia": "София",
+  "next": "Напред",
+
+  "settings_page_notifications": "Известия",
+  "settings_page_settings": "Настройки",
+  "settings_page_strava": "Strava интеграция",
+  "settings_page_language": "Език",
+  "settings_page_exit": "Изход",
+
+  "profile_page_last_run": "Последно ",
+  "profile_page_best_run": "Най-добро ",
+  "profile_page_legionary_selfie": "Легионер\nselfie",
+  "profile_page_legionary_official": "Легионер\nсъщинско",
+  "profile_page_official": "същинско",
+
+  "home_label_profile": "Профил",
+  "home_label_runs": "Бягания",
+  "home_label_events": "Събития",
+  "home_label_support": "Подкрепи",
+
+  "barcode_page_barcode":"Баркод",
+  "barcode_page_patron":"Патрон",
+  "barcode_page_runner":"Бегач",
+
+  "user_runs_page_title": "Твоите Бягания",
+
+  "events_page_events": "Събития",
+  "events_page_past_events": "Минали събития",
+  "events_page_upcoming_events": "Предстоящи събития",
+
+  "events_results_page_results": "Резултати",
+
+  "login_widget_login_with_password": "влез с парола",
+  "login_widget_login_with_id": "влез с номер",
+  "login_widget_no_registration": "Нямате регистрация?",
+  "login_widget_register": "Регистрирай се сега",
+
+  "donate_page_title": "Подкрепи ни",
+  "donate_page_description": "Това приложение и цялата дейност на 5kmRun се издържа изцяло от дарения и доброволен труд. Можете да подкрепите нашите усилия, чрез някой от изброените по-долу начини.",
+  "donate_page_become_a_patron": "Стани Патрон",
+  "donate_page_patreon_description": "Можете да направите годишно дарение на стойност 24лв., което ще ви отреди званието 'Патрон' за следващите 12 месеца. Сумата можете да дарите на място при същинските бягания или по банков път.",
+  "donate_page_pay_pal":" PayPal",
+  "donate_page_pay_pal_description": "Можете да направите еднократно или регулярно дарение на сума по ваш избор.",
+  "donate_page_fan_store": " Фен магазин",
+  "donate_page_fan_store_description": "Всяка покупка на артикул на нашия фен магазин подпомага дейностите на 5kmrun и ни помага да стигнем безплатно до хиляди хора в България.",
+  "donate_page_xl_run": " XL бягане",
+  "donate_page_xl_run_description": "Всеки месец в района на София организираме предизвикателства в различни дължини, терени и натоварвания. Таксата за участие изцяло подпомага дейностите на 5kmrun.",
+
+  "offline_chart_page_join":"Участвай",
+  "offline_chart_page_results":"Подробни\nрезултати",
+  "offline_chart_page_no_results":"Няма резултати",
+  "offline_chart_page_login":"Вход с парола",
+  "offline_chart_page_participation_in":"Участието в ",
+  "offline_chart_page_leaderboard_access":"класацията е достъпно вход с парола!",
+  "offline_chart_page_cancel":"Откажи",
+  "offline_chart_page_weekly":"Седмична ",
+  "offline_chart_page_leaderboard":" класация",
+  "offline_chart_page_previous_week":"Предходна седмица",
+  "offline_chart_page_current_week":"Текуща седмица",
+
+  "add_offline_entry_page_server_error": "Сървърна грешка",
+  "add_offline_entry_page_data_error": "Грешка при изпращане на данните. Моля, опитайте по-късно.",
+  "add_offline_entry_page_ok": "OK",
+  "add_offline_entry_page_authentication_error": "Невалидно потребителско име и парола",
+  "add_offline_entry_page_login_again": "Влезте отново с вашите 5kmRun потребителско име и парола.",
+  "add_offline_entry_page_login": "Вход",
+  "add_offline_entry_page_cancel": "Откажи",
+  "add_offline_entry_page_server_sending_error": "Грешка при изпращане на сървъра",
+  "add_offline_entry_page_join_leaderboard": "Участвай в класацията",
+  "add_offline_entry_page_join_leaderboard_instructions": "За да продължите - следвайте инструкциите и свържете 5kmRun приложението с вашия Strava профил.\n\nМоля, използвайте Google Chrome при свързването и въведете директно Strava потребителско име и парола. В момента, свързване с други браузъри не сработва успешно.\n\nСистемата на селфи отчита  „Elapsed time“, т.е. вашето общо (цялостно) време на бягането, което включва и времето при включена пауза или просто спрял на място! Много хора се заблуждават, че селфи ще им приеме тяхното „Moving Time“, което представлява само времето на движение без включените паузи и спиранията, т.е. случаите, при които се прекъсва бягането с използването на бутона „пауза“ или спиране на място!",
+  "add_offline_entry_page_join_with_current_run": "Участвай с избраното бягане",
+  "add_offline_entry_page_sending": "Изпращане",
+  "add_offline_entry_page_uploading_error": "Грешка при качване",
+
+  "run_details_page_position": "Позиция",
+  "run_details_page_pace": "Темпо",
+  "run_details_page_time": "Време",
+  "run_details_page_speed": "Скорост",
+
+  "offline_chart_details_page_date": "дата",
+  "offline_chart_details_page_position": "позиция",
+  "offline_chart_details_page_time": "време",
+  "offline_chart_details_page_total_time": "общо време",
+  "offline_chart_details_page_pace": "темпо",
+  "offline_chart_details_page_total_elevation_gained": "общо изкачване",
+  "offline_chart_details_page_hour": "час",
+  "offline_chart_details_page_location": "локация",
+  "offline_chart_details_page_distance": "дистанция",
+  "offline_chart_details_page_total_distance": "обща дистанция",
+  "offline_chart_details_page_elevation": "денивелация",
+  "offline_chart_details_page_status": "статус",
+  "offline_chart_details_page_confirmed": "доказан",
+  "offline_chart_details_page_independent": "самостоятелен",
+  "offline_chart_details_page_disqualified": "дисквалифициран",
+
+  "results_list_no_results": "Няма резултати",
+  "results_list_anonymous":"Анонимен",
+  "results_list_search_bar":"Търси по име или номер",
+  
+  "no_results_component_no_suitable_runs": "Няма подходящи бягания!",
+  "no_results_component_participation_requirements":"Участието в класацията е възможно с бягания отговарящи на следните условия:",
+  "no_results_component_requirements":"1. Бягането е качено в Strava и е направено в текущата седмица\n\n2. Бягането е от тип Run и не е на пътека\n\n3. Дължината на бягането е поне 5км\n\n4. Към бягането има карта, която е видима за всички потребители",
+
+  "login_with_id_widget_personal_id": "личен номер",
+  "login_with_id_widget_participation": "Участието в ",
+  "login_with_id_widget_authentication": " класацията е достъпно само с парола!",
+
+  "login_with_username_widget_wrong_auth": "Грешно потребителско име или парола",
+  "login_with_username_widget_password": "парола",
+
+  "login_preview_widget_year": "г.",
+  "login_preview_widget_loading": "зареждане ...",
+  "login_preview_widget_login_as": "Влез като",
+
+  "best_time_by_route_chart_widget_records": "Рекорди по същински трасета",
+
+  "run_card_widget_place": "място",
+
+  "app_rating_manager_title":"Харесвате ли приложението?" ,
+  "app_rating_manager_message": "Помогнете ни да го направим още по-добро, като оставите вашето мнение",
+  "app_rating_manager_rate_button": "Да, разбира се",
+  "app_rating_manager_no_button": "Не, благодаря",
+  "app_rating_manager_later_button": "По-късно",
+
+  "runs_by_route_chart_title": "Бягания по същински трасета",
+
+  "runs_chart_date": "Дата: ",
+  "runs_chart_time": "\nВреме: ",
+  "runs_chart_trend": "Тенденция от последните ",
+  "runs_chart_runs": " бягания"
+}

@@ -7,6 +7,7 @@ import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BarcodePage extends StatelessWidget {
   final Uuid uuid = Uuid();
@@ -20,7 +21,7 @@ class BarcodePage extends StatelessWidget {
       final userId = (user?.id != null) ? user?.id : 0;
       final userName = (user?.name != null) ? user?.name : "";
       final isUserPatron = (userResource.value?.donationsCount ?? 0) > 0;
-      final userStatus = isUserPatron ? "Патрон" : "Бегач";
+      final userStatus = isUserPatron ? AppLocalizations.of(context)!.barcode_page_patron : AppLocalizations.of(context)!.barcode_page_runner;
 
       final objectId = uuid.v4();
       final pass = """
@@ -84,7 +85,7 @@ class BarcodePage extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(
             leading: BackButton(color: Colors.white),
-            title: Text("Баркод"),
+            title: Text(AppLocalizations.of(context)!.barcode_page_barcode),
             centerTitle: true,
           ),
           backgroundColor: Colors.white,
