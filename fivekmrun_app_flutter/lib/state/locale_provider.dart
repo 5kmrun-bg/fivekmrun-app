@@ -29,7 +29,7 @@ class LocaleProvider extends ChangeNotifier {
       Locale platformLocale = Locale(Platform.localeName);
       _locale = (AppLocalizations.supportedLocales.contains(platformLocale))
           ? platformLocale
-          : Locale("en");
+          : Locale("bg");
       await preferences.setString('locale', _locale!.languageCode);
     }
     notifyListeners();
