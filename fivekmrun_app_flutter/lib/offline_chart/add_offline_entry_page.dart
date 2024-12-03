@@ -18,6 +18,7 @@ import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
 import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../common/int_extensions.dart';
 import '../common/double_extensions.dart';
@@ -151,12 +152,14 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           useRootNavigator: true,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Сървърна грешка"),
-              content: Text(
-                  "Грешка при изпращане на данните. Моля, опитайте по-късно."),
+              title: Text(AppLocalizations.of(context)!
+                  .add_offline_entry_page_server_error),
+              content: Text(AppLocalizations.of(context)!
+                  .add_offline_entry_page_data_error),
               actions: <Widget>[
                 TextButton(
-                    child: Text("OK"),
+                    child: Text(AppLocalizations.of(context)!
+                        .add_offline_entry_page_ok),
                     onPressed: () => Navigator.of(context).pop())
               ],
             );
@@ -177,21 +180,23 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           useRootNavigator: true,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: new Text("Невалидно потребителско име и парола"),
+              title: new Text(AppLocalizations.of(context)!
+                  .add_offline_entry_page_authentication_error),
               content: RichText(
                 text: TextSpan(
                   style: textStlyle,
                   children: <TextSpan>[
                     TextSpan(
-                        text:
-                            'Влезте отново с вашите 5kmRun потребителско име и парола.'),
+                        text: AppLocalizations.of(context)!
+                            .add_offline_entry_page_login_again),
                   ],
                 ),
               ),
               actions: <Widget>[
                 // usually buttons at the bottom of the dialog
                 TextButton(
-                  child: new Text("Вход"),
+                  child: new Text(AppLocalizations.of(context)!
+                      .add_offline_entry_page_login),
                   onPressed: () async {
                     await authResource.logout();
                     Provider.of<UserResource>(context, listen: false).clear();
@@ -202,7 +207,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                   },
                 ),
                 TextButton(
-                  child: new Text("Откажи"),
+                  child: new Text(AppLocalizations.of(context)!
+                      .add_offline_entry_page_cancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -219,10 +225,11 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           useRootNavigator: true,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: new Text("Грешка при изпращане на сървъра"),
+              title: new Text(AppLocalizations.of(context)!
+                  .add_offline_entry_page_server_sending_error),
               actions: <Widget>[
                 TextButton(
-                    child: Text("OK"),
+                    child: Text(AppLocalizations.of(context)!.add_offline_entry_page_ok),
                     onPressed: () => Navigator.of(context).pop())
               ],
               content: RichText(
@@ -230,7 +237,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                   children: <TextSpan>[
                     TextSpan(
                         text:
-                            'Грешка при изпращане на данните. Моля, опитайте по-късно.'),
+                            AppLocalizations.of(context)!.add_offline_entry_page_data_error),
                   ],
                 ),
               ),
@@ -277,7 +284,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Участвай в класацията'),
+        title: Text(AppLocalizations.of(context)!.add_offline_entry_page_join_leaderboard),
       ),
       body: Center(
           child: this.isLoading
@@ -294,7 +301,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
           child: Text(
-            "За да продължите - следвайте инструкциите и свържете 5kmRun приложението с вашия Strava профил.\n\nМоля, използвайте Google Chrome при свързването и въведете директно Strava потребителско име и парола. В момента, свързване с други браузъри не сработва успешно.\n\nСистемата на селфи отчита  „Elapsed time“, т.е. вашето общо (цялостно) време на бягането, което включва и времето при включена пауза или просто спрял на място! Много хора се заблуждават, че селфи ще им приеме тяхното „Moving Time“, което представлява само времето на движение без включените паузи и спиранията, т.е. случаите, при които се прекъсва бягането с използването на бутона „пауза“ или спиране на място!",
+            AppLocalizations.of(context)!
+                .add_offline_entry_page_join_leaderboard_instructions,
             style: Theme.of(context).textTheme.titleSmall,
             textAlign: TextAlign.center,
           ),
@@ -334,13 +342,17 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
             child: ProgressButton.icon(
               iconedButtons: {
                 ButtonState.idle: IconedButton(
-                    text: "Участвай с избраното бягане",
+                    text: AppLocalizations.of(context)!
+                        .add_offline_entry_page_join_with_current_run,
                     icon: Icon(Icons.send, color: Colors.white),
                     color: selectedColor),
-                ButtonState.loading:
-                    IconedButton(text: "Изпращане", color: selectedColor),
+                ButtonState.loading: IconedButton(
+                    text: AppLocalizations.of(context)!
+                        .add_offline_entry_page_sending,
+                    color: selectedColor),
                 ButtonState.fail: IconedButton(
-                    text: "Грешка при качване",
+                    text: AppLocalizations.of(context)!
+                        .add_offline_entry_page_uploading_error,
                     icon: Icon(Icons.cancel, color: Colors.white),
                     color: selectedColor),
                 ButtonState.success: IconedButton(
@@ -421,7 +433,7 @@ class StravaActivityList extends StatelessWidget {
                       text: activity.detailedActivity.name!, icon: Icons.info),
                   ListTileRow(text: dateString, icon: Icons.calendar_today),
                   ListTileRow(
-                      text: "$fastestSplitDistance / $totalDistance км",
+                      text: "$fastestSplitDistance / $totalDistance ${AppLocalizations.of(context)!.km}",
                       icon: Icons.map),
                   ListTileRow(
                       text: "$fastestSplitTime / $totalTime",

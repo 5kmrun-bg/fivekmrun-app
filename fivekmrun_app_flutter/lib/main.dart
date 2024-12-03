@@ -16,6 +16,9 @@ import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fivekmrun_flutter/state/locale_provider.dart';
 import 'package:provider/provider.dart';
 
 final userRes = UserResource();
@@ -70,53 +73,71 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OfflineChartResource()),
         ChangeNotifierProvider(create: (_) => LocalStorageResource()),
         ChangeNotifierProvider(create: (_) => StravaResource()),
+        ChangeNotifierProvider(create: (context) => LocaleProvider()),
       ],
-      child: MaterialApp(
-        navigatorKey: MyApp.navKey,
-        debugShowCheckedModeBanner: false,
-        title: '5kmRun.bg',
-        themeMode: ThemeMode.dark,
-        darkTheme: ThemeData(
-          useMaterial3: false,
-          dividerColor: Colors.black12,
-          textTheme: TextTheme(
-            titleSmall: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            bodyLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
-            bodyMedium: TextStyle(fontSize: 10),
-          ),
-          outlinedButtonTheme: OutlinedButtonThemeData(style: ButtonStyle(
-              foregroundColor: WidgetStateProperty.resolveWith<Color?>(
-                  (Set<WidgetState> states) {
-            return Colors.white;
-          }))),
-          textButtonTheme: TextButtonThemeData(style: ButtonStyle(
-            foregroundColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-              return Colors.white;
-            }),
-          )),
-          appBarTheme: AppBarTheme(
-              backgroundColor: Color.fromRGBO(66, 66, 66, 1),
-              iconTheme: IconThemeData(color: Colors.white),
-              titleTextStyle: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(color: Colors.white)),
-          colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: getColor(appAccentColor),
-              backgroundColor: Colors.black,
-              accentColor: appAccentColor,
-              errorColor: Colors.red,
-              brightness: Brightness.dark),
-        ),
-        initialRoute: _initialRoute,
-        routes: {
-          '/': (_) => Login(),
-          'loginPreview': (_) => LoginPreview(),
-          'home': (_) => Home(),
-          'barcode': (_) => BarcodePage(),
-          'settings': (_) => SettingsPage(),
-          'donation': (_) => DonatePage(),
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, child) {
+          return MaterialApp(
+            navigatorKey: MyApp.navKey,
+            debugShowCheckedModeBanner: false,
+            title: '5kmRun.bg',
+            locale: localeProvider.locale,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              Locale('en'),
+              Locale('bg'),
+            ],
+            themeMode: ThemeMode.dark,
+            darkTheme: ThemeData(
+              useMaterial3: false,
+              dividerColor: Colors.black12,
+              textTheme: TextTheme(
+                titleSmall: TextStyle(
+                    fontSize: 13, fontWeight: FontWeight.bold),
+                bodyLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                bodyMedium: TextStyle(fontSize: 10),
+              ),
+              outlinedButtonTheme: OutlinedButtonThemeData(style: ButtonStyle(
+                  foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                          (Set<WidgetState> states) {
+                        return Colors.white;
+                      }))),
+              textButtonTheme: TextButtonThemeData(style: ButtonStyle(
+                foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (Set<WidgetState> states) {
+                      return Colors.white;
+                    }),
+              )),
+              appBarTheme: AppBarTheme(
+                  backgroundColor: Color.fromRGBO(66, 66, 66, 1),
+                  iconTheme: IconThemeData(color: Colors.white),
+                  titleTextStyle: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: Colors.white)),
+              colorScheme: ColorScheme.fromSwatch(
+                  primarySwatch: getColor(appAccentColor),
+                  backgroundColor: Colors.black,
+                  accentColor: appAccentColor,
+                  errorColor: Colors.red,
+                  brightness: Brightness.dark),
+            ),
+            initialRoute: _initialRoute,
+            routes: {
+              '/': (_) => Login(),
+              'loginPreview': (_) => LoginPreview(),
+              'home': (_) => Home(),
+              'barcode': (_) => BarcodePage(),
+              'settings': (_) => SettingsPage(),
+              'donation': (_) => DonatePage(),
+            },
+          );
         },
       ),
     );

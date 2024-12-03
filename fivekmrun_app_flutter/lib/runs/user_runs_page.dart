@@ -3,6 +3,7 @@ import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserRunsPage extends StatelessWidget {
   const UserRunsPage({Key? key}) : super(key: key);
@@ -10,14 +11,14 @@ class UserRunsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Твоите Бягания")),
+        appBar: AppBar(title: Text(AppLocalizations.of(context)!.user_runs_page_title)),
         body: Consumer<RunsResource>(builder: (context, runsResource, child) {
           if (runsResource.loading) {
             return Center(child: CircularProgressIndicator());
           } else if (runsResource.value == null ||
               runsResource.value?.length == 0) {
             return Center(
-                child: Text("Все още не сте направили първото си бягане"));
+                child: Text(AppLocalizations.of(context)!.no_runs));
           } else {
             return UserRunsList(runs: runsResource.value!);
           }
@@ -73,7 +74,7 @@ class UserRunsList extends StatelessWidget {
                   ),
                   ListTileRow(
                     icon: Icons.timer,
-                    text: run.time! + " мин",
+                    text: run.time! + " ${AppLocalizations.of(context)!.min}",
                   ),
                 ],
               ),
