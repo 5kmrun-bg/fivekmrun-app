@@ -58,7 +58,7 @@
     "offline_chart_page_no_results":"No results",
     "offline_chart_page_login":"Login",
     "offline_chart_page_participation_in":"Participation in ",
-    "offline_chart_page_leaderboard_access":"the leaderboard requires authentication!",
+    "offline_chart_page_leaderboard_access":" leaderboard requires authentication!",
     "offline_chart_page_cancel":"Cancel",
     "offline_chart_page_weekly":"Weekly ",
     "offline_chart_page_leaderboard":" leaderboard",
