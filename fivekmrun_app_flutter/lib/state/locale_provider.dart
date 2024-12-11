@@ -26,7 +26,8 @@ class LocaleProvider extends ChangeNotifier {
     if (localeCode != null) {
       _locale = Locale(localeCode);
     } else {
-      Locale platformLocale = Locale(Platform.localeName);
+      Locale platformLocale = _getLocale(Platform.localeName);
+
       _locale = (AppLocalizations.supportedLocales.contains(platformLocale))
           ? platformLocale
           : Locale("bg");
@@ -35,10 +36,12 @@ class LocaleProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> clearLocale() async {
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.remove('locale');
-    _locale = null;
-    notifyListeners();
+  Locale _getLocale(String localeString) {
+    if (localeString.contains('_') || localeString.contains('-')) {
+      var parts = localeString.split(RegExp(r'[_-]'));
+      return Locale(parts.first);
+    } else {
+      return Locale(localeString);
+    }
   }
 }
