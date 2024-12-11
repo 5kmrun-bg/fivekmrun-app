@@ -1,7 +1,6 @@
 import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
-import 'package:fivekmrun_flutter/state/locale_provider.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,6 @@ class _SettingsPageState extends State<SettingsPage> {
       await authResource.logout();
       Provider.of<UserResource>(context, listen: false).clear();
       Provider.of<RunsResource>(context, listen: false).clear();
-      Provider.of<LocaleProvider>(context, listen: false).clearLocale();
 
       Navigator.of(context, rootNavigator: true)
           .pushNamedAndRemoveUntil("/", (_) => false);
