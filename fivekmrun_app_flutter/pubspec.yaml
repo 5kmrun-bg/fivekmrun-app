@@ -61,6 +61,9 @@ dependencies:
   uuid: ^4.1.0
   add_to_google_wallet: ^0.0.3
   flutter_shake_animated: ^0.0.5
+  flutter_localizations:
+    sdk: flutter
+  language_picker: ^0.4.5
 
 dependency_overrides:
   plugin_platform_interface: ^2.0.0
@@ -92,6 +95,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  # The following line enables automatic generation of localization files
+  generate: true
 
   assets:
     - assets/

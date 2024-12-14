@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
 import "package:collection/collection.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class RunsByRouteChart extends StatelessWidget {
   final List<charts.Series<dynamic, String>> seriesList;
@@ -25,7 +27,7 @@ class RunsByRouteChart extends StatelessWidget {
         padding: EdgeInsets.all(8.0),
         child: Column(children: <Widget>[
           IntrinsicHeight(
-              child: Text("Бягания по същински трасета", style: subTitleStyle)),
+              child: Text(AppLocalizations.of(context)!.runs_by_route_chart_title, style: subTitleStyle)),
           Expanded(
               child: new charts.PieChart<String>(seriesList,
                   animate: animate,

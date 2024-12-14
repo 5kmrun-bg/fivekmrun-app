@@ -6,6 +6,8 @@ import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ResultsList extends StatefulWidget {
   final List<Result> results;
@@ -97,7 +99,7 @@ class _ResultsListState extends State<ResultsList> {
                   itemBuilder: resultTileBuilder,
                 )
               : Center(
-                  child: Text("Няма резултати"),
+                  child: Text(AppLocalizations.of(context)!.results_list_no_results),
                 ),
         ),
       ],
@@ -214,7 +216,7 @@ class _ResultsListState extends State<ResultsList> {
                               icon: (res.isPatreon)
                                   ? CustomIcons.hand_holding_heart
                                   : Icons.person,
-                              text: (!res.isAnonymous) ? res.name : "Анонимен",
+                              text: (!res.isAnonymous) ? res.name : AppLocalizations.of(context)!.results_list_anonymous,
                               iconColor: iconColor,
                             ),
                             if (res.isSelfie)
@@ -263,7 +265,7 @@ class SearchBox extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 decoration: new InputDecoration(
-                    hintText: 'Търси по име или номер',
+                    hintText: AppLocalizations.of(context)!.results_list_search_bar,
                     border: InputBorder.none),
               ),
             ),
