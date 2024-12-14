@@ -107,6 +107,38 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     if (this.selectedActivity == null) {
       return;
     }
+
+    // Check if run is from current week
+    DateTime now = DateTime.now();
+    DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    startOfWeek =
+        DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+
+    DateTime runDate = DateTime.parse(
+        this.selectedActivity?.detailedActivity?.startDateLocal ?? "");
+    if (runDate.isBefore(startOfWeek)) {
+      setState(() {
+        submitButtonState = ButtonState.idle;
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Невалидно бягане"),
+              content: Text("Моля изберете бягане от текущата седмица."),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+      return;
+    }
+
     StravaSummaryRun? runSummary = this.selectedActivity;
 
     DetailedActivity? stravaActivity = this.selectedActivity?.detailedActivity;
