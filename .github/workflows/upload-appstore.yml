@@ -55,7 +55,7 @@ jobs:
         run: xcodebuild -resolvePackageDependencies -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release
       - name: Build xArchive
         run: |
-          xcodebuild -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=48HKWHQ6FS -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=1777610c-cb24-460c-85ea-101174d824d0 clean archive CODE_SIGN_IDENTITY="Apple Distribution: 5 KM PARK BG (48HKWHQ6FS)"
+          xcodebuild -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=48HKWHQ6FS -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=670ec024-9888-47a9-ae95-a6501a3b9898 clean archive CODE_SIGN_IDENTITY="Apple Distribution: 5 KM PARK BG (48HKWHQ6FS)"
       - name: Create export options plist
         run: |
           echo -n "${{ vars.IOS_EXPORT_OPTIONS }}" > $RUNNER_TEMP/exportOptions.plist
