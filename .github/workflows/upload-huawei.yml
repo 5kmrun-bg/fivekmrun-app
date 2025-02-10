@@ -46,9 +46,11 @@ jobs:
           path: ./fivekmrun_app_flutter/build/app/outputs/apk/release/
 
       - name: Upload to Huawei AppGallery
-        uses: wsr6/huawei-appgallery-deploy@v1.0.0
+        uses: kienlv58/appgallery-deply-action@main
         with:
-          client_id: ${{ secrets.HUAWEI_CLIENT_ID }}
-          client_secret: ${{ secrets.HUAWEI_CLIENT_SECRET }}
-          app_id: ${{ secrets.HUAWEI_APP_ID }}
-          apk_path: ./fivekmrun_app_flutter/build/app/outputs/apk/release/app-release.apk
+          client-id: ${{ secrets.HUAWEI_CLIENT_ID }}
+          client-key: ${{ secrets.HUAWEI_CLIENT_SECRET }}
+          app-id: ${{ secrets.HUAWEI_APP_ID }}
+          file-extension: "apk"
+          file-path: ./fivekmrun_app_flutter/build/app/outputs/apk/release/app-release.apk
+          submit: true
