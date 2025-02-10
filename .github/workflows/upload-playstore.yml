@@ -1,8 +1,7 @@
 name: Build and Upload to Google Play Store
-on:
-  workflow_dispatch
+on: workflow_dispatch
 env:
-  FLUTTER_VERSION: '${{ vars.FLUTTER_VERSION }}'
+  FLUTTER_VERSION: "${{ vars.FLUTTER_VERSION }}"
 
 jobs:
   android-build:
@@ -11,9 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
-        with: 
+        with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: 'stable'
+          channel: "stable"
           architecture: x64
 
       - run: cd fivekmrun_app_flutter && flutter pub get
@@ -31,7 +30,7 @@ jobs:
 
       - name: Replace Firebase config
         run: rm ./fivekmrun_app_flutter/android/app/google-services.json && echo "${{ secrets.FIREBASE_CONFIG }}" | base64 --decode > ./fivekmrun_app_flutter/android/app/google-services.json
-        
+
       - name: Build appbundle
         run: cd fivekmrun_app_flutter && flutter build appbundle --release --no-shrink
 
@@ -39,13 +38,13 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > /tmp/keystore.jks
           jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore /tmp/keystore.jks -storepass '${{ secrets.KEYSTORE_PASSWORD }}' -keypass '${{ secrets.KEYSTORE_PASSWORD }}' ./fivekmrun_app_flutter/build/app/outputs/bundle/release/app-release.aab ${{ secrets.KEYSTORE_ALIAS }}
-      
+
       - name: Publish Android Artefacts to GitHub
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-android
-          path: ./fivekmrun_app_flutter/build/app/outputs/bundle/release/     
-    
+          path: ./fivekmrun_app_flutter/build/app/outputs/bundle/release/
+
       - name: Upload to Google Play
         uses: r0adkll/upload-google-play@v1
         with:

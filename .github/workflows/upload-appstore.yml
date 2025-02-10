@@ -1,13 +1,12 @@
 name: Build and Upload to Apple App Store
-on:
-  workflow_dispatch
+on: workflow_dispatch
 env:
-  FLUTTER_VERSION: '${{ vars.FLUTTER_VERSION }}'
+  FLUTTER_VERSION: "${{ vars.FLUTTER_VERSION }}"
 
 jobs:
   ios-build:
     runs-on: macOS-latest
-    environment: production 
+    environment: production
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
@@ -21,9 +20,9 @@ jobs:
           PROVISIONING_CERTIFICATE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
         run: |
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-    
+
           echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode -o $PP_PATH
-    
+
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
@@ -41,13 +40,13 @@ jobs:
       - name: Replace Firebase config
         run: rm ./fivekmrun_app_flutter/ios/GoogleService-Info.plist && echo -n "${{ vars.FIREBASE_PLIST }}" > ./fivekmrun_app_flutter/ios/GoogleService-Info.plist
 
-      - name: 'Install Flutter'
+      - name: "Install Flutter"
         uses: subosito/flutter-action@v2
-        with: 
+        with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: 'stable'
+          channel: "stable"
           architecture: x64
-      - name: 'Install Flutter dependencies'
+      - name: "Install Flutter dependencies"
         run: cd fivekmrun_app_flutter && flutter pub get
 
       - name: Build Flutter
@@ -60,18 +59,18 @@ jobs:
       - name: Create export options plist
         run: |
           echo -n "${{ vars.IOS_EXPORT_OPTIONS }}" > $RUNNER_TEMP/exportOptions.plist
-          echo "Created export options plist: $RUNNER_TEMP/exportOptions.plist"  
+          echo "Created export options plist: $RUNNER_TEMP/exportOptions.plist"
       - name: Export ipa
         run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist $RUNNER_TEMP/exportOptions.plist
       - name: Publish iOS Artefacts to GitHub
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-ios
           path: build-output/ios
-      - name: 'Upload app to TestFlight'
+      - name: "Upload app to TestFlight"
         uses: apple-actions/upload-testflight-build@v1
-        with: 
-          app-path: 'build-output/ios/5kmRun.bg.ipa' 
+        with:
+          app-path: "build-output/ios/5kmRun.bg.ipa"
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
