@@ -7,6 +7,7 @@ import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
 import 'package:intl/intl.dart';
 import '../common/int_extensions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RunsChart extends StatefulWidget {
   final List<Run> runs;
@@ -41,11 +42,12 @@ class _RunsChartState extends State<RunsChart> {
         date = selectedDatum.first.datum.date;
         time = selectedDatum.first.datum.time;
 
-        setState(() => this.dataPointLabel = "Дата: " +
-            DateFormat(Constants.DATE_FORMAT).format(date) +
-            "\nВреме: " +
-            time +
-            "");
+        setState(() => this.dataPointLabel =
+            AppLocalizations.of(context)!.runs_chart_date +
+                DateFormat(Constants.DATE_FORMAT).format(date) +
+                AppLocalizations.of(context)!.runs_chart_time +
+                time +
+                "");
         print("model: time(" + date.toString() + "), value(" + time + ")");
       }
     }
@@ -56,9 +58,9 @@ class _RunsChartState extends State<RunsChart> {
           children: <Widget>[
             IntrinsicHeight(
                 child: Text(
-                    "Тенденция от последните " +
+                    AppLocalizations.of(context)!.runs_chart_trend +
                         this.widget.runs.length.toString() +
-                        " бягания",
+                        AppLocalizations.of(context)!.runs_chart_runs,
                     style: theme.textTheme.titleSmall)),
             IntrinsicHeight(child: Text(this.dataPointLabel)),
             Expanded(
