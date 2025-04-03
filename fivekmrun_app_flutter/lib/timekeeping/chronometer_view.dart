@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:ui'; // Add this import for FontFeature
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class ChronometerView extends StatefulWidget {
   const ChronometerView({Key? key}) : super(key: key);
@@ -14,22 +16,87 @@ class _ChronometerViewState extends State<ChronometerView> {
   int _milliseconds = 0;
   Timer? _timer;
   List<int> _laps = [];
+  int? _startTimeMillis; // When the timer was started
+  int? _pausedAtMillis; // When the timer was paused
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedState();
+  }
+
+  Future<void> _loadSavedState() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      _startTimeMillis = prefs.getInt('chronometer_start_time');
+      _pausedAtMillis = prefs.getInt('chronometer_paused_at');
+
+      final lapsJson = prefs.getString('chronometer_laps');
+      if (lapsJson != null) {
+        final List<dynamic> decoded = jsonDecode(lapsJson);
+        _laps = decoded.map((e) => e as int).toList();
+      }
+
+      // If we had a running timer when the app was closed
+      if (_startTimeMillis != null && _pausedAtMillis == null) {
+        // Calculate elapsed time and continue running
+        final now = DateTime.now().millisecondsSinceEpoch;
+        final elapsedSinceStart = now - _startTimeMillis!;
+        _milliseconds = elapsedSinceStart;
+        _isRunning = true;
+        _startTimer();
+      }
+      // If we had a paused timer
+      else if (_pausedAtMillis != null) {
+        _milliseconds = _pausedAtMillis!;
+        _isRunning = false;
+      }
+    });
+  }
+
+  Future<void> _saveState() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (_isRunning) {
+      // Save when we started the timer
+      await prefs.setInt('chronometer_start_time',
+          DateTime.now().millisecondsSinceEpoch - _milliseconds);
+      await prefs.remove('chronometer_paused_at');
+    } else {
+      // Save the time when we paused
+      await prefs.setInt('chronometer_paused_at', _milliseconds);
+      if (_milliseconds == 0) {
+        // If reset, clear the start time
+        await prefs.remove('chronometer_start_time');
+      }
+    }
+
+    // Save laps
+    await prefs.setString('chronometer_laps', jsonEncode(_laps));
+  }
 
   void _toggleTimer() {
     setState(() {
       _isRunning = !_isRunning;
       if (_isRunning) {
+        _startTimeMillis =
+            DateTime.now().millisecondsSinceEpoch - _milliseconds;
+        _pausedAtMillis = null;
         _startTimer();
       } else {
+        _pausedAtMillis = _milliseconds;
         _stopTimer();
       }
+      _saveState();
     });
   }
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
       setState(() {
-        _milliseconds += 10;
+        final now = DateTime.now().millisecondsSinceEpoch;
+        _milliseconds = now - _startTimeMillis!;
       });
     });
   }
@@ -45,6 +112,9 @@ class _ChronometerViewState extends State<ChronometerView> {
       _milliseconds = 0;
       _isRunning = false;
       _laps = [];
+      _startTimeMillis = null;
+      _pausedAtMillis = null;
+      _saveState();
     });
   }
 
@@ -52,6 +122,7 @@ class _ChronometerViewState extends State<ChronometerView> {
     if (_isRunning) {
       setState(() {
         _laps.add(_milliseconds);
+        _saveState();
       });
     }
   }
