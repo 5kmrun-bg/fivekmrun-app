@@ -61,6 +61,7 @@ dependencies:
   uuid: ^4.1.0
   add_to_google_wallet: ^0.0.3
   flutter_shake_animated: ^0.0.5
+  flutter_barcode_scanner: ^2.0.0
 
 dependency_overrides:
   plugin_platform_interface: ^2.0.0
