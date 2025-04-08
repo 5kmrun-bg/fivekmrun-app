@@ -106,22 +106,70 @@ class _ChronometerViewState extends State<ChronometerView> {
     _timer = null;
   }
 
-  void _resetTimer() {
-    _stopTimer();
-    setState(() {
-      _milliseconds = 0;
-      _isRunning = false;
-      _laps = [];
-      _startTimeMillis = null;
-      _pausedAtMillis = null;
-      _saveState();
-    });
+  Future<void> _resetTimer() async {
+    final bool? shouldReset = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Reset Timer'),
+        content: const Text(
+            'Are you sure you want to reset the timer and clear all laps?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Reset'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldReset == true) {
+      _stopTimer();
+      setState(() {
+        _milliseconds = 0;
+        _isRunning = false;
+        _laps = [];
+        _startTimeMillis = null;
+        _pausedAtMillis = null;
+        _saveState();
+      });
+    }
   }
 
   void _markLap() {
     if (_isRunning) {
       setState(() {
         _laps.add(_milliseconds);
+        _saveState();
+      });
+    }
+  }
+
+  Future<void> _deleteLap(int index) async {
+    final bool? shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Lap'),
+        content: const Text('Are you sure you want to delete this lap?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      setState(() {
+        _laps.removeAt(index);
         _saveState();
       });
     }
@@ -146,7 +194,10 @@ class _ChronometerViewState extends State<ChronometerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Chronometer')),
+      appBar: AppBar(
+        title: const Text('Chronometer'),
+        actions: [],
+      ),
       body: Column(
         children: [
           Padding(
@@ -206,10 +257,53 @@ class _ChronometerViewState extends State<ChronometerView> {
                           reversedIndex > 0 ? _laps[reversedIndex - 1] : 0;
                       final lapDuration = lapTime - previousLapTime;
 
-                      return ListTile(
-                        leading: CircleAvatar(child: Text('$lapNumber')),
-                        title: Text('Lap time: ${_formatTime(lapDuration)}'),
-                        subtitle: Text('Total time: ${_formatTime(lapTime)}'),
+                      return Dismissible(
+                        key: Key('lap_$reversedIndex'),
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                        ),
+                        confirmDismiss: (direction) async {
+                          final bool? shouldDelete = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Delete Lap'),
+                              content: const Text(
+                                  'Are you sure you want to delete this lap?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text('Delete'),
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (shouldDelete == true) {
+                            setState(() {
+                              _laps.removeAt(reversedIndex);
+                              _saveState();
+                            });
+                          }
+                          return shouldDelete;
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(child: Text('$lapNumber')),
+                          title: Text('Lap time: ${_formatTime(lapDuration)}'),
+                          subtitle: Text('Total time: ${_formatTime(lapTime)}'),
+                        ),
                       );
                     },
                   ),
