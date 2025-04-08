@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:ui'; // Add this import for FontFeature
 import 'package:shared_preferences/shared_preferences.dart';
@@ -185,6 +186,75 @@ class _ChronometerViewState extends State<ChronometerView> {
     return '$hoursStr${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}.${hundreds.toString().padLeft(2, '0')}';
   }
 
+  Future<void> _exportToFile() async {
+    if (_laps.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No laps to export')),
+      );
+      return;
+    }
+
+    final now = DateTime.now();
+    final dayOfWeek = now.weekday == 1
+        ? 'Monday'
+        : now.weekday == 2
+            ? 'Tuesday'
+            : now.weekday == 3
+                ? 'Wednesday'
+                : now.weekday == 4
+                    ? 'Thursday'
+                    : now.weekday == 5
+                        ? 'Friday'
+                        : now.weekday == 6
+                            ? 'Saturday'
+                            : 'Sunday';
+
+    final dateStr =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+    String content = 'MCH:\t\t001\n\n';
+    content += 'Record Date:\t$dateStr\t$dayOfWeek\n\n';
+
+    int previousLapTime = 0;
+    for (int i = 0; i < _laps.length; i++) {
+      final lapNumber = i + 1;
+      final lapTime = _laps[i];
+      final splitTime = lapTime - previousLapTime;
+
+      final minutes = (splitTime / 60000).floor();
+      final seconds = ((splitTime % 60000) / 1000).floor();
+      final milliseconds = (splitTime % 1000) ~/ 10;
+
+      final splitTimeStr =
+          '$minutes:${seconds.toString().padLeft(2, '0')}\'${milliseconds.toString().padLeft(2, '0')}.${(splitTime % 10).toString().padLeft(2, '0')}';
+
+      final totalMinutes = (lapTime / 60000).floor();
+      final totalSeconds = ((lapTime % 60000) / 1000).floor();
+      final totalMilliseconds = (lapTime % 1000) ~/ 10;
+
+      final totalTimeStr =
+          '$totalMinutes:${totalSeconds.toString().padLeft(2, '0')}\'${totalMilliseconds.toString().padLeft(2, '0')}.${(lapTime % 10).toString().padLeft(2, '0')}';
+
+      content +=
+          'Lap$lapNumber:\t$splitTimeStr\tSplit$lapNumber:\t$totalTimeStr\n';
+      previousLapTime = lapTime;
+    }
+
+    try {
+      await Clipboard.setData(ClipboardData(text: content));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Results copied to clipboard'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error copying results: $e')),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _stopTimer();
@@ -196,7 +266,13 @@ class _ChronometerViewState extends State<ChronometerView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chronometer'),
-        actions: [],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: _exportToFile,
+            tooltip: 'Export Results',
+          ),
+        ],
       ),
       body: Column(
         children: [
