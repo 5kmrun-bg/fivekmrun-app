@@ -21,6 +21,7 @@ class BarcodePage extends StatelessWidget {
       final userName = (user?.name != null) ? user?.name : "";
       final isUserPatron = (userResource.value?.donationsCount ?? 0) > 0;
       final userStatus = isUserPatron ? "Патрон" : "Бегач";
+      final accentColor = Theme.of(context).colorScheme.secondary;
 
       final objectId = uuid.v4();
       final pass = """
@@ -87,29 +88,87 @@ class BarcodePage extends StatelessWidget {
             title: Text("Баркод"),
             centerTitle: true,
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.black,
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Center(
-                child: Column(children: <Widget>[
-              Text(userName!, style: TextStyle(color: Colors.black)),
-              BarCodeImage(
-                  params: Code39BarCodeParams(
-                formatBarcode(userId),
-                lineWidth:
-                    2.0, // width for a single black/white bar (default: 2.0)
-                barHeight:
-                    90.0, // height for the entire widget (default: 100.0)
-                withText: false,
-              )),
-              Text(userId.toString(), style: TextStyle(color: Colors.black)),
-              Expanded(
-                  child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Align(
-                          alignment: FractionalOffset.bottomCenter,
-                          child: buildButton())))
-            ])),
+                child: Card(
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      accentColor,
+                      accentColor.withOpacity(0.8),
+                    ],
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        "5kmrun",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        userName!,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        userStatus,
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 24),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: BarCodeImage(
+                            params: Code39BarCodeParams(
+                          formatBarcode(userId),
+                          lineWidth: 1.5,
+                          barHeight: 60.0,
+                          withText: false,
+                        )),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        userId.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 24),
+                      buildButton(),
+                    ],
+                  ),
+                ),
+              ),
+            )),
           ));
     });
   }
