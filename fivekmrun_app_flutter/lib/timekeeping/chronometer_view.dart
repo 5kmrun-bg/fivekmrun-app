@@ -292,22 +292,24 @@ class _ChronometerViewState extends State<ChronometerView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: _toggleTimer,
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 ),
-                child: Text(_isRunning ? 'Stop' : 'Start'),
+                icon: Icon(_isRunning ? Icons.stop : Icons.play_arrow),
+                label: Text(_isRunning ? 'Stop' : 'Start'),
               ),
               const SizedBox(width: 20),
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: _resetTimer,
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 ),
-                child: const Text('Reset'),
+                icon: const Icon(Icons.refresh),
+                label: const Text('Reset'),
               ),
             ],
           ),
@@ -378,12 +380,13 @@ class _ChronometerViewState extends State<ChronometerView> {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
+            child: ElevatedButton.icon(
               onPressed: _markLap,
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 48),
               ),
-              child: const Text('Lap'),
+              icon: const Icon(Icons.flag),
+              label: const Text('Lap'),
             ),
           ),
         ],
