@@ -142,6 +142,7 @@ class _ChronometerViewState extends State<ChronometerView> {
 
   void _markLap() {
     if (_isRunning) {
+      HapticFeedback.lightImpact();
       setState(() {
         _laps.add(_milliseconds);
         _saveState();
@@ -301,15 +302,6 @@ class _ChronometerViewState extends State<ChronometerView> {
               ),
               const SizedBox(width: 20),
               ElevatedButton(
-                onPressed: _markLap,
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                ),
-                child: const Text('Lap'),
-              ),
-              const SizedBox(width: 20),
-              ElevatedButton(
                 onPressed: _resetTimer,
                 style: ElevatedButton.styleFrom(
                   padding:
@@ -383,6 +375,16 @@ class _ChronometerViewState extends State<ChronometerView> {
                       );
                     },
                   ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: _markLap,
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 48),
+              ),
+              child: const Text('Lap'),
+            ),
           ),
         ],
       ),
