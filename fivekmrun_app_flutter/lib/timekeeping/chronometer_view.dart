@@ -376,7 +376,11 @@ class _ChronometerViewState extends State<ChronometerView> {
                         },
                         child: ListTile(
                           leading: CircleAvatar(child: Text('$lapNumber')),
-                          title: Text('${_formatTime(lapTime)}'),
+                          title: Text('Total time: ${_formatTime(lapTime)}'),
+                          subtitle: Text(
+                            'Lap: ${_formatTime(lapDuration)}',
+                            style: const TextStyle(fontSize: 12),
+                          ),
                         ),
                       );
                     },
