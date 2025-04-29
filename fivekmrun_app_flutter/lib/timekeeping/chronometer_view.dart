@@ -222,19 +222,21 @@ class _ChronometerViewState extends State<ChronometerView> {
       final lapTime = _laps[i];
       final splitTime = lapTime - previousLapTime;
 
+      final hours = (splitTime / 3600000).floor();
       final minutes = (splitTime / 60000).floor();
       final seconds = ((splitTime % 60000) / 1000).floor();
       final milliseconds = (splitTime % 1000) ~/ 10;
 
       final splitTimeStr =
-          '$minutes:${seconds.toString().padLeft(2, '0')}\'${milliseconds.toString().padLeft(2, '0')}.${(splitTime % 10).toString().padLeft(2, '0')}';
+          '$hours:${minutes.toString().padLeft(2, '0')}\'${seconds.toString().padLeft(2, '0')}.${milliseconds.toString().padLeft(2, '0')}';
 
+      final totalHours = (lapTime / 3600000).floor();
       final totalMinutes = (lapTime / 60000).floor();
       final totalSeconds = ((lapTime % 60000) / 1000).floor();
       final totalMilliseconds = (lapTime % 1000) ~/ 10;
 
       final totalTimeStr =
-          '$totalMinutes:${totalSeconds.toString().padLeft(2, '0')}\'${totalMilliseconds.toString().padLeft(2, '0')}.${(lapTime % 10).toString().padLeft(2, '0')}';
+          '$totalHours:${totalMinutes.toString().padLeft(2, '0')}\'${totalSeconds.toString().padLeft(2, '0')}.${totalMilliseconds.toString().padLeft(2, '0')}';
 
       content +=
           'Lap$lapNumber:\t$splitTimeStr\tSplit$lapNumber:\t$totalTimeStr\n';
