@@ -142,7 +142,7 @@ class _ChronometerViewState extends State<ChronometerView> {
 
   void _markLap() {
     if (_isRunning) {
-      HapticFeedback.lightImpact();
+      HapticFeedback.mediumImpact();
       setState(() {
         _laps.add(_milliseconds);
         _saveState();
@@ -289,32 +289,37 @@ class _ChronometerViewState extends State<ChronometerView> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton.icon(
-                onPressed: _toggleTimer,
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _toggleTimer,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 48),
+                    ),
+                    icon: Icon(_isRunning ? Icons.stop : Icons.play_arrow),
+                    label: Text(_isRunning ? 'Stop' : 'Start'),
+                  ),
                 ),
-                icon: Icon(_isRunning ? Icons.stop : Icons.play_arrow),
-                label: Text(_isRunning ? 'Stop' : 'Start'),
-              ),
-              const SizedBox(width: 20),
-              ElevatedButton.icon(
-                onPressed: _resetTimer,
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _resetTimer,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 48),
+                    ),
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Reset'),
+                  ),
                 ),
-                icon: const Icon(Icons.refresh),
-                label: const Text('Reset'),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 20),
           Expanded(
+            flex: 3,
             child: _laps.isEmpty
                 ? const Center(child: Text('No laps recorded'))
                 : ListView.builder(
@@ -383,9 +388,10 @@ class _ChronometerViewState extends State<ChronometerView> {
             child: ElevatedButton.icon(
               onPressed: _markLap,
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 48),
+                minimumSize: const Size(double.infinity, 96),
+                textStyle: const TextStyle(fontSize: 20),
               ),
-              icon: const Icon(Icons.flag),
+              icon: const Icon(Icons.flag, size: 32),
               label: const Text('Lap'),
             ),
           ),
