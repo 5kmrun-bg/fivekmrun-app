@@ -280,7 +280,7 @@ class _ChronometerViewState extends State<ChronometerView> {
         title: const Text('Chronometer'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share),
+            icon: const Icon(Icons.save_alt),
             onPressed: _exportToFile,
             tooltip: 'Export Results',
           ),
