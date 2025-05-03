@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'dart:io';
 
 class ChronometerView extends StatefulWidget {
@@ -27,6 +28,7 @@ class _ChronometerViewState extends State<ChronometerView> {
   void initState() {
     super.initState();
     _loadSavedState();
+    WakelockPlus.enable();
   }
 
   Future<void> _loadSavedState() async {
@@ -270,6 +272,7 @@ class _ChronometerViewState extends State<ChronometerView> {
   @override
   void dispose() {
     _stopTimer();
+    WakelockPlus.disable();
     super.dispose();
   }
 
