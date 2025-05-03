@@ -64,6 +64,7 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   path_provider: ^2.1.2
   share_plus: ^7.2.1
+  firebase_remote_config: ^5.0.0
 
 dependency_overrides:
   plugin_platform_interface: ^2.0.0
