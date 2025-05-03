@@ -4,6 +4,9 @@ import 'dart:async';
 import 'dart:ui'; // Add this import for FontFeature
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:io';
 
 class ChronometerView extends StatefulWidget {
   const ChronometerView({Key? key}) : super(key: key);
@@ -244,16 +247,22 @@ class _ChronometerViewState extends State<ChronometerView> {
     }
 
     try {
-      await Clipboard.setData(ClipboardData(text: content));
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Results copied to clipboard'),
-          duration: Duration(seconds: 2),
-        ),
+      // Get temporary directory
+      final directory = await getTemporaryDirectory();
+      final fileName = 'chronometer_results_${dateStr.replaceAll('-', '')}.txt';
+      final file = File('${directory.path}/$fileName');
+
+      // Write content to file
+      await file.writeAsString(content);
+
+      // Share the file
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        subject: 'Chronometer Results - $dateStr',
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error copying results: $e')),
+        SnackBar(content: Text('Error sharing results: $e')),
       );
     }
   }
