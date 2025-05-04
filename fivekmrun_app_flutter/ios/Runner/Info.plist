@@ -71,5 +71,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is required for scanning QR codes and barcodes for race registration and timing purposes.</string>
 </dict>
 </plist>
