@@ -182,14 +182,27 @@ class _ChronometerViewState extends State<ChronometerView> {
     }
   }
 
-  String _formatTime(int milliseconds) {
-    int hundreds = (milliseconds / 10).floor() % 100;
-    int seconds = (milliseconds / 1000).floor() % 60;
-    int minutes = (milliseconds / 60000).floor() % 60;
-    int hours = (milliseconds / 3600000).floor();
+  List<int> _breakDownTime(int ms) {
+    final hours = ms ~/ 3600000;
+    final minutes = (ms % 3600000) ~/ 60000;
+    final seconds = (ms % 60000) ~/ 1000;
+    final hundredths = (ms % 1000) ~/ 10;
+    return [hours, minutes, seconds, hundredths];
+  }
 
-    String hoursStr = hours > 0 ? '${hours.toString().padLeft(2, '0')}:' : '';
-    return '$hoursStr${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}.${hundreds.toString().padLeft(2, '0')}';
+  String _formatTimeForExport(int ms) {
+    final parts = _breakDownTime(ms);
+    final h = parts[0], m = parts[1], s = parts[2], hs = parts[3];
+
+    return '$h:${m.toString().padLeft(2, '0')}\'${s.toString().padLeft(2, '0')}.${hs.toString().padLeft(2, '0')}';
+  }
+
+  String _formatTimeForUI(int ms) {
+    final parts = _breakDownTime(ms);
+    final h = parts[0], m = parts[1], s = parts[2], hs = parts[3];
+
+    final hStr = h > 0 ? '${h.toString().padLeft(2, '0')}:' : '';
+    return '$hStr${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}.${hs.toString().padLeft(2, '0')}';
   }
 
   Future<void> _exportToFile() async {
@@ -223,21 +236,8 @@ class _ChronometerViewState extends State<ChronometerView> {
       final lapTime = _laps[i];
       final splitTime = lapTime - previousLapTime;
 
-      final hours = (splitTime / 3600000).floor();
-      final minutes = (splitTime / 60000).floor();
-      final seconds = ((splitTime % 60000) / 1000).floor();
-      final milliseconds = (splitTime % 1000) ~/ 10;
-
-      final splitTimeStr =
-          '$hours:${minutes.toString().padLeft(2, '0')}\'${seconds.toString().padLeft(2, '0')}.${milliseconds.toString().padLeft(2, '0')}';
-
-      final totalHours = (lapTime / 3600000).floor();
-      final totalMinutes = (lapTime / 60000).floor();
-      final totalSeconds = ((lapTime % 60000) / 1000).floor();
-      final totalMilliseconds = (lapTime % 1000) ~/ 10;
-
-      final totalTimeStr =
-          '$totalHours:${totalMinutes.toString().padLeft(2, '0')}\'${totalSeconds.toString().padLeft(2, '0')}.${totalMilliseconds.toString().padLeft(2, '0')}';
+      final splitTimeStr = _formatTimeForExport(splitTime);
+      final totalTimeStr = _formatTimeForExport(lapTime);
 
       content +=
           'Lap$lapNumber:\t$splitTimeStr\tSplit$lapNumber:\t$totalTimeStr\n';
@@ -290,7 +290,7 @@ class _ChronometerViewState extends State<ChronometerView> {
           Padding(
             padding: const EdgeInsets.all(32.0),
             child: Text(
-              _formatTime(_milliseconds),
+              _formatTimeForUI(_milliseconds),
               style: const TextStyle(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
@@ -386,9 +386,10 @@ class _ChronometerViewState extends State<ChronometerView> {
                         },
                         child: ListTile(
                           leading: CircleAvatar(child: Text('$lapNumber')),
-                          title: Text('Total time: ${_formatTime(lapTime)}'),
+                          title:
+                              Text('Total time: ${_formatTimeForUI(lapTime)}'),
                           subtitle: Text(
-                            'Lap: ${_formatTime(lapDuration)}',
+                            'Lap: ${_formatTimeForUI(lapDuration)}',
                             style: const TextStyle(fontSize: 12),
                           ),
                         ),
