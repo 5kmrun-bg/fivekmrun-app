@@ -201,19 +201,15 @@ class _ChronometerViewState extends State<ChronometerView> {
     }
 
     final now = DateTime.now();
-    final dayOfWeek = now.weekday == 1
-        ? 'Monday'
-        : now.weekday == 2
-            ? 'Tuesday'
-            : now.weekday == 3
-                ? 'Wednesday'
-                : now.weekday == 4
-                    ? 'Thursday'
-                    : now.weekday == 5
-                        ? 'Friday'
-                        : now.weekday == 6
-                            ? 'Saturday'
-                            : 'Sunday';
+    final dayOfWeek = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ][now.weekday - 1];
 
     final dateStr =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
