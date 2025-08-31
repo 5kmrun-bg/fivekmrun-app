@@ -22,6 +22,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!-- Needed for strava authentication: https://github.com/dreampowder/strava_flutter/issues/87 -->
         <activity android:name="com.linusu.flutter_web_auth_2.CallbackActivity"
             android:exported="true">
             <intent-filter android:label="flutter_web_auth_2">
