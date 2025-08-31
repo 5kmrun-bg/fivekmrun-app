@@ -300,7 +300,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     strava.authenticate().then(
           (success) => this.setState(() {
             this.isConnectedToStrava = success;
-            this.loadActivities(strava);
+            if (success) {
+              this.loadActivities(strava);
+            }
           }),
         );
   }
