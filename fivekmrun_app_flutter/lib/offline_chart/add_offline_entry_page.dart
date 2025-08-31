@@ -17,7 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
-import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
+import 'package:strava_client/strava_client.dart';
 
 import '../common/int_extensions.dart';
 import '../common/double_extensions.dart';
