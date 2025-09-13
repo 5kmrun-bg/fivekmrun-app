@@ -3,11 +3,7 @@ import 'package:fivekmrun_flutter/constants.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:fivekmrun_flutter/state/strava_activity_model.dart';
 import 'package:flutter/material.dart';
-import 'package:strava_flutter/domain/model/model_authentication_response.dart';
-import 'package:strava_flutter/domain/model/model_authentication_scopes.dart';
-import 'package:strava_flutter/domain/model/model_detailed_activity.dart';
-import 'package:strava_flutter/domain/model/model_detailed_athlete.dart';
-import 'package:strava_flutter/strava_client.dart';
+import 'package:strava_client/strava_client.dart';
 
 typedef StravaCallback<T> = Future<T> Function(StravaClient strava);
 
@@ -66,7 +62,10 @@ class StravaResource extends ChangeNotifier {
         AuthenticationScope.profile_read_all
       ];
       final isAuthOk = await strava.authentication
-          .authenticate(scopes: scopes, redirectUrl: "fivekmrun://redirect/")
+          .authenticate(
+              scopes: scopes,
+              redirectUrl: "fivekmrun://redirect/",
+              callbackUrlScheme: "fivekmrun")
           .then((t) => true)
           .onError((error, stackTrace) {
         FirebaseCrashlytics.instance.recordError(error, stackTrace);
