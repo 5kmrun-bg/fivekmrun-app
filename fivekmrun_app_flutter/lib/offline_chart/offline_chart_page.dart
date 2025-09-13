@@ -8,6 +8,7 @@ import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OfflineChartPage extends StatefulWidget {
   OfflineChartPage({Key? key}) : super(key: key);
@@ -66,12 +67,12 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
       useRootNavigator: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Вход с парола"),
+          title: new Text(AppLocalizations.of(context)!.offline_chart_page_login),
           content: RichText(
             text: TextSpan(
               style: textStlyle,
               children: <TextSpan>[
-                TextSpan(text: 'Участието в '),
+                TextSpan(text: AppLocalizations.of(context)!.offline_chart_page_participation_in),
                 TextSpan(
                   text: 'Selfie',
                   style: textStlyle?.copyWith(
@@ -79,13 +80,13 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextSpan(text: ' класацията е достъпно вход с парола!'),
+                TextSpan(text: AppLocalizations.of(context)!.offline_chart_page_leaderboard_access),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: new Text("Вход с парола"),
+              child: new Text(AppLocalizations.of(context)!.offline_chart_page_login),
               onPressed: () async {
                 await authResource.logout();
                 Provider.of<UserResource>(context, listen: false).clear();
@@ -96,7 +97,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               },
             ),
             TextButton(
-              child: new Text("Откажи"),
+              child: new Text(AppLocalizations.of(context)!.offline_chart_page_cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -143,7 +144,9 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
           text: TextSpan(
             style: textStlyle,
             children: <TextSpan>[
-              TextSpan(text: 'Седмична '),
+              TextSpan(
+                  text:
+                      AppLocalizations.of(context)!.offline_chart_page_weekly),
               TextSpan(
                 text: 'Selfie',
                 style: textStlyle?.copyWith(
@@ -151,7 +154,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              TextSpan(text: ' класация'),
+              TextSpan(text: AppLocalizations.of(context)!.offline_chart_page_leaderboard),
             ],
           ),
         ),
@@ -162,12 +165,12 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
             Row(
               children: <Widget>[
                 SelectButton(
-                  text: "Предходна седмица",
+                  text: AppLocalizations.of(context)!.offline_chart_page_previous_week,
                   onPressed: this.selectLastWeek,
                   selected: !this.thisWeekSelected,
                 ),
                 SelectButton(
-                  text: "Текуща седмица",
+                  text: AppLocalizations.of(context)!.offline_chart_page_current_week,
                   onPressed: this.selectThisWeek,
                   selected: this.thisWeekSelected,
                 ),
@@ -182,7 +185,10 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                     onPressed: () => this.goToAddEntry(),
                     child: Row(
                       children: [
-                        Text("Участвай", style: TextStyle()),
+                        Text(
+                            AppLocalizations.of(context)!
+                                .offline_chart_page_join,
+                            style: TextStyle()),
                         Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: Icon(Icons.add_circle_outline),
@@ -202,7 +208,8 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                       child: Row(
                         children: [
                           Text(
-                            "Подробни\nрезултати",
+                            AppLocalizations.of(context)!
+                                .offline_chart_page_results,
                             style: TextStyle(
                               fontSize: 8,
                             ),
@@ -226,7 +233,9 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
     if (this.results == null) {
       return Center(child: CircularProgressIndicator());
     } else if (this.results?.length == 0) {
-      return Center(child: Text("Няма резултати"));
+      return Center(
+          child: Text(
+              AppLocalizations.of(context)!.offline_chart_page_no_results));
     } else {
       return ResultsList(results: this.results!);
     }

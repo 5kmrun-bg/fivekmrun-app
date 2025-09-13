@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
 import '../common/int_extensions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class BestTimesByRouteChart extends StatelessWidget {
   final List<charts.Series<dynamic, String>> seriesList;
@@ -27,7 +29,7 @@ class BestTimesByRouteChart extends StatelessWidget {
         child: Column(
           children: <Widget>[
             IntrinsicHeight(
-                child: Text("Рекорди по същински трасета",
+                child: Text(AppLocalizations.of(context)!.best_time_by_route_chart_widget_records,
                     style: theme.textTheme.titleSmall)),
             Expanded(
                 child: charts.BarChart(seriesList,

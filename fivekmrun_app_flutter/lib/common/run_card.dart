@@ -2,6 +2,8 @@ import 'package:fivekmrun_flutter/home.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class RunCard extends StatelessWidget {
   final Run run;
@@ -46,7 +48,7 @@ class RunCard extends StatelessWidget {
                                 color: theme.colorScheme
                                     .secondary), //HACK: hide the label if Selfie but bump the space
                           ),
-                          Text("място", style: labelStyle),
+                          Text(AppLocalizations.of(context)!.run_card_widget_place, style: labelStyle),
                         ],
                       ),
                     ),
@@ -73,11 +75,11 @@ class RunCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text(run.pace ?? "" + " мин/км",
+                            child: Text(run.pace ?? "" + " ${AppLocalizations.of(context)!.min_km}",
                                 style: valueStyle,
                                 overflow: TextOverflow.ellipsis),
                           ),
-                          Text(run.time ?? "" + " мин",
+                          Text(run.time ?? "" + " ${AppLocalizations.of(context)!.min}",
                               style: valueStyle,
                               overflow: TextOverflow.ellipsis),
                         ],

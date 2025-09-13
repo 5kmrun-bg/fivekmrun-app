@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DonatePage extends StatelessWidget {
   const DonatePage({Key? key}) : super(key: key);
@@ -16,7 +17,8 @@ class DonatePage extends StatelessWidget {
         ));
 
     return Scaffold(
-      appBar: AppBar(title: Text("Подкрепи ни")),
+      appBar:
+          AppBar(title: Text(AppLocalizations.of(context)!.donate_page_title)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -26,7 +28,7 @@ class DonatePage extends StatelessWidget {
               child: Column(children: [
                 Center(
                     child: Text(
-                  "Това приложение и цялата дейност на 5kmRun се издържа изцяло от дарения и доброволен труд. Можете да подкрепите нашите усилия, чрез някой от изброените по-долу начини.",
+                  AppLocalizations.of(context)!.donate_page_description,
                   textAlign: TextAlign.center,
                 )),
                 Padding(
@@ -37,7 +39,8 @@ class DonatePage extends StatelessWidget {
                       child: ElevatedButton(
                         child: Row(
                           children: [
-                            Text("Стани Патрон"),
+                            Text(AppLocalizations.of(context)!
+                                .donate_page_become_a_patron),
                           ],
                         ),
                         onPressed: () async {
@@ -52,7 +55,8 @@ class DonatePage extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Можете да направите годишно дарение на стойност 24лв., което ще ви отреди званието 'Патрон' за следващите 12 месеца. Сумата можете да дарите на място при същинските бягания или по банков път.",
+                          AppLocalizations.of(context)!
+                              .donate_page_patreon_description,
                         ),
                       ),
                     ),
@@ -66,7 +70,8 @@ class DonatePage extends StatelessWidget {
                       child: Row(
                         children: [
                           Icon(CustomIcons.paypal, size: 16),
-                          Text(" PayPal"),
+                          Text(AppLocalizations.of(context)!
+                              .donate_page_pay_pal),
                         ],
                       ),
                       onPressed: () async {
@@ -81,8 +86,8 @@ class DonatePage extends StatelessWidget {
                   Flexible(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Можете да направите еднократно или регулярно дарение на сума по ваш избор."),
+                      child: Text(AppLocalizations.of(context)!
+                          .donate_page_pay_pal_description),
                     ),
                   )
                 ]),
@@ -95,7 +100,8 @@ class DonatePage extends StatelessWidget {
                         child: Row(
                           children: [
                             Icon(Icons.shopping_bag),
-                            Text(" Фен магазин"),
+                            Text(AppLocalizations.of(context)!
+                                .donate_page_fan_store),
                           ],
                         ),
                         onPressed: () async {
@@ -110,8 +116,8 @@ class DonatePage extends StatelessWidget {
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                            "Всяка покупка на артикул на нашия фен магазин подпомага дейностите на 5kmrun и ни помага да стигнем безплатно до хиляди хора в България."),
+                        child: Text(AppLocalizations.of(context)!
+                            .donate_page_fan_store_description),
                       ),
                     )
                   ],
@@ -125,7 +131,8 @@ class DonatePage extends StatelessWidget {
                         child: Row(
                           children: [
                             Icon(Icons.directions_run),
-                            Text(" XL бягане"),
+                            Text(AppLocalizations.of(context)!
+                                .donate_page_xl_run),
                           ],
                         ),
                         onPressed: () async {
@@ -139,8 +146,8 @@ class DonatePage extends StatelessWidget {
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                            "Всеки месец в района на София организираме предизвикателства в различни дължини, терени и натоварвания. Таксата за участие изцяло подпомага дейностите на 5kmrun."),
+                        child: Text(AppLocalizations.of(context)!
+                            .donate_page_xl_run_description),
                       ),
                     )
                   ],

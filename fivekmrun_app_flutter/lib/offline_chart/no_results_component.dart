@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NoResultsComponent extends StatelessWidget {
   @override
@@ -7,18 +8,21 @@ class NoResultsComponent extends StatelessWidget {
       padding: const EdgeInsets.only(top: 24.0),
       child: Column(
         children: [
-          Text("Няма подходящи бягания!",
+          Text(
+              AppLocalizations.of(context)!
+                  .no_results_component_no_suitable_runs,
               style: Theme.of(context).textTheme.titleSmall),
           Padding(
             padding: const EdgeInsets.only(
                 left: 36.0, top: 36.0, right: 36.0, bottom: 18.0),
-            child: Text(
-                "Участието в класацията е възможно с бягания отговарящи на следните условия:"),
+            child: Text(AppLocalizations.of(context)!
+                .no_results_component_participation_requirements),
           ),
           Column(
             children: [
               Text(
-                  "1. Бягането е качено в Strava и е направено в текущата седмица\n\n2. Бягането е от тип Run и не е на пътека\n\n3. Дължината на бягането е поне 5км\n\n4. Към бягането има карта, която е видима за всички потребители",
+                  AppLocalizations.of(context)!
+                      .no_results_component_requirements,
                   textAlign: TextAlign.left),
             ],
           ),
