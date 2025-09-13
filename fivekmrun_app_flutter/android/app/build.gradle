@@ -45,7 +45,7 @@ android {
         applicationId "bg.fivekmpark.fivekmrun"
         namespace "bg.fivekmpark.fivekmrun"
         minSdkVersion 26
-        targetSdkVersion 34
+        targetSdkVersion 35
  
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
