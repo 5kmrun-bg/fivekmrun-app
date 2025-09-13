@@ -12,6 +12,7 @@ import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
+import 'package:fivekmrun_flutter/timekeeping/timekeeping.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
@@ -167,6 +168,9 @@ class ProfileDashboard extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            Row(
+              children: [Timekeeping()],
             ),
             if (runsRes.loading) Center(child: CircularProgressIndicator()),
             if (hasOfficialRuns)
