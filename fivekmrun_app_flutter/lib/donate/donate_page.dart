@@ -43,8 +43,9 @@ class DonatePage extends StatelessWidget {
                         onPressed: () async {
                           FirebaseAnalytics.instance
                               .logEvent(name: "button_donation_5kmrun_clicked");
-                          await launch("https://5kmrun.bg/dariteli",
-                              forceSafariVC: false);
+                          await launchUrl(
+                              Uri.parse("https://5kmrun.bg/dariteli"),
+                              mode: LaunchMode.externalApplication);
                         },
                       ),
                     ),
@@ -72,9 +73,10 @@ class DonatePage extends StatelessWidget {
                       onPressed: () async {
                         FirebaseAnalytics.instance
                             .logEvent(name: "button_donation_paypal_clicked");
-                        await launch(
-                            "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U9KNHBAU8VMFS&source=url",
-                            forceSafariVC: false);
+                        await launchUrl(
+                            Uri.parse(
+                                "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U9KNHBAU8VMFS&source=url"),
+                            mode: LaunchMode.externalApplication);
                       },
                     ),
                   ),
@@ -101,9 +103,10 @@ class DonatePage extends StatelessWidget {
                         onPressed: () async {
                           FirebaseAnalytics.instance.logEvent(
                               name: "button_donation_fanshop_clicked");
-                          await launch(
-                              "https://www.bryzoshop.bg/bg-catalog-details-9.html",
-                              forceSafariVC: false);
+                          await launchUrl(
+                              Uri.parse(
+                                  "https://www.bryzoshop.bg/bg-catalog-details-9.html"),
+                              mode: LaunchMode.externalApplication);
                         },
                       ),
                     ),
@@ -131,8 +134,9 @@ class DonatePage extends StatelessWidget {
                         onPressed: () async {
                           FirebaseAnalytics.instance
                               .logEvent(name: "button_donation_xlrun_clicked");
-                          await launch("https://5kmrun.bg/xlrun/events",
-                              forceSafariVC: false);
+                          await launchUrl(
+                              Uri.parse("https://5kmrun.bg/xlrun/events"),
+                              mode: LaunchMode.externalApplication);
                         },
                       ),
                     ),
