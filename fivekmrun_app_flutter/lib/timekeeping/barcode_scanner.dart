@@ -235,163 +235,89 @@ class _BarcodeScannerState extends State<BarcodeScanner>
           ),
           Expanded(
             flex: 2,
-            child: Container(
-              color: Colors.grey[100],
-              child: scannedValues.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'Сканирайте баркод',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
+            child: scannedValues.isEmpty
+                ? const Center(child: Text('Сканирайте баркод'))
+                : ListView.builder(
+                    controller: _scrollController,
+                    itemCount: _getPairCount(),
+                    itemBuilder: (context, index) {
+                      final pairIndex = _getPairCount() - index - 1;
+                      final firstIndex = pairIndex * 2;
+                      final secondIndex = firstIndex + 1;
+
+                      final first = scannedValues[firstIndex];
+                      final second = secondIndex < scannedValues.length
+                          ? scannedValues[secondIndex]
+                          : null;
+
+                      return Dismissible(
+                        key: Key('pair_$pairIndex'),
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    )
-                  : ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.all(8.0),
-                      itemCount: _getPairCount(),
-                      itemBuilder: (context, index) {
-                        final pairIndex = _getPairCount() - index - 1;
-                        final firstIndex = pairIndex * 2;
-                        final secondIndex = firstIndex + 1;
-
-                        final first = scannedValues[firstIndex];
-                        final second = secondIndex < scannedValues.length
-                            ? scannedValues[secondIndex]
-                            : null;
-
-                        return Dismissible(
-                          key: Key('pair_$pairIndex'),
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            color: Colors.red,
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: const Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                            ),
-                          ),
-                          confirmDismiss: (direction) async {
-                            final bool? shouldDelete = await showDialog<bool>(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text('Изтрий двойката?'),
-                                content: const Text(
-                                    'Сигурни ли сте, че искате да изтриете тази двойка?'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(false),
-                                    child: const Text('Отказ'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(true),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: Colors.red,
-                                    ),
-                                    child: const Text('Изтрий'),
-                                  ),
-                                ],
-                              ),
-                            );
-
-                            if (shouldDelete == true) {
-                              setState(() {
-                                // Remove both items (or just one if pair is incomplete)
-                                if (secondIndex < scannedValues.length) {
-                                  scannedValues.removeAt(secondIndex);
-                                }
-                                scannedValues.removeAt(firstIndex);
-
-                                // Reset lastScannedValue if we deleted the most recent scan
-                                if (scannedValues.isEmpty) {
-                                  lastScannedValue = null;
-                                }
-                              });
-                              _saveState();
-                            }
-                            return shouldDelete;
-                          },
-                          child: Card(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
-                              vertical: 4.0,
-                            ),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                child: Text(
-                                  '${_getPairCount() - index}',
-                                  style: const TextStyle(color: Colors.white),
+                        confirmDismiss: (direction) async {
+                          final bool? shouldDelete = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Изтрий двойката?'),
+                              content: const Text(
+                                  'Сигурни ли сте, че искате да изтриете тази двойка?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: const Text('Отказ'),
                                 ),
-                              ),
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'Участник: ${first.value}',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.red,
                                   ),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          second != null
-                                              ? 'Място: ${second.value}'
-                                              : 'Място: (чака сканиране)',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            color: second != null
-                                                ? Colors.black
-                                                : Colors.grey,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Участник: ${first.timestamp.toString().substring(0, 19)}',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                  if (second != null)
-                                    Text(
-                                      'Място: ${second.timestamp.toString().substring(0, 19)}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey[600],
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              isThreeLine: true,
+                                  child: const Text('Изтрий'),
+                                ),
+                              ],
                             ),
+                          );
+
+                          if (shouldDelete == true) {
+                            setState(() {
+                              // Remove both items (or just one if pair is incomplete)
+                              if (secondIndex < scannedValues.length) {
+                                scannedValues.removeAt(secondIndex);
+                              }
+                              scannedValues.removeAt(firstIndex);
+
+                              // Reset lastScannedValue if we deleted the most recent scan
+                              if (scannedValues.isEmpty) {
+                                lastScannedValue = null;
+                              }
+                            });
+                            _saveState();
+                          }
+                          return shouldDelete;
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(
+                              child: Text('${_getPairCount() - index}')),
+                          title: Text('Участник: ${first.value}'),
+                          subtitle: Text(
+                            second != null
+                                ? 'Място: ${second.value}'
+                                : 'Място: (чака сканиране)',
+                            style: const TextStyle(fontSize: 12),
                           ),
-                        );
-                      },
-                    ),
-            ),
+                        ),
+                      );
+                    },
+                  ),
           ),
         ],
       ),
