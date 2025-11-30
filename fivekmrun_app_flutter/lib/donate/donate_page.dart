@@ -105,7 +105,7 @@ class DonatePage extends StatelessWidget {
                               name: "button_donation_fanshop_clicked");
                           await launchUrl(
                               Uri.parse(
-                                  "https://www.bryzoshop.bg/bg-catalog-details-9.html"),
+                                  "https://bryzosport.com/bg-bg/pages/5-km-run"),
                               mode: LaunchMode.externalApplication);
                         },
                       ),

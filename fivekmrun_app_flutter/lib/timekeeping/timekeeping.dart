@@ -3,6 +3,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:provider/provider.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'chronometer_view.dart';
+import 'barcode_scanner.dart';
 
 class Timekeeping extends StatelessWidget {
   const Timekeeping({Key? key}) : super(key: key);
@@ -68,6 +69,17 @@ class Timekeeping extends StatelessWidget {
                         },
                         icon: const Icon(Icons.timer),
                         label: const Text('Хронометър'),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const BarcodeScanner()),
+                          );
+                        },
+                        icon: const Icon(Icons.qr_code_scanner),
+                        label: const Text('Отчитане'),
                       ),
                     ],
                   ),
