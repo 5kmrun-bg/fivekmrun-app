@@ -195,8 +195,8 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: OutlinedButton(
                       onPressed: () => {
-                            launch(
-                              "https://5kmrun.bg/selfie/ofc",
+                            launchUrl(
+                              Uri.parse("https://5kmrun.bg/selfie/ofc"),
                             )
                           },
                       child: Row(

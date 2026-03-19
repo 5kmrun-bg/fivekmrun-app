@@ -27,18 +27,18 @@ class OfflineChartDetailsPage extends StatelessWidget {
         title: Text(result.name, style: TextStyle(fontSize: 16)),
         actions: [
           IconButton(
-            onPressed: () => launch(
-                "https://5kmrun.bg/selfie/user/" + result.userId.toString(),
-                forceSafariVC: false),
+            onPressed: () => launchUrl(
+                Uri.parse("https://5kmrun.bg/selfie/user/" + result.userId.toString()),
+                mode: LaunchMode.externalApplication),
             icon: Icon(Icons.person),
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
             iconSize: 20,
           ),
           if (result.stravaLink != null && result.stravaLink != "")
             IconButton(
-              onPressed: () => launch(
-                  "https://www.strava.com/activities/" + result.stravaLink!,
-                  forceSafariVC: false),
+              onPressed: () => launchUrl(
+                  Uri.parse("https://www.strava.com/activities/" + result.stravaLink!),
+                  mode: LaunchMode.externalApplication),
               icon: Icon(CustomIcons.strava),
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
               iconSize: 20,
