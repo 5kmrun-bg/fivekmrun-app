@@ -3,6 +3,7 @@ import 'package:fivekmrun_flutter/login/login_with_id.dart';
 import 'package:fivekmrun_flutter/login/login_with_username.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -37,15 +38,15 @@ class _LoginState extends State<Login> {
                 width: double.infinity,
                 child: OutlinedButton(
                   child:
-                      Text(this.loginWithId ? "влез с парола" : "влез с номер"),
+                      Text(this.loginWithId ? AppLocalizations.of(context)!.login_widget_login_with_password : AppLocalizations.of(context)!.login_widget_login_with_id),
                   onPressed: this._toggleLogin,
                 ),
               ),
               Spacer(),
-              Text("Нямате регистрация?"),
+              Text(AppLocalizations.of(context)!.login_widget_no_registration),
               GestureDetector(
                 onTap: () => _loadRegistrationScreen(),
-                child: Text("Регистрирай се сега",
+                child: Text(AppLocalizations.of(context)!.login_widget_register,
                     style: TextStyle(
                         color: accentColor,
                         fontSize: 14,
