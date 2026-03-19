@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 
+/// Parses a user ID from a string. Returns null if the input is not a valid
+/// positive integer.
+int? parseUserId(String input) {
+  final trimmed = input.trim();
+  if (trimmed.isEmpty) return null;
+  final value = int.tryParse(trimmed);
+  if (value == null || value <= 0) return null;
+  return value;
+}
+
 class InputHelpers {
   static InputDecoration decoration(String hint) {
     return InputDecoration(

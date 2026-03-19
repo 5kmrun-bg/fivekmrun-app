@@ -22,7 +22,13 @@ class _LoginWithIdState extends State<LoginWithId> {
   }
 
   void onPressed() async {
-    int userId = int.parse(numberInputController.text);
+    final userId = parseUserId(numberInputController.text);
+    if (userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Моля въведете валиден личен номер')),
+      );
+      return;
+    }
     await Provider.of<AuthenticationResource>(context, listen: false)
         .authenticateWithUserId(userId);
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;
