@@ -162,7 +162,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get offline_chart_page_leaderboard_access =>
-      'класацията е достъпно вход с парола!';
+      ' класацията е достъпно вход с парола!';
 
   @override
   String get offline_chart_page_cancel => 'Откажи';

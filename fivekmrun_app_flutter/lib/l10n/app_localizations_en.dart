@@ -162,7 +162,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get offline_chart_page_leaderboard_access =>
-      'the leaderboard requires authentication!';
+      ' leaderboard requires authentication!';
 
   @override
   String get offline_chart_page_cancel => 'Cancel';
@@ -329,7 +329,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get best_time_by_route_chart_widget_records =>
-      'Records on main routes';
+      'Records on official routes';
 
   @override
   String get run_card_widget_place => 'place';
@@ -351,7 +351,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get app_rating_manager_later_button => 'Later';
 
   @override
-  String get runs_by_route_chart_title => 'Runs on main routes';
+  String get runs_by_route_chart_title => 'Runs on official routes';
 
   @override
   String get runs_chart_date => 'Date: ';

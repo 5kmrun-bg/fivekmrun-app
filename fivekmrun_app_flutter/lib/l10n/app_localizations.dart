@@ -395,7 +395,7 @@ abstract class AppLocalizations {
   /// No description provided for @offline_chart_page_leaderboard_access.
   ///
   /// In bg, this message translates to:
-  /// **'класацията е достъпно вход с парола!'**
+  /// **' класацията е достъпно вход с парола!'**
   String get offline_chart_page_leaderboard_access;
 
   /// No description provided for @offline_chart_page_cancel.
