@@ -6,12 +6,33 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:screen_brightness/screen_brightness.dart';
 import 'package:uuid/uuid.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
-class BarcodePage extends StatelessWidget {
+class BarcodePage extends StatefulWidget {
+  @override
+  _BarcodePageState createState() => _BarcodePageState();
+}
+
+class _BarcodePageState extends State<BarcodePage> {
   final Uuid uuid = Uuid();
   final issuerId = '3388000000022281825';
   final classId = 'MembershipCard';
+
+  @override
+  void initState() {
+    super.initState();
+    WakelockPlus.enable();
+    ScreenBrightness().setScreenBrightness(1.0);
+  }
+
+  @override
+  void dispose() {
+    WakelockPlus.disable();
+    ScreenBrightness().resetScreenBrightness();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
