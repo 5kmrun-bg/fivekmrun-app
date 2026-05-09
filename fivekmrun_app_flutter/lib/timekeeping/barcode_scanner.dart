@@ -156,27 +156,24 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     final now = DateTime.now();
     final dateStr =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    final timeStr =
-        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
 
-    String content = 'Дата:\t$dateStr\t$timeStr\n\n';
-
-    final pairCount = _getPairCount();
-    for (int i = 0; i < pairCount; i++) {
-      final pairNumber = pairCount - i;
-      final firstIndex = i * 2;
-      final secondIndex = firstIndex + 1;
-      final participant = scannedValues[firstIndex].value;
-      final place = secondIndex < scannedValues.length
-          ? scannedValues[secondIndex].value
-          : '(липсва)';
-      content += 'Двойка$pairNumber:\tУчастник: $participant\tМясто: $place\n';
+    // Build lines in chronological order (scannedValues is newest-first)
+    String content = '';
+    for (int i = scannedValues.length - 1; i >= 0; i--) {
+      final entry = scannedValues[i];
+      final t = entry.timestamp;
+      final yy = (t.year % 100).toString().padLeft(2, '0');
+      final mm = t.month.toString().padLeft(2, '0');
+      final dd = t.day.toString().padLeft(2, '0');
+      final hh = t.hour.toString().padLeft(2, '0');
+      final min = t.minute.toString().padLeft(2, '0');
+      final ss = t.second.toString().padLeft(2, '0');
+      content += '$yy/$mm/$dd,$hh:$min:$ss,01,${entry.value}\n';
     }
 
     try {
       final directory = await getTemporaryDirectory();
-      final fileName =
-          'barcode_results_${dateStr.replaceAll('-', '')}.txt';
+      final fileName = 'BARCODES_${dateStr.replaceAll('-', '')}.txt';
       final file = File('${directory.path}/$fileName');
       await file.writeAsString(content);
 
@@ -187,7 +184,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
-          subject: 'Резултати от отчитане - $dateStr',
+          subject: 'BARCODES_${dateStr.replaceAll('-', '')}',
           sharePositionOrigin: origin,
         ),
       );
