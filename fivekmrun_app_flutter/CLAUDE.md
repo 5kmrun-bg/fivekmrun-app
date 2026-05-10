@@ -41,6 +41,33 @@ Flutter mobile app for [5kmRun.bg](https://5kmrun.bg). Targets Android and iOS. 
 - Prefer `launchUrl()` (url_launcher 6.1+) over the deprecated `launch()`
 - Localisation strings live in `lib/l10n/app_bg.arb` and `lib/l10n/app_en.arb` — keep both in sync when adding new strings
 
+## Preparing a New Release (`/release`)
+
+When the user asks to prepare a new release or invokes `/release`, follow these steps:
+
+1. **Determine version bump** — If the user did not specify major/minor/patch, inspect the commits since the last tag (`git log <last-tag>..HEAD --oneline`) and ask: "Should this be a minor or patch bump?" (ask about major only if there are breaking changes). Wait for the answer before proceeding.
+
+2. **Bump the version in `pubspec.yaml`** — Current format is `MAJOR.MINOR.PATCH+BUILD`. Increment the appropriate semver segment and increment the build number by 1. Edit `pubspec.yaml` directly.
+
+3. **Commit the version bump** — Commit only `pubspec.yaml` with message `chore: bump version to X.Y.Z+N`.
+
+4. **Collect the changelog** — Run `git log <last-tag>..HEAD --pretty=format:"- %s"` to list all commits since the previous tag. Clean up the list (remove merge commits, CI noise). This becomes the tag description.
+
+5. **Create and push the release tag** — Create an annotated tag named `vX.Y.Z` on `master` with the changelog as the tag message, then push it:
+   ```
+   git tag -a vX.Y.Z -m "$(changelog)"
+   git push origin vX.Y.Z
+   ```
+
+6. **Trigger the deployment workflows** — Both workflows use `workflow_dispatch`. Trigger them via the GitHub CLI:
+   ```
+   gh workflow run upload-appstore.yml --repo 5kmrun-bg/fivekmrun-app
+   gh workflow run upload-playstore.yml --repo 5kmrun-bg/fivekmrun-app
+   ```
+   Report the run URLs so the user can monitor progress.
+
+> Note: Do **not** push to `master` directly — the version-bump commit should already be on `master` (or merged) before tagging. If the current branch is not `master`, remind the user to merge first.
+
 ## What NOT to Do
 - Do not commit `lib/private/secrets.dart`
 - Do not skip CI hooks (`--no-verify`) or bypass code signing flags without an explicit ask

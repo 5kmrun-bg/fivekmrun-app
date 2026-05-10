@@ -33,6 +33,9 @@ class UserResource extends ChangeNotifier {
   set currentUserId(int? v) {
     this._currentUserId = v;
     if (v != null) {
+      // Show barcode immediately; getById will overwrite with full profile data.
+      this.value = User(age: 0, name: "", donationsCount: 0, id: v, avatarUrl: "");
+      this._loading = false;
       this.getById(v, true);
     } else {
       this.value = null;
@@ -54,8 +57,16 @@ class UserResource extends ChangeNotifier {
       return value;
     }
 
-    http.Response response =
-        await http.get(Uri.parse("${constants.userEndpointUrl}$userId"));
+    http.Response? response;
+    try {
+      response = await http.get(Uri.parse("${constants.userEndpointUrl}$userId"));
+    } catch (e) {
+      // No internet or server unreachable — show barcode with cached user ID.
+      this.loading = false;
+      this.value = new User(age: 0, name: "", donationsCount: 0, id: userId, avatarUrl: "");
+      return this.value;
+    }
+
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
       this.loading = false;
