@@ -59,9 +59,63 @@ jobs:
           path: ./fivekmrun_app_flutter/build/app/outputs/flutter-apk/
 
       - name: Upload to Huawei AppGallery
-        uses: eatorb/huawei-appgallery-action@v1.0.0
-        with:
-          client-id: ${{ secrets.HUAWEI_CLIENT_ID }}
-          client-secret: ${{ secrets.HUAWEI_CLIENT_SECRET }}
-          app-id: ${{ secrets.HUAWEI_APP_ID }}
-          file-path: ./fivekmrun_app_flutter/build/app/outputs/flutter-apk/app-release.apk
+        env:
+          HUAWEI_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.HUAWEI_SERVICE_ACCOUNT_JSON_BASE64 }}
+          HUAWEI_APP_ID: ${{ secrets.HUAWEI_APP_ID }}
+        run: |
+          pip3 install PyJWT cryptography requests --quiet
+          python3 - <<'EOF'
+          import base64, json, time, os, sys, hashlib
+          import jwt, requests
+
+          sa = json.loads(base64.b64decode(os.environ['HUAWEI_SERVICE_ACCOUNT_JSON_BASE64']))
+          app_id = os.environ['HUAWEI_APP_ID']
+          apk_path = './fivekmrun_app_flutter/build/app/outputs/flutter-apk/app-release.apk'
+          domain = 'https://connect-api.cloud.huawei.com/api'
+
+          # Get access token via Service Account JWT
+          now = int(time.time())
+          payload = {
+              'iss': sa['sub_account'],
+              'sub': sa['sub_account'],
+              'aud': sa['token_uri'],
+              'iat': now,
+              'exp': now + 3600,
+          }
+          signed_jwt = jwt.encode(payload, sa['private_key'], algorithm='RS256', headers={'kid': sa['key_id']})
+          token_resp = requests.post(sa['token_uri'], data={
+              'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+              'assertion': signed_jwt,
+          })
+          token_resp.raise_for_status()
+          access_token = token_resp.json()['access_token']
+          print('Token obtained successfully')
+
+          # Get upload URL
+          file_name = os.path.basename(apk_path)
+          file_size = os.path.getsize(apk_path)
+          sha256 = hashlib.sha256(open(apk_path,'rb').read()).hexdigest()
+          headers = {'Authorization': f'Bearer {access_token}', 'client_id': sa['sub_account']}
+          url_resp = requests.get(f'{domain}/publish/v2/upload-url/for-obs', params={
+              'appId': app_id, 'fileName': file_name, 'sha256': sha256,
+              'contentLength': file_size, 'releaseType': 1,
+          }, headers=headers)
+          url_resp.raise_for_status()
+          upload_info = url_resp.json()['urlInfo']
+          print(f'Upload URL obtained')
+
+          # Upload file to OBS
+          with open(apk_path, 'rb') as f:
+              obs_resp = requests.put(upload_info['url'], data=f, headers=upload_info['headers'])
+          obs_resp.raise_for_status()
+          print('File uploaded to OBS')
+
+          # Commit the release
+          commit_resp = requests.post(f'{domain}/publish/v2/app-file-info/update', json={
+              'fileType': 5,
+              'files': [{'fileName': file_name, 'fileDestUrl': upload_info['url'].split('?')[0], 'size': file_size, 'sha256': sha256}],
+          }, params={'appId': app_id}, headers={**headers, 'Content-Type': 'application/json'})
+          print(f'Commit response: {commit_resp.status_code} {commit_resp.text}')
+          commit_resp.raise_for_status()
+          print('Upload committed successfully')
+          EOF
