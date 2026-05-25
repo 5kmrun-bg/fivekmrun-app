@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'dart:convert';
+import 'dart:io';
 
 class ScannedBarcode {
   final String value;
@@ -40,9 +44,11 @@ class _BarcodeScannerState extends State<BarcodeScanner>
   final MobileScannerController controller = MobileScannerController();
   final List<ScannedBarcode> scannedValues = [];
   final ScrollController _scrollController = ScrollController();
+  final AudioPlayer _audioPlayer = AudioPlayer();
   String? lastScannedValue;
   late AnimationController _animationController;
   late Animation<double> _animation;
+  final GlobalKey _saveButtonKey = GlobalKey();
 
   @override
   void initState() {
@@ -93,41 +99,103 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     _animationController.dispose();
     _scrollController.dispose();
     controller.dispose();
+    _audioPlayer.dispose();
     super.dispose();
+  }
+
+  bool _isExpectedCode(String value) {
+    // Even count → next scan is runner ID (must start with "00")
+    // Odd count  → next scan is place number (must start with "J")
+    if (scannedValues.length.isEven) {
+      return value.startsWith('00');
+    } else {
+      return value.startsWith('J');
+    }
   }
 
   void _onBarcodeDetect(BarcodeCapture barcodeCapture) {
     final List<Barcode> barcodes = barcodeCapture.barcodes;
     for (final barcode in barcodes) {
-      if (barcode.rawValue != null && barcode.rawValue != lastScannedValue) {
-        setState(() {
-          lastScannedValue = barcode.rawValue;
-          scannedValues.insert(
-              0,
-              ScannedBarcode(
-                value: barcode.rawValue!,
-                timestamp: DateTime.now(),
-              ));
-        });
-        _saveState();
-        // Vibrate when a new barcode is scanned
-        HapticFeedback.mediumImpact();
-        // Scroll to top to show the newly added item
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (_scrollController.hasClients) {
-            _scrollController.animateTo(
-              0.0,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          }
-        });
-      }
+      final raw = barcode.rawValue;
+      if (raw == null || raw == lastScannedValue) continue;
+      if (!_isExpectedCode(raw)) continue;
+
+      setState(() {
+        lastScannedValue = raw;
+        scannedValues.add(ScannedBarcode(
+          value: raw,
+          timestamp: DateTime.now(),
+        ));
+      });
+      _saveState();
+      HapticFeedback.heavyImpact();
+      _audioPlayer.play(AssetSource('beep.wav'));
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            0.0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        }
+      });
     }
   }
 
   int _getPairCount() {
     return (scannedValues.length / 2).ceil();
+  }
+
+  Future<void> _exportToFile() async {
+    if (scannedValues.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Няма сканирани баркода за запис')),
+      );
+      return;
+    }
+
+    final now = DateTime.now();
+    final dateStr =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+    // Build lines in chronological order (scannedValues is newest-first)
+    String content = '';
+    for (int i = 0; i < scannedValues.length; i++) {
+      final entry = scannedValues[i];
+      final t = entry.timestamp;
+      final yy = (t.year % 100).toString().padLeft(2, '0');
+      final mm = t.month.toString().padLeft(2, '0');
+      final dd = t.day.toString().padLeft(2, '0');
+      final hh = t.hour.toString().padLeft(2, '0');
+      final min = t.minute.toString().padLeft(2, '0');
+      final ss = t.second.toString().padLeft(2, '0');
+      content += '$yy/$mm/$dd,$hh:$min:$ss,01,${entry.value}\n';
+    }
+
+    try {
+      final directory = await getTemporaryDirectory();
+      final fileName = 'BARCODES_${dateStr.replaceAll('-', '')}.txt';
+      final file = File('${directory.path}/$fileName');
+      await file.writeAsString(content);
+
+      final box =
+          _saveButtonKey.currentContext?.findRenderObject() as RenderBox?;
+      final origin =
+          box == null ? Rect.zero : box.localToGlobal(Offset.zero) & box.size;
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          subject: 'BARCODES_${dateStr.replaceAll('-', '')}',
+          sharePositionOrigin: origin,
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Грешка при запис: $e')),
+        );
+      }
+    }
   }
 
   Future<void> _clearScannedValues() async {
@@ -176,6 +244,12 @@ class _BarcodeScannerState extends State<BarcodeScanner>
         centerTitle: true,
         actions: [
           IconButton(
+            key: _saveButtonKey,
+            icon: const Icon(Icons.save_alt),
+            onPressed: _exportToFile,
+            tooltip: 'Запази',
+          ),
+          IconButton(
             icon: const Icon(Icons.delete_outline),
             onPressed: _clearScannedValues,
             tooltip: 'Изчисти',
@@ -193,6 +267,12 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                     MobileScanner(
                       controller: controller,
                       onDetect: _onBarcodeDetect,
+                      scanWindow: Rect.fromLTWH(
+                        40,
+                        40,
+                        constraints.maxWidth - 80,
+                        constraints.maxHeight - 80,
+                      ),
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -307,12 +387,25 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                         child: ListTile(
                           leading: CircleAvatar(
                               child: Text('${_getPairCount() - index}')),
-                          title: Text('Участник: ${first.value}'),
+                          title: Text(
+                            'Участник: ${first.value}',
+                            style: TextStyle(
+                              fontSize: index < 1 ? 24 : 20,
+                              fontWeight: index < 1
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                            ),
+                          ),
                           subtitle: Text(
                             second != null
                                 ? 'Място: ${second.value}'
                                 : 'Място: (чака сканиране)',
-                            style: const TextStyle(fontSize: 12),
+                            style: TextStyle(
+                              fontSize: index < 1 ? 18 : 16,
+                              fontWeight: index < 1
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                            ),
                           ),
                         ),
                       );
