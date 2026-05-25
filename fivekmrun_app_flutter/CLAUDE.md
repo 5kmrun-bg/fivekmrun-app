@@ -59,7 +59,19 @@ When the user asks to prepare a new release or invokes `/release`, follow these 
    git push origin vX.Y.Z
    ```
 
-6. **Trigger the deployment workflows** — Both workflows use `workflow_dispatch`. Trigger them via the GitHub CLI:
+6. **Generate store release notes** — Translate the changelog into user-facing language (no technical jargon, bullet points, max 500 characters each). Write two files:
+   - `whatsnew/whatsnew-bg` — Bulgarian
+   - `whatsnew/whatsnew-en-GB` — English
+
+   Format (plain text, no headings, bullet character `•`):
+   ```
+   • User-facing change 1
+   • User-facing change 2
+   ```
+
+   Commit both files directly to `master` with message `chore: add release notes for vX.Y.Z` and push.
+
+7. **Trigger the deployment workflows** — Both workflows use `workflow_dispatch`. Trigger them via the GitHub CLI:
    ```
    gh workflow run upload-appstore.yml --repo 5kmrun-bg/fivekmrun-app
    gh workflow run upload-playstore.yml --repo 5kmrun-bg/fivekmrun-app
