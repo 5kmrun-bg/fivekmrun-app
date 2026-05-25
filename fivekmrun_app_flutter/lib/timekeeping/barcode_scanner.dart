@@ -4,6 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -43,6 +44,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
   final MobileScannerController controller = MobileScannerController();
   final List<ScannedBarcode> scannedValues = [];
   final ScrollController _scrollController = ScrollController();
+  final AudioPlayer _audioPlayer = AudioPlayer();
   String? lastScannedValue;
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -97,6 +99,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     _animationController.dispose();
     _scrollController.dispose();
     controller.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -126,7 +129,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
       });
       _saveState();
       HapticFeedback.heavyImpact();
-      SystemSound.play(SystemSoundType.click);
+      _audioPlayer.play(AssetSource('beep.wav'));
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_scrollController.hasClients) {
           _scrollController.animateTo(
