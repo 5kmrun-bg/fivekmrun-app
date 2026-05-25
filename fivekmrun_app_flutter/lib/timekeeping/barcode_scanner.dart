@@ -119,12 +119,10 @@ class _BarcodeScannerState extends State<BarcodeScanner>
 
       setState(() {
         lastScannedValue = raw;
-        scannedValues.insert(
-            0,
-            ScannedBarcode(
-              value: raw,
-              timestamp: DateTime.now(),
-            ));
+        scannedValues.add(ScannedBarcode(
+          value: raw,
+          timestamp: DateTime.now(),
+        ));
       });
       _saveState();
       HapticFeedback.heavyImpact();
@@ -177,10 +175,10 @@ class _BarcodeScannerState extends State<BarcodeScanner>
       final file = File('${directory.path}/$fileName');
       await file.writeAsString(content);
 
-      final box = _saveButtonKey.currentContext?.findRenderObject() as RenderBox?;
-      final origin = box == null
-          ? Rect.zero
-          : box.localToGlobal(Offset.zero) & box.size;
+      final box =
+          _saveButtonKey.currentContext?.findRenderObject() as RenderBox?;
+      final origin =
+          box == null ? Rect.zero : box.localToGlobal(Offset.zero) & box.size;
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
