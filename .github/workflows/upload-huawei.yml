@@ -95,7 +95,7 @@ jobs:
           file_name = os.path.basename(apk_path)
           file_size = os.path.getsize(apk_path)
           sha256 = hashlib.sha256(open(apk_path,'rb').read()).hexdigest()
-          headers = {'Authorization': f'Bearer {access_token}', 'client_id': sa['sub_account']}
+          headers = {'Authorization': f'Bearer {access_token}', 'client_id': sa['key_id']}
           url_resp = requests.get(f'{domain}/publish/v2/upload-url/for-obs', params={
               'appId': app_id, 'fileName': file_name, 'sha256': sha256,
               'contentLength': file_size, 'releaseType': 1,
