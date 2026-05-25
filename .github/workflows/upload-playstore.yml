@@ -53,3 +53,4 @@ jobs:
           releaseFiles: ./fivekmrun_app_flutter/build/app/outputs/bundle/release/app-release.aab
           track: production
           status: draft
+          whatsNewDirectory: whatsnew
