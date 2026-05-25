@@ -115,7 +115,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
 
     DateTime runDate = DateTime.parse(
-        this.selectedActivity?.detailedActivity?.startDateLocal ?? "");
+        this.selectedActivity?.detailedActivity.startDateLocal ?? "");
     if (runDate.isBefore(startOfWeek)) {
       setState(() {
         submitButtonState = ButtonState.idle;
