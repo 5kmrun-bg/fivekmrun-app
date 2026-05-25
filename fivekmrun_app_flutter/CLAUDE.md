@@ -71,12 +71,22 @@ When the user asks to prepare a new release or invokes `/release`, follow these 
 
    Commit both files directly to `master` with message `chore: add release notes for vX.Y.Z` and push.
 
-7. **Trigger the deployment workflows** — Both workflows use `workflow_dispatch`. Trigger them via the GitHub CLI:
+7. **Create a GitHub Release** — Create a GitHub Release from the tag using the English release notes as the body:
+   ```
+   gh release create vX.Y.Z --repo 5kmrun-bg/fivekmrun-app --title "vX.Y.Z" --notes "..."
+   ```
+
+8. **Trigger the deployment workflows** — Both workflows use `workflow_dispatch`. Trigger them via the GitHub CLI:
    ```
    gh workflow run upload-appstore.yml --repo 5kmrun-bg/fivekmrun-app
    gh workflow run upload-playstore.yml --repo 5kmrun-bg/fivekmrun-app
    ```
-   Report the run URLs so the user can monitor progress.
+
+   After triggering, report these links so the user can monitor and review everything directly:
+   - **GitHub Release:** `https://github.com/5kmrun-bg/fivekmrun-app/releases/tag/vX.Y.Z`
+   - **App Store Connect:** `https://appstoreconnect.apple.com/apps/1489549617/testflight/ios`
+   - **Google Play Console:** `https://play.google.com/console/developers/app/bg.fivekmpark.fivekmrun/tracks/production`
+   - **iOS workflow run:** (URL returned by `gh run list`)
 
 ## What NOT to Do
 - Do not commit `lib/private/secrets.dart`
