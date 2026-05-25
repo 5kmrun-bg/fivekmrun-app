@@ -5,7 +5,7 @@ env:
 
 jobs:
   ios-build:
-    runs-on: macOS-latest
+    runs-on: macos-26
     environment: production
     steps:
       - name: Checkout the code
