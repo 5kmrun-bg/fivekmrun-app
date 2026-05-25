@@ -87,3 +87,89 @@ jobs:
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      - name: Create App Store draft version
+        env:
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+          APPSTORE_API_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+        run: |
+          pip3 install PyJWT cryptography --quiet
+          export VERSION=$(grep '^version:' fivekmrun_app_flutter/pubspec.yaml | sed 's/version: //' | cut -d'+' -f1)
+          python3 - <<EOF
+          import jwt, time, json, urllib.request, urllib.error, os, sys
+
+          key_id = os.environ['APPSTORE_API_KEY_ID']
+          issuer_id = os.environ['APPSTORE_ISSUER_ID']
+          private_key = os.environ['APPSTORE_API_PRIVATE_KEY']
+          version = os.environ['VERSION']
+
+          token = jwt.encode(
+              {'iss': issuer_id, 'iat': int(time.time()), 'exp': int(time.time()) + 1200, 'aud': 'appstoreconnect-v1'},
+              private_key, algorithm='ES256', headers={'kid': key_id}
+          )
+          headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
+
+          def api(method, path, body=None):
+              req = urllib.request.Request(
+                  f'https://api.appstoreconnect.apple.com{path}',
+                  data=json.dumps(body).encode() if body else None,
+                  headers=headers, method=method
+              )
+              with urllib.request.urlopen(req) as r:
+                  return json.loads(r.read())
+
+          # Look up app by bundle ID
+          apps = api('GET', '/v1/apps?filter[bundleId]=bg.5kmpark.5kmrun&fields[apps]=id,name')
+          app_id = apps['data'][0]['id']
+          print(f'App ID: {app_id}')
+
+          # Create draft version (or get existing)
+          version_id = None
+          try:
+              result = api('POST', '/v1/appStoreVersions', {'data': {
+                  'type': 'appStoreVersions',
+                  'attributes': {'platform': 'IOS', 'versionString': version},
+                  'relationships': {'app': {'data': {'type': 'apps', 'id': app_id}}}
+              }})
+              version_id = result['data']['id']
+              print(f'Draft version {version} created: {version_id}')
+          except urllib.error.HTTPError as e:
+              body = e.read().decode()
+              if 'VERSION_ALREADY_EXIST' in body or 'already exists' in body.lower():
+                  print(f'Version {version} already exists, fetching id...')
+                  existing = api('GET', f'/v1/apps/{app_id}/appStoreVersions?filter[versionString]={version}&filter[platform]=IOS')
+                  version_id = existing['data'][0]['id']
+              else:
+                  print(f'Error creating draft version: {body}')
+                  sys.exit(1)
+
+          # Read whatsnew files
+          locale_map = {'en-GB': 'whatsnew/whatsnew-en-GB', 'bg': 'whatsnew/whatsnew-bg'}
+          whatsnew = {}
+          for locale, path in locale_map.items():
+              try:
+                  with open(path) as f:
+                      whatsnew[locale] = f.read().strip()
+              except FileNotFoundError:
+                  print(f'No whatsnew file for {locale}, skipping.')
+
+          # Set whatsNew on each localization
+          locs = api('GET', f'/v1/appStoreVersions/{version_id}/appStoreVersionLocalizations')
+          existing_locales = {l['attributes']['locale']: l['id'] for l in locs['data']}
+
+          for locale, text in whatsnew.items():
+              if locale in existing_locales:
+                  api('PATCH', f'/v1/appStoreVersionLocalizations/{existing_locales[locale]}', {'data': {
+                      'type': 'appStoreVersionLocalizations',
+                      'id': existing_locales[locale],
+                      'attributes': {'whatsNew': text}
+                  }})
+                  print(f'Updated whatsNew for {locale}')
+              else:
+                  api('POST', '/v1/appStoreVersionLocalizations', {'data': {
+                      'type': 'appStoreVersionLocalizations',
+                      'attributes': {'locale': locale, 'whatsNew': text},
+                      'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': version_id}}}
+                  }})
+                  print(f'Created whatsNew for {locale}')
+          EOF
