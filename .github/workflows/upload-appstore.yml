@@ -9,7 +9,7 @@ jobs:
     environment: production
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Install Apple Certificate
         uses: apple-actions/import-codesign-certs@v1
         with:
@@ -81,7 +81,7 @@ jobs:
           name: release-ios
           path: build-output/ios
       - name: "Upload app to TestFlight"
-        uses: apple-actions/upload-testflight-build@v1
+        uses: apple-actions/upload-testflight-build@v3
         with:
           app-path: "build-output/ios/5kmRun.bg.ipa"
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
