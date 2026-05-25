@@ -157,7 +157,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
 
     // Build lines in chronological order (scannedValues is newest-first)
     String content = '';
-    for (int i = scannedValues.length - 1; i >= 0; i--) {
+    for (int i = 0; i < scannedValues.length; i++) {
       final entry = scannedValues[i];
       final t = entry.timestamp;
       final yy = (t.year % 100).toString().padLeft(2, '0');
@@ -386,13 +386,23 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                               child: Text('${_getPairCount() - index}')),
                           title: Text(
                             'Участник: ${first.value}',
-                            style: const TextStyle(fontSize: 20),
+                            style: TextStyle(
+                              fontSize: index < 1 ? 24 : 20,
+                              fontWeight: index < 1
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                            ),
                           ),
                           subtitle: Text(
                             second != null
                                 ? 'Място: ${second.value}'
                                 : 'Място: (чака сканиране)',
-                            style: const TextStyle(fontSize: 16),
+                            style: TextStyle(
+                              fontSize: index < 1 ? 18 : 16,
+                              fontWeight: index < 1
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                            ),
                           ),
                         ),
                       );
