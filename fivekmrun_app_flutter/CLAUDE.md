@@ -49,7 +49,7 @@ When the user asks to prepare a new release or invokes `/release`, follow these 
 
 2. **Bump the version in `pubspec.yaml`** — Current format is `MAJOR.MINOR.PATCH+BUILD`. Increment the appropriate semver segment and increment the build number by 1. Edit `pubspec.yaml` directly.
 
-3. **Commit the version bump** — Commit only `pubspec.yaml` with message `chore: bump version to X.Y.Z+N`.
+3. **Commit and push the version bump** — Commit only `pubspec.yaml` with message `chore: bump version to X.Y.Z+N`, then push directly to `master`.
 
 4. **Collect the changelog** — Run `git log <last-tag>..HEAD --pretty=format:"- %s"` to list all commits since the previous tag. Clean up the list (remove merge commits, CI noise). This becomes the tag description.
 
@@ -65,8 +65,6 @@ When the user asks to prepare a new release or invokes `/release`, follow these 
    gh workflow run upload-playstore.yml --repo 5kmrun-bg/fivekmrun-app
    ```
    Report the run URLs so the user can monitor progress.
-
-> Note: Do **not** push to `master` directly — the version-bump commit should already be on `master` (or merged) before tagging. If the current branch is not `master`, remind the user to merge first.
 
 ## What NOT to Do
 - Do not commit `lib/private/secrets.dart`
