@@ -63,7 +63,7 @@ jobs:
         run: cd fivekmrun_app_flutter && flutter pub get
 
       - name: Build Flutter
-        run: cd fivekmrun_app_flutter && flutter build ios --release --no-codesign
+        run: cd fivekmrun_app_flutter && flutter build ios --release --no-codesign --dart-define=STORE=app_store
       - name: Build resolve Swift dependencies
         run: xcodebuild -resolvePackageDependencies -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release
       - name: Build xArchive

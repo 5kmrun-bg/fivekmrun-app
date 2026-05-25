@@ -30,7 +30,7 @@ void main() async {
 
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
-  const store = String.fromEnvironment('STORE', defaultValue: 'google_play');
+  const store = String.fromEnvironment('STORE', defaultValue: 'unknown');
   await FirebaseAnalytics.instance.setUserProperty(name: 'store', value: store);
 
   // Pass all uncaught errors to Crashlytics.
