@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/barcode_page.dart';
@@ -28,6 +29,9 @@ void main() async {
   await Firebase.initializeApp();
 
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+  const store = String.fromEnvironment('STORE', defaultValue: 'google_play');
+  await FirebaseAnalytics.instance.setUserProperty(name: 'store', value: store);
 
   // Pass all uncaught errors to Crashlytics.
   final originalOnError = FlutterError.onError;
