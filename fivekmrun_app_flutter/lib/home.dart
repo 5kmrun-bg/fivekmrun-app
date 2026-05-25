@@ -91,7 +91,9 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
     final userId =
         Provider.of<AuthenticationResource>(context, listen: false).getUserId();
     print("HOME: start loading userId $userId");
-    Provider.of<UserResource>(context, listen: false).currentUserId = userId;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<UserResource>(context, listen: false).currentUserId = userId;
+    });
     Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
     Provider.of<AllFutureEventsResource>(context, listen: false).getAll();
     Provider.of<PastEventsResource>(context, listen: false).getAll();
