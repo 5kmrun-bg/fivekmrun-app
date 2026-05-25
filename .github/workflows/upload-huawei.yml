@@ -60,32 +60,23 @@ jobs:
 
       - name: Upload to Huawei AppGallery
         env:
-          HUAWEI_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.HUAWEI_SERVICE_ACCOUNT_JSON_BASE64 }}
+          HUAWEI_CLIENT_ID: ${{ secrets.HUAWEI_CLIENT_ID }}
+          HUAWEI_CLIENT_SECRET: ${{ secrets.HUAWEI_CLIENT_SECRET }}
           HUAWEI_APP_ID: ${{ secrets.HUAWEI_APP_ID }}
         run: |
-          pip3 install PyJWT cryptography requests --quiet
+          pip3 install requests --quiet
           python3 - <<'EOF'
-          import base64, json, time, os, sys, hashlib
-          import jwt, requests
+          import os, hashlib, requests
 
-          sa = json.loads(base64.b64decode(os.environ['HUAWEI_SERVICE_ACCOUNT_JSON_BASE64']))
+          client_id = os.environ['HUAWEI_CLIENT_ID']
+          client_secret = os.environ['HUAWEI_CLIENT_SECRET']
           app_id = os.environ['HUAWEI_APP_ID']
           apk_path = './fivekmrun_app_flutter/build/app/outputs/flutter-apk/app-release.apk'
           domain = 'https://connect-api.cloud.huawei.com/api'
 
-          # Get access token via Service Account JWT
-          now = int(time.time())
-          payload = {
-              'iss': sa['sub_account'],
-              'sub': sa['sub_account'],
-              'aud': sa['token_uri'],
-              'iat': now,
-              'exp': now + 3600,
-          }
-          signed_jwt = jwt.encode(payload, sa['private_key'], algorithm='RS256', headers={'kid': sa['key_id']})
-          token_resp = requests.post(sa['token_uri'], data={
-              'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-              'assertion': signed_jwt,
+          # Get access token
+          token_resp = requests.post(f'{domain}/oauth2/v1/token', json={
+              'client_id': client_id, 'client_secret': client_secret, 'grant_type': 'client_credentials',
           })
           token_resp.raise_for_status()
           access_token = token_resp.json()['access_token']
@@ -95,14 +86,14 @@ jobs:
           file_name = os.path.basename(apk_path)
           file_size = os.path.getsize(apk_path)
           sha256 = hashlib.sha256(open(apk_path,'rb').read()).hexdigest()
-          headers = {'Authorization': f'Bearer {access_token}', 'client_id': sa['key_id']}
+          headers = {'Authorization': f'Bearer {access_token}', 'client_id': client_id}
           url_resp = requests.get(f'{domain}/publish/v2/upload-url/for-obs', params={
               'appId': app_id, 'fileName': file_name, 'sha256': sha256,
               'contentLength': file_size, 'releaseType': 1,
           }, headers=headers)
           url_resp.raise_for_status()
           upload_info = url_resp.json()['urlInfo']
-          print(f'Upload URL obtained')
+          print('Upload URL obtained')
 
           # Upload file to OBS
           with open(apk_path, 'rb') as f:
