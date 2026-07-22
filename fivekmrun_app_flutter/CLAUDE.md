@@ -41,105 +41,20 @@ Flutter mobile app for [5kmRun.bg](https://5kmrun.bg). Targets Android and iOS. 
 - Prefer `launchUrl()` (url_launcher 6.1+) over the deprecated `launch()`
 - Localisation strings live in `lib/l10n/app_bg.arb` and `lib/l10n/app_en.arb` — keep both in sync when adding new strings
 
-## Preparing a New Release (`/release`)
+## Slash Commands
 
-When the user asks to prepare a new release or invokes `/release`, follow these steps:
+Two multi-step procedures live in `.claude/commands/` rather than here, so they
+are invocable as real slash commands:
 
-1. **Determine version bump** — If the user did not specify major/minor/patch, inspect the commits since the last tag (`git log <last-tag>..HEAD --oneline`) and ask: "Should this be a minor or patch bump?" (ask about major only if there are breaking changes). Wait for the answer before proceeding.
+- **`/release`** — prepare and ship a release: version bump, tag, store release
+  notes, GitHub Release, and triggering both deploy workflows. Pushes directly
+  to `master` and publishes to the stores; that is intended, and overrides the
+  "always open a PR" rule in **Branching & PRs** above.
+- **`/renew-ios-cert`** — renew the annual iOS distribution certificate and
+  provisioning profile, and update the CI secrets. Needs Apple Developer
+  account access, so it hands off partway through.
 
-2. **Bump the version in `pubspec.yaml`** — Current format is `MAJOR.MINOR.PATCH+BUILD`. Increment the appropriate semver segment and increment the build number by 1. Edit `pubspec.yaml` directly.
-
-3. **Commit and push the version bump** — Commit only `pubspec.yaml` with message `chore: bump version to X.Y.Z+N`, then push directly to `master`.
-
-4. **Collect the changelog** — Run `git log <last-tag>..HEAD --pretty=format:"- %s"` to list all commits since the previous tag. Clean up the list (remove merge commits, CI noise). This becomes the tag description.
-
-5. **Create and push the release tag** — Create an annotated tag named `vX.Y.Z` on `master` with the changelog as the tag message, then push it:
-   ```
-   git tag -a vX.Y.Z -m "$(changelog)"
-   git push origin vX.Y.Z
-   ```
-
-6. **Generate store release notes** — Translate the changelog into user-facing language (no technical jargon, bullet points, max 500 characters each). Write two files:
-   - `whatsnew/whatsnew-bg` — Bulgarian
-   - `whatsnew/whatsnew-en-GB` — English
-
-   Format (plain text, no headings, bullet character `•`):
-   ```
-   • User-facing change 1
-   • User-facing change 2
-   ```
-
-   Commit both files directly to `master` with message `chore: add release notes for vX.Y.Z` and push.
-
-7. **Create a GitHub Release** — Create a GitHub Release from the tag using the English release notes as the body:
-   ```
-   gh release create vX.Y.Z --repo 5kmrun-bg/fivekmrun-app --title "vX.Y.Z" --notes "..."
-   ```
-
-8. **Trigger the deployment workflows** — Both workflows use `workflow_dispatch`. Trigger them via the GitHub CLI:
-   ```
-   gh workflow run upload-appstore.yml --repo 5kmrun-bg/fivekmrun-app
-   gh workflow run upload-playstore.yml --repo 5kmrun-bg/fivekmrun-app
-   ```
-
-   After triggering, report these links so the user can monitor and review everything directly:
-   - **GitHub Release:** `https://github.com/5kmrun-bg/fivekmrun-app/releases/tag/vX.Y.Z`
-   - **App Store Connect:** `https://appstoreconnect.apple.com/apps/1489549617/testflight/ios`
-   - **Google Play Console:** `https://play.google.com/console/developers/app/bg.fivekmpark.fivekmrun/tracks/production`
-   - **iOS workflow run:** (URL returned by `gh run list`)
-
-## Renewing the iOS Distribution Certificate (`/renew-ios-cert`)
-
-Certificates expire annually. When the build fails with "No certificate for team matching 'Apple Distribution'" or "Provisioning profile expired", follow these steps.
-
-### You do (requires Apple Developer account access)
-
-1. **Generate a CSR** — Claude will run this automatically:
-   ```
-   openssl req -new -newkey rsa:2048 -nodes \
-     -keyout ~/Downloads/fivekmrun_dist.key \
-     -out ~/Downloads/fivekmrun_dist.csr \
-     -subj "/emailAddress=emil.tabakov@gmail.com/CN=Emil Tabakov/C=BG"
-   ```
-
-2. **Create a new Distribution Certificate** at [developer.apple.com/account/resources/certificates](https://developer.apple.com/account/resources/certificates):
-   - Click **+** → choose **Apple Distribution**
-   - Upload `~/Downloads/fivekmrun_dist.csr`
-   - Download the resulting `.cer` file
-
-3. **Recreate the provisioning profile** at [developer.apple.com/account/resources/profiles](https://developer.apple.com/account/resources/profiles):
-   - Click **+** → **App Store Connect**
-   - App ID: select **`bg.5kmpark.5kmrun`** (NOT the wildcard — it doesn't support Push Notifications or Associated Domains)
-   - Certificate: select the new **Apple Distribution: 5 KM PARK BG**
-   - Name it `5kmrun-distribution-profile` → **Generate** → **Download**
-
-4. Drop both files in `~/Downloads/` and tell Claude.
-
-### Claude does (automated)
-
-1. Convert the `.cer` + private key to a `.p12` (password: `fivekmrun2026`):
-   ```
-   openssl x509 -inform der -in ~/Downloads/distribution*.cer -out ~/Downloads/fivekmrun_dist.pem
-   openssl pkcs12 -export -inkey ~/Downloads/fivekmrun_dist.key -in ~/Downloads/fivekmrun_dist.pem \
-     -out ~/Downloads/fivekmrun_dist.p12 -passout pass:fivekmrun2026 -name "Apple Distribution: 5 KM PARK BG"
-   ```
-2. Read the new provisioning profile UUID:
-   ```
-   security cms -D -i ~/Downloads/*.mobileprovision | plutil -extract UUID xml1 -o - -
-   ```
-3. Update three GitHub secrets (`production` environment):
-   - `IOS_P12_BASE64` — base64 of the `.p12`
-   - `IOS_P12_PASSWORD` — `fivekmrun2026`
-   - `IOS_PROVISIONING_PROFILE_BASE64` — base64 of the `.mobileprovision`
-4. Update the provisioning profile UUID in two places:
-   - `PROVISIONING_PROFILE=<uuid>` in `.github/workflows/upload-appstore.yml`
-   - `IOS_EXPORT_OPTIONS` variable at the **`production` environment** level (not repo level — environment takes precedence)
-5. Commit and push the workflow change, then re-trigger the build.
-
-### Key gotchas learned
-- The `IOS_EXPORT_OPTIONS` variable exists at both repo and `production` environment level — always update the **environment** one or the build will use the old UUID
-- Always use App ID `bg.5kmpark.5kmrun`, never the XC wildcard — the wildcard doesn't include Push Notifications or Associated Domains entitlements
-- The private key (`fivekmrun_dist.key`) is generated locally and never stored in the repo — keep it in `~/Downloads/` until the process is complete
+Edit those files to change the procedures — do not restate the steps here.
 
 ## What NOT to Do
 - Do not commit `lib/private/secrets.dart`
