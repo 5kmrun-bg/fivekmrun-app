@@ -1,7 +1,4 @@
-• Improved barcode scanner — faster and more accurate scanning
-• Sound feedback when your barcode is scanned at the finish line
-• Barcode now works without an internet connection
-• Newest results appear at the top
-• Fixed Strava authentication on Android
-• Initial timekeeping support
+• Pull down to refresh your profile, runs and events
+• Support for the latest version of Android
+• Fixed an issue when loading your profile
 • Bug fixes and stability improvements
