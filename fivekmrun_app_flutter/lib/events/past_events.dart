@@ -17,6 +17,7 @@ class PastEventsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
       itemCount: events.length,
       itemBuilder: (BuildContext context, int i) {
         return Card(

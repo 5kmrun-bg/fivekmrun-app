@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/state/fetch_exception.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
@@ -46,12 +47,25 @@ class RunsResource extends ChangeNotifier {
     this._lastOfficialRun = null;
   }
 
+  /// Fetches the user's runs and replaces [value] on success.
+  ///
+  /// If the fetch fails the previously loaded runs are kept — an unreachable
+  /// server must not look the same as "this user has never run". The error is
+  /// rethrown so callers can react; see [refreshAllData].
   Future<List<Run>> getByUserId(int? userId) async {
-    List<Run> runs = (await this.retrieve5kmRuns(userId));
-    List<Run> selfieRuns = await this.retrieveSelfieRuns(userId);
-    runs.addAll(selfieRuns.where((r) => r.timeInSeconds != null));
+    if (userId == null) {
+      return this.value ?? <Run>[];
+    }
 
-    print("COUNT RUNS:" + runs.length.toString());
+    final List<Run> runs;
+    try {
+      runs = await this.retrieve5kmRuns(userId);
+      final List<Run> selfieRuns = await this.retrieveSelfieRuns(userId);
+      runs.addAll(selfieRuns.where((r) => r.timeInSeconds != null));
+    } catch (_) {
+      this.loading = false;
+      rethrow;
+    }
 
     this._processRuns(runs);
 
@@ -61,30 +75,18 @@ class RunsResource extends ChangeNotifier {
   }
 
   Future<List<Run>> retrieve5kmRuns(int? userId) async {
-    http.Response response =
+    final http.Response response =
         await http.get(Uri.parse("${constants.runsEndpointUrl}$userId"));
-    if (response.statusCode != 200 ||
-        response.headers["content-type"] != "application/json;charset=utf-8;") {
-      print('hello');
-      //TODO: Fix this when endpoint behaves properly
-
-      return [];
-    }
+    ensureJsonResponse(response, "5km runs");
 
     String body = utf8.decode(response.bodyBytes);
     return Run.listFromJson(jsonDecode(body));
   }
 
   Future<List<Run>> retrieveSelfieRuns(int? userId) async {
-    http.Response response =
+    final http.Response response =
         await http.get(Uri.parse("https://5kmrun.bg/api/selfie/user/$userId"));
-    if (response.statusCode != 200 ||
-        response.headers["content-type"] != "application/json;charset=utf-8;") {
-      print('hello');
-      //TODO: Fix this when endpoint behaves properly
-
-      return [];
-    }
+    ensureJsonResponse(response, "selfie runs");
 
     String body = utf8.decode(response.bodyBytes);
     return Run.selfieListFromJson(jsonDecode(body));
