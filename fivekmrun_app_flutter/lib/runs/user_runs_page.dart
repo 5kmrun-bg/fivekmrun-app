@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
+import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +12,20 @@ class UserRunsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("Твоите Бягания")),
-        body: Consumer<RunsResource>(builder: (context, runsResource, child) {
-          if (runsResource.loading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (runsResource.value == null ||
-              runsResource.value?.length == 0) {
-            return Center(
-                child: Text("Все още не сте направили първото си бягане"));
-          } else {
-            return UserRunsList(runs: runsResource.value!);
-          }
-        }));
+        body: RefreshIndicator(
+          onRefresh: () => refreshAllData(context),
+          child: Consumer<RunsResource>(builder: (context, runsResource, child) {
+            if (runsResource.loading) {
+              return refreshableMessage(CircularProgressIndicator());
+            } else if (runsResource.value == null ||
+                runsResource.value?.length == 0) {
+              return refreshableMessage(
+                  Text("Все още не сте направили първото си бягане"));
+            } else {
+              return UserRunsList(runs: runsResource.value!);
+            }
+          }),
+        ));
   }
 }
 
@@ -41,6 +45,7 @@ class UserRunsList extends StatelessWidget {
     final darkerColor = Colors.white;
 
     return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
       itemCount: runs.length,
       itemBuilder: (BuildContext context, int index) {
         final run = runs[index];

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
+import 'package:fivekmrun_flutter/state/fetch_exception.dart';
 import 'package:fivekmrun_flutter/constants.dart' as constants;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +9,9 @@ import 'package:http/http.dart' as http;
 abstract class EventsResource extends ChangeNotifier {
   String getEventUrl();
 
-  late List<Event> value;
+  // Not `late`: a failed fetch now leaves [value] untouched, so it has to be
+  // readable before the first successful load.
+  List<Event> value = <Event>[];
 
   bool _loading = true;
 
@@ -23,13 +26,13 @@ abstract class EventsResource extends ChangeNotifier {
   List<Event> listFromJsonParser(dynamic json);
 
   Future<List<Event>> getAll() async {
-    http.Response response = await http.get(Uri.parse("${this.getEventUrl()}"));
-    if (response.statusCode != 200 ||
-        response.headers["content-type"] != "application/json;charset=utf-8;") {
-      print('NO EVENTS RECEIVED');
-      //TODO: Fix this when endpoint behaves properly
-
-      return [];
+    final http.Response response;
+    try {
+      response = await http.get(Uri.parse("${this.getEventUrl()}"));
+      ensureJsonResponse(response, "events");
+    } catch (_) {
+      this.loading = false;
+      rethrow;
     }
 
     String body = utf8.decode(response.bodyBytes);
@@ -44,7 +47,7 @@ class FutureEventsResource extends EventsResource {
   String getEventUrl() {
     return constants.futureEventsUrl;
   }
-  
+
   @override
   List<Event> listFromJsonParser(json) {
     return Event.listFromJson(json);
@@ -56,7 +59,7 @@ class PastEventsResource extends EventsResource {
   String getEventUrl() {
     return constants.pastEventsUrl;
   }
-  
+
   @override
   List<Event> listFromJsonParser(json) {
     return Event.listFromJson(json);
@@ -88,7 +91,9 @@ class KidsFutureEventsResource extends EventsResource {
 }
 
 class AllFutureEventsResource extends ChangeNotifier {
-  late List<Event> value;
+  // Not `late`: a failed fetch now leaves [value] untouched, so it has to be
+  // readable before the first successful load.
+  List<Event> value = <Event>[];
 
   bool _loading = true;
 
@@ -101,14 +106,24 @@ class AllFutureEventsResource extends ChangeNotifier {
   }
 
   Future<List<Event>> getAll() async {
-    var futureEvents = await FutureEventsResource().getAll();
-    var xlFutureEvents = await XLFutureEventsResource().getAll();
-    var kidsFutureEvents = await KidsFutureEventsResource().getAll();
+    final List<Event> combined;
+    try {
+      var futureEvents = await FutureEventsResource().getAll();
+      var xlFutureEvents = await XLFutureEventsResource().getAll();
+      var kidsFutureEvents = await KidsFutureEventsResource().getAll();
+
+      combined = List<Event>.from(futureEvents)
+        ..addAll(xlFutureEvents)
+        ..addAll(kidsFutureEvents);
+    } catch (_) {
+      // Keep whatever was already loaded rather than blanking the events tab.
+      this.loading = false;
+      rethrow;
+    }
 
     this.loading = false;
-    this.value = List<Event>.from(futureEvents)..addAll(xlFutureEvents)..addAll(kidsFutureEvents);
-    this.value.sortBy((e) => e.date);
-    
+    this.value = combined..sortBy((e) => e.date);
+
     return this.value;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/common/constants.dart';
+import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/common/select_button.dart';
 import 'package:fivekmrun_flutter/events/future_events.dart';
 import 'package:fivekmrun_flutter/events/past_events.dart';
@@ -27,25 +28,31 @@ class _EventsPage extends State<EventsPage> {
 
   Widget _buildEvents() {
     if (!this.futureEventSelected) {
-      return Consumer<PastEventsResource>(
-        builder: (context, eventsResource, child) {
-          if (eventsResource.loading) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            return PastEventsList(events: eventsResource.value);
-          }
-        },
+      return RefreshIndicator(
+        onRefresh: () => refreshAllData(context),
+        child: Consumer<PastEventsResource>(
+          builder: (context, eventsResource, child) {
+            if (eventsResource.loading) {
+              return refreshableMessage(CircularProgressIndicator());
+            } else {
+              return PastEventsList(events: eventsResource.value);
+            }
+          },
+        ),
       );
     }
 
-    return Consumer<AllFutureEventsResource>(
-      builder: (context, eventsResource, child) {
-        if (eventsResource.loading) {
-          return Center(child: CircularProgressIndicator());
-        } else {
-          return FutureEventsList(events: eventsResource.value);
+    return RefreshIndicator(
+      onRefresh: () => refreshAllData(context),
+      child: Consumer<AllFutureEventsResource>(
+        builder: (context, eventsResource, child) {
+          if (eventsResource.loading) {
+            return refreshableMessage(CircularProgressIndicator());
+          } else {
+            return FutureEventsList(events: eventsResource.value);
+          }
         }
-      }
+      ),
     );
   }
 

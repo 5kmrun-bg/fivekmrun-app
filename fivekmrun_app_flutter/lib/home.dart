@@ -1,5 +1,6 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:fivekmrun_flutter/app_rating_manager.dart';
+import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/offline_chart/add_offline_entry_page.dart';
@@ -94,9 +95,18 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<UserResource>(context, listen: false).currentUserId = userId;
     });
-    Provider.of<RunsResource>(context, listen: false).getByUserId(userId);
-    Provider.of<AllFutureEventsResource>(context, listen: false).getAll();
-    Provider.of<PastEventsResource>(context, listen: false).getAll();
+    // Fire-and-forget: the resources notify their listeners when they land.
+    // A failed fetch leaves the previous data in place, so there is nothing to
+    // do here beyond keeping the error from going unhandled.
+    reportOnFailure(
+        Provider.of<RunsResource>(context, listen: false).getByUserId(userId),
+        "runs");
+    reportOnFailure(
+        Provider.of<AllFutureEventsResource>(context, listen: false).getAll(),
+        "future events");
+    reportOnFailure(
+        Provider.of<PastEventsResource>(context, listen: false).getAll(),
+        "past events");
 
     this._tabHelper = TabNavigationHelper(this);
     this._widgetOptions = <Widget>[
