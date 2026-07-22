@@ -15,45 +15,47 @@ class LoginPreview extends StatelessWidget {
       final avatrUrl = user?.avatarUrl;
       final textTheme = Theme.of(context).textTheme;
       return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("Влез като", style: textTheme.titleLarge),
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: Text(title, style: textTheme.titleLarge),
-              ),
-              Hero(tag: "avatar", child: Avatar(url: avatrUrl ?? "")),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
-                    child: Container(
-                      width: 60,
-                      child: ElevatedButton(
-                        child: Icon(
-                          Icons.edit,
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text("Влез като", style: textTheme.titleLarge),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Text(title, style: textTheme.titleLarge),
+                ),
+                Hero(tag: "avatar", child: Avatar(url: avatrUrl ?? "")),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12.0),
+                      child: Container(
+                        width: 60,
+                        child: ElevatedButton(
+                          child: Icon(
+                            Icons.edit,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
                       ),
                     ),
-                  ),
-                  Container(
-                    width: 150,
-                    child: ElevatedButton(
-                        child: Text("Напред"),
-                        onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, "home", (_) => false);
-                        }),
-                  ),
-                ],
-              )
-            ],
+                    Container(
+                      width: 150,
+                      child: ElevatedButton(
+                          child: Text("Напред"),
+                          onPressed: () {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, "home", (_) => false);
+                          }),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       );

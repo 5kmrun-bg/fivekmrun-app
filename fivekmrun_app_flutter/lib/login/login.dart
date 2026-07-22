@@ -21,37 +21,39 @@ class _LoginState extends State<Login> {
     final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(
-      body: Center(
-        child: Container(
-          width: 220,
-          height: 400,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              this._buildLogo(),
-              SizedBox(height: 10),
-              Spacer(),
-              this.loginWithId ? LoginWithId() : LoginWithUsername(),
-              SizedBox(height: 4),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  child:
-                      Text(this.loginWithId ? "влез с парола" : "влез с номер"),
-                  onPressed: this._toggleLogin,
+      body: SafeArea(
+        child: Center(
+          child: Container(
+            width: 220,
+            height: 400,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                this._buildLogo(),
+                SizedBox(height: 10),
+                Spacer(),
+                this.loginWithId ? LoginWithId() : LoginWithUsername(),
+                SizedBox(height: 4),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    child: Text(
+                        this.loginWithId ? "влез с парола" : "влез с номер"),
+                    onPressed: this._toggleLogin,
+                  ),
                 ),
-              ),
-              Spacer(),
-              Text("Нямате регистрация?"),
-              GestureDetector(
-                onTap: () => _loadRegistrationScreen(),
-                child: Text("Регистрирай се сега",
-                    style: TextStyle(
-                        color: accentColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold)),
-              )
-            ],
+                Spacer(),
+                Text("Нямате регистрация?"),
+                GestureDetector(
+                  onTap: () => _loadRegistrationScreen(),
+                  child: Text("Регистрирай се сега",
+                      style: TextStyle(
+                          color: accentColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold)),
+                )
+              ],
+            ),
           ),
         ),
       ),
