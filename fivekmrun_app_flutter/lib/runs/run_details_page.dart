@@ -8,7 +8,11 @@ class RunDetailsPage extends StatelessWidget {
   const RunDetailsPage({Key? key}) : super(key: key);
 
   Widget buildPositionGauge(Run run) {
-    if (run.isSelfie) return SizedBox.shrink();
+    // XL runs are scored against the xlrun results endpoint, not the regular
+    // 5kmrun one this gauge queries — showing it here would either fetch the
+    // wrong event's results or fail outright, so skip it like selfie runs
+    // until XL has its own results integration.
+    if (run.isSelfie || run.isXL) return SizedBox.shrink();
 
     ResultsResource results = ResultsResource();
     return FutureBuilder<List<Result>>(

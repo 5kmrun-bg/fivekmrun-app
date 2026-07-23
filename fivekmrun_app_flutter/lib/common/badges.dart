@@ -34,7 +34,7 @@ bool hasMaxBadge(List<Run>? runs) {
 
   var yearsWon = <int>[];
   var officialRunsDates = runs
-      .where((run) => run.date != null && !run.isSelfie)
+      .where((run) => run.date != null && !run.isSelfie && !run.isXL)
       .map((e) => e.date!);
 
   var yearsToCheck = officialRunsDates.map((date) => date.year).toSet();

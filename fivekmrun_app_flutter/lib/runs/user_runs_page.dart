@@ -42,6 +42,7 @@ class UserRunsList extends StatelessWidget {
     runs.sort((r1, r2) => r2.date?.compareTo(r1.date!) ?? 0);
 
     final accentColor = Theme.of(context).colorScheme.secondary;
+    final xlColor = Colors.deepPurpleAccent;
     final darkerColor = Colors.white;
 
     return ListView.builder(
@@ -49,11 +50,15 @@ class UserRunsList extends StatelessWidget {
       itemCount: runs.length,
       itemBuilder: (BuildContext context, int index) {
         final run = runs[index];
+        final borderColor = run.isXL
+            ? xlColor
+            : (run.isSelfie ? accentColor : darkerColor);
+
         return Card(
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color: run.isSelfie ? accentColor : darkerColor,
+                color: borderColor,
                 style: BorderStyle.solid,
                 width: 1.0,
               ),
@@ -65,7 +70,12 @@ class UserRunsList extends StatelessWidget {
                   .pushNamed("/run-details", arguments: run),
               title: Column(
                 children: <Widget>[
-                  if (!run.isSelfie)
+                  if (run.isXL)
+                    ListTileRow(
+                      icon: Icons.terrain,
+                      text: "XL · " + run.location!,
+                    )
+                  else if (!run.isSelfie)
                     ListTileRow(
                       icon: Icons.pin_drop,
                       text: run.location!,

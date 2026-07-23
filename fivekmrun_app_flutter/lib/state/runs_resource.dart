@@ -62,6 +62,8 @@ class RunsResource extends ChangeNotifier {
       runs = await this.retrieve5kmRuns(userId);
       final List<Run> selfieRuns = await this.retrieveSelfieRuns(userId);
       runs.addAll(selfieRuns.where((r) => r.timeInSeconds != null));
+      final List<Run> xlRuns = await this.retrieveXLRuns(userId);
+      runs.addAll(xlRuns.where((r) => r.timeInSeconds != null));
     } catch (_) {
       this.loading = false;
       rethrow;
@@ -92,6 +94,23 @@ class RunsResource extends ChangeNotifier {
     return Run.selfieListFromJson(jsonDecode(body));
   }
 
+  /// Unlike the other two endpoints, xlrun/user/<id> answers with a non-JSON
+  /// error page (not an empty array) for the vast majority of users who have
+  /// no XL history — so, unlike [retrieve5kmRuns]/[retrieveSelfieRuns], that
+  /// response is treated as "no XL runs" rather than a fetch failure. Letting
+  /// it throw would break the whole runs list for every non-XL user.
+  Future<List<Run>> retrieveXLRuns(int? userId) async {
+    final http.Response response = await http
+        .get(Uri.parse("${constants.xlUserEndpointUrl}$userId"));
+
+    if (!isJsonResponse(response.statusCode, response.headers["content-type"])) {
+      return <Run>[];
+    }
+
+    String body = utf8.decode(response.bodyBytes);
+    return Run.listFromXLUserJson(jsonDecode(body));
+  }
+
   void _processRuns(List<Run> runs) {
     if (runs.length == 0) {
       this._bestOfficialRun = null;
@@ -103,10 +122,11 @@ class RunsResource extends ChangeNotifier {
 
     runs.sort((r1, r2) => r2.date?.compareTo(r1.date!) ?? 0);
 
-    if (runs.where((r) => !r.isSelfie).length > 0) {
-      this._lastOfficialRun = runs.where((r) => !r.isSelfie).first;
-      this._bestOfficialRun = runs.where((r) => !r.isSelfie).reduce(
-          (a, b) => (a.timeInSeconds ?? 0) < (b.timeInSeconds ?? 0) ? a : b);
+    if (runs.where((r) => !r.isSelfie && !r.isXL).length > 0) {
+      this._lastOfficialRun = runs.where((r) => !r.isSelfie && !r.isXL).first;
+      this._bestOfficialRun =
+          runs.where((r) => !r.isSelfie && !r.isXL).reduce((a, b) =>
+              (a.timeInSeconds ?? 0) < (b.timeInSeconds ?? 0) ? a : b);
       //Function.apply((r) => r.differenceFromBest = r.timeInSeconds - this._bestOfficialRun.timeInSeconds, runs.where((r) => !r.isSelfie).toList());
     }
 

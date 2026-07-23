@@ -61,8 +61,8 @@ class RunsByRouteChart extends StatelessWidget {
 
   static List<charts.Series<RunsByRouteEntry, String>> _createData(
       List<Run> runs) {
-    List<RunsByRouteEntry> series =
-        groupBy<Run, String>(runs.where((r) => !r.isSelfie), (r) => r.location!)
+    List<RunsByRouteEntry> series = groupBy<Run, String>(
+            runs.where((r) => !r.isSelfie && !r.isXL), (r) => r.location!)
             .entries
             .map((e) => RunsByRouteEntry(e.key, e.value.length))
             .toList();

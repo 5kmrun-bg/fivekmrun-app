@@ -35,8 +35,8 @@ class ProfileDashboard extends StatelessWidget {
 
     final runs = runsRes.value;
     final hasAnyRuns = runs != null && runs.length > 0;
-    final hasOfficialRuns =
-        runs != null && runs.where((r) => !r.isSelfie).length > 0;
+    final hasOfficialRuns = runs != null &&
+        runs.where((r) => !r.isSelfie && !r.isXL).length > 0;
     final hasSelfieRuns =
         runs != null && runs.where((r) => r.isSelfie).length > 0;
 
@@ -155,13 +155,14 @@ class ProfileDashboard extends StatelessWidget {
                           ]),
                           MilestoneTile(
                               value: runsRes.value
-                                      ?.where((r) => !r.isSelfie)
+                                      ?.where((r) => !r.isSelfie && !r.isXL)
                                       .length
                                       .toInt() ??
                                   0,
                               milestone: LegionerStatusHelper.getNextMilestone(
                                   runsRes.value
-                                          ?.where((r) => !r.isSelfie)
+                                          ?.where(
+                                              (r) => !r.isSelfie && !r.isXL)
                                           .length
                                           .toInt() ??
                                       0),

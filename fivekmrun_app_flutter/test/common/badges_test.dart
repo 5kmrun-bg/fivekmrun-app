@@ -64,4 +64,19 @@ void main() {
 
     expect(hasSelfieBadge(runs), true);
   });
+
+  test('XL runs on every Saturday should not earn the max badge', () {
+    // XL runs are monthly, not weekly — attending every XLrun day must not
+    // be mistaken for attending every weekly official (Saturday) run.
+    var runs = <Run>[];
+
+    var previousYear = DateTime(2022, 12, 31);
+    var saturday = previousYear.lastSaturday();
+    while (saturday.year == previousYear.year) {
+      runs.add(new Run(date: saturday, isSelfie: false, isXL: true));
+      saturday = saturday.subtract(Duration(days: 7));
+    }
+
+    expect(hasMaxBadge(runs), false);
+  });
 }
