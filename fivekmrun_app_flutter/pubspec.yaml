@@ -78,6 +78,7 @@ dependency_overrides:
   cupertino_icons: ^1.0.3
 
 dev_dependencies:
+  flutter_lints: ^2.0.3
   build_runner: ^2.4.6
   flutter_test:
     sdk: flutter

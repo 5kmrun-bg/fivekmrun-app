@@ -1,0 +1,20 @@
+# This file configures the analyzer, which statically analyzes Dart code to
+# check for errors, warnings, and lints.
+#
+# The lint rules applied to this project can be customized in the section below.
+# The included flutter_lints package activates a recommended set of lints for
+# Flutter apps. See https://dart.dev/lints and https://pub.dev/packages/flutter_lints.
+
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  errors:
+    # Keep the build green while the codebase is brought up to standard.
+    # These are surfaced in the IDE/`flutter analyze` but do not fail as errors.
+    avoid_print: warning
+    deprecated_member_use: info
+
+linter:
+  rules:
+    # The flutter_lints recommended set (included above) is the baseline.
+    # Add project-specific rules here as the codebase is cleaned up.

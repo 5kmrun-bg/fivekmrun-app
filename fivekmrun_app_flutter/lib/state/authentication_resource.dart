@@ -21,7 +21,6 @@ class AuthenticationResource extends ChangeNotifier {
 
     HttpClientResponse response = await request.close();
     String reply = await response.transform(utf8.decoder).join();
-    print(reply);
     httpClient.close();
     Map<String, dynamic> map = json.decode(reply);
     List<String> errors = List.from(map["errors"]);
@@ -113,8 +112,6 @@ class AuthenticationResource extends ChangeNotifier {
       final timestamp = prefs.getInt(constants.key_tokenTimestamp);
       if (timestamp != null) {
         final created = DateTime.fromMillisecondsSinceEpoch(timestamp);
-        print("AUTH.loadFromLocalStore token created: ${created.toString()}");
-
         final expiresAt =
             created.add(new Duration(days: constants.tokenExpiryDays));
         if (expiresAt.isAfter(DateTime.now())) {
@@ -122,8 +119,5 @@ class AuthenticationResource extends ChangeNotifier {
         }
       }
     }
-
-    print("AUTH.loadFromLocalStore userId: ${this._userId.toString()} ");
-    print("AUTH.loadFromLocalStore token: ${this._token}");
   }
 }

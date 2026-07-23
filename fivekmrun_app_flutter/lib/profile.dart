@@ -40,7 +40,6 @@ class ProfileDashboard extends StatelessWidget {
     final hasSelfieRuns =
         runs != null && runs.where((r) => r.isSelfie).length > 0;
 
-    print("HAS ANY RUNS: " + hasAnyRuns.toString());
     final goToSettings = () {
       Navigator.of(context, rootNavigator: true).pushNamed("settings");
     };

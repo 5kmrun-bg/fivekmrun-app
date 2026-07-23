@@ -30,8 +30,6 @@ bool hasMaxBadge(List<Run>? runs) {
     return false;
   }
 
-  print("MAX BADGE");
-
   var yearsWon = <int>[];
   var officialRunsDates = runs
       .where((run) => run.date != null && !run.isSelfie)
@@ -45,15 +43,11 @@ bool hasMaxBadge(List<Run>? runs) {
     var actualRunsCount =
         officialRunsDates.where((date) => date.year == year).length;
 
-    print("$year expectedRunsCount: $expectedRunsCount");
-    print("$year actualRunsCount: $actualRunsCount");
-
     if (actualRunsCount >= expectedRunsCount) {
       yearsWon.add(year);
     }
   }
 
-  print(yearsWon);
   return yearsWon.length > 0;
 }
 
@@ -61,8 +55,6 @@ bool hasSelfieBadge(List<Run>? runs) {
   if (runs == null) {
     return false;
   }
-
-  print("SELFIE BADGE");
 
   var yearsWon = <int>[];
   var selfieRunDates = runs
@@ -77,14 +69,10 @@ bool hasSelfieBadge(List<Run>? runs) {
     var actualRunsCount =
         selfieRunDates.where((date) => date.year == year).length;
 
-    print("$year expectedRunsCount: $expectedRunsCount");
-    print("$year actualRunsCount: $actualRunsCount");
-
     if (actualRunsCount >= expectedRunsCount) {
       yearsWon.add(year);
     }
   }
 
-  print(yearsWon);
   return yearsWon.length > 0;
 }
