@@ -51,7 +51,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 Text("Известия"),
                 Switch(
                   onChanged: (value) {
-                    print("SET PUSH NOTIFICATION: " + value.toString());
                     final pushNotificationManager =
                         PushNotificationsManager.getInstance();
                     setState(() => localStorage.isSubscrubedForGeneral = value);

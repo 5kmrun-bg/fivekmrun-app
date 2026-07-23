@@ -40,7 +40,10 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
       } else {
         setState(() => this.loginError = true);
       }
-    }).catchError((error, stackTrace) => print("ERROR: " + error.toString()));
+    }).catchError((error, stackTrace) {
+      FirebaseCrashlytics.instance
+          .recordError(error, stackTrace, reason: "authenticate with username");
+    });
   }
 
   @override

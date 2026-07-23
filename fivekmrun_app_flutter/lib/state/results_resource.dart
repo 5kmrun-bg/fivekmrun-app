@@ -25,7 +25,6 @@ class ResultsResource extends ChangeNotifier {
         .get(Uri.parse("${constants.resultEventsUrl}${eventId.toString()}"));
     if (response.statusCode != 200 ||
         response.headers["content-type"] != "application/json;charset=utf-8;") {
-      print('NO RESULTS RECEIVED');
       //TODO: Fix this when endpoint behaves properly
 
       return [];
