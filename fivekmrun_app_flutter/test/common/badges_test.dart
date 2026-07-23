@@ -20,7 +20,7 @@ void main() {
     var now = DateTime.now();
     var date = now;
     while (date.year == now.year) {
-      runs.add(new Run(date: date, isSelfie: false));
+      runs.add(new Run(date: date, runType: RunType.official));
       date = date.subtract(Duration(days: 1));
     }
 
@@ -33,7 +33,7 @@ void main() {
     var now = DateTime.now();
     var date = now;
     while (date.year == now.year) {
-      runs.add(new Run(date: date, isSelfie: true));
+      runs.add(new Run(date: date, runType: RunType.selfie));
       date = date.subtract(Duration(days: 1));
     }
 
@@ -46,7 +46,7 @@ void main() {
     var previousYear = DateTime(2022, 12, 31);
     var saturday = previousYear.lastSaturday();
     while (saturday.year == previousYear.year) {
-      runs.add(new Run(date: saturday, isSelfie: false));
+      runs.add(new Run(date: saturday, runType: RunType.official));
       saturday = saturday.subtract(Duration(days: 7));
     }
     expect(hasMaxBadge(runs), true);
@@ -58,7 +58,7 @@ void main() {
     var previousYear = DateTime(2022, 12, 31);
     var saturday = previousYear.lastSaturday();
     while (saturday.year == previousYear.year) {
-      runs.add(new Run(date: saturday, isSelfie: true));
+      runs.add(new Run(date: saturday, runType: RunType.selfie));
       saturday = saturday.subtract(Duration(days: 7));
     }
 
@@ -73,7 +73,7 @@ void main() {
     var previousYear = DateTime(2022, 12, 31);
     var saturday = previousYear.lastSaturday();
     while (saturday.year == previousYear.year) {
-      runs.add(new Run(date: saturday, isSelfie: false, isXL: true));
+      runs.add(new Run(date: saturday, runType: RunType.xl));
       saturday = saturday.subtract(Duration(days: 7));
     }
 

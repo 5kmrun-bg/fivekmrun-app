@@ -47,7 +47,7 @@ class BestTimesByRouteChart extends StatelessWidget {
   static List<charts.Series<BestTimeByRouteEntry, String>> _createData(
       List<Run> runs) {
     List<BestTimeByRouteEntry> series = groupBy<Run, String>(
-            runs.where((r) => !r.isSelfie && !r.isXL), (r) => r.location!)
+            runs.where((r) => r.runType == RunType.official), (r) => r.location!)
             .entries
             .map((e) => BestTimeByRouteEntry(
                 e.key,

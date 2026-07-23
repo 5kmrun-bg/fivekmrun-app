@@ -35,10 +35,9 @@ void main() {
       expect(run.distance, null);
     });
 
-    test('marks the run as XL and not selfie', () {
+    test('marks the run as XL', () {
       final run = Run.fromXLJson(xlResultJson());
-      expect(run.isXL, true);
-      expect(run.isSelfie, false);
+      expect(run.runType, RunType.xl);
     });
 
     test('computes pace/speed off the real distance, not a fixed 5km', () {

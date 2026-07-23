@@ -12,7 +12,7 @@ class RunDetailsPage extends StatelessWidget {
     // 5kmrun one this gauge queries — showing it here would either fetch the
     // wrong event's results or fail outright, so skip it like selfie runs
     // until XL has its own results integration.
-    if (run.isSelfie || run.isXL) return SizedBox.shrink();
+    if (run.runType != RunType.official) return SizedBox.shrink();
 
     ResultsResource results = ResultsResource();
     return FutureBuilder<List<Result>>(
@@ -120,11 +120,12 @@ class RunDetailsPage extends StatelessWidget {
                 ),
                 IconText(
                   icon: Icons.pin_drop,
-                  text: (run.isSelfie) ? "Selfie" : run.location!,
+                  text:
+                      (run.runType == RunType.selfie) ? "Selfie" : run.location!,
                 ),
               ],
             ),
-            if (run.isSelfie)
+            if (run.runType == RunType.selfie)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[

@@ -3,6 +3,13 @@ import 'package:intl/intl.dart';
 
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
+/// Official (regular 5kmrun), selfie, and XL runs are mutually exclusive —
+/// this used to be modeled as two independent bools (isSelfie, isXL), which
+/// meant every consumer had to remember to exclude XL wherever it filtered
+/// on "not selfie" to mean "official". An enum makes the exclusivity
+/// structural instead of a convention every call site has to uphold.
+enum RunType { official, selfie, xl }
+
 class Run {
   final int id;
   final int? eventId;
@@ -14,8 +21,7 @@ class Run {
   final String? speed;
   final String? notes;
   final String? pace;
-  final bool isSelfie;
-  final bool isXL;
+  final RunType runType;
   final int? distance;
   final String? totalTime;
 
@@ -37,8 +43,7 @@ class Run {
       this.speed,
       this.notes,
       this.pace,
-      this.isSelfie = false,
-      this.isXL = false,
+      this.runType = RunType.official,
       this.distance,
       this.totalTime})
       : id = ("$date#$time#$location").hashCode;
@@ -57,8 +62,7 @@ class Run {
         speed = timeInSecondsToSpeed(json["r_time"]),
         notes = "",
         pace = timeInSecondsToPace(json["r_time"]),
-        isSelfie = false,
-        isXL = false,
+        runType = RunType.official,
         distance = 5000;
 
   // For XLrun — same r_*/n_name shape as the regular result endpoint (see
@@ -82,8 +86,7 @@ class Run {
         notes = "",
         pace = timeInSecondsToPace(json["r_time"],
             distanceMeters: _xlDistanceMetersFromName(json["n_name"]) ?? 5000),
-        isSelfie = false,
-        isXL = true,
+        runType = RunType.xl,
         distance = _xlDistanceMetersFromName(json["n_name"]);
 
   static List<Run> listFromJson(Map<String, dynamic> json) {
@@ -105,8 +108,7 @@ class Run {
         speed = timeInSecondsToSpeed(json["s_time"]),
         notes = "",
         pace = timeInSecondsToPace(json["s_time"]),
-        isSelfie = true,
-        isXL = false,
+        runType = RunType.selfie,
         distance = json["s_total_distance"] ?? 5000,
         totalTime = timeInSecondsToString(json[
             "s_total_elapsed_time"] ?? 0); //timeInSecondsToPace(json["r_time"]);

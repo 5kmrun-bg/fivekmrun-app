@@ -122,17 +122,18 @@ class RunsResource extends ChangeNotifier {
 
     runs.sort((r1, r2) => r2.date?.compareTo(r1.date!) ?? 0);
 
-    if (runs.where((r) => !r.isSelfie && !r.isXL).length > 0) {
-      this._lastOfficialRun = runs.where((r) => !r.isSelfie && !r.isXL).first;
-      this._bestOfficialRun =
-          runs.where((r) => !r.isSelfie && !r.isXL).reduce((a, b) =>
-              (a.timeInSeconds ?? 0) < (b.timeInSeconds ?? 0) ? a : b);
+    final officialRuns = runs.where((r) => r.runType == RunType.official);
+    if (officialRuns.length > 0) {
+      this._lastOfficialRun = officialRuns.first;
+      this._bestOfficialRun = officialRuns.reduce((a, b) =>
+          (a.timeInSeconds ?? 0) < (b.timeInSeconds ?? 0) ? a : b);
       //Function.apply((r) => r.differenceFromBest = r.timeInSeconds - this._bestOfficialRun.timeInSeconds, runs.where((r) => !r.isSelfie).toList());
     }
 
-    if (runs.where((r) => r.isSelfie).length > 0) {
-      this._lastSelfieRun = runs.where((r) => r.isSelfie).first;
-      this._bestSelfieRun = runs.where((r) => r.isSelfie).reduce(
+    final selfieRuns = runs.where((r) => r.runType == RunType.selfie);
+    if (selfieRuns.length > 0) {
+      this._lastSelfieRun = selfieRuns.first;
+      this._bestSelfieRun = selfieRuns.reduce(
           (a, b) => (a.timeInSeconds ?? 0) < (b.timeInSeconds ?? 0) ? a : b);
       //Function.apply((r) => r.differenceFromBest = r.timeInSeconds - this._bestSelfieRun.timeInSeconds, runs.where((r) => r.isSelfie).toList());
     }
