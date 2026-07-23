@@ -46,7 +46,6 @@ class _RunsChartState extends State<RunsChart> {
             "\nВреме: " +
             time +
             "");
-        print("model: time(" + date.toString() + "), value(" + time + ")");
       }
     }
 

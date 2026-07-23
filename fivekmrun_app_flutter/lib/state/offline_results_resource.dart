@@ -37,8 +37,6 @@ class OfflineResultsResource extends ChangeNotifier {
 
     String weekFilter = "${lastWeek.year}/${_weekNumber(lastWeek)}";
 
-    print("WEEK FILTER: " + weekFilter);
-
     return _loadResultByWeek(weekFilter);
   }
 

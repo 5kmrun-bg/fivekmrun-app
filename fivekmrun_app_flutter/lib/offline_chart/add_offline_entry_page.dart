@@ -151,7 +151,6 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
     var segments =
         stravaActivity?.segmentEfforts?.map((s) => s.segment?.id).toList();
-    print("segments: " + json.encode(segments));
     OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
       elapsedTime: runSummary?.fastestSplit.elapsedTime.floor() ?? 0,

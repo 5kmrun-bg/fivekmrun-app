@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:developer' as developer;
 
 import 'package:app_badge_plus/app_badge_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,9 +44,6 @@ class PushNotificationsManager {
         // (App in foreground)
         // on this event add new message in notification collection and hightlight the count on bell icon.
         // Add notificaion add in local storage and show in a list.
-        print("ON MESSAGE: ");
-        inspect(msg);
-
         showNotification(MyApp.navKey.currentState?.overlay?.context ?? context,
             title, body);
       });
@@ -135,5 +132,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
 
-  print("Handling a background message: ${message.messageId}");
+  developer.log("Handling a background message: ${message.messageId}",
+      name: "push_notifications");
 }
