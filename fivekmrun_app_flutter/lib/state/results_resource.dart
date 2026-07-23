@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fivekmrun_flutter/state/fetch_exception.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:fivekmrun_flutter/constants.dart' as constants;
 import 'package:flutter/material.dart';
@@ -6,6 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ResultsResource extends ChangeNotifier {
+  /// Injectable for tests; defaults to a real client in production.
+  final http.Client _client;
+
+  ResultsResource({http.Client? client}) : _client = client ?? http.Client();
+
   List<Result>? value;
 
   bool _loading = false;
@@ -21,13 +27,11 @@ class ResultsResource extends ChangeNotifier {
   Future<List<Result>> getAll(int eventId) async {
     this.loading = true;
 
-    http.Response response = await http
+    http.Response response = await _client
         .get(Uri.parse("${constants.resultEventsUrl}${eventId.toString()}"));
-    if (response.statusCode != 200 ||
-        response.headers["content-type"] != "application/json;charset=utf-8;") {
-      print('NO RESULTS RECEIVED');
-      //TODO: Fix this when endpoint behaves properly
-
+    if (!isJsonResponse(
+        response.statusCode, response.headers["content-type"])) {
+      this.loading = false;
       return [];
     }
 

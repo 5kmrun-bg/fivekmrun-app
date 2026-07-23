@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:fivekmrun_flutter/state/fetch_exception.dart';
 import 'package:fivekmrun_flutter/state/run_simple_model.dart';
 import 'package:fivekmrun_flutter/state/user_model.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +10,11 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 
 class UserResource extends ChangeNotifier {
+  /// Injectable for tests; defaults to a real client in production.
+  final http.Client _client;
+
+  UserResource({http.Client? client}) : _client = client ?? http.Client();
+
   bool _loading = true;
 
   bool get loading => _loading;
@@ -59,7 +65,8 @@ class UserResource extends ChangeNotifier {
 
     http.Response? response;
     try {
-      response = await http.get(Uri.parse("${constants.userEndpointUrl}$userId"));
+      response =
+          await _client.get(Uri.parse("${constants.userEndpointUrl}$userId"));
     } catch (e) {
       // No internet or server unreachable — show barcode with cached user ID.
       this.loading = false;
@@ -67,10 +74,9 @@ class UserResource extends ChangeNotifier {
       return this.value;
     }
 
-    if (response.statusCode != 200 ||
-        response.headers["content-type"] != "application/json;charset=utf-8;") {
+    if (!isJsonResponse(
+        response.statusCode, response.headers["content-type"])) {
       this.loading = false;
-      //TODO: Fix this when endpoint behaves properly
       this.value =
           new User(age: 0, name: " ", donationsCount: 0, id: -1, avatarUrl: "");
       return this.value;
