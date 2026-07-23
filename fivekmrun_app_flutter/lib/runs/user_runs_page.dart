@@ -96,7 +96,7 @@ class RunTypePill extends StatelessWidget {
       case RunType.official:
         backgroundColor = Colors.white;
         textColor = Colors.black87;
-        label = "Същинско";
+        label = "5kmrun";
         break;
       case RunType.selfie:
         backgroundColor = Theme.of(context).colorScheme.secondary;
