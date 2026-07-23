@@ -6,6 +6,11 @@ import 'package:fivekmrun_flutter/constants.dart' as constants;
 import 'dart:convert';
 
 class RunsResource extends ChangeNotifier {
+  /// Injectable for tests; defaults to a real client in production.
+  final http.Client _client;
+
+  RunsResource({http.Client? client}) : _client = client ?? http.Client();
+
   Run? _bestOfficialRun;
   Run? _lastOfficialRun;
 
@@ -78,7 +83,7 @@ class RunsResource extends ChangeNotifier {
 
   Future<List<Run>> retrieve5kmRuns(int? userId) async {
     final http.Response response =
-        await http.get(Uri.parse("${constants.runsEndpointUrl}$userId"));
+        await _client.get(Uri.parse("${constants.runsEndpointUrl}$userId"));
     ensureJsonResponse(response, "5km runs");
 
     String body = utf8.decode(response.bodyBytes);
@@ -87,7 +92,7 @@ class RunsResource extends ChangeNotifier {
 
   Future<List<Run>> retrieveSelfieRuns(int? userId) async {
     final http.Response response =
-        await http.get(Uri.parse("https://5kmrun.bg/api/selfie/user/$userId"));
+        await _client.get(Uri.parse("https://5kmrun.bg/api/selfie/user/$userId"));
     ensureJsonResponse(response, "selfie runs");
 
     String body = utf8.decode(response.bodyBytes);
@@ -100,8 +105,8 @@ class RunsResource extends ChangeNotifier {
   /// response is treated as "no XL runs" rather than a fetch failure. Letting
   /// it throw would break the whole runs list for every non-XL user.
   Future<List<Run>> retrieveXLRuns(int? userId) async {
-    final http.Response response = await http
-        .get(Uri.parse("${constants.xlUserEndpointUrl}$userId"));
+    final http.Response response =
+        await _client.get(Uri.parse("${constants.xlUserEndpointUrl}$userId"));
 
     if (!isJsonResponse(response.statusCode, response.headers["content-type"])) {
       return <Run>[];

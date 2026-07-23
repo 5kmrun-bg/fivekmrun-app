@@ -19,7 +19,6 @@ class User {
       name = user["u_name"] + " " + user["u_surname"];
       avatarUrl = user["pic"];
       donationsCount = user["u_sponsor"] ?? 0;
-      print("Has donated: " + donationsCount.toString());
       age = calculateAge(
           DateTime.fromMillisecondsSinceEpoch(user["u_bdate"] * 1000));
     } else {

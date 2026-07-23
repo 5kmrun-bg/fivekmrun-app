@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:provider/provider.dart';
@@ -15,12 +17,12 @@ class Timekeeping extends StatelessWidget {
 
       final String authorizedUsersJson =
           remoteConfig.getString('timekeeping_authorized_users');
-      print("config: " + authorizedUsersJson);
       final List<String> authorizedUsers = authorizedUsersJson.split(',');
 
       return authorizedUsers.contains(userId);
-    } catch (e) {
-      print('Error checking timekeeping authorization: $e');
+    } catch (e, stackTrace) {
+      developer.log('Error checking timekeeping authorization',
+          name: 'timekeeping', error: e, stackTrace: stackTrace);
       return false;
     }
   }

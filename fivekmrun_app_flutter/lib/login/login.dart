@@ -72,7 +72,6 @@ class _LoginState extends State<Login> {
   }
 
   _loadRegistrationScreen() async {
-    print("load registration");
     FirebaseAnalytics.instance.logEvent(name: "open_registration_link");
     await launchUrl(Uri.parse("https://5kmrun.bg/register"));
   }

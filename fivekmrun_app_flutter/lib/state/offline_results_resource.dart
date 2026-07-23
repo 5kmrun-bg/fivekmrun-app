@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/state/fetch_exception.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,12 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 
 class OfflineResultsResource extends ChangeNotifier {
+  /// Injectable for tests; defaults to a real client in production.
+  final http.Client _client;
+
+  OfflineResultsResource({http.Client? client})
+      : _client = client ?? http.Client();
+
   bool _loading = false;
 
   bool get loading => _loading;
@@ -37,8 +44,6 @@ class OfflineResultsResource extends ChangeNotifier {
 
     String weekFilter = "${lastWeek.year}/${_weekNumber(lastWeek)}";
 
-    print("WEEK FILTER: " + weekFilter);
-
     return _loadResultByWeek(weekFilter);
   }
 
@@ -48,10 +53,10 @@ class OfflineResultsResource extends ChangeNotifier {
   }
 
   Future<List<Result>?> _loadResultByWeek(String weekFilter) async {
-    http.Response response = await http
+    http.Response response = await _client
         .get(Uri.parse("${constants.offlineChartEndpointUrl}$weekFilter"));
-    if (response.statusCode != 200 ||
-        response.headers["content-type"] != "application/json;charset=utf-8;") {
+    if (!isJsonResponse(
+        response.statusCode, response.headers["content-type"])) {
       this.loading = false;
 
       return null;
