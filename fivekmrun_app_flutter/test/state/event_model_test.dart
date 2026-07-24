@@ -22,18 +22,81 @@ void main() {
     });
   });
 
-  group('Event.fromXLJson', () {
-    test('uses n_name as the title and a fixed XL image/location', () {
-      final e = Event.fromXLJson({
-        "e_id": 2,
-        "n_name": "XL Route",
-        "e_date": 1609459200,
-        "e_time": "10:00",
-      });
-      expect(e.id, 2);
-      expect(e.title, "XL Route");
-      expect(e.location, "XLkm Run София");
+  group('Event.listFromXLJson', () {
+    test('groups rows sharing e_num + e_date into a single XLEvent', () {
+      final events = Event.listFromXLJson([
+        {
+          "e_id": 394,
+          "n_name": "с. Кътина 4.8 км",
+          "e_num": 5,
+          "e_date": 1786827600,
+          "e_time": "9:00",
+          "e_title": "Къса дистанция",
+        },
+        {
+          "e_id": 395,
+          "n_name": "с. Кътина 9.6 км",
+          "e_num": 5,
+          "e_date": 1786827600,
+          "e_time": "9:00",
+          "e_title": "Средна дистанция",
+        },
+        {
+          "e_id": 396,
+          "n_name": "с. Кътина 14.4 км",
+          "e_num": 5,
+          "e_date": 1786827600,
+          "e_time": "9:00",
+          "e_title": "XL дистанция",
+        },
+      ]);
+
+      expect(events, hasLength(1));
+      final e = events.single as XLEvent;
+      expect(e.location, "с. Кътина");
+      expect(e.distances, ["4.8 km", "9.6 km", "14.4 km"]);
+      expect(e.title, "4.8 km · 9.6 km · 14.4 km");
+      expect(e.time, "9:00");
       expect(e.imageUrl, contains("xl-run-thumbnail"));
+      expect(e.date, DateTime.fromMillisecondsSinceEpoch(1786827600 * 1000));
+    });
+
+    test('keeps separate locations/days as separate groups', () {
+      final events = Event.listFromXLJson([
+        {
+          "e_id": 1,
+          "n_name": "с. Кътина 4.8 км",
+          "e_num": 5,
+          "e_date": 1786827600,
+          "e_time": "9:00",
+        },
+        {
+          "e_id": 2,
+          "n_name": "гр. Своге 6 км",
+          "e_num": 6,
+          "e_date": 1789419600,
+          "e_time": "9:00",
+        },
+      ]);
+
+      expect(events, hasLength(2));
+      expect((events[0] as XLEvent).location, "с. Кътина");
+      expect((events[1] as XLEvent).location, "гр. Своге");
+    });
+
+    test('falls back to e_id as the grouping key when e_num is missing', () {
+      final events = Event.listFromXLJson([
+        {
+          "e_id": 1,
+          "n_name": "XL Route",
+          "e_date": 1609459200,
+          "e_time": "10:00",
+        },
+      ]);
+
+      expect(events, hasLength(1));
+      final e = events.single as XLEvent;
+      expect(e.distances, ["XL Route"]);
     });
   });
 
