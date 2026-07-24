@@ -9,6 +9,7 @@ class WalletPassGenerator {
 
     static func generatePass(userId: Int, userName: String, userStatus: String) throws -> URL {
         let barcodeValue = String(format: "%010d", userId)
+        let barcodeFormat = "PKBarcodeFormatCode128"
 
         let passJSON: [String: Any] = [
             "formatVersion": 1,
@@ -22,35 +23,39 @@ class WalletPassGenerator {
             "labelColor": "rgb(255, 255, 255)",
             "generic": [
                 "primaryFields": [
-                    ["key": "name", "label": "Бегач", "value": userName]
-                ],
-                "secondaryFields": [
-                    ["key": "status", "label": "Статус", "value": userStatus]
-                ],
-                "auxiliaryFields": [
-                    ["key": "id", "label": "ID", "value": String(userId)]
+                    ["key": "name", "label": "Име", "value": userName]
+                ]
+            ],
+            // `barcodes` (plural) is the modern field iOS renders larger; `barcode`
+            // (singular) is kept for backwards compatibility. altText prints the
+            // member number underneath the barcode.
+            "barcodes": [
+                [
+                    "message": barcodeValue,
+                    "format": barcodeFormat,
+                    "messageEncoding": "iso-8859-1",
+                    "altText": String(userId)
                 ]
             ],
             "barcode": [
                 "message": barcodeValue,
-                "format": "PKBarcodeFormatCode128",
-                "messageEncoding": "iso-8859-1"
+                "format": barcodeFormat,
+                "messageEncoding": "iso-8859-1",
+                "altText": String(userId)
             ]
         ]
 
         let passData = try JSONSerialization.data(withJSONObject: passJSON, options: .prettyPrinted)
 
-        let iconData = loadBundleImage(named: "wallet_icon") ?? whitePNG1x1()
-        let icon2xData = loadBundleImage(named: "wallet_icon@2x") ?? whitePNG1x1()
-        let logoData = loadBundleImage(named: "wallet_logo") ?? whitePNG1x1()
-        let logo2xData = loadBundleImage(named: "wallet_logo@2x") ?? whitePNG1x1()
+        // Brand the pass with the app logo (falls back to a blank pixel if missing).
+        let brandData = loadBundleImage(named: "wallet_brand") ?? whitePNG1x1()
 
         let files: [String: Data] = [
             "pass.json": passData,
-            "icon.png": iconData,
-            "icon@2x.png": icon2xData,
-            "logo.png": logoData,
-            "logo@2x.png": logo2xData
+            "icon.png": brandData,
+            "icon@2x.png": brandData,
+            "logo.png": brandData,
+            "logo@2x.png": brandData
         ]
 
         let manifest = try buildManifest(files: files)
@@ -87,6 +92,12 @@ class WalletPassGenerator {
         var digest = [UInt8](repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
         data.withUnsafeBytes { CC_SHA1($0.baseAddress, CC_LONG(data.count), &digest) }
         return digest.map { String(format: "%02x", $0) }.joined()
+    }
+
+    private static func sha256(_ data: Data) -> Data {
+        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        data.withUnsafeBytes { CC_SHA256($0.baseAddress, CC_LONG(data.count), &digest) }
+        return Data(digest)
     }
 
     // MARK: - Signing
@@ -126,17 +137,40 @@ class WalletPassGenerator {
         SecIdentityCopyCertificate(identity as! SecIdentity, &certificate)
         guard let cert = certificate else { throw PassError.certificateImportFailed }
 
+        // PassKit requires the CMS signature to carry authenticated (signed)
+        // attributes — content-type, message-digest and, crucially, a signing
+        // time. The signature is then computed over the DER of those attributes.
+        let contentTypeAttr = derSequence(
+            derOID([1, 2, 840, 113549, 1, 9, 3]) +          // contentType
+            derSet(derOID([1, 2, 840, 113549, 1, 7, 1]))    //   = data
+        )
+        let signingTimeAttr = derSequence(
+            derOID([1, 2, 840, 113549, 1, 9, 5]) +          // signingTime
+            derSet(derUTCTime(Date()))
+        )
+        let messageDigestAttr = derSequence(
+            derOID([1, 2, 840, 113549, 1, 9, 4]) +          // messageDigest
+            derSet(derOctetString(sha256(manifestData)))    //   = SHA-256(manifest)
+        )
+        // DER requires the members of a SET OF to be sorted by their encoding.
+        let sortedAttrs = [contentTypeAttr, signingTimeAttr, messageDigestAttr]
+            .sorted(by: derLess)
+            .reduce(Data(), +)
+        let attrsToSign = derTLV(0x31, sortedAttrs)   // SET OF — what we sign
+        let attrsEmbedded = derTLV(0xa0, sortedAttrs) // [0] IMPLICIT — what SignerInfo carries
+
         var signError: Unmanaged<CFError>?
         guard let signature = SecKeyCreateSignature(
             privateKey,
             .rsaSignatureMessagePKCS1v15SHA256,
-            manifestData as CFData,
+            attrsToSign as CFData,
             &signError
         ) else {
             throw PassError.signingFailed
         }
 
-        return try buildPKCS7Detached(content: manifestData, cert: cert, signatureBytes: signature as Data)
+        return try buildPKCS7Detached(cert: cert, authenticatedAttributes: attrsEmbedded,
+                                      signatureBytes: signature as Data)
     }
 
     /// Strips the PKCS#8 AlgorithmIdentifier header to return raw PKCS#1 RSAPrivateKey DER.
@@ -171,10 +205,10 @@ class WalletPassGenerator {
 
     // MARK: - Minimal PKCS#7 DER builder
 
-    /// Builds a detached PKCS#7 SignedData structure (no signed attributes).
+    /// Builds a detached PKCS#7 SignedData structure carrying signed attributes.
     private static func buildPKCS7Detached(
-        content: Data,
         cert: SecCertificate,
+        authenticatedAttributes: Data,
         signatureBytes: Data
     ) throws -> Data {
         let certDER = SecCertificateCopyData(cert) as Data
@@ -208,6 +242,7 @@ class WalletPassGenerator {
             derInteger(Data([1]))       + // version
             issuerAndSerial             +
             sha256AlgID                 + // digestAlgorithm
+            authenticatedAttributes     + // signedAttrs [0] IMPLICIT
             rsaAlgID                    + // signatureAlgorithm
             derOctetString(signatureBytes)
         )
@@ -314,6 +349,20 @@ class WalletPassGenerator {
     private static func derNull() -> Data                      { Data([0x05, 0x00]) }
     private static func derTagged(_ n: Int, _ d: Data) -> Data { derTLV(UInt8(0xa0 | n), d) }
     private static func derExplicit(_ n: Int, _ d: Data) -> Data { derTLV(UInt8(0xa0 | n), d) }
+
+    private static func derUTCTime(_ date: Date) -> Data {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "en_US_POSIX")
+        df.timeZone = TimeZone(identifier: "UTC")
+        df.dateFormat = "yyMMddHHmmss'Z'"
+        return derTLV(0x17, Data(df.string(from: date).utf8))
+    }
+
+    /// Lexicographic byte comparison — used to DER-sort the members of a SET OF.
+    private static func derLess(_ a: Data, _ b: Data) -> Bool {
+        for (x, y) in zip(a, b) where x != y { return x < y }
+        return a.count < b.count
+    }
 
     private static func derInteger(_ d: Data) -> Data {
         // prepend 0x00 if high bit set to keep positive
