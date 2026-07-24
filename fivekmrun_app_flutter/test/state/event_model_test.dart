@@ -96,7 +96,68 @@ void main() {
 
       expect(events, hasLength(1));
       final e = events.single as XLEvent;
-      expect(e.distances, ["XL Route"]);
+      // No numeric distance suffix and nothing to diff against within the
+      // group, so there's no distance info to show — just the location.
+      expect(e.location, "XL Route");
+      expect(e.distances, isEmpty);
+      expect(e.title, "");
+    });
+
+    test('groups rows suffixed with a tier word instead of a number', () {
+      // Real-world data: some events suffix n_name with "Къса"/"Средна"/"XL"
+      // instead of a numeric distance, e.g. "Бонсови Поляни – Люлин планина
+      // Къса" / "... Средна" / "... XL".
+      final events = Event.listFromXLJson([
+        {
+          "e_id": 401,
+          "n_name": "Бонсови Поляни – Люлин планина Къса",
+          "e_num": 13,
+          "e_date": 1795298400,
+          "e_time": "11:00",
+        },
+        {
+          "e_id": 402,
+          "n_name": "Бонсови Поляни – Люлин планина Средна",
+          "e_num": 13,
+          "e_date": 1795298400,
+          "e_time": "11:00",
+        },
+        {
+          "e_id": 403,
+          "n_name": "Бонсови Поляни – Люлин планина XL",
+          "e_num": 13,
+          "e_date": 1795298400,
+          "e_time": "11:00",
+        },
+      ]);
+
+      expect(events, hasLength(1));
+      final e = events.single as XLEvent;
+      expect(e.location, "Бонсови Поляни – Люлин планина");
+      expect(e.distances, ["Къса", "Средна", "XL"]);
+      expect(e.title, "Къса · Средна · XL");
+    });
+
+    test('a single-row group with no distance suffix shows only the location',
+        () {
+      // Real-world data: a relay-style event carries no per-row distance in
+      // n_name at all — the breakdown lives in e_title instead, which this
+      // parser doesn't attempt to read.
+      final events = Event.listFromXLJson([
+        {
+          "e_id": 400,
+          "n_name": "Западен парк",
+          "e_num": 2,
+          "e_date": 1792875600,
+          "e_time": "10:00",
+        },
+      ]);
+
+      expect(events, hasLength(1));
+      final e = events.single as XLEvent;
+      expect(e.location, "Западен парк");
+      expect(e.distances, isEmpty);
+      expect(e.title, "");
     });
   });
 

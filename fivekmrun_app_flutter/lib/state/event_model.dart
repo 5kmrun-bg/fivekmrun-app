@@ -87,7 +87,11 @@ class XLEvent extends Event {
   static const String _thumbnailUrl =
       "https://firebasestorage.googleapis.com/v0/b/kmrunbg.appspot.com/o/xl-run-thumbnail-bw.png?alt=media&token=bdccfa3c-9a5a-4792-bb04-bafaaad6442a";
 
-  // n_name is "<place name> <distance> км", e.g. "с. Кътина 4.8 км".
+  // n_name is usually "<place name> <distance> км", e.g. "с. Кътина 4.8 км",
+  // but some events instead suffix a tier word ("Къса"/"Средна"/"XL") with no
+  // number at all, and single-distance/relay events carry no suffix. So
+  // rather than assume a numeric suffix, the location is derived as the
+  // longest common prefix shared by every row in the group.
   static final RegExp _distanceSuffix =
       RegExp(r'\s+[\d.,]+\s*км\.?\s*$', caseSensitive: false);
   static final RegExp _distanceValue =
@@ -95,14 +99,20 @@ class XLEvent extends Event {
 
   factory XLEvent.fromRows(List<dynamic> rows) {
     final first = rows.first;
-    final String rawName = first["n_name"] ?? "";
-    final String location = rawName.replaceAll(_distanceSuffix, "").trim();
+    final List<String> rawNames =
+        rows.map<String>((row) => (row["n_name"] ?? "") as String).toList();
 
-    final List<String> distances = rows.map<String>((row) {
-      final String name = row["n_name"] ?? "";
-      final match = _distanceValue.firstMatch(name);
-      return match != null ? "${match.group(1)} km" : name;
-    }).toList();
+    final String location = _locationFrom(rawNames);
+
+    final List<String> distances = rawNames
+        .map((name) {
+          final String remainder = _stripPrefix(name, location).trim();
+          if (remainder.isEmpty) return "";
+          final match = _distanceValue.firstMatch(remainder);
+          return match != null ? "${match.group(1)} km" : remainder;
+        })
+        .where((d) => d.isNotEmpty)
+        .toList();
 
     return XLEvent(
       id: first["e_id"],
@@ -114,5 +124,43 @@ class XLEvent extends Event {
       detailsUrl: " ",
       distances: distances,
     );
+  }
+
+  static String _locationFrom(List<String> names) {
+    if (names.isEmpty) return "";
+    if (names.length == 1) {
+      final stripped = names.first.replaceAll(_distanceSuffix, "").trim();
+      return stripped.isNotEmpty ? stripped : names.first.trim();
+    }
+
+    String prefix = names.first;
+    for (final name in names.skip(1)) {
+      prefix = _commonPrefix(prefix, name);
+    }
+    prefix = prefix.trim();
+
+    // A too-short common prefix means these rows likely don't actually
+    // share a location name; fall back to stripping a numeric suffix off
+    // the first row instead of grouping on a near-empty string.
+    if (prefix.length < 3) {
+      return names.first.replaceAll(_distanceSuffix, "").trim();
+    }
+    return prefix;
+  }
+
+  static String _commonPrefix(String a, String b) {
+    final int len = a.length < b.length ? a.length : b.length;
+    int i = 0;
+    while (i < len && a[i] == b[i]) {
+      i++;
+    }
+    return a.substring(0, i);
+  }
+
+  static String _stripPrefix(String name, String prefix) {
+    if (prefix.isNotEmpty && name.startsWith(prefix)) {
+      return name.substring(prefix.length);
+    }
+    return name;
   }
 }
