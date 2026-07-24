@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:barcode_widgets/barcode_flutter.dart';
 import 'package:add_to_google_wallet/widgets/add_to_google_wallet_button.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class BarcodePage extends StatefulWidget {
 }
 
 class _BarcodePageState extends State<BarcodePage> {
+  static final _walletChannel = MethodChannel('bg.fivekmpark.5kmrun/wallet');
+
   final Uuid uuid = Uuid();
   final issuerId = '3388000000022281825';
   final classId = 'MembershipCard';
@@ -97,6 +100,30 @@ class _BarcodePageState extends State<BarcodePage> {
             pass: pass,
             onSuccess: () => FirebaseAnalytics.instance
                 .logEvent(name: "button_add_to_wallet_clicked"),
+          );
+        }
+
+        if (Platform.isIOS) {
+          return _AddToAppleWalletButton(
+            onPressed: () async {
+              try {
+                await _walletChannel.invokeMethod('addToWallet', {
+                  'userId': userId,
+                  'userName': userName,
+                  'userStatus': userStatus,
+                });
+                FirebaseAnalytics.instance
+                    .logEvent(name: "button_add_to_apple_wallet_clicked");
+              } catch (e) {
+                print("Error: ");
+                print(e);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Грешка при добавяне в Wallet')),
+                  );
+                }
+              }
+            },
           );
         }
 
@@ -195,4 +222,30 @@ class _BarcodePageState extends State<BarcodePage> {
   }
 
   String formatBarcode(int? userId) => userId.toString().padLeft(10, '0');
+}
+
+class _AddToAppleWalletButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const _AddToAppleWalletButton({required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Image.asset(
+        'assets/add_to_apple_wallet.png',
+        height: 48,
+        errorBuilder: (_, __, ___) => ElevatedButton.icon(
+          onPressed: onPressed,
+          icon: Icon(Icons.wallet),
+          label: Text('Add to Apple Wallet'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
 }
