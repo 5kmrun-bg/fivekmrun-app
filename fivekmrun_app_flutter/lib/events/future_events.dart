@@ -21,6 +21,7 @@ class FutureEventsList extends StatelessWidget {
       itemCount: events.length,
       itemBuilder: (BuildContext context, int i) {
         final Event event = events[i];
+        final bool isXL = event is XLEvent;
         return Card(
           child: ListTile(
             title: Row(
@@ -29,6 +30,11 @@ class FutureEventsList extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      if (isXL)
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 4),
+                          child: XLBadge(),
+                        ),
                       ListTileRow(text: event.location, icon: Icons.pin_drop),
                       ListTileRow(
                           text: dateFromat.format(event.date),
@@ -38,7 +44,9 @@ class FutureEventsList extends StatelessWidget {
                         icon: Icons.watch,
                       ),
                       if (event.title.isNotEmpty)
-                        ListTileRow(text: event.title, icon: Icons.info),
+                        ListTileRow(
+                            text: event.title,
+                            icon: isXL ? Icons.terrain : Icons.info),
                     ],
                   ),
                 ),
@@ -63,6 +71,31 @@ class FutureEventsList extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// Marks an XLrun event card so it's visually distinguishable from regular
+/// event days in the merged future-events list.
+class XLBadge extends StatelessWidget {
+  const XLBadge({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: const Text(
+        "XL",
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 12.0,
+        ),
+      ),
     );
   }
 }
