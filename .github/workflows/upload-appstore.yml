@@ -35,8 +35,22 @@ jobs:
           mkdir ./fivekmrun_app_flutter/lib/private && cat << EOF > ./fivekmrun_app_flutter/lib/private/secrets.dart
           const stravaSecret = "$STRAVA_SECRET";
           const stravaClientId = "$STRAVA_CLIENT_ID";
-          const googleMapsKey = "$GOOGLE_MAPS_KEY"; 
+          const googleMapsKey = "$GOOGLE_MAPS_KEY";
           EOF
+      - name: Generate Apple Wallet pass signing material
+        env:
+          IOS_PASS_SIGNING_KEY_BASE64: ${{ secrets.IOS_PASS_SIGNING_KEY_BASE64 }}
+          IOS_PASS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_PASS_CERTIFICATE_PASSWORD }}
+          IOS_PASS_CERTIFICATE_BASE64: ${{ secrets.IOS_PASS_CERTIFICATE_BASE64 }}
+        run: |
+          cat << EOF > ./fivekmrun_app_flutter/ios/Runner/PassSecrets.swift
+          import Foundation
+          enum PassSecrets {
+              static let privateKeyBase64 = "$IOS_PASS_SIGNING_KEY_BASE64"
+              static let p12Passphrase = "$IOS_PASS_CERTIFICATE_PASSWORD"
+          }
+          EOF
+          echo -n "$IOS_PASS_CERTIFICATE_BASE64" | base64 --decode > ./fivekmrun_app_flutter/ios/Runner/pass_certificate.p12
       - name: Replace Firebase config
         run: rm ./fivekmrun_app_flutter/ios/GoogleService-Info.plist && echo -n "${{ vars.FIREBASE_PLIST }}" > ./fivekmrun_app_flutter/ios/GoogleService-Info.plist
 
