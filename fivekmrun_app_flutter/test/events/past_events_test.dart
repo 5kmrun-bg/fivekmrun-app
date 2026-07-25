@@ -1,4 +1,4 @@
-import 'package:fivekmrun_flutter/events/future_events.dart' show XLBadge;
+import 'package:fivekmrun_flutter/common/pill.dart';
 import 'package:fivekmrun_flutter/events/past_events.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ void main() {
           home: Scaffold(body: PastEventsList(events: [event])),
         )));
 
-    expect(find.byType(XLBadge), findsNothing);
+    expect(find.byType(XLPill), findsNothing);
     expect(find.text("Sofia"), findsOneWidget);
   });
 
@@ -48,7 +48,7 @@ void main() {
 
     // Same day/location, but rendered as two separate tappable items, each
     // with its own badge and mileage — not merged into one grouped card.
-    expect(find.byType(XLBadge), findsNWidgets(2));
+    expect(find.byType(XLPill), findsNWidgets(2));
     expect(find.text("15.2 km"), findsOneWidget);
     expect(find.text("7.6 km"), findsOneWidget);
   });

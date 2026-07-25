@@ -1,6 +1,6 @@
 import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
-import 'package:fivekmrun_flutter/events/future_events.dart' show XLBadge;
+import 'package:fivekmrun_flutter/common/pill.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -39,7 +39,7 @@ class PastEventsList extends StatelessWidget {
                       if (isXL)
                         const Padding(
                           padding: EdgeInsets.only(bottom: 4),
-                          child: XLBadge(),
+                          child: XLPill(),
                         ),
                       ListTileRow(
                           text: events[i].location, icon: Icons.pin_drop),
