@@ -117,6 +117,20 @@ class KidsFutureEventsResource extends EventsResource {
   }
 }
 
+class KidsPastEventsResource extends EventsResource {
+  KidsPastEventsResource({super.client});
+
+  @override
+  String getEventUrl() {
+    return constants.kidsPastEventsUrl;
+  }
+
+  @override
+  List<Event> listFromJsonParser(json) {
+    return Event.listFromKidsJson(json);
+  }
+}
+
 class AllFutureEventsResource extends ChangeNotifier {
   /// Injectable for tests; forwarded to the composed per-type resources.
   final http.Client? _client;
@@ -186,8 +200,12 @@ class AllPastEventsResource extends ChangeNotifier {
     try {
       var pastEvents = await PastEventsResource(client: _client).getAll();
       var xlPastEvents = await XLPastEventsResource(client: _client).getAll();
+      var kidsPastEvents =
+          await KidsPastEventsResource(client: _client).getAll();
 
-      combined = List<Event>.from(pastEvents)..addAll(xlPastEvents);
+      combined = List<Event>.from(pastEvents)
+        ..addAll(xlPastEvents)
+        ..addAll(kidsPastEvents);
     } catch (_) {
       // Keep whatever was already loaded rather than blanking the events tab.
       this.loading = false;
@@ -196,7 +214,7 @@ class AllPastEventsResource extends ChangeNotifier {
 
     this.loading = false;
     // Past events read most-recent-first (unlike future events, which are
-    // soonest-first), so sort by date descending across both sources.
+    // soonest-first), so sort by date descending across all sources.
     this.value = combined..sort((a, b) => b.date.compareTo(a.date));
 
     return this.value;

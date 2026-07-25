@@ -23,6 +23,7 @@ class PastEventsList extends StatelessWidget {
       itemBuilder: (BuildContext context, int i) {
         final Event event = events[i];
         final bool isXL = event is XLEvent;
+        final bool isKids = event is KidsEvent;
 
         return Card(
           child: ListTile(
@@ -41,6 +42,11 @@ class PastEventsList extends StatelessWidget {
                           padding: EdgeInsets.only(bottom: 4),
                           child: XLPill(),
                         ),
+                      if (isKids)
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 4),
+                          child: KidsPill(),
+                        ),
                       ListTileRow(
                           text: events[i].location, icon: Icons.pin_drop),
                       ListTileRow(
@@ -49,7 +55,11 @@ class PastEventsList extends StatelessWidget {
                       if (events[i].title != "")
                         ListTileRow(
                             text: events[i].title,
-                            icon: isXL ? Icons.terrain : Icons.info),
+                            icon: isXL
+                                ? Icons.terrain
+                                : isKids
+                                    ? Icons.child_care
+                                    : Icons.info),
                     ],
                   ),
                 ),

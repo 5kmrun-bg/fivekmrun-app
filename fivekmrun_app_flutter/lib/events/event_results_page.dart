@@ -19,12 +19,18 @@ class _EventResultsPageState extends State<EventResultsPage> {
   Widget build(BuildContext context) {
     Event event = ModalRoute.of(context)?.settings.arguments as Event;
     final bool isXL = event is XLEvent;
+    final bool isKids = event is KidsEvent;
+
+    final String? baseUrl = isXL
+        ? constants.xlResultEventsUrl
+        : isKids
+            ? constants.kidsResultEventsUrl
+            : null;
 
     return Scaffold(
       appBar: AppBar(title: Text("Резултати")),
       body: FutureBuilder<List<Result>>(
-        future: results.getAll(event.id,
-            baseUrl: isXL ? constants.xlResultEventsUrl : null),
+        future: results.getAll(event.id, baseUrl: baseUrl),
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot<List<Result>> snapshot) {
           switch (snapshot.connectionState) {
