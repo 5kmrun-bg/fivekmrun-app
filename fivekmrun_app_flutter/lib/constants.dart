@@ -10,6 +10,7 @@ const userEndpointUrl = "https://5kmrun.bg/api/selfie/user/";
 const runsEndpointUrl = endpointBaseUrl + "user/";
 const offlineChartEndpointUrl = "https://5kmrun.bg/api/selfie/ofc/";
 const xlUserEndpointUrl = "https://5kmrun.bg/api/xlrun/user/";
+const kidsUserEndpointUrl = "https://5kmrun.bg/api/kidsrun/user/";
 
 const String key_userId = "5kmrun_UserID";
 const String key_token = "5kmrun_Token";

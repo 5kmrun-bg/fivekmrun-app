@@ -58,7 +58,9 @@ class UserRunsList extends StatelessWidget {
                   ListTileRow(
                     icon: run.runType == RunType.xl
                         ? Icons.terrain
-                        : Icons.pin_drop,
+                        : run.runType == RunType.kids
+                            ? Icons.child_care
+                            : Icons.pin_drop,
                     text: run.location!,
                   ),
                 ListTileRow(
@@ -107,6 +109,13 @@ class RunTypePill extends StatelessWidget {
         backgroundColor = Colors.blue;
         textColor = Colors.white;
         label = "XL";
+        break;
+      case RunType.kids:
+        // Same green used by the Kids badge on the future-events cards
+        // (#185/#186), for a consistent Kids visual language across the app.
+        backgroundColor = Colors.green;
+        textColor = Colors.white;
+        label = "Kids";
         break;
     }
 
