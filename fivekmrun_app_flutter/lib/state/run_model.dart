@@ -8,7 +8,7 @@ final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 /// meant every consumer had to remember to exclude XL wherever it filtered
 /// on "not selfie" to mean "official". An enum makes the exclusivity
 /// structural instead of a convention every call site has to uphold.
-enum RunType { official, selfie, xl }
+enum RunType { official, selfie, xl, kids }
 
 class Run {
   final int id;
@@ -89,6 +89,31 @@ class Run {
         runType = RunType.xl,
         distance = _xlDistanceMetersFromName(json["n_name"]);
 
+  // KidsRun events are single-distance (~2 km, see #185) — unlike XLrun,
+  // n_name is already a clean location with no distance suffix to strip, so
+  // this is simpler than Run.fromXLJson: no name parsing, just a fixed
+  // distance for pace/speed.
+  static const int kidsDistanceMeters = 2000;
+
+  Run.fromKidsJson(dynamic json)
+      : id = json["r_id"],
+        eventId = json["r_eventid"],
+        date = DateTime.fromMillisecondsSinceEpoch(json["e_date"] * 1000),
+        time = timeInSecondsToString(json["r_time"]),
+        totalTime = timeInSecondsToString(json["r_time"]),
+        timeInSeconds = json["r_time"],
+        location = json["n_name"],
+        differenceFromBest = null,
+        differenceFromPrevious = null,
+        position = json["r_finish_pos"],
+        speed = timeInSecondsToSpeed(json["r_time"],
+            distanceMeters: kidsDistanceMeters),
+        notes = "",
+        pace = timeInSecondsToPace(json["r_time"],
+            distanceMeters: kidsDistanceMeters),
+        runType = RunType.kids,
+        distance = kidsDistanceMeters;
+
   static List<Run> listFromJson(Map<String, dynamic> json) {
     List<dynamic> runs = json["runners"];
     var result = List<Run>.from(runs.map((d) => Run.fromJson(d)));
@@ -137,6 +162,24 @@ class Run {
     }
 
     return byId.values.map((d) => Run.fromXLJson(d)).toList();
+  }
+
+  /// Same shape and same "runners" + "years"[].results duplication concern
+  /// as the XLrun user endpoint (see [listFromXLUserJson]) — merge and
+  /// de-dupe by r_id rather than picking just one source.
+  static List<Run> listFromKidsUserJson(dynamic json) {
+    final List<dynamic> current = (json["runners"] as List<dynamic>?) ?? [];
+    final List<dynamic> years = (json["years"] as List<dynamic>?) ?? [];
+    final List<dynamic> historic = years
+        .expand((y) => (y["results"] as List<dynamic>?) ?? const [])
+        .toList();
+
+    final Map<int, dynamic> byId = {};
+    for (final r in [...current, ...historic]) {
+      byId[r["r_id"] as int] = r;
+    }
+
+    return byId.values.map((d) => Run.fromKidsJson(d)).toList();
   }
 
   static final RegExp _xlNameDistancePattern =

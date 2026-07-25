@@ -69,6 +69,8 @@ class RunsResource extends ChangeNotifier {
       runs.addAll(selfieRuns.where((r) => r.timeInSeconds != null));
       final List<Run> xlRuns = await this.retrieveXLRuns(userId);
       runs.addAll(xlRuns.where((r) => r.timeInSeconds != null));
+      final List<Run> kidsRuns = await this.retrieveKidsRuns(userId);
+      runs.addAll(kidsRuns.where((r) => r.timeInSeconds != null));
     } catch (_) {
       this.loading = false;
       rethrow;
@@ -114,6 +116,20 @@ class RunsResource extends ChangeNotifier {
 
     String body = utf8.decode(response.bodyBytes);
     return Run.listFromXLUserJson(jsonDecode(body));
+  }
+
+  /// Same "non-JSON error page means no history" behavior as
+  /// [retrieveXLRuns] — most users have no Kids history.
+  Future<List<Run>> retrieveKidsRuns(int? userId) async {
+    final http.Response response = await _client
+        .get(Uri.parse("${constants.kidsUserEndpointUrl}$userId"));
+
+    if (!isJsonResponse(response.statusCode, response.headers["content-type"])) {
+      return <Run>[];
+    }
+
+    String body = utf8.decode(response.bodyBytes);
+    return Run.listFromKidsUserJson(jsonDecode(body));
   }
 
   void _processRuns(List<Run> runs) {
