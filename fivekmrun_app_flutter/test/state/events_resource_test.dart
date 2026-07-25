@@ -119,5 +119,35 @@ void main() {
 
       await expectLater(resource.getAll(), throwsA(isA<FetchException>()));
     });
+
+    test('sorts the merged past events by date, most recent first', () async {
+      // The regular past event is OLDER (2020); the XL past event is NEWER
+      // (2023). Regardless of which source is appended first, the merged list
+      // must lead with the most recent event.
+      final client = MockClient((request) async {
+        final bool isXl = request.url.path.contains("xlrun");
+        return http.Response(
+            jsonEncode([
+              {
+                "e_id": isXl ? 394 : 1,
+                "e_title": isXl ? "" : "Old Race",
+                "e_date": isXl ? 1700000000 : 1600000000,
+                "e_time": "09:00",
+                "n_name": isXl ? "Сеславци 7.6 км" : "Sofia",
+                "e_sponsor": "",
+              }
+            ]),
+            200,
+            headers: _jsonHeaders);
+      });
+      final resource = AllPastEventsResource(client: client);
+
+      final events = await resource.getAll();
+
+      expect(events, hasLength(2));
+      expect(events.first.date.isAfter(events.last.date), isTrue,
+          reason: "past events should be ordered most-recent-first");
+      expect(events.first.date.millisecondsSinceEpoch, 1700000000 * 1000);
+    });
   });
 }

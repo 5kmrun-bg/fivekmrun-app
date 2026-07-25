@@ -195,7 +195,9 @@ class AllPastEventsResource extends ChangeNotifier {
     }
 
     this.loading = false;
-    this.value = combined..sortBy((e) => e.date);
+    // Past events read most-recent-first (unlike future events, which are
+    // soonest-first), so sort by date descending across both sources.
+    this.value = combined..sort((a, b) => b.date.compareTo(a.date));
 
     return this.value;
   }
