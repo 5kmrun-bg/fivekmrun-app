@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
+import 'package:fivekmrun_flutter/common/pill.dart';
 import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
@@ -110,20 +111,10 @@ class RunTypePill extends StatelessWidget {
         break;
     }
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: textColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 12.0,
-        ),
-      ),
+    return Pill(
+      label: label,
+      backgroundColor: backgroundColor,
+      textColor: textColor,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
+import 'package:fivekmrun_flutter/common/pill.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -173,20 +174,10 @@ class XLBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-      decoration: BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: const Text(
-        "XL",
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 12.0,
-        ),
-      ),
+    return const Pill(
+      label: "XL",
+      backgroundColor: Colors.blue,
+      textColor: Colors.white,
     );
   }
 }
@@ -198,20 +189,10 @@ class KidsBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-      decoration: BoxDecoration(
-        color: Colors.green,
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: const Text(
-        "Kids",
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 12.0,
-        ),
-      ),
+    return const Pill(
+      label: "Kids",
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
     );
   }
 }
