@@ -89,32 +89,13 @@ class RunTypePill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late final Color backgroundColor;
-    late final Color textColor;
-    late final String label;
-
     switch (runType) {
       case RunType.official:
-        backgroundColor = Colors.white;
-        textColor = Colors.black87;
-        label = "5kmrun";
-        break;
+        return const OfficialPill();
       case RunType.selfie:
-        backgroundColor = Theme.of(context).colorScheme.secondary;
-        textColor = Colors.white;
-        label = "Selfie";
-        break;
+        return const SelfiePill();
       case RunType.xl:
-        backgroundColor = Colors.blue;
-        textColor = Colors.white;
-        label = "XL";
-        break;
+        return const XLPill();
     }
-
-    return Pill(
-      label: label,
-      backgroundColor: backgroundColor,
-      textColor: textColor,
-    );
   }
 }

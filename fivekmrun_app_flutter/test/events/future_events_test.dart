@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/common/pill.dart';
 import 'package:fivekmrun_flutter/events/future_events.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,8 @@ void main() {
           home: Scaffold(body: FutureEventsList(events: [event])),
         )));
 
-    expect(find.byType(XLBadge), findsNothing);
-    expect(find.byType(KidsBadge), findsNothing);
+    expect(find.byType(XLPill), findsNothing);
+    expect(find.byType(KidsPill), findsNothing);
     expect(find.text("Sofia"), findsOneWidget);
     expect(find.text("Race"), findsOneWidget);
   });
@@ -48,8 +49,8 @@ void main() {
           home: Scaffold(body: FutureEventsList(events: events)),
         )));
 
-    expect(find.byType(XLBadge), findsOneWidget);
-    expect(find.byType(KidsBadge), findsNothing);
+    expect(find.byType(XLPill), findsOneWidget);
+    expect(find.byType(KidsPill), findsNothing);
     expect(find.text("с. Кътина"), findsOneWidget);
     expect(find.text("4.8 km · 9.6 km"), findsOneWidget);
   });
@@ -70,8 +71,8 @@ void main() {
           home: Scaffold(body: FutureEventsList(events: events)),
         )));
 
-    expect(find.byType(KidsBadge), findsOneWidget);
-    expect(find.byType(XLBadge), findsNothing);
+    expect(find.byType(KidsPill), findsOneWidget);
+    expect(find.byType(XLPill), findsNothing);
     expect(find.text("Южен Парк Kids"), findsOneWidget);
     expect(find.text("Детско бягане 2 км"), findsOneWidget);
   });

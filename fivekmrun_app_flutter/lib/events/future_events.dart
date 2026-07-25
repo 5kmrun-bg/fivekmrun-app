@@ -41,12 +41,12 @@ class FutureEventsList extends StatelessWidget {
                           if (isXL)
                             const Padding(
                               padding: EdgeInsets.only(top: 4, bottom: 10),
-                              child: XLBadge(),
+                              child: XLPill(),
                             ),
                           if (isKids)
                             const Padding(
                               padding: EdgeInsets.only(top: 4, bottom: 10),
-                              child: KidsBadge(),
+                              child: KidsPill(),
                             ),
                           ListTileRow(
                               text: event.location, icon: Icons.pin_drop),
@@ -167,32 +167,3 @@ class XLRegistrationSection extends StatelessWidget {
   }
 }
 
-/// Marks an XLrun event card so it's visually distinguishable from regular
-/// event days in the merged future-events list.
-class XLBadge extends StatelessWidget {
-  const XLBadge({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Pill(
-      label: "XL",
-      backgroundColor: Colors.blue,
-      textColor: Colors.white,
-    );
-  }
-}
-
-/// Marks a KidsRun event card so it's visually distinguishable from regular
-/// and XL event days in the merged future-events list.
-class KidsBadge extends StatelessWidget {
-  const KidsBadge({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Pill(
-      label: "Kids",
-      backgroundColor: Colors.green,
-      textColor: Colors.white,
-    );
-  }
-}

@@ -35,3 +35,60 @@ class Pill extends StatelessWidget {
     );
   }
 }
+
+/// XLrun marker — used on both run cards and future-event cards.
+class XLPill extends StatelessWidget {
+  const XLPill({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Pill(
+      label: "XL",
+      backgroundColor: Colors.blue,
+      textColor: Colors.white,
+    );
+  }
+}
+
+/// KidsRun marker — used on future-event cards.
+class KidsPill extends StatelessWidget {
+  const KidsPill({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Pill(
+      label: "Kids",
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
+  }
+}
+
+/// Official (Saturday 5kmrun) marker — used on run cards.
+class OfficialPill extends StatelessWidget {
+  const OfficialPill({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Pill(
+      label: "5kmrun",
+      backgroundColor: Colors.white,
+      textColor: Colors.black87,
+    );
+  }
+}
+
+/// Selfie run marker — used on run cards. Uses the theme accent so it stays
+/// consistent with the app's palette.
+class SelfiePill extends StatelessWidget {
+  const SelfiePill({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Pill(
+      label: "Selfie",
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+      textColor: Colors.white,
+    );
+  }
+}
