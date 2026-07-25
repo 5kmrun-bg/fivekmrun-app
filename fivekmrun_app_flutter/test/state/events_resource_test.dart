@@ -99,16 +99,42 @@ void main() {
     });
   });
 
+  group('KidsPastEventsResource.getAll', () {
+    test('parses each row as its own KidsEvent (single-distance, no grouping)',
+        () async {
+      final client = MockClient((_) async => http.Response(
+          jsonEncode([
+            {
+              "e_id": 519,
+              "n_name": "Южен Парк Kids",
+              "e_date": 1784322000,
+              "e_time": "10:00",
+              "e_title": "Детско бягане 2 км",
+            },
+          ]),
+          200,
+          headers: _jsonHeaders));
+      final resource = KidsPastEventsResource(client: client);
+
+      final events = await resource.getAll();
+
+      expect(events, hasLength(1));
+      expect(events.single, isA<KidsEvent>());
+      expect(events.single.title, "Детско бягане 2 км");
+    });
+  });
+
   group('AllPastEventsResource.getAll', () {
-    test('combines regular and XL past-event sources', () async {
+    test('combines regular, XL and Kids past-event sources', () async {
       final client = MockClient((_) async =>
           http.Response(jsonEncode(_events()), 200, headers: _jsonHeaders));
       final resource = AllPastEventsResource(client: client);
 
       final events = await resource.getAll();
 
-      // One from PastEventsResource, one from XLPastEventsResource.
-      expect(events, hasLength(2));
+      // One from each of PastEventsResource, XLPastEventsResource and
+      // KidsPastEventsResource.
+      expect(events, hasLength(3));
       expect(resource.loading, isFalse);
     });
 
@@ -121,19 +147,24 @@ void main() {
     });
 
     test('sorts the merged past events by date, most recent first', () async {
-      // The regular past event is OLDER (2020); the XL past event is NEWER
-      // (2023). Regardless of which source is appended first, the merged list
-      // must lead with the most recent event.
+      // Distinct dates per source: XL newest (2023), Kids middle (2022),
+      // regular oldest (2020). Regardless of the order the sources are
+      // appended, the merged list must run strictly most-recent-first.
       final client = MockClient((request) async {
-        final bool isXl = request.url.path.contains("xlrun");
+        final String path = request.url.path;
+        final int date = path.contains("xlrun")
+            ? 1700000000 // 2023
+            : path.contains("kidsrun")
+                ? 1650000000 // 2022
+                : 1600000000; // 2020
         return http.Response(
             jsonEncode([
               {
-                "e_id": isXl ? 394 : 1,
-                "e_title": isXl ? "" : "Old Race",
-                "e_date": isXl ? 1700000000 : 1600000000,
+                "e_id": 1,
+                "e_title": "Race",
+                "e_date": date,
                 "e_time": "09:00",
-                "n_name": isXl ? "Сеславци 7.6 км" : "Sofia",
+                "n_name": "Sofia",
                 "e_sponsor": "",
               }
             ]),
@@ -144,10 +175,11 @@ void main() {
 
       final events = await resource.getAll();
 
-      expect(events, hasLength(2));
-      expect(events.first.date.isAfter(events.last.date), isTrue,
+      expect(events, hasLength(3));
+      final dates =
+          events.map((e) => e.date.millisecondsSinceEpoch ~/ 1000).toList();
+      expect(dates, [1700000000, 1650000000, 1600000000],
           reason: "past events should be ordered most-recent-first");
-      expect(events.first.date.millisecondsSinceEpoch, 1700000000 * 1000);
     });
   });
 }

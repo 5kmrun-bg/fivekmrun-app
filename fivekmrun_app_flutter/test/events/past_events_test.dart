@@ -21,6 +21,7 @@ void main() {
         )));
 
     expect(find.byType(XLPill), findsNothing);
+    expect(find.byType(KidsPill), findsNothing);
     expect(find.text("Sofia"), findsOneWidget);
   });
 
@@ -51,5 +52,26 @@ void main() {
     expect(find.byType(XLPill), findsNWidgets(2));
     expect(find.text("15.2 km"), findsOneWidget);
     expect(find.text("7.6 km"), findsOneWidget);
+  });
+
+  testWidgets('KidsRun past results show the Kids badge', (tester) async {
+    final events = Event.listFromKidsJson([
+      {
+        "e_id": 519,
+        "n_name": "Южен Парк Kids",
+        "e_date": 1784322000,
+        "e_time": "10:00",
+        "e_title": "Детско бягане 2 км",
+      },
+    ]);
+
+    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
+          home: Scaffold(body: PastEventsList(events: events)),
+        )));
+
+    expect(find.byType(KidsPill), findsOneWidget);
+    expect(find.byType(XLPill), findsNothing);
+    expect(find.text("Южен Парк Kids"), findsOneWidget);
+    expect(find.text("Детско бягане 2 км"), findsOneWidget);
   });
 }
