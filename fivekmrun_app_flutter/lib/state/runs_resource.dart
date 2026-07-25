@@ -62,18 +62,50 @@ class RunsResource extends ChangeNotifier {
       return this.value ?? <Run>[];
     }
 
-    final List<Run> runs;
+    // Each source is fetched independently so one endpoint failing can't
+    // blank the runs that did load — e.g. a Kids-only participant has no
+    // 5km/selfie history and that endpoint answers with a non-JSON page,
+    // which must not hide their Kids runs. Only a total failure (every
+    // source errored — a real outage) rethrows, leaving cached runs intact.
+    final List<Run> runs = [];
+    final List<Object> errors = [];
+    var anySucceeded = false;
+
     try {
-      runs = await this.retrieve5kmRuns(userId);
+      // Unlike the others, official runs aren't filtered on timeInSeconds.
+      runs.addAll(await this.retrieve5kmRuns(userId));
+      anySucceeded = true;
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
       final List<Run> selfieRuns = await this.retrieveSelfieRuns(userId);
       runs.addAll(selfieRuns.where((r) => r.timeInSeconds != null));
+      anySucceeded = true;
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
       final List<Run> xlRuns = await this.retrieveXLRuns(userId);
       runs.addAll(xlRuns.where((r) => r.timeInSeconds != null));
+      anySucceeded = true;
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
       final List<Run> kidsRuns = await this.retrieveKidsRuns(userId);
       runs.addAll(kidsRuns.where((r) => r.timeInSeconds != null));
-    } catch (_) {
+      anySucceeded = true;
+    } catch (e) {
+      errors.add(e);
+    }
+
+    if (!anySucceeded) {
       this.loading = false;
-      rethrow;
+      throw errors.first;
     }
 
     this._processRuns(runs);

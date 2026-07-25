@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:fivekmrun_flutter/state/fetch_exception.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -114,12 +113,52 @@ void main() {
       expect(called, isFalse);
     });
 
-    test('rethrows FetchException and stops loading when a fetch fails',
-        () async {
+    test(
+        'tolerates a single failing source: keeps the runs that did load '
+        'instead of blanking the whole list', () async {
+      // selfie 500s, but 5km succeeds — the user should still see their
+      // 5km runs rather than an empty/error list.
       final resource = RunsResource(client: _client(selfieStatus: 500));
 
+      final runs = await resource.getByUserId(42);
+
+      expect(runs, hasLength(1));
+      expect(runs.single.runType, RunType.official);
+      expect(resource.loading, isFalse);
+    });
+
+    test(
+        'surfaces Kids runs even when the 5km and selfie endpoints answer '
+        'with non-JSON — a Kids-only participant has no 5km/selfie history, '
+        'and that must not blank their Kids runs', () async {
+      final client = MockClient((request) async {
+        if (request.url.path.contains("kidsrun")) {
+          return http.Response(jsonEncode(_kids), 200, headers: _jsonHeaders);
+        }
+        // 5km, selfie and xl all answer with a non-JSON "no history" page.
+        return http.Response("<html>no history</html>", 200,
+            headers: {"content-type": "text/html; charset=utf-8"});
+      });
+      final resource = RunsResource(client: client);
+
+      final runs = await resource.getByUserId(42);
+
+      expect(runs, hasLength(1));
+      expect(runs.single.runType, RunType.kids);
+      expect(resource.loading, isFalse);
+    });
+
+    test(
+        'rethrows and keeps the cached runs when every source fails '
+        '(a real outage must not wipe history)', () async {
+      final cached = [Run.fromKidsJson(_kids["runners"]![0])];
+      final resource = RunsResource(
+          client: MockClient((_) async => throw http.ClientException("down")))
+        ..value = cached;
+
       await expectLater(
-          resource.getByUserId(42), throwsA(isA<FetchException>()));
+          resource.getByUserId(42), throwsA(isA<Exception>()));
+      expect(resource.value, same(cached));
       expect(resource.loading, isFalse);
     });
 
