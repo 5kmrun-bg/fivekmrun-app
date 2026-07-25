@@ -178,6 +178,49 @@ void main() {
     });
   });
 
+  group('Event.listFromXLPastJson', () {
+    test(
+        'does NOT group same-day/location rows — each distance tier is its '
+        'own separate item, unlike listFromXLJson', () {
+      final events = Event.listFromXLPastJson([
+        {
+          "e_id": 393,
+          "n_name": "Сеславци 15.2 км",
+          "e_num": 2,
+          "e_date": 1783803600,
+          "e_time": "10:00",
+        },
+        {
+          "e_id": 394,
+          "n_name": "Сеславци 7.6 км",
+          "e_num": 2,
+          "e_date": 1783803600,
+          "e_time": "10:00",
+        },
+      ]);
+
+      expect(events, hasLength(2));
+      expect(events.every((e) => e is XLEvent), isTrue);
+      expect(events.map((e) => e.id), [393, 394]);
+    });
+
+    test('parses the real mileage into each item\'s title/distances', () {
+      final events = Event.listFromXLPastJson([
+        {
+          "e_id": 393,
+          "n_name": "Сеславци 15.2 км",
+          "e_date": 1783803600,
+          "e_time": "10:00",
+        },
+      ]);
+
+      final e = events.single as XLEvent;
+      expect(e.distances, ["15.2 km"]);
+      expect(e.title, "15.2 km");
+      expect(e.location, "Сеславци");
+    });
+  });
+
   group('Event.fromKidsJson', () {
     test('uses e_title as title and n_name as location', () {
       final e = Event.fromKidsJson({

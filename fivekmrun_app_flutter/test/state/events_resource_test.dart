@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:fivekmrun_flutter/state/events_resource.dart';
 import 'package:fivekmrun_flutter/state/fetch_exception.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -63,6 +64,58 @@ void main() {
       final client = MockClient(
           (_) async => http.Response("nope", 500, headers: _jsonHeaders));
       final resource = AllFutureEventsResource(client: client);
+
+      await expectLater(resource.getAll(), throwsA(isA<FetchException>()));
+    });
+  });
+
+  group('XLPastEventsResource.getAll', () {
+    test('parses each row as its own ungrouped XLEvent', () async {
+      final client = MockClient((_) async => http.Response(
+          jsonEncode([
+            {
+              "e_id": 393,
+              "n_name": "Сеславци 15.2 км",
+              "e_date": 1783803600,
+              "e_time": "10:00",
+            },
+            {
+              "e_id": 394,
+              "n_name": "Сеславци 7.6 км",
+              "e_date": 1783803600,
+              "e_time": "10:00",
+            },
+          ]),
+          200,
+          headers: _jsonHeaders));
+      final resource = XLPastEventsResource(client: client);
+
+      final events = await resource.getAll();
+
+      // Same day/location, but NOT grouped — each distance tier is its own
+      // separate leaderboard, unlike the future-events grouping.
+      expect(events, hasLength(2));
+      expect(events.every((e) => e is XLEvent), isTrue);
+    });
+  });
+
+  group('AllPastEventsResource.getAll', () {
+    test('combines regular and XL past-event sources', () async {
+      final client = MockClient((_) async =>
+          http.Response(jsonEncode(_events()), 200, headers: _jsonHeaders));
+      final resource = AllPastEventsResource(client: client);
+
+      final events = await resource.getAll();
+
+      // One from PastEventsResource, one from XLPastEventsResource.
+      expect(events, hasLength(2));
+      expect(resource.loading, isFalse);
+    });
+
+    test('rethrows if any composed source fails', () async {
+      final client = MockClient(
+          (_) async => http.Response("nope", 500, headers: _jsonHeaders));
+      final resource = AllPastEventsResource(client: client);
 
       await expectLater(resource.getAll(), throwsA(isA<FetchException>()));
     });

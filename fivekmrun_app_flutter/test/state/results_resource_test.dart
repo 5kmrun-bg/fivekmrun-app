@@ -65,5 +65,21 @@ void main() {
 
       expect(await resource.getAll(99), isEmpty);
     });
+
+    test('hits the given baseUrl instead of the default when provided',
+        () async {
+      String? requestedUrl;
+      final client = MockClient((request) async {
+        requestedUrl = request.url.toString();
+        return http.Response(jsonEncode(_officialResults()), 200,
+            headers: _jsonHeaders);
+      });
+      final resource = ResultsResource(client: client);
+
+      await resource.getAll(393,
+          baseUrl: "https://5kmrun.bg/api/xlrun/result/");
+
+      expect(requestedUrl, "https://5kmrun.bg/api/xlrun/result/393");
+    });
   });
 }

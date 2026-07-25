@@ -24,11 +24,11 @@ class ResultsResource extends ChangeNotifier {
     }
   }
 
-  Future<List<Result>> getAll(int eventId) async {
+  Future<List<Result>> getAll(int eventId, {String? baseUrl}) async {
     this.loading = true;
 
-    http.Response response = await _client
-        .get(Uri.parse("${constants.resultEventsUrl}${eventId.toString()}"));
+    http.Response response = await _client.get(Uri.parse(
+        "${baseUrl ?? constants.resultEventsUrl}${eventId.toString()}"));
     if (!isJsonResponse(
         response.statusCode, response.headers["content-type"])) {
       this.loading = false;
