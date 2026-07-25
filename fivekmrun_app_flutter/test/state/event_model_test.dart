@@ -191,6 +191,7 @@ void main() {
       expect(e.title, "Kids Race");
       expect(e.location, "Playground");
       expect(e.imageUrl, contains("kids-run"));
+      expect(e, isA<KidsEvent>());
     });
   });
 

@@ -24,6 +24,7 @@ class FutureEventsList extends StatelessWidget {
       itemBuilder: (BuildContext context, int i) {
         final Event event = events[i];
         final bool isXL = event is XLEvent;
+        final bool isKids = event is KidsEvent;
         return Card(
           clipBehavior: Clip.antiAlias,
           child: Column(
@@ -41,6 +42,11 @@ class FutureEventsList extends StatelessWidget {
                               padding: EdgeInsets.only(top: 4, bottom: 10),
                               child: XLBadge(),
                             ),
+                          if (isKids)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 4, bottom: 10),
+                              child: KidsBadge(),
+                            ),
                           ListTileRow(
                               text: event.location, icon: Icons.pin_drop),
                           ListTileRow(
@@ -53,7 +59,11 @@ class FutureEventsList extends StatelessWidget {
                           if (event.title.isNotEmpty)
                             ListTileRow(
                                 text: event.title,
-                                icon: isXL ? Icons.terrain : Icons.info),
+                                icon: isXL
+                                    ? Icons.terrain
+                                    : isKids
+                                        ? Icons.child_care
+                                        : Icons.info),
                         ],
                       ),
                     ),
@@ -171,6 +181,31 @@ class XLBadge extends StatelessWidget {
       ),
       child: const Text(
         "XL",
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 12.0,
+        ),
+      ),
+    );
+  }
+}
+
+/// Marks a KidsRun event card so it's visually distinguishable from regular
+/// and XL event days in the merged future-events list.
+class KidsBadge extends StatelessWidget {
+  const KidsBadge({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+      decoration: BoxDecoration(
+        color: Colors.green,
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: const Text(
+        "Kids",
         style: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,

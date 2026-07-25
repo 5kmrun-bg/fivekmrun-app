@@ -20,6 +20,7 @@ void main() {
         )));
 
     expect(find.byType(XLBadge), findsNothing);
+    expect(find.byType(KidsBadge), findsNothing);
     expect(find.text("Sofia"), findsOneWidget);
     expect(find.text("Race"), findsOneWidget);
   });
@@ -48,8 +49,31 @@ void main() {
         )));
 
     expect(find.byType(XLBadge), findsOneWidget);
+    expect(find.byType(KidsBadge), findsNothing);
     expect(find.text("с. Кътина"), findsOneWidget);
     expect(find.text("4.8 km · 9.6 km"), findsOneWidget);
+  });
+
+  testWidgets('kids event shows the Kids badge, location and title',
+      (tester) async {
+    final events = Event.listFromKidsJson([
+      {
+        "e_id": 520,
+        "n_name": "Южен Парк Kids",
+        "e_date": 1784926800,
+        "e_time": "10:00",
+        "e_title": "Детско бягане 2 км",
+      },
+    ]);
+
+    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
+          home: Scaffold(body: FutureEventsList(events: events)),
+        )));
+
+    expect(find.byType(KidsBadge), findsOneWidget);
+    expect(find.byType(XLBadge), findsNothing);
+    expect(find.text("Южен Парк Kids"), findsOneWidget);
+    expect(find.text("Детско бягане 2 км"), findsOneWidget);
   });
 
   testWidgets('grouped XL event shows one registration button per distance',
