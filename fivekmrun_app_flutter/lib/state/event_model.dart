@@ -62,6 +62,17 @@ class Event {
     return groups.values.map((rows) => XLEvent.fromRows(rows)).toList();
   }
 
+  // Unlike the future-events list, past XLrun results must NOT be grouped —
+  // r_finish_pos is scoped to a single e_id, so short/medium/XL tiers at the
+  // same day/location are separate ranking pools and need their own
+  // tappable item, each leading to its own leaderboard. Each row becomes
+  // its own single-row XLEvent (reusing XLEvent.fromRows' existing handling
+  // of a one-row group) instead of being grouped by e_num/e_date.
+  static List<Event> listFromXLPastJson(dynamic json) {
+    List<dynamic> rows = json;
+    return rows.map((row) => XLEvent.fromRows([row])).toList();
+  }
+
   static List<Event> listFromKidsJson(dynamic json) {
     List<dynamic> events = json;
     List<Event> result = events.map((d) => Event.fromKidsJson(d)).toList();

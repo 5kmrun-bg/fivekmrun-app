@@ -2,6 +2,8 @@ const pastEventsUrl = "https://5kmrun.bg/api/5kmrun/results";
 const futureEventsUrl = "https://5kmrun.bg/api/5kmrun/events";
 const resultEventsUrl = "https://5kmrun.bg/api/5kmrun/result/";
 const xlFutureEventsUrl = "https://5kmrun.bg/api/xlrun/events";
+const xlPastEventsUrl = "https://5kmrun.bg/api/xlrun/results";
+const xlResultEventsUrl = "https://5kmrun.bg/api/xlrun/result/";
 const kidsFutureEventsUrl = "https://5kmrun.bg/api/kidsrun/events";
 const wrapUrl = "https://wrapped.5kmrun.bg/";
 

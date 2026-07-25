@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => userRes),
         ChangeNotifierProvider(create: (_) => RunsResource()),
         ChangeNotifierProvider(create: (_) => AllFutureEventsResource()),
-        ChangeNotifierProvider(create: (_) => PastEventsResource()),
+        ChangeNotifierProvider(create: (_) => AllPastEventsResource()),
         ChangeNotifierProvider(create: (_) => OfflineChartResource()),
         ChangeNotifierProvider(create: (_) => LocalStorageResource()),
         ChangeNotifierProvider(create: (_) => StravaResource()),
