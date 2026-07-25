@@ -3,6 +3,9 @@
 ## Project Overview
 Flutter mobile app for [5kmRun.bg](https://5kmrun.bg). Targets Android and iOS. The app authenticates users via username/password or user ID, displays run history, charts, barcode, settings, and integrates with Strava.
 
+## Core Rules
+- **Test-driven bug fixing (mandatory).** Every bug fix starts with a test that *reproduces* the bug and **fails before the fix**, then passes after — confirm the red→green transition, don't just assert it. Never change production code to fix a reported bug without a failing test first. If the "bug" turns out not to reproduce (e.g. it's a server/data issue), say so instead of writing a fix. See **Testing** below.
+
 ## Repository Layout
 - `lib/` — all Dart source code, feature-based folders (`login/`, `home/`, `barcode/`, `offline_chart/`, `state/`, `l10n/`, etc.)
 - `test/common/` — unit and widget tests; `flutter test` is run in CI on every PR
@@ -32,7 +35,7 @@ Flutter mobile app for [5kmRun.bg](https://5kmrun.bg). Targets Android and iOS. 
 ## Testing
 - All tests live under `test/` and are run with `flutter test`
 - Prefer **widget tests** over integration tests: they run on the host (no emulator), are fast, and work in CI out of the box
-- When fixing a bug, add tests that cover the broken cases before/alongside the fix
+- When fixing a bug, follow the test-driven rule in **Core Rules**: write a test that fails before the fix and passes after (red→green), covering the broken case
 - Integration tests requiring a device/emulator are not currently wired into CI — do not add them without discussion
 
 ## Code Conventions
