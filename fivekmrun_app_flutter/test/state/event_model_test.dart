@@ -59,6 +59,17 @@ void main() {
       expect(e.time, "9:00");
       expect(e.imageUrl, contains("xl-run-thumbnail"));
       expect(e.date, DateTime.fromMillisecondsSinceEpoch(1786827600 * 1000));
+      expect(
+        e.registrationLinks.map((l) => l.url),
+        [
+          "https://5kmrun.bg/xlrun/event/394",
+          "https://5kmrun.bg/xlrun/event/395",
+          "https://5kmrun.bg/xlrun/event/396",
+        ],
+      );
+      expect(e.registrationLinks.map((l) => l.label),
+          ["4.8 km", "9.6 km", "14.4 km"]);
+      expect(e.detailsUrl, "https://5kmrun.bg/xlrun/event/394");
     });
 
     test('keeps separate locations/days as separate groups', () {
@@ -158,6 +169,12 @@ void main() {
       expect(e.location, "Западен парк");
       expect(e.distances, isEmpty);
       expect(e.title, "");
+      // Even with no distance label to show, the single row still gets a
+      // registration link so the button isn't silently dropped.
+      expect(e.registrationLinks, hasLength(1));
+      expect(e.registrationLinks.single.label, "");
+      expect(e.registrationLinks.single.url,
+          "https://5kmrun.bg/xlrun/event/400");
     });
   });
 
