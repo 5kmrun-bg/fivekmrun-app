@@ -26,14 +26,16 @@ class Event {
         detailsUrl = "",
         imageUrl = json["e_sponsor"];
 
-  Event.fromKidsJson(d):
-      id = d["e_id"],
-      title = d["e_title"],
-      date = DateTime.fromMillisecondsSinceEpoch(d["e_date"] * 1000),
-      time = d["e_time"],
-      imageUrl = "https://firebasestorage.googleapis.com/v0/b/kmrunbg.appspot.com/o/kids-run-bw.png?alt=media&token=a782fe29-6422-4b61-95b1-c4e7f81ddd5c",
-      location = d["n_name"],
-      detailsUrl = " ";
+  factory Event.fromKidsJson(dynamic d) => KidsEvent(
+        id: d["e_id"],
+        title: d["e_title"],
+        date: DateTime.fromMillisecondsSinceEpoch(d["e_date"] * 1000),
+        time: d["e_time"],
+        imageUrl:
+            "https://firebasestorage.googleapis.com/v0/b/kmrunbg.appspot.com/o/kids-run-bw.png?alt=media&token=a782fe29-6422-4b61-95b1-c4e7f81ddd5c",
+        location: d["n_name"],
+        detailsUrl: " ",
+      );
 
 
   static List<Event> listFromJson(dynamic json) {
@@ -163,4 +165,19 @@ class XLEvent extends Event {
     }
     return name;
   }
+}
+
+/// A KidsRun event — single-distance, unlike [XLEvent]. Exists as its own
+/// type purely so the future-events list can tell it apart from a regular
+/// or XL event and show a distinct "Kids" badge.
+class KidsEvent extends Event {
+  KidsEvent({
+    required super.id,
+    required super.title,
+    required super.date,
+    required super.time,
+    required super.imageUrl,
+    required super.location,
+    required super.detailsUrl,
+  });
 }
