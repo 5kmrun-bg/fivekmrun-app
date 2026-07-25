@@ -1,8 +1,10 @@
 import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
@@ -47,6 +49,24 @@ class FutureEventsList extends StatelessWidget {
                         ListTileRow(
                             text: event.title,
                             icon: isXL ? Icons.terrain : Icons.info),
+                      if (event is XLEvent &&
+                          event.registrationLinks.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 4,
+                            children: event.registrationLinks
+                                .map((link) => OutlinedButton(
+                                      onPressed: () =>
+                                          _openRegistrationLink(link.url),
+                                      child: Text(link.label.isNotEmpty
+                                          ? link.label
+                                          : "Регистрация"),
+                                    ))
+                                .toList(),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -72,6 +92,11 @@ class FutureEventsList extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _openRegistrationLink(String url) async {
+    FirebaseAnalytics.instance.logEvent(name: "open_xlrun_registration_link");
+    await launchUrl(Uri.parse(url), mode: LaunchMode.inAppWebView);
   }
 }
 
