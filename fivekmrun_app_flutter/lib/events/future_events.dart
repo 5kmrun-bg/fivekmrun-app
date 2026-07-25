@@ -1,5 +1,6 @@
 import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
+import 'package:fivekmrun_flutter/common/pill.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -40,12 +41,12 @@ class FutureEventsList extends StatelessWidget {
                           if (isXL)
                             const Padding(
                               padding: EdgeInsets.only(top: 4, bottom: 10),
-                              child: XLBadge(),
+                              child: XLPill(),
                             ),
                           if (isKids)
                             const Padding(
                               padding: EdgeInsets.only(top: 4, bottom: 10),
-                              child: KidsBadge(),
+                              child: KidsPill(),
                             ),
                           ListTileRow(
                               text: event.location, icon: Icons.pin_drop),
@@ -166,52 +167,3 @@ class XLRegistrationSection extends StatelessWidget {
   }
 }
 
-/// Marks an XLrun event card so it's visually distinguishable from regular
-/// event days in the merged future-events list.
-class XLBadge extends StatelessWidget {
-  const XLBadge({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-      decoration: BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: const Text(
-        "XL",
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 12.0,
-        ),
-      ),
-    );
-  }
-}
-
-/// Marks a KidsRun event card so it's visually distinguishable from regular
-/// and XL event days in the merged future-events list.
-class KidsBadge extends StatelessWidget {
-  const KidsBadge({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-      decoration: BoxDecoration(
-        color: Colors.green,
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: const Text(
-        "Kids",
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 12.0,
-        ),
-      ),
-    );
-  }
-}
