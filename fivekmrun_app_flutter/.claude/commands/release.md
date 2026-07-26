@@ -35,16 +35,25 @@ Prepare a new release of the app. Follow these steps in order.
    gh release create vX.Y.Z --repo 5kmrun-bg/fivekmrun-app --title "vX.Y.Z" --notes "..."
    ```
 
-8. **Trigger the deployment workflows** — Both workflows use `workflow_dispatch`. Trigger them via the GitHub CLI:
+8. **Trigger the deployment workflows** — All three workflows use `workflow_dispatch`. Trigger them via the GitHub CLI:
    ```
    gh workflow run upload-appstore.yml --repo 5kmrun-bg/fivekmrun-app
    gh workflow run upload-playstore.yml --repo 5kmrun-bg/fivekmrun-app
+   gh workflow run upload-huawei.yml --repo 5kmrun-bg/fivekmrun-app
    ```
+
+   The Huawei run takes noticeably longer than its build suggests: after uploading
+   the APK it waits for AppGallery to compile the package (up to 6 minutes) before
+   submitting for review. A run sitting on "package still compiling" is healthy.
+
+   Unlike the other two, a successful Huawei run ends with the build **already
+   submitted for review** — no console step is needed.
 
    After triggering, report these links so the user can monitor and review everything directly:
    - **GitHub Release:** `https://github.com/5kmrun-bg/fivekmrun-app/releases/tag/vX.Y.Z`
    - **App Store Connect:** `https://appstoreconnect.apple.com/apps/1489549617/testflight/ios`
    - **Google Play Console:** `https://play.google.com/console/developers/app/bg.fivekmpark.fivekmrun/tracks/production`
+   - **AppGallery Connect:** `https://developer.huawei.com/consumer/en/service/josp/agc/index.html#/myApp/109680919`
    - **iOS workflow run:** (URL returned by `gh run list`)
 
 Note that steps 3, 5, 6 and 8 push to `master` and publish to the app stores. These are the intended behaviour of this command — the general "always open a PR" rule in `CLAUDE.md` does not apply here.
