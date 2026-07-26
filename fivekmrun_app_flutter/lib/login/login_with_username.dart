@@ -36,14 +36,27 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
 
       if (isAuthenticated) {
         FirebaseAnalytics.instance.logEvent(name: "login");
-        setState(() => this.loginError = false);
+        if (mounted) setState(() => this.loginError = false);
         Navigator.pushNamedAndRemoveUntil(context, "home", (_) => false);
       } else {
-        setState(() => this.loginError = true);
+        if (mounted) setState(() => this.loginError = true);
       }
     }).catchError((error, stackTrace) {
-      FirebaseCrashlytics.instance
-          .recordError(error, stackTrace, reason: "authenticate with username");
+      // Show the error before reporting it. Reporting alone left the tap with
+      // no visible effect at all, indistinguishable from a request that is
+      // merely slow. Every failure mode of authenticate() lands here — a
+      // SocketException with no usable network, a FormatException when a
+      // captive portal answers with HTML instead of JSON. Ordering also keeps
+      // the user-facing feedback independent of the telemetry call.
+      if (mounted) setState(() => this.loginError = true);
+
+      // Best-effort: reporting must not become a second failure on top of the
+      // one being reported. Crashlytics throws if Firebase never initialised,
+      // and an exception raised here would escape as an unhandled async error.
+      try {
+        FirebaseCrashlytics.instance.recordError(error, stackTrace,
+            reason: "authenticate with username");
+      } catch (_) {}
     });
   }
 
