@@ -3,6 +3,7 @@ import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class LoginWithId extends StatefulWidget {
   LoginWithId({Key? key}) : super(key: key);
@@ -46,7 +47,8 @@ class _LoginWithIdState extends State<LoginWithId> {
         TextField(
           controller: numberInputController,
           keyboardType: TextInputType.number,
-          decoration: InputHelpers.decoration("личен номер"),
+          decoration: InputHelpers.decoration(
+              AppLocalizations.of(context)!.login_with_id_widget_personal_id),
         ),
         SizedBox(height: 16),
         RichText(
@@ -54,7 +56,9 @@ class _LoginWithIdState extends State<LoginWithId> {
           text: TextSpan(
             style: textStlyle,
             children: <TextSpan>[
-              TextSpan(text: 'Участието в '),
+              TextSpan(
+                  text: AppLocalizations.of(context)!
+                      .login_with_id_widget_participation),
               TextSpan(
                 text: 'Selfie',
                 style: textStlyle?.copyWith(
@@ -62,14 +66,18 @@ class _LoginWithIdState extends State<LoginWithId> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              TextSpan(text: ' класацията е достъпно само с парола!'),
+              TextSpan(
+                  text: AppLocalizations.of(context)!
+                      .login_with_id_widget_authentication),
             ],
           ),
         ),
         SizedBox(height: 18),
         SizedBox(
           width: double.infinity,
-          child: ElevatedButton(onPressed: onPressed, child: Text("Напред")),
+          child: ElevatedButton(
+              onPressed: onPressed,
+              child: Text(AppLocalizations.of(context)!.next)),
         ),
       ],
     );

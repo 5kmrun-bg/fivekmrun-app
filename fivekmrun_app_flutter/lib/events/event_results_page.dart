@@ -4,6 +4,7 @@ import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:fivekmrun_flutter/state/results_resource.dart';
 import 'package:flutter/material.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class EventResultsPage extends StatefulWidget {
   EventResultsPage({Key? key}) : super(key: key);
@@ -28,7 +29,9 @@ class _EventResultsPageState extends State<EventResultsPage> {
             : null;
 
     return Scaffold(
-      appBar: AppBar(title: Text("Резултати")),
+      appBar: AppBar(
+          title:
+              Text(AppLocalizations.of(context)!.events_results_page_results)),
       body: FutureBuilder<List<Result>>(
         future: results.getAll(event.id, baseUrl: baseUrl),
         initialData: [],

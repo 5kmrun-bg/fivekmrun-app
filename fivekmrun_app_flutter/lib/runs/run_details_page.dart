@@ -3,6 +3,7 @@ import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:fivekmrun_flutter/state/results_resource.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class RunDetailsPage extends StatelessWidget {
   const RunDetailsPage({Key? key}) : super(key: key);
@@ -64,7 +65,8 @@ class RunDetailsPage extends StatelessWidget {
                           left: 0,
                           right: 0,
                           child: Text(
-                            "Позиция",
+                            AppLocalizations.of(context)!
+                                .run_details_page_position,
                             style: theme.textTheme.titleLarge,
                             textAlign: TextAlign.center,
                           ),
@@ -80,30 +82,32 @@ class RunDetailsPage extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    CircleWidget(run.pace!, "мин/км"),
+                    CircleWidget(
+                        run.pace!, AppLocalizations.of(context)!.min_km),
                     SizedBox(height: 10),
                     Text(
-                      "Темпо",
+                      AppLocalizations.of(context)!.run_details_page_pace,
                       style: theme.textTheme.titleSmall,
                     ),
                   ],
                 ),
                 Column(
                   children: <Widget>[
-                    CircleWidget(run.time!, "мин"),
+                    CircleWidget(run.time!, AppLocalizations.of(context)!.min),
                     SizedBox(height: 10),
                     Text(
-                      "Време",
+                      AppLocalizations.of(context)!.run_details_page_time,
                       style: theme.textTheme.titleSmall,
                     ),
                   ],
                 ),
                 Column(
                   children: <Widget>[
-                    CircleWidget(run.speed!, "км/ч"),
+                    CircleWidget(
+                        run.speed!, AppLocalizations.of(context)!.km_per_h),
                     SizedBox(height: 10),
                     Text(
-                      "Скорост",
+                      AppLocalizations.of(context)!.run_details_page_speed,
                       style: theme.textTheme.titleSmall,
                     )
                   ],
@@ -120,8 +124,9 @@ class RunDetailsPage extends StatelessWidget {
                 ),
                 IconText(
                   icon: Icons.pin_drop,
-                  text:
-                      (run.runType == RunType.selfie) ? "Selfie" : run.location!,
+                  text: (run.runType == RunType.selfie)
+                      ? "Selfie"
+                      : run.location!,
                 ),
               ],
             ),
@@ -129,10 +134,14 @@ class RunDetailsPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  IconText(icon: Icons.watch, text: run.totalTime! + " мин"),
+                  IconText(
+                      icon: Icons.watch,
+                      text: run.totalTime! +
+                          " ${AppLocalizations.of(context)!.min}"),
                   IconText(
                       icon: Icons.straighten,
-                      text: (run.distance! / 1000).toStringAsFixed(2) + " км"),
+                      text: (run.distance! / 1000).toStringAsFixed(2) +
+                          " ${AppLocalizations.of(context)!.km}"),
                 ],
               ),
             SizedBox(height: 20),

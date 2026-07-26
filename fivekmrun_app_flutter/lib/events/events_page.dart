@@ -7,6 +7,7 @@ import 'package:fivekmrun_flutter/state/events_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
@@ -45,44 +46,38 @@ class _EventsPage extends State<EventsPage> {
     return RefreshIndicator(
       onRefresh: () => refreshAllData(context),
       child: Consumer<AllFutureEventsResource>(
-        builder: (context, eventsResource, child) {
-          if (eventsResource.loading) {
-            return refreshableMessage(CircularProgressIndicator());
-          } else {
-            return FutureEventsList(events: eventsResource.value);
-          }
+          builder: (context, eventsResource, child) {
+        if (eventsResource.loading) {
+          return refreshableMessage(CircularProgressIndicator());
+        } else {
+          return FutureEventsList(events: eventsResource.value);
         }
-      ),
+      }),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Събития")),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                SelectButton(
-                  text: "Минали събития",
-                  onPressed: this.toggleEvents,
-                  selected: !this.futureEventSelected,
-                ),
-                SelectButton(
-                  text: "Предстоящи събития",
-                  onPressed: this.toggleEvents,
-                  selected: this.futureEventSelected,
-                ),
-              ],
-            ),
-            Expanded(
-              child: this._buildEvents()
-            )
-          ]
-        )
-      )
-    );
+        appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.events_page_events)),
+        body: Center(
+            child: Column(children: <Widget>[
+          Row(
+            children: <Widget>[
+              SelectButton(
+                text: AppLocalizations.of(context)!.events_page_past_events,
+                onPressed: this.toggleEvents,
+                selected: !this.futureEventSelected,
+              ),
+              SelectButton(
+                text: AppLocalizations.of(context)!.events_page_upcoming_events,
+                onPressed: this.toggleEvents,
+                selected: this.futureEventSelected,
+              ),
+            ],
+          ),
+          Expanded(child: this._buildEvents())
+        ])));
   }
 }

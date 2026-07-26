@@ -2,6 +2,7 @@ import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
 import 'package:fivekmrun_flutter/common/pill.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -111,6 +112,7 @@ class XLRegistrationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color accent = Theme.of(context).colorScheme.secondary;
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
@@ -128,7 +130,7 @@ class XLRegistrationSection extends StatelessWidget {
               Icon(Icons.how_to_reg, size: 18, color: accent),
               const SizedBox(width: 6),
               Text(
-                "Регистрация",
+                l10n.events_page_registration,
                 style: TextStyle(
                   color: accent,
                   fontWeight: FontWeight.bold,
@@ -164,7 +166,7 @@ class XLRegistrationSection extends StatelessWidget {
                     child: Text(
                       links[j].label.isNotEmpty
                           ? links[j].label
-                          : "Регистрация",
+                          : l10n.events_page_registration,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

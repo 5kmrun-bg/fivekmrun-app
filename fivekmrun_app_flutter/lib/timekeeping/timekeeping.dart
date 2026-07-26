@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:provider/provider.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'chronometer_view.dart';
 import 'barcode_scanner.dart';
 
@@ -31,6 +32,7 @@ class Timekeeping extends StatelessWidget {
   Widget build(BuildContext context) {
     final userResource = Provider.of<UserResource>(context);
     final user = userResource.value;
+    final l10n = AppLocalizations.of(context)!;
 
     if (user == null) {
       return const SizedBox.shrink();
@@ -50,9 +52,9 @@ class Timekeeping extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Времеизмерване',
-                    style: TextStyle(
+                  Text(
+                    l10n.timekeeping_title,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -70,7 +72,7 @@ class Timekeeping extends StatelessWidget {
                           );
                         },
                         icon: const Icon(Icons.timer),
-                        label: const Text('Хронометър'),
+                        label: Text(l10n.timekeeping_chronometer),
                       ),
                       ElevatedButton.icon(
                         onPressed: () {
@@ -81,7 +83,7 @@ class Timekeeping extends StatelessWidget {
                           );
                         },
                         icon: const Icon(Icons.qr_code_scanner),
-                        label: const Text('Отчитане'),
+                        label: Text(l10n.timekeeping_scanning),
                       ),
                     ],
                   ),

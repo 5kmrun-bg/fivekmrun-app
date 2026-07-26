@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
+import '../localized_app.dart';
+
 void main() {
   testWidgets('regular past event has no XL badge', (tester) async {
     final event = Event.fromJson({
@@ -16,9 +18,8 @@ void main() {
       "e_sponsor": "",
     });
 
-    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
-          home: Scaffold(body: PastEventsList(events: [event])),
-        )));
+    await mockNetworkImagesFor(
+        () => tester.pumpWidget(localizedApp(PastEventsList(events: [event]))));
 
     expect(find.byType(XLPill), findsNothing);
     expect(find.byType(KidsPill), findsNothing);
@@ -43,9 +44,8 @@ void main() {
       },
     ]);
 
-    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
-          home: Scaffold(body: PastEventsList(events: events)),
-        )));
+    await mockNetworkImagesFor(
+        () => tester.pumpWidget(localizedApp(PastEventsList(events: events))));
 
     // Same day/location, but rendered as two separate tappable items, each
     // with its own badge and mileage — not merged into one grouped card.
@@ -65,9 +65,8 @@ void main() {
       },
     ]);
 
-    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
-          home: Scaffold(body: PastEventsList(events: events)),
-        )));
+    await mockNetworkImagesFor(
+        () => tester.pumpWidget(localizedApp(PastEventsList(events: events))));
 
     expect(find.byType(KidsPill), findsOneWidget);
     expect(find.byType(XLPill), findsNothing);

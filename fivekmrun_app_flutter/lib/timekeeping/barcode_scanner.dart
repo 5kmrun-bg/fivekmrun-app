@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -147,9 +148,10 @@ class _BarcodeScannerState extends State<BarcodeScanner>
   }
 
   Future<void> _exportToFile() async {
+    final l10n = AppLocalizations.of(context)!;
     if (scannedValues.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Няма сканирани баркода за запис')),
+        SnackBar(content: Text(l10n.barcode_scanner_nothing_to_save)),
       );
       return;
     }
@@ -192,7 +194,8 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Грешка при запис: $e')),
+          SnackBar(
+              content: Text(l10n.barcode_scanner_save_error(e.toString()))),
         );
       }
     }
@@ -205,22 +208,24 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
+        final l10n = AppLocalizations.of(context)!;
         return AlertDialog(
-          title: const Text('Изчисти всички записи?'),
+          title: Text(l10n.barcode_scanner_clear_all_title),
           content: Text(
-            'Сигурни ли сте, че искате да изтриете всички $pairCount двойки (${scannedValues.length} сканирани баркода)?',
+            l10n.barcode_scanner_clear_all_content(
+                pairCount, scannedValues.length),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Отказ'),
+              child: Text(l10n.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
               style: TextButton.styleFrom(
                 foregroundColor: Colors.red,
               ),
-              child: const Text('Изчисти'),
+              child: Text(l10n.barcode_scanner_clear),
             ),
           ],
         );
@@ -238,21 +243,22 @@ class _BarcodeScannerState extends State<BarcodeScanner>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Отчитане'),
+        title: Text(l10n.timekeeping_scanning),
         centerTitle: true,
         actions: [
           IconButton(
             key: _saveButtonKey,
             icon: const Icon(Icons.save_alt),
             onPressed: _exportToFile,
-            tooltip: 'Запази',
+            tooltip: l10n.barcode_scanner_save,
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
             onPressed: _clearScannedValues,
-            tooltip: 'Изчисти',
+            tooltip: l10n.barcode_scanner_clear,
           ),
         ],
       ),
@@ -316,7 +322,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
           Expanded(
             flex: 2,
             child: scannedValues.isEmpty
-                ? const Center(child: Text('Сканирайте баркод'))
+                ? Center(child: Text(l10n.barcode_scanner_scan_prompt))
                 : ListView.builder(
                     controller: _scrollController,
                     itemCount: _getPairCount(),
@@ -346,14 +352,15 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                           final bool? shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text('Изтрий двойката?'),
-                              content: const Text(
-                                  'Сигурни ли сте, че искате да изтриете тази двойка?'),
+                              title:
+                                  Text(l10n.barcode_scanner_delete_pair_title),
+                              content: Text(
+                                  l10n.barcode_scanner_delete_pair_content),
                               actions: [
                                 TextButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(false),
-                                  child: const Text('Отказ'),
+                                  child: Text(l10n.cancel),
                                 ),
                                 TextButton(
                                   onPressed: () =>
@@ -361,7 +368,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                                   style: TextButton.styleFrom(
                                     foregroundColor: Colors.red,
                                   ),
-                                  child: const Text('Изтрий'),
+                                  child: Text(l10n.barcode_scanner_delete),
                                 ),
                               ],
                             ),
@@ -388,7 +395,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                           leading: CircleAvatar(
                               child: Text('${_getPairCount() - index}')),
                           title: Text(
-                            'Участник: ${first.value}',
+                            l10n.barcode_scanner_participant(first.value),
                             style: TextStyle(
                               fontSize: index < 1 ? 24 : 20,
                               fontWeight: index < 1
@@ -398,8 +405,8 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                           ),
                           subtitle: Text(
                             second != null
-                                ? 'Място: ${second.value}'
-                                : 'Място: (чака сканиране)',
+                                ? l10n.barcode_scanner_place(second.value)
+                                : l10n.barcode_scanner_place_pending,
                             style: TextStyle(
                               fontSize: index < 1 ? 18 : 16,
                               fontWeight: index < 1
