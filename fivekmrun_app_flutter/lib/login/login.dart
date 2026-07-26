@@ -3,6 +3,7 @@ import 'package:fivekmrun_flutter/login/login_with_id.dart';
 import 'package:fivekmrun_flutter/login/login_with_username.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).colorScheme.secondary;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SafeArea(
@@ -37,16 +39,17 @@ class _LoginState extends State<Login> {
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
-                    child: Text(
-                        this.loginWithId ? "влез с парола" : "влез с номер"),
+                    child: Text(this.loginWithId
+                        ? l10n.login_widget_login_with_password
+                        : l10n.login_widget_login_with_id),
                     onPressed: this._toggleLogin,
                   ),
                 ),
                 Spacer(),
-                Text("Нямате регистрация?"),
+                Text(l10n.login_widget_no_registration),
                 GestureDetector(
                   onTap: () => _loadRegistrationScreen(),
-                  child: Text("Регистрирай се сега",
+                  child: Text(l10n.login_widget_register,
                       style: TextStyle(
                           color: accentColor,
                           fontSize: 14,

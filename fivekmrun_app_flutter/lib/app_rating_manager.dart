@@ -2,6 +2,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rate_my_app/rate_my_app.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class AppRatingManager {
   AppRatingManager(BuildContext context) {
@@ -18,12 +20,12 @@ class AppRatingManager {
       if (rateMyApp.shouldOpenDialog) {
         FirebaseAnalytics.instance.logEvent(name: "review_dialog_open");
         rateMyApp.showRateDialog(context,
-            title: 'Харесвате ли приложението?',
+            title: AppLocalizations.of(context)!.app_rating_manager_title,
             message:
-                'Помогнете ни да го направим още по-добро, като оставите вашето мнение',
-            rateButton: 'Да, разбира се',
-            noButton: 'По-късно',
-            laterButton: 'Не, благодаря',
+            AppLocalizations.of(context)!.app_rating_manager_message,
+            rateButton: AppLocalizations.of(context)!.app_rating_manager_rate_button,
+            noButton: AppLocalizations.of(context)!.app_rating_manager_no_button,
+            laterButton: AppLocalizations.of(context)!.app_rating_manager_later_button,
             //ignoreIOS: false, // Set to false if you want to show the native Apple app rating dialog on iOS.
             listener: (button) {
           // The button click listener (useful if you want to cancel the click event).

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BarcodePage extends StatefulWidget {
   @override
@@ -44,7 +45,7 @@ class _BarcodePageState extends State<BarcodePage> {
       final userId = (user?.id != null) ? user?.id : 0;
       final userName = (user?.name != null) ? user?.name : "";
       final isUserPatron = (userResource.value?.donationsCount ?? 0) > 0;
-      final userStatus = isUserPatron ? "Патрон" : "Бегач";
+      final userStatus = isUserPatron ? AppLocalizations.of(context)!.barcode_page_patron : AppLocalizations.of(context)!.barcode_page_runner;
       final accentColor = Theme.of(context).colorScheme.secondary;
 
       final objectId = uuid.v4();
@@ -133,7 +134,7 @@ class _BarcodePageState extends State<BarcodePage> {
       return Scaffold(
           appBar: AppBar(
             leading: BackButton(color: Colors.white),
-            title: Text("Баркод"),
+            title: Text(AppLocalizations.of(context)!.barcode_page_barcode),
             centerTitle: true,
           ),
           backgroundColor: Colors.black,
