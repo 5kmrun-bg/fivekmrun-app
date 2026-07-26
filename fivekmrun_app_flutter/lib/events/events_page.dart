@@ -30,7 +30,7 @@ class _EventsPage extends State<EventsPage> {
     if (!this.futureEventSelected) {
       return RefreshIndicator(
         onRefresh: () => refreshAllData(context),
-        child: Consumer<PastEventsResource>(
+        child: Consumer<AllPastEventsResource>(
           builder: (context, eventsResource, child) {
             if (eventsResource.loading) {
               return refreshableMessage(CircularProgressIndicator());

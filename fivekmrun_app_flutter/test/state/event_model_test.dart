@@ -59,6 +59,17 @@ void main() {
       expect(e.time, "9:00");
       expect(e.imageUrl, contains("xl-run-thumbnail"));
       expect(e.date, DateTime.fromMillisecondsSinceEpoch(1786827600 * 1000));
+      expect(
+        e.registrationLinks.map((l) => l.url),
+        [
+          "https://5kmrun.bg/xlrun/event/394",
+          "https://5kmrun.bg/xlrun/event/395",
+          "https://5kmrun.bg/xlrun/event/396",
+        ],
+      );
+      expect(e.registrationLinks.map((l) => l.label),
+          ["4.8 km", "9.6 km", "14.4 km"]);
+      expect(e.detailsUrl, "https://5kmrun.bg/xlrun/event/394");
     });
 
     test('keeps separate locations/days as separate groups', () {
@@ -158,6 +169,55 @@ void main() {
       expect(e.location, "Западен парк");
       expect(e.distances, isEmpty);
       expect(e.title, "");
+      // Even with no distance label to show, the single row still gets a
+      // registration link so the button isn't silently dropped.
+      expect(e.registrationLinks, hasLength(1));
+      expect(e.registrationLinks.single.label, "");
+      expect(e.registrationLinks.single.url,
+          "https://5kmrun.bg/xlrun/event/400");
+    });
+  });
+
+  group('Event.listFromXLPastJson', () {
+    test(
+        'does NOT group same-day/location rows — each distance tier is its '
+        'own separate item, unlike listFromXLJson', () {
+      final events = Event.listFromXLPastJson([
+        {
+          "e_id": 393,
+          "n_name": "Сеславци 15.2 км",
+          "e_num": 2,
+          "e_date": 1783803600,
+          "e_time": "10:00",
+        },
+        {
+          "e_id": 394,
+          "n_name": "Сеславци 7.6 км",
+          "e_num": 2,
+          "e_date": 1783803600,
+          "e_time": "10:00",
+        },
+      ]);
+
+      expect(events, hasLength(2));
+      expect(events.every((e) => e is XLEvent), isTrue);
+      expect(events.map((e) => e.id), [393, 394]);
+    });
+
+    test('parses the real mileage into each item\'s title/distances', () {
+      final events = Event.listFromXLPastJson([
+        {
+          "e_id": 393,
+          "n_name": "Сеславци 15.2 км",
+          "e_date": 1783803600,
+          "e_time": "10:00",
+        },
+      ]);
+
+      final e = events.single as XLEvent;
+      expect(e.distances, ["15.2 km"]);
+      expect(e.title, "15.2 km");
+      expect(e.location, "Сеславци");
     });
   });
 
@@ -174,6 +234,7 @@ void main() {
       expect(e.title, "Kids Race");
       expect(e.location, "Playground");
       expect(e.imageUrl, contains("kids-run"));
+      expect(e, isA<KidsEvent>());
     });
   });
 

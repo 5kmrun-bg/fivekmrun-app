@@ -89,12 +89,40 @@ class XLFutureEventsResource extends EventsResource {
   }
 }
 
+class XLPastEventsResource extends EventsResource {
+  XLPastEventsResource({super.client});
+
+  @override
+  String getEventUrl() {
+    return constants.xlPastEventsUrl;
+  }
+
+  @override
+  List<Event> listFromJsonParser(json) {
+    return Event.listFromXLPastJson(json);
+  }
+}
+
 class KidsFutureEventsResource extends EventsResource {
   KidsFutureEventsResource({super.client});
 
   @override
   String getEventUrl() {
     return constants.kidsFutureEventsUrl;
+  }
+
+  @override
+  List<Event> listFromJsonParser(json) {
+    return Event.listFromKidsJson(json);
+  }
+}
+
+class KidsPastEventsResource extends EventsResource {
+  KidsPastEventsResource({super.client});
+
+  @override
+  String getEventUrl() {
+    return constants.kidsPastEventsUrl;
   }
 
   @override
@@ -142,6 +170,52 @@ class AllFutureEventsResource extends ChangeNotifier {
 
     this.loading = false;
     this.value = combined..sortBy((e) => e.date);
+
+    return this.value;
+  }
+}
+
+class AllPastEventsResource extends ChangeNotifier {
+  /// Injectable for tests; forwarded to the composed per-type resources.
+  final http.Client? _client;
+
+  AllPastEventsResource({http.Client? client}) : _client = client;
+
+  // Not `late`: a failed fetch now leaves [value] untouched, so it has to be
+  // readable before the first successful load.
+  List<Event> value = <Event>[];
+
+  bool _loading = true;
+
+  bool get loading => _loading;
+  set loading(bool value) {
+    if (_loading != value) {
+      _loading = value;
+      notifyListeners();
+    }
+  }
+
+  Future<List<Event>> getAll() async {
+    final List<Event> combined;
+    try {
+      var pastEvents = await PastEventsResource(client: _client).getAll();
+      var xlPastEvents = await XLPastEventsResource(client: _client).getAll();
+      var kidsPastEvents =
+          await KidsPastEventsResource(client: _client).getAll();
+
+      combined = List<Event>.from(pastEvents)
+        ..addAll(xlPastEvents)
+        ..addAll(kidsPastEvents);
+    } catch (_) {
+      // Keep whatever was already loaded rather than blanking the events tab.
+      this.loading = false;
+      rethrow;
+    }
+
+    this.loading = false;
+    // Past events read most-recent-first (unlike future events, which are
+    // soonest-first), so sort by date descending across all sources.
+    this.value = combined..sort((a, b) => b.date.compareTo(a.date));
 
     return this.value;
   }

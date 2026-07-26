@@ -24,7 +24,8 @@ Future<void> refreshAllData(BuildContext context) async {
   final runsRes = Provider.of<RunsResource>(context, listen: false);
   final futureEventsRes =
       Provider.of<AllFutureEventsResource>(context, listen: false);
-  final pastEventsRes = Provider.of<PastEventsResource>(context, listen: false);
+  final pastEventsRes =
+      Provider.of<AllPastEventsResource>(context, listen: false);
 
   // eagerError: false — one unreachable endpoint shouldn't abandon the others.
   await Future.wait(

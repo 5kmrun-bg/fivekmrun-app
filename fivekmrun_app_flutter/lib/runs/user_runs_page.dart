@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/common/list_tile_row.dart';
+import 'package:fivekmrun_flutter/common/pill.dart';
 import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
@@ -90,49 +91,13 @@ class RunTypePill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late final Color backgroundColor;
-    late final Color textColor;
-    late final String label;
-
     switch (runType) {
       case RunType.official:
-        backgroundColor = Colors.white;
-        textColor = Colors.black87;
-        label = "5kmrun";
-        break;
+        return const OfficialPill();
       case RunType.selfie:
-        backgroundColor = Theme.of(context).colorScheme.secondary;
-        textColor = Colors.white;
-        label = "Selfie";
-        break;
+        return const SelfiePill();
       case RunType.xl:
-        backgroundColor = Colors.blue;
-        textColor = Colors.white;
-        label = "XL";
-        break;
-      case RunType.kids:
-        // Same green used by the Kids badge on the future-events cards
-        // (#185/#186), for a consistent Kids visual language across the app.
-        backgroundColor = Colors.green;
-        textColor = Colors.white;
-        label = "Kids";
-        break;
+        return const XLPill();
     }
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: textColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 12.0,
-        ),
-      ),
-    );
   }
 }

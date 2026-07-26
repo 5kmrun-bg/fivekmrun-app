@@ -26,14 +26,16 @@ class Event {
         detailsUrl = "",
         imageUrl = json["e_sponsor"];
 
-  Event.fromKidsJson(d):
-      id = d["e_id"],
-      title = d["e_title"],
-      date = DateTime.fromMillisecondsSinceEpoch(d["e_date"] * 1000),
-      time = d["e_time"],
-      imageUrl = "https://firebasestorage.googleapis.com/v0/b/kmrunbg.appspot.com/o/kids-run-bw.png?alt=media&token=a782fe29-6422-4b61-95b1-c4e7f81ddd5c",
-      location = d["n_name"],
-      detailsUrl = " ";
+  factory Event.fromKidsJson(dynamic d) => KidsEvent(
+        id: d["e_id"],
+        title: d["e_title"],
+        date: DateTime.fromMillisecondsSinceEpoch(d["e_date"] * 1000),
+        time: d["e_time"],
+        imageUrl:
+            "https://firebasestorage.googleapis.com/v0/b/kmrunbg.appspot.com/o/kids-run-bw.png?alt=media&token=a782fe29-6422-4b61-95b1-c4e7f81ddd5c",
+        location: d["n_name"],
+        detailsUrl: " ",
+      );
 
 
   static List<Event> listFromJson(dynamic json) {
@@ -60,6 +62,17 @@ class Event {
     return groups.values.map((rows) => XLEvent.fromRows(rows)).toList();
   }
 
+  // Unlike the future-events list, past XLrun results must NOT be grouped —
+  // r_finish_pos is scoped to a single e_id, so short/medium/XL tiers at the
+  // same day/location are separate ranking pools and need their own
+  // tappable item, each leading to its own leaderboard. Each row becomes
+  // its own single-row XLEvent (reusing XLEvent.fromRows' existing handling
+  // of a one-row group) instead of being grouped by e_num/e_date.
+  static List<Event> listFromXLPastJson(dynamic json) {
+    List<dynamic> rows = json;
+    return rows.map((row) => XLEvent.fromRows([row])).toList();
+  }
+
   static List<Event> listFromKidsJson(dynamic json) {
     List<dynamic> events = json;
     List<Event> result = events.map((d) => Event.fromKidsJson(d)).toList();
@@ -72,6 +85,7 @@ class Event {
 /// distance tier offered that day (e.g. "4.8 km · 9.6 km · 14.4 km").
 class XLEvent extends Event {
   final List<String> distances;
+  final List<XLRegistrationLink> registrationLinks;
 
   XLEvent({
     required super.id,
@@ -82,6 +96,7 @@ class XLEvent extends Event {
     required super.location,
     required super.detailsUrl,
     required this.distances,
+    required this.registrationLinks,
   });
 
   static const String _thumbnailUrl =
@@ -97,6 +112,8 @@ class XLEvent extends Event {
   static final RegExp _distanceValue =
       RegExp(r'([\d.,]+)\s*км', caseSensitive: false);
 
+  static const String _registerUrlPrefix = "https://5kmrun.bg/xlrun/event/";
+
   factory XLEvent.fromRows(List<dynamic> rows) {
     final first = rows.first;
     final List<String> rawNames =
@@ -104,15 +121,30 @@ class XLEvent extends Event {
 
     final String location = _locationFrom(rawNames);
 
-    final List<String> distances = rawNames
-        .map((name) {
-          final String remainder = _stripPrefix(name, location).trim();
-          if (remainder.isEmpty) return "";
-          final match = _distanceValue.firstMatch(remainder);
-          return match != null ? "${match.group(1)} km" : remainder;
-        })
-        .where((d) => d.isNotEmpty)
-        .toList();
+    // Per-row distance label, kept empty when a row has no distance suffix
+    // to parse (relay/single-tier events) — unlike `distances` below, this
+    // stays index-aligned with `rows` so it can be paired with each row's
+    // own e_id for the per-distance registration link.
+    final List<String> labels = rawNames.map((name) {
+      final String remainder = _stripPrefix(name, location).trim();
+      if (remainder.isEmpty) return "";
+      final match = _distanceValue.firstMatch(remainder);
+      return match != null ? "${match.group(1)} km" : remainder;
+    }).toList();
+
+    final List<String> distances = labels.where((d) => d.isNotEmpty).toList();
+
+    // The registration URL is per distance tier, since each row is its own
+    // event id on the website — not the group as a whole.
+    final List<XLRegistrationLink> registrationLinks = [];
+    for (var i = 0; i < rows.length; i++) {
+      final eventId = rows[i]["e_id"];
+      if (eventId == null) continue;
+      registrationLinks.add(XLRegistrationLink(
+        label: labels[i],
+        url: "$_registerUrlPrefix$eventId",
+      ));
+    }
 
     return XLEvent(
       id: first["e_id"],
@@ -121,8 +153,10 @@ class XLEvent extends Event {
       time: first["e_time"],
       imageUrl: _thumbnailUrl,
       location: location.isNotEmpty ? location : "XLkm Run София",
-      detailsUrl: " ",
+      detailsUrl:
+          registrationLinks.isNotEmpty ? registrationLinks.first.url : "",
       distances: distances,
+      registrationLinks: registrationLinks,
     );
   }
 
@@ -163,4 +197,29 @@ class XLEvent extends Event {
     }
     return name;
   }
+}
+
+/// A KidsRun event — single-distance, unlike [XLEvent]. Exists as its own
+/// type purely so the future-events list can tell it apart from a regular
+/// or XL event and show a distinct "Kids" badge.
+class KidsEvent extends Event {
+  KidsEvent({
+    required super.id,
+    required super.title,
+    required super.date,
+    required super.time,
+    required super.imageUrl,
+    required super.location,
+    required super.detailsUrl,
+  });
+}
+
+/// One distance tier's registration link on a grouped [XLEvent] card. Each
+/// tier is its own event id on the website, so the registration URL varies
+/// per distance rather than per day/location.
+class XLRegistrationLink {
+  final String label;
+  final String url;
+
+  const XLRegistrationLink({required this.label, required this.url});
 }

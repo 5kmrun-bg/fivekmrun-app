@@ -104,7 +104,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
         Provider.of<AllFutureEventsResource>(context, listen: false).getAll(),
         "future events");
     reportOnFailure(
-        Provider.of<PastEventsResource>(context, listen: false).getAll(),
+        Provider.of<AllPastEventsResource>(context, listen: false).getAll(),
         "past events");
 
     this._tabHelper = TabNavigationHelper(this);

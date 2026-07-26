@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/common/results_list.dart';
+import 'package:fivekmrun_flutter/constants.dart' as constants;
 import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:fivekmrun_flutter/state/results_resource.dart';
@@ -17,11 +18,19 @@ class _EventResultsPageState extends State<EventResultsPage> {
   @override
   Widget build(BuildContext context) {
     Event event = ModalRoute.of(context)?.settings.arguments as Event;
+    final bool isXL = event is XLEvent;
+    final bool isKids = event is KidsEvent;
+
+    final String? baseUrl = isXL
+        ? constants.xlResultEventsUrl
+        : isKids
+            ? constants.kidsResultEventsUrl
+            : null;
 
     return Scaffold(
       appBar: AppBar(title: Text("Резултати")),
       body: FutureBuilder<List<Result>>(
-        future: results.getAll(event.id),
+        future: results.getAll(event.id, baseUrl: baseUrl),
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot<List<Result>> snapshot) {
           switch (snapshot.connectionState) {
