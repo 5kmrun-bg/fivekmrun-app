@@ -204,6 +204,90 @@ void main() {
     });
   });
 
+  group('Run.fromKidsJson', () {
+    dynamic kidsResultJson({
+      String nName = "Южен Парк Kids",
+      int rTime = 720,
+    }) {
+      return {
+        "r_id": 5001,
+        "r_uid": 13731,
+        "r_eventid": 519,
+        "r_finish_pos": 12,
+        "r_time": rTime,
+        "n_name": nName,
+        "e_date": 1784322000,
+      };
+    }
+
+    test('uses "n_name" directly as the location (no distance to strip)', () {
+      final run = Run.fromKidsJson(kidsResultJson(nName: "Южен Парк Kids"));
+      expect(run.location, "Южен Парк Kids");
+    });
+
+    test('marks the run as kids with a fixed 2km distance', () {
+      final run = Run.fromKidsJson(kidsResultJson());
+      expect(run.runType, RunType.kids);
+      expect(run.distance, 2000);
+    });
+
+    test('computes pace/speed off the fixed 2km distance', () {
+      final run = Run.fromKidsJson(kidsResultJson(rTime: 600));
+      expect(run.pace, Run.timeInSecondsToPace(600, distanceMeters: 2000));
+      expect(run.speed, Run.timeInSecondsToSpeed(600, distanceMeters: 2000));
+    });
+  });
+
+  group('Run.listFromKidsUserJson', () {
+    test('merges "runners" and "years[].results", de-duplicated by r_id', () {
+      final json = {
+        "runners": [
+          {
+            "r_id": 1,
+            "r_eventid": 519,
+            "r_time": 700,
+            "r_finish_pos": 1,
+            "n_name": "Южен Парк Kids",
+            "e_date": 1784322000,
+          }
+        ],
+        "years": [
+          {
+            "yr": "2026",
+            "results": [
+              {
+                "r_id": 1, // duplicate of the "runners" entry above
+                "r_eventid": 519,
+                "r_time": 700,
+                "r_finish_pos": 1,
+                "n_name": "Южен Парк Kids",
+                "e_date": 1784322000,
+              },
+              {
+                "r_id": 2,
+                "r_eventid": 520,
+                "r_time": 650,
+                "r_finish_pos": 3,
+                "n_name": "Морска градина Варна",
+                "e_date": 1700000000,
+              },
+            ],
+          }
+        ],
+      };
+
+      final runs = Run.listFromKidsUserJson(json);
+
+      expect(runs.length, 2);
+      expect(runs.map((r) => r.id).toSet(), {1, 2});
+      expect(runs.every((r) => r.runType == RunType.kids), isTrue);
+    });
+
+    test('handles missing "runners"/"years" gracefully', () {
+      expect(Run.listFromKidsUserJson({}), isEmpty);
+    });
+  });
+
   group('Run.timeInSecondsToString', () {
     test('zero-pads minutes and seconds', () {
       expect(Run.timeInSecondsToString(0), "00:00");

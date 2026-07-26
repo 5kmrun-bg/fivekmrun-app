@@ -10,6 +10,7 @@ import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
 import 'package:fivekmrun_flutter/constants.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
+import 'package:fivekmrun_flutter/state/kids_stats.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
@@ -39,6 +40,7 @@ class ProfileDashboard extends StatelessWidget {
         runs.where((r) => r.runType == RunType.official).length > 0;
     final hasSelfieRuns = runs != null &&
         runs.where((r) => r.runType == RunType.selfie).length > 0;
+    final kidsStats = KidsStats.fromRuns(runs ?? <Run>[]);
 
     final goToSettings = () {
       Navigator.of(context, rootNavigator: true).pushNamed("settings");
@@ -184,6 +186,7 @@ class ProfileDashboard extends StatelessWidget {
                 if (hasSelfieRuns)
                   this.buildRunsCards(
                       runsRes.bestSelfieRun!, runsRes.lastSelfieRun!, "selfie"),
+                if (kidsStats != null) this.buildKidsStatsCard(kidsStats),
                 if (hasAnyRuns) this.buildRunsChartCard(runs),
                 if (!runsRes.loading && !hasAnyRuns)
                   Row(
@@ -221,6 +224,59 @@ class ProfileDashboard extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget buildKidsStatsCard(KidsStats stats) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Builder(builder: (context) {
+          final theme = Theme.of(context);
+          final labelStyle = theme.textTheme.bodyMedium;
+          final valueStyle = theme.textTheme.titleLarge
+              ?.copyWith(color: theme.colorScheme.secondary);
+
+          Widget stat(String value, String label) {
+            return Column(
+              children: <Widget>[
+                Text(value, style: valueStyle),
+                Text(label, style: labelStyle, textAlign: TextAlign.center),
+              ],
+            );
+          }
+
+          final km = (stats.totalDistanceMeters / 1000).toStringAsFixed(1);
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text("KidsRun", style: theme.textTheme.titleSmall),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  stat(stats.runsThisYear.toString(), "тази година"),
+                  stat(stats.runsAllTime.toString(), "общо"),
+                  stat(km, "км общо"),
+                  if (stats.bestRun?.time != null)
+                    stat(stats.bestRun!.time!, "най-добро"),
+                ],
+              ),
+              if (stats.mostRecentRun != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    (stats.mostRecentRun!.location ?? "").isNotEmpty
+                        ? "Последно: ${stats.mostRecentRun!.displayDate} · ${stats.mostRecentRun!.location}"
+                        : "Последно: ${stats.mostRecentRun!.displayDate}",
+                    style: labelStyle,
+                  ),
+                ),
+            ],
+          );
+        }),
+      ),
     );
   }
 

@@ -59,7 +59,9 @@ class UserRunsList extends StatelessWidget {
                   ListTileRow(
                     icon: run.runType == RunType.xl
                         ? Icons.terrain
-                        : Icons.pin_drop,
+                        : run.runType == RunType.kids
+                            ? Icons.child_care
+                            : Icons.pin_drop,
                     text: run.location!,
                   ),
                 ListTileRow(
