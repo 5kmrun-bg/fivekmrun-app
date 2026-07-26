@@ -200,6 +200,60 @@ class TokenNeverLoggedTest(unittest.TestCase):
             self.assertNotIn(self.TOKEN, hp.redact(body), f"leaked from: {body}")
 
 
+class SubmitWaitsForCompilationTest(unittest.TestCase):
+    """AGC compiles the package asynchronously after the upload succeeds.
+
+    Observed on run 30206217782: app-file-info returned ret.code 0, then
+    app-submit immediately returned HTTP 200 with ret.code 204144727,
+    "The package is being compiled, please try again in 3-5 minutes".
+    The upload always finishes before compilation, so an upload-then-submit
+    pipeline hits this on essentially every run.
+    """
+
+    COMPILING = FakeResponse(
+        200,
+        text=json.dumps({"ret": {"code": 204144727, "msg": "The package is being compiled, please try again in 3-5 minutes"}}),
+        reason="OK",
+    )
+    DONE = FakeResponse(200, text=json.dumps({"ret": {"code": 0, "msg": "success"}}), reason="OK")
+
+    def test_retries_until_compilation_finishes(self):
+        with mock.patch.object(hp, "requests") as req, mock.patch.object(hp, "time") as clock:
+            req.post.side_effect = [self.COMPILING, self.COMPILING, self.DONE]
+            hp.submit({}, "1", "1", "note")
+
+        self.assertEqual(req.post.call_count, 3)
+        self.assertEqual(clock.sleep.call_count, 2, "must wait between attempts")
+
+    def test_gives_up_with_an_actionable_message(self):
+        with mock.patch.object(hp, "requests") as req, mock.patch.object(hp, "time"):
+            req.post.return_value = self.COMPILING
+            with self.assertRaises(hp.PublishError) as caught:
+                hp.submit({}, "1", "1", "note")
+
+        self.assertEqual(req.post.call_count, hp.SUBMIT_ATTEMPTS, "must not retry forever")
+        message = str(caught.exception)
+        self.assertIn("still compiling", message)
+        self.assertIn("uploaded and attached successfully", message)
+
+    def test_a_real_error_is_not_mistaken_for_compiling(self):
+        broken = FakeResponse(
+            200, text=json.dumps({"ret": {"code": 204144662, "msg": "add apk failed"}}), reason="OK"
+        )
+        with mock.patch.object(hp, "requests") as req, mock.patch.object(hp, "time"):
+            req.post.return_value = broken
+            with self.assertRaises(hp.PublishError):
+                hp.submit({}, "1", "1", "note")
+        self.assertEqual(req.post.call_count, 1, "a real failure must fail fast, not retry")
+
+    def test_success_first_time_does_not_sleep(self):
+        with mock.patch.object(hp, "requests") as req, mock.patch.object(hp, "time") as clock:
+            req.post.return_value = self.DONE
+            hp.submit({}, "1", "1", "note")
+        self.assertEqual(req.post.call_count, 1)
+        clock.sleep.assert_not_called()
+
+
 class MalformedResponseTest(unittest.TestCase):
     def test_non_json_body_is_reported_legibly(self):
         resp = FakeResponse(200, text="<html>gateway</html>", reason="OK")

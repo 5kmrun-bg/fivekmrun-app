@@ -48,6 +48,12 @@ DOMAIN = "https://connect-api.cloud.huawei.com/api"
 OBS_UPLOAD_ATTEMPTS = 3
 OBS_RETRY_DELAY_SECONDS = 5
 
+# AGC compiles an uploaded package asynchronously and refuses submission until it
+# finishes, quoting 3-5 minutes. 12 x 30s allows 6 minutes before giving up.
+COMPILING_RET_CODE = 204144727
+SUBMIT_ATTEMPTS = 12
+SUBMIT_RETRY_DELAY_SECONDS = 30
+
 
 class PublishError(Exception):
     """A failure we can explain to a human without a traceback."""
@@ -249,16 +255,61 @@ def attach_file(headers, app_id, url_info, file_name, file_size, sha256, release
 
 
 def submit(headers, app_id, release_type, remark):
-    resp = requests.post(
-        f"{DOMAIN}/publish/v2/app-submit",
-        params={"appId": app_id, "releaseType": release_type, "remark": remark},
-        headers={**headers, "Content-Type": "application/json"},
-        timeout=120,
+    """Submit the draft for review, waiting while AGC compiles the package.
+
+    AGC accepts the upload and then processes it asynchronously. Submitting too
+    soon returns ret.code 204144727, "The package is being compiled, please try
+    again in 3-5 minutes". That is normal, not an error: the upload always
+    finishes before compilation does, so a pipeline that uploads and immediately
+    submits will hit this on essentially every run. Poll until it clears.
+    """
+    deadline_attempts = SUBMIT_ATTEMPTS
+    for attempt in range(1, deadline_attempts + 1):
+        resp = requests.post(
+            f"{DOMAIN}/publish/v2/app-submit",
+            params={"appId": app_id, "releaseType": release_type, "remark": remark},
+            headers={**headers, "Content-Type": "application/json"},
+            timeout=120,
+        )
+
+        if is_still_compiling(resp):
+            waited = (attempt - 1) * SUBMIT_RETRY_DELAY_SECONDS
+            print(
+                f"app-submit: package still compiling after {waited}s "
+                f"(attempt {attempt}/{deadline_attempts}); waiting "
+                f"{SUBMIT_RETRY_DELAY_SECONDS}s",
+                flush=True,
+            )
+            time.sleep(SUBMIT_RETRY_DELAY_SECONDS)
+            continue
+
+        payload = check("app-submit", resp)
+        # AGC returns success on submit without the release being live; log whatever
+        # state it hands back so the run's log proves what actually happened.
+        print(f"Submitted to AppGallery review. AGC response payload: {payload}", flush=True)
+        return
+
+    total = SUBMIT_ATTEMPTS * SUBMIT_RETRY_DELAY_SECONDS
+    raise PublishError(
+        f"AppGallery was still compiling the package after {total}s "
+        f"({SUBMIT_ATTEMPTS} attempts). The APK uploaded and attached successfully, so "
+        f"this is a slow compile rather than a bad build: re-dispatch, or submit the "
+        f"draft from the AppGallery Connect console."
     )
-    payload = check("app-submit", resp)
-    # AGC returns success on submit without the release being live; log whatever
-    # state it hands back so the run's log proves what actually happened.
-    print(f"Submitted to AppGallery review. AGC response payload: {payload}", flush=True)
+
+
+def is_still_compiling(resp):
+    """True for AGC's transient 'package is being compiled' response.
+
+    HTTP 200 with a non-zero ret.code, so it is only visible if ret.code is read.
+    """
+    if not resp.ok:
+        return False
+    try:
+        ret = resp.json().get("ret") or {}
+    except ValueError:
+        return False
+    return ret.get("code") == COMPILING_RET_CODE or "being compiled" in (ret.get("msg") or "").lower()
 
 
 def main():
