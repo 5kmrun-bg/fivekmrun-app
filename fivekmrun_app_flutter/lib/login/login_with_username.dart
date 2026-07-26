@@ -5,8 +5,7 @@ import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class LoginWithUsername extends StatefulWidget {
   @override
@@ -58,7 +57,8 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
               child: Text(
-                AppLocalizations.of(context)!.login_with_username_widget_wrong_auth,
+                AppLocalizations.of(context)!
+                    .login_with_username_widget_wrong_auth,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
@@ -79,7 +79,8 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
             autocorrect: false,
             obscureText: true,
             autofillHints: [AutofillHints.password],
-            decoration: InputHelpers.decoration(AppLocalizations.of(context)!.login_with_username_widget_password),
+            decoration: InputHelpers.decoration(AppLocalizations.of(context)!
+                .login_with_username_widget_password),
             onEditingComplete: () => TextInput.finishAutofillContext(),
           ),
           SizedBox(height: 10),

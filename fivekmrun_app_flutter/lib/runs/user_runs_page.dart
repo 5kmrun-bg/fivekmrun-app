@@ -3,6 +3,7 @@ import 'package:fivekmrun_flutter/common/pill.dart';
 import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,17 +12,18 @@ class UserRunsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-        appBar: AppBar(title: Text("Твоите Бягания")),
+        appBar: AppBar(title: Text(l10n.user_runs_page_title)),
         body: RefreshIndicator(
           onRefresh: () => refreshAllData(context),
-          child: Consumer<RunsResource>(builder: (context, runsResource, child) {
+          child:
+              Consumer<RunsResource>(builder: (context, runsResource, child) {
             if (runsResource.loading) {
               return refreshableMessage(CircularProgressIndicator());
             } else if (runsResource.value == null ||
                 runsResource.value?.length == 0) {
-              return refreshableMessage(
-                  Text("Все още не сте направили първото си бягане"));
+              return refreshableMessage(Text(l10n.no_runs));
             } else {
               return UserRunsList(runs: runsResource.value!);
             }
@@ -50,8 +52,8 @@ class UserRunsList extends StatelessWidget {
 
         return Card(
           child: ListTile(
-            onTap: () => Navigator.of(context)
-                .pushNamed("/run-details", arguments: run),
+            onTap: () =>
+                Navigator.of(context).pushNamed("/run-details", arguments: run),
             trailing: RunTypePill(runType: run.runType),
             title: Column(
               children: <Widget>[
@@ -68,7 +70,7 @@ class UserRunsList extends StatelessWidget {
                 ),
                 ListTileRow(
                   icon: Icons.timer,
-                  text: run.time! + " мин",
+                  text: run.time! + " " + AppLocalizations.of(context)!.min,
                 ),
               ],
             ),

@@ -40,3 +40,9 @@ lib/generated_plugin_registrant.dart
 # (mirrors lib/private/secrets.dart)
 /ios/Runner/PassSecrets.swift
 /ios/Runner/pass_certificate.p12
+
+# Localizations generated from lib/l10n/*.arb by `flutter pub get`
+# (pubspec `generate: true` + l10n.yaml). Regenerated on every checkout,
+# including in CI, so the output is not tracked — edit the .arb files.
+lib/l10n/app_localizations.dart
+lib/l10n/app_localizations_*.dart

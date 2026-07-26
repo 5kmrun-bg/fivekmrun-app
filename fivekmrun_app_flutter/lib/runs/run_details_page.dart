@@ -3,7 +3,7 @@ import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:fivekmrun_flutter/state/results_resource.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class RunDetailsPage extends StatelessWidget {
   const RunDetailsPage({Key? key}) : super(key: key);
@@ -65,7 +65,8 @@ class RunDetailsPage extends StatelessWidget {
                           left: 0,
                           right: 0,
                           child: Text(
-                            AppLocalizations.of(context)!.run_details_page_position,
+                            AppLocalizations.of(context)!
+                                .run_details_page_position,
                             style: theme.textTheme.titleLarge,
                             textAlign: TextAlign.center,
                           ),
@@ -81,7 +82,8 @@ class RunDetailsPage extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    CircleWidget(run.pace!, AppLocalizations.of(context)!.min_km),
+                    CircleWidget(
+                        run.pace!, AppLocalizations.of(context)!.min_km),
                     SizedBox(height: 10),
                     Text(
                       AppLocalizations.of(context)!.run_details_page_pace,
@@ -101,7 +103,8 @@ class RunDetailsPage extends StatelessWidget {
                 ),
                 Column(
                   children: <Widget>[
-                    CircleWidget(run.speed!, AppLocalizations.of(context)!.km_per_h),
+                    CircleWidget(
+                        run.speed!, AppLocalizations.of(context)!.km_per_h),
                     SizedBox(height: 10),
                     Text(
                       AppLocalizations.of(context)!.run_details_page_speed,
@@ -121,8 +124,9 @@ class RunDetailsPage extends StatelessWidget {
                 ),
                 IconText(
                   icon: Icons.pin_drop,
-                  text:
-                      (run.runType == RunType.selfie) ? "Selfie" : run.location!,
+                  text: (run.runType == RunType.selfie)
+                      ? "Selfie"
+                      : run.location!,
                 ),
               ],
             ),
@@ -130,10 +134,14 @@ class RunDetailsPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  IconText(icon: Icons.watch, text: run.totalTime! + " ${AppLocalizations.of(context)!.min}"),
+                  IconText(
+                      icon: Icons.watch,
+                      text: run.totalTime! +
+                          " ${AppLocalizations.of(context)!.min}"),
                   IconText(
                       icon: Icons.straighten,
-                      text: (run.distance! / 1000).toStringAsFixed(2) + " ${AppLocalizations.of(context)!.km}"),
+                      text: (run.distance! / 1000).toStringAsFixed(2) +
+                          " ${AppLocalizations.of(context)!.km}"),
                 ],
               ),
             SizedBox(height: 20),

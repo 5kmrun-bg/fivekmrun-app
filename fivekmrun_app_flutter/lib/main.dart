@@ -17,7 +17,7 @@ import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:fivekmrun_flutter/state/locale_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -88,36 +88,36 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: [
-              Locale('en'),
-              Locale('bg'),
-            ],
+            // Kept in sync with the .arb files by the generator. Order
+            // matters: while LocaleProvider is still reading the saved
+            // preference, `locale` is null and Flutter falls back to the
+            // first entry — bg, which is the intended default.
+            supportedLocales: AppLocalizations.supportedLocales,
             themeMode: ThemeMode.dark,
             darkTheme: ThemeData(
               useMaterial3: false,
               dividerColor: Colors.black12,
               textTheme: TextTheme(
-                titleSmall: TextStyle(
-                    fontSize: 13, fontWeight: FontWeight.bold),
+                titleSmall:
+                    TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 bodyLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
                 bodyMedium: TextStyle(fontSize: 10),
               ),
               outlinedButtonTheme: OutlinedButtonThemeData(style: ButtonStyle(
                   foregroundColor: WidgetStateProperty.resolveWith<Color?>(
-                          (Set<WidgetState> states) {
-                        return Colors.white;
-                      }))),
+                      (Set<WidgetState> states) {
+                return Colors.white;
+              }))),
               textButtonTheme: TextButtonThemeData(style: ButtonStyle(
                 foregroundColor: WidgetStateProperty.resolveWith<Color?>(
-                        (Set<WidgetState> states) {
-                      return Colors.white;
-                    }),
+                    (Set<WidgetState> states) {
+                  return Colors.white;
+                }),
               )),
               appBarTheme: AppBarTheme(
                   backgroundColor: Color.fromRGBO(66, 66, 66, 1),
                   iconTheme: IconThemeData(color: Colors.white),
-                  titleTextStyle: Theme
-                      .of(context)
+                  titleTextStyle: Theme.of(context)
                       .textTheme
                       .titleLarge
                       ?.copyWith(color: Colors.white)),

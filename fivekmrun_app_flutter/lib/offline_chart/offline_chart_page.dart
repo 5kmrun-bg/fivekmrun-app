@@ -8,7 +8,7 @@ import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class OfflineChartPage extends StatefulWidget {
   OfflineChartPage({Key? key}) : super(key: key);
@@ -67,12 +67,15 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
       useRootNavigator: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text(AppLocalizations.of(context)!.offline_chart_page_login),
+          title:
+              new Text(AppLocalizations.of(context)!.offline_chart_page_login),
           content: RichText(
             text: TextSpan(
               style: textStlyle,
               children: <TextSpan>[
-                TextSpan(text: AppLocalizations.of(context)!.offline_chart_page_participation_in),
+                TextSpan(
+                    text: AppLocalizations.of(context)!
+                        .offline_chart_page_participation_in),
                 TextSpan(
                   text: 'Selfie',
                   style: textStlyle?.copyWith(
@@ -80,13 +83,16 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextSpan(text: AppLocalizations.of(context)!.offline_chart_page_leaderboard_access),
+                TextSpan(
+                    text: AppLocalizations.of(context)!
+                        .offline_chart_page_leaderboard_access),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: new Text(AppLocalizations.of(context)!.offline_chart_page_login),
+              child: new Text(
+                  AppLocalizations.of(context)!.offline_chart_page_login),
               onPressed: () async {
                 await authResource.logout();
                 Provider.of<UserResource>(context, listen: false).clear();
@@ -97,7 +103,8 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               },
             ),
             TextButton(
-              child: new Text(AppLocalizations.of(context)!.offline_chart_page_cancel),
+              child: new Text(
+                  AppLocalizations.of(context)!.offline_chart_page_cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -154,7 +161,9 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              TextSpan(text: AppLocalizations.of(context)!.offline_chart_page_leaderboard),
+              TextSpan(
+                  text: AppLocalizations.of(context)!
+                      .offline_chart_page_leaderboard),
             ],
           ),
         ),
@@ -165,12 +174,14 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
             Row(
               children: <Widget>[
                 SelectButton(
-                  text: AppLocalizations.of(context)!.offline_chart_page_previous_week,
+                  text: AppLocalizations.of(context)!
+                      .offline_chart_page_previous_week,
                   onPressed: this.selectLastWeek,
                   selected: !this.thisWeekSelected,
                 ),
                 SelectButton(
-                  text: AppLocalizations.of(context)!.offline_chart_page_current_week,
+                  text: AppLocalizations.of(context)!
+                      .offline_chart_page_current_week,
                   onPressed: this.selectThisWeek,
                   selected: this.thisWeekSelected,
                 ),

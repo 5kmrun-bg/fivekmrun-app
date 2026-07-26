@@ -17,7 +17,7 @@ import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 enum AppTab { profile, runs, events, offlineChart, donate }
 
@@ -173,9 +173,8 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
           selectedItemColor: selectedColor,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: AppLocalizations.of(context)!.home_label_profile
-            ),
+                icon: Icon(Icons.person),
+                label: AppLocalizations.of(context)!.home_label_profile),
             BottomNavigationBarItem(
               icon: Icon(Icons.directions_run),
               label: AppLocalizations.of(context)!.home_label_runs,

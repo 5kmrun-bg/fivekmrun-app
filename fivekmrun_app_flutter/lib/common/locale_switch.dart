@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:fivekmrun_flutter/state/locale_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -15,14 +15,18 @@ class LocaleSwitcherWidget extends StatelessWidget {
         value: locale,
         icon: Container(width: 12),
         items: AppLocalizations.supportedLocales.map(
-              (nextLocale) {
+          (nextLocale) {
             return DropdownMenuItem(
               value: nextLocale,
               child: Center(
-                child: Text(nextLocale.toString().toUpperCase(),style: TextStyle(
-                  color: nextLocale == locale ? Theme.of(context).colorScheme.secondary: Colors.grey,
-                ),),
-
+                child: Text(
+                  nextLocale.toString().toUpperCase(),
+                  style: TextStyle(
+                    color: nextLocale == locale
+                        ? Theme.of(context).colorScheme.secondary
+                        : Colors.grey,
+                  ),
+                ),
               ),
             );
           },

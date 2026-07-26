@@ -134,5 +134,49 @@
     "runs_chart_date": "Date: ",
     "runs_chart_time": "\nTime: ",
     "runs_chart_trend": "Trend from last ",
-    "runs_chart_runs": " runs"
+    "runs_chart_runs": " runs",
+
+  "cancel": "Cancel",
+
+  "profile_page_xl_this_year": "this year",
+  "profile_page_xl_km_this_year": "km this year",
+  "profile_page_xl_all_time": "all time",
+  "profile_page_xl_km_all_time": "km all time",
+  "profile_page_xl_last_run": "Last: ",
+
+  "events_page_registration": "Registration",
+
+  "timekeeping_title": "Timekeeping",
+  "timekeeping_chronometer": "Chronometer",
+  "timekeeping_scanning": "Scanning",
+
+  "chronometer_start": "Start",
+  "chronometer_stop": "Stop",
+  "chronometer_reset": "Reset",
+  "chronometer_lap": "Lap",
+  "chronometer_delete": "Delete",
+  "chronometer_export": "Export results",
+  "chronometer_no_laps": "No laps recorded",
+  "chronometer_no_laps_to_export": "No laps to export",
+  "chronometer_reset_title": "Reset timer",
+  "chronometer_reset_content": "Are you sure you want to reset the timer and clear all laps?",
+  "chronometer_delete_lap_title": "Delete lap",
+  "chronometer_delete_lap_content": "Are you sure you want to delete this lap?",
+  "chronometer_total_time": "Total time: {time}",
+  "chronometer_lap_time": "Lap: {time}",
+  "chronometer_share_error": "Error sharing results: {error}",
+
+  "barcode_scanner_save": "Save",
+  "barcode_scanner_clear": "Clear",
+  "barcode_scanner_delete": "Delete",
+  "barcode_scanner_scan_prompt": "Scan a barcode",
+  "barcode_scanner_nothing_to_save": "No scanned barcodes to save",
+  "barcode_scanner_clear_all_title": "Clear all records?",
+  "barcode_scanner_clear_all_content": "Are you sure you want to delete all {pairs} pairs ({scans} scanned barcodes)?",
+  "barcode_scanner_delete_pair_title": "Delete the pair?",
+  "barcode_scanner_delete_pair_content": "Are you sure you want to delete this pair?",
+  "barcode_scanner_participant": "Participant: {value}",
+  "barcode_scanner_place": "Place: {value}",
+  "barcode_scanner_place_pending": "Place: (waiting for scan)",
+  "barcode_scanner_save_error": "Error saving: {error}"
 }

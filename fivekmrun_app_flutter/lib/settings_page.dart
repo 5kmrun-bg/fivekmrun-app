@@ -2,7 +2,7 @@ import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'common/locale_switch.dart';

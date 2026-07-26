@@ -7,7 +7,7 @@ import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
 import 'package:intl/intl.dart';
 import '../common/int_extensions.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class RunsChart extends StatefulWidget {
   final List<Run> runs;

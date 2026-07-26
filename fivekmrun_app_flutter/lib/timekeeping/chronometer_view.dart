@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'dart:io';
 
 class ChronometerView extends StatefulWidget {
@@ -114,21 +115,23 @@ class _ChronometerViewState extends State<ChronometerView> {
   Future<void> _resetTimer() async {
     final bool? shouldReset = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Reset Timer'),
-        content: const Text(
-            'Are you sure you want to reset the timer and clear all laps?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Reset'),
-          ),
-        ],
-      ),
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return AlertDialog(
+          title: Text(l10n.chronometer_reset_title),
+          content: Text(l10n.chronometer_reset_content),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n.chronometer_reset),
+            ),
+          ],
+        );
+      },
     );
 
     if (shouldReset == true) {
@@ -157,20 +160,23 @@ class _ChronometerViewState extends State<ChronometerView> {
   Future<void> _deleteLap(int index) async {
     final bool? shouldDelete = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Lap'),
-        content: const Text('Are you sure you want to delete this lap?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Delete'),
-          ),
-        ],
-      ),
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return AlertDialog(
+          title: Text(l10n.chronometer_delete_lap_title),
+          content: Text(l10n.chronometer_delete_lap_content),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n.chronometer_delete),
+            ),
+          ],
+        );
+      },
     );
 
     if (shouldDelete == true) {
@@ -205,9 +211,10 @@ class _ChronometerViewState extends State<ChronometerView> {
   }
 
   Future<void> _exportToFile() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_laps.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No laps to export')),
+        SnackBar(content: Text(l10n.chronometer_no_laps_to_export)),
       );
       return;
     }
@@ -259,7 +266,7 @@ class _ChronometerViewState extends State<ChronometerView> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error sharing results: $e')),
+        SnackBar(content: Text(l10n.chronometer_share_error(e.toString()))),
       );
     }
   }
@@ -273,14 +280,15 @@ class _ChronometerViewState extends State<ChronometerView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chronometer'),
+        title: Text(l10n.timekeeping_chronometer),
         actions: [
           IconButton(
             icon: const Icon(Icons.save_alt),
             onPressed: _exportToFile,
-            tooltip: 'Export Results',
+            tooltip: l10n.chronometer_export,
           ),
         ],
       ),
@@ -309,7 +317,9 @@ class _ChronometerViewState extends State<ChronometerView> {
                       minimumSize: const Size(double.infinity, 48),
                     ),
                     icon: Icon(_isRunning ? Icons.stop : Icons.play_arrow),
-                    label: Text(_isRunning ? 'Stop' : 'Start'),
+                    label: Text(_isRunning
+                        ? l10n.chronometer_stop
+                        : l10n.chronometer_start),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -320,7 +330,7 @@ class _ChronometerViewState extends State<ChronometerView> {
                       minimumSize: const Size(double.infinity, 48),
                     ),
                     icon: const Icon(Icons.refresh),
-                    label: const Text('Reset'),
+                    label: Text(l10n.chronometer_reset),
                   ),
                 ),
               ],
@@ -330,7 +340,7 @@ class _ChronometerViewState extends State<ChronometerView> {
           Expanded(
             flex: 3,
             child: _laps.isEmpty
-                ? const Center(child: Text('No laps recorded'))
+                ? Center(child: Text(l10n.chronometer_no_laps))
                 : ListView.builder(
                     itemCount: _laps.length,
                     itemBuilder: (context, index) {
@@ -357,19 +367,19 @@ class _ChronometerViewState extends State<ChronometerView> {
                           final bool? shouldDelete = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text('Delete Lap'),
-                              content: const Text(
-                                  'Are you sure you want to delete this lap?'),
+                              title: Text(l10n.chronometer_delete_lap_title),
+                              content:
+                                  Text(l10n.chronometer_delete_lap_content),
                               actions: [
                                 TextButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(false),
-                                  child: const Text('Cancel'),
+                                  child: Text(l10n.cancel),
                                 ),
                                 TextButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(true),
-                                  child: const Text('Delete'),
+                                  child: Text(l10n.chronometer_delete),
                                 ),
                               ],
                             ),
@@ -385,10 +395,11 @@ class _ChronometerViewState extends State<ChronometerView> {
                         },
                         child: ListTile(
                           leading: CircleAvatar(child: Text('$lapNumber')),
-                          title:
-                              Text('Total time: ${_formatTimeForUI(lapTime)}'),
+                          title: Text(l10n.chronometer_total_time(
+                              _formatTimeForUI(lapTime))),
                           subtitle: Text(
-                            'Lap: ${_formatTimeForUI(lapDuration)}',
+                            l10n.chronometer_lap_time(
+                                _formatTimeForUI(lapDuration)),
                             style: const TextStyle(fontSize: 12),
                           ),
                         ),
@@ -405,7 +416,7 @@ class _ChronometerViewState extends State<ChronometerView> {
                 textStyle: const TextStyle(fontSize: 20),
               ),
               icon: const Icon(Icons.flag, size: 32),
-              label: const Text('Lap'),
+              label: Text(l10n.chronometer_lap),
             ),
           ),
         ],

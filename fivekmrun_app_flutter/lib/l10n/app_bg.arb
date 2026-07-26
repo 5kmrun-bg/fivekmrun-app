@@ -134,5 +134,73 @@
   "runs_chart_date": "Дата: ",
   "runs_chart_time": "\nВреме: ",
   "runs_chart_trend": "Тенденция от последните ",
-  "runs_chart_runs": " бягания"
+  "runs_chart_runs": " бягания",
+
+  "cancel": "Отказ",
+
+  "profile_page_xl_this_year": "тази година",
+  "profile_page_xl_km_this_year": "км тази година",
+  "profile_page_xl_all_time": "общо",
+  "profile_page_xl_km_all_time": "км общо",
+  "profile_page_xl_last_run": "Последно: ",
+
+  "events_page_registration": "Регистрация",
+
+  "timekeeping_title": "Времеизмерване",
+  "timekeeping_chronometer": "Хронометър",
+  "timekeeping_scanning": "Отчитане",
+
+  "chronometer_start": "Старт",
+  "chronometer_stop": "Стоп",
+  "chronometer_reset": "Нулирай",
+  "chronometer_lap": "Обиколка",
+  "chronometer_delete": "Изтрий",
+  "chronometer_export": "Запази резултатите",
+  "chronometer_no_laps": "Няма записани обиколки",
+  "chronometer_no_laps_to_export": "Няма обиколки за запис",
+  "chronometer_reset_title": "Нулиране на хронометъра",
+  "chronometer_reset_content": "Сигурни ли сте, че искате да нулирате хронометъра и да изтриете всички обиколки?",
+  "chronometer_delete_lap_title": "Изтрий обиколката",
+  "chronometer_delete_lap_content": "Сигурни ли сте, че искате да изтриете тази обиколка?",
+  "chronometer_total_time": "Общо време: {time}",
+  "@chronometer_total_time": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "chronometer_lap_time": "Обиколка: {time}",
+  "@chronometer_lap_time": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "chronometer_share_error": "Грешка при споделяне на резултатите: {error}",
+  "@chronometer_share_error": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "barcode_scanner_save": "Запази",
+  "barcode_scanner_clear": "Изчисти",
+  "barcode_scanner_delete": "Изтрий",
+  "barcode_scanner_scan_prompt": "Сканирайте баркод",
+  "barcode_scanner_nothing_to_save": "Няма сканирани баркода за запис",
+  "barcode_scanner_clear_all_title": "Изчисти всички записи?",
+  "barcode_scanner_clear_all_content": "Сигурни ли сте, че искате да изтриете всички {pairs} двойки ({scans} сканирани баркода)?",
+  "@barcode_scanner_clear_all_content": {
+    "placeholders": {
+      "pairs": { "type": "int" },
+      "scans": { "type": "int" }
+    }
+  },
+  "barcode_scanner_delete_pair_title": "Изтрий двойката?",
+  "barcode_scanner_delete_pair_content": "Сигурни ли сте, че искате да изтриете тази двойка?",
+  "barcode_scanner_participant": "Участник: {value}",
+  "@barcode_scanner_participant": {
+    "placeholders": { "value": { "type": "String" } }
+  },
+  "barcode_scanner_place": "Място: {value}",
+  "@barcode_scanner_place": {
+    "placeholders": { "value": { "type": "String" } }
+  },
+  "barcode_scanner_place_pending": "Място: (чака сканиране)",
+  "barcode_scanner_save_error": "Грешка при запис: {error}",
+  "@barcode_scanner_save_error": {
+    "placeholders": { "error": { "type": "String" } }
+  }
 }

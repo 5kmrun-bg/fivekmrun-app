@@ -7,8 +7,7 @@ import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class OfflineChartDetailsPage extends StatelessWidget {
   OfflineChartDetailsPage({Key? key}) : super(key: key);
@@ -30,7 +29,8 @@ class OfflineChartDetailsPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () => launchUrl(
-                Uri.parse("https://5kmrun.bg/selfie/user/" + result.userId.toString()),
+                Uri.parse("https://5kmrun.bg/selfie/user/" +
+                    result.userId.toString()),
                 mode: LaunchMode.externalApplication),
             icon: Icon(Icons.person),
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
@@ -39,7 +39,8 @@ class OfflineChartDetailsPage extends StatelessWidget {
           if (result.stravaLink != null && result.stravaLink != "")
             IconButton(
               onPressed: () => launchUrl(
-                  Uri.parse("https://www.strava.com/activities/" + result.stravaLink!),
+                  Uri.parse("https://www.strava.com/activities/" +
+                      result.stravaLink!),
                   mode: LaunchMode.externalApplication),
               icon: Icon(CustomIcons.strava),
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
@@ -75,34 +76,43 @@ class OfflineChartDetailsPage extends StatelessWidget {
                         child: Column(
                           children: <Widget>[
                             DetailsTile(
-                              title: AppLocalizations.of(context)!.offline_chart_details_page_date,
+                              title: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_date,
                               value: DateFormat("dd.MM.yyyy")
                                   .format(result.startDate!),
                               accentColor: iconColor,
                             ),
                             DetailsTile(
-                              title: AppLocalizations.of(context)!.offline_chart_details_page_position,
+                              title: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_position,
                               value: result.officialPosition.toString(),
                               accentColor: iconColor,
                             ),
                             DetailsTile(
-                              title: AppLocalizations.of(context)!.offline_chart_details_page_time,
-                              value: '${result.time} ${AppLocalizations.of(context)!.min}',
+                              title: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_time,
+                              value:
+                                  '${result.time} ${AppLocalizations.of(context)!.min}',
                               accentColor: iconColor,
                             ),
                             if (result.totalTime.isNotEmpty)
                               DetailsTile(
-                                title: AppLocalizations.of(context)!.offline_chart_details_page_total_time,
-                                value: '${result.totalTime} ${AppLocalizations.of(context)!.min}',
+                                title: AppLocalizations.of(context)!
+                                    .offline_chart_details_page_total_time,
+                                value:
+                                    '${result.totalTime} ${AppLocalizations.of(context)!.min}',
                                 accentColor: iconColor,
                               ),
                             DetailsTile(
-                              title: AppLocalizations.of(context)!.offline_chart_details_page_pace,
-                              value: result.pace + " ${AppLocalizations.of(context)!.min_km}",
+                              title: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_pace,
+                              value: result.pace +
+                                  " ${AppLocalizations.of(context)!.min_km}",
                               accentColor: iconColor,
                             ),
                             DetailsTile(
-                              title: AppLocalizations.of(context)!.offline_chart_details_page_total_elevation_gained,
+                              title: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_total_elevation_gained,
                               value: result.elevationGainedTotal
                                       .round()
                                       .toString() +
@@ -130,29 +140,34 @@ class OfflineChartDetailsPage extends StatelessWidget {
                           child: Column(
                         children: <Widget>[
                           DetailsTile(
-                            title: AppLocalizations.of(context)!.offline_chart_details_page_hour,
+                            title: AppLocalizations.of(context)!
+                                .offline_chart_details_page_hour,
                             value:
                                 DateFormat("HH:mm").format(result.startDate!),
                             accentColor: iconColor,
                           ),
                           DetailsTile(
-                            title: AppLocalizations.of(context)!.offline_chart_details_page_location,
+                            title: AppLocalizations.of(context)!
+                                .offline_chart_details_page_location,
                             value: result.startLocation,
                             accentColor: iconColor,
                           ),
                           DetailsTile(
-                            title: AppLocalizations.of(context)!.offline_chart_details_page_distance,
+                            title: AppLocalizations.of(context)!
+                                .offline_chart_details_page_distance,
                             value: '${result.distance.toString()} m',
                             accentColor: iconColor,
                           ),
                           if (result.totalDistance > result.distance)
                             DetailsTile(
-                              title:AppLocalizations.of(context)!.offline_chart_details_page_total_distance,
+                              title: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_total_distance,
                               value: '${result.totalDistance.toString()} m',
                               accentColor: iconColor,
                             ),
                           DetailsTile(
-                            title: AppLocalizations.of(context)!.offline_chart_details_page_elevation,
+                            title: AppLocalizations.of(context)!
+                                .offline_chart_details_page_elevation,
                             value: result.elevationLow.toStringAsFixed(0) +
                                 " m - " +
                                 result.elevationHigh.toStringAsFixed(0) +
@@ -161,20 +176,26 @@ class OfflineChartDetailsPage extends StatelessWidget {
                           ),
                           if (result.status > 0 && result.status <= 2)
                             DetailsTile(
-                              title: AppLocalizations.of(context)!.offline_chart_details_page_status,
-                              value: AppLocalizations.of(context)!.offline_chart_details_page_confirmed,
+                              title: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_status,
+                              value: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_confirmed,
                               accentColor: iconColor,
                             ),
                           if (result.status == 3)
                             DetailsTile(
-                              title: AppLocalizations.of(context)!.offline_chart_details_page_status,
-                              value: AppLocalizations.of(context)!.offline_chart_details_page_independent,
+                              title: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_status,
+                              value: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_independent,
                               accentColor: iconColor,
                             ),
                           if (result.status > 3 && result.status <= 5)
                             DetailsTile(
-                              title: AppLocalizations.of(context)!.offline_chart_details_page_status,
-                              value: AppLocalizations.of(context)!.offline_chart_details_page_disqualified,
+                              title: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_status,
+                              value: AppLocalizations.of(context)!
+                                  .offline_chart_details_page_disqualified,
                               accentColor: iconColor,
                             ),
                         ],

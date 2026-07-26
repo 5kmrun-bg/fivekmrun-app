@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
 import "package:collection/collection.dart";
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class RunsByRouteChart extends StatelessWidget {
   final List<charts.Series<dynamic, String>> seriesList;
@@ -27,7 +26,9 @@ class RunsByRouteChart extends StatelessWidget {
         padding: EdgeInsets.all(8.0),
         child: Column(children: <Widget>[
           IntrinsicHeight(
-              child: Text(AppLocalizations.of(context)!.runs_by_route_chart_title, style: subTitleStyle)),
+              child: Text(
+                  AppLocalizations.of(context)!.runs_by_route_chart_title,
+                  style: subTitleStyle)),
           Expanded(
               child: new charts.PieChart<String>(seriesList,
                   animate: animate,
@@ -64,10 +65,11 @@ class RunsByRouteChart extends StatelessWidget {
   static List<charts.Series<RunsByRouteEntry, String>> _createData(
       List<Run> runs) {
     List<RunsByRouteEntry> series = groupBy<Run, String>(
-            runs.where((r) => r.runType == RunType.official), (r) => r.location!)
-            .entries
-            .map((e) => RunsByRouteEntry(e.key, e.value.length))
-            .toList();
+            runs.where((r) => r.runType == RunType.official),
+            (r) => r.location!)
+        .entries
+        .map((e) => RunsByRouteEntry(e.key, e.value.length))
+        .toList();
 
     return [
       new charts.Series<RunsByRouteEntry, String>(

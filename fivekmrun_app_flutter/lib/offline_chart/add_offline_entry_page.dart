@@ -18,7 +18,7 @@ import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
 import 'package:strava_client/strava_client.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 import '../common/int_extensions.dart';
 import '../common/double_extensions.dart';
@@ -260,15 +260,16 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                   .add_offline_entry_page_server_sending_error),
               actions: <Widget>[
                 TextButton(
-                    child: Text(AppLocalizations.of(context)!.add_offline_entry_page_ok),
+                    child: Text(AppLocalizations.of(context)!
+                        .add_offline_entry_page_ok),
                     onPressed: () => Navigator.of(context).pop())
               ],
               content: RichText(
                 text: TextSpan(
                   children: <TextSpan>[
                     TextSpan(
-                        text:
-                            AppLocalizations.of(context)!.add_offline_entry_page_data_error),
+                        text: AppLocalizations.of(context)!
+                            .add_offline_entry_page_data_error),
                   ],
                 ),
               ),
@@ -317,7 +318,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.add_offline_entry_page_join_leaderboard),
+        title: Text(AppLocalizations.of(context)!
+            .add_offline_entry_page_join_leaderboard),
       ),
       body: Center(
           child: this.isLoading
@@ -466,7 +468,8 @@ class StravaActivityList extends StatelessWidget {
                       text: activity.detailedActivity.name!, icon: Icons.info),
                   ListTileRow(text: dateString, icon: Icons.calendar_today),
                   ListTileRow(
-                      text: "$fastestSplitDistance / $totalDistance ${AppLocalizations.of(context)!.km}",
+                      text:
+                          "$fastestSplitDistance / $totalDistance ${AppLocalizations.of(context)!.km}",
                       icon: Icons.map),
                   ListTileRow(
                       text: "$fastestSplitTime / $totalTime",

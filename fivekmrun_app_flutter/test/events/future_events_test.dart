@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
+import '../localized_app.dart';
+
 void main() {
   testWidgets('regular event has no XL badge', (tester) async {
     final event = Event.fromJson({
@@ -16,9 +18,8 @@ void main() {
       "e_sponsor": "",
     });
 
-    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
-          home: Scaffold(body: FutureEventsList(events: [event])),
-        )));
+    await mockNetworkImagesFor(() =>
+        tester.pumpWidget(localizedApp(FutureEventsList(events: [event]))));
 
     expect(find.byType(XLPill), findsNothing);
     expect(find.byType(KidsPill), findsNothing);
@@ -45,9 +46,8 @@ void main() {
       },
     ]);
 
-    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
-          home: Scaffold(body: FutureEventsList(events: events)),
-        )));
+    await mockNetworkImagesFor(() =>
+        tester.pumpWidget(localizedApp(FutureEventsList(events: events))));
 
     expect(find.byType(XLPill), findsOneWidget);
     expect(find.byType(KidsPill), findsNothing);
@@ -67,9 +67,8 @@ void main() {
       },
     ]);
 
-    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
-          home: Scaffold(body: FutureEventsList(events: events)),
-        )));
+    await mockNetworkImagesFor(() =>
+        tester.pumpWidget(localizedApp(FutureEventsList(events: events))));
 
     expect(find.byType(KidsPill), findsOneWidget);
     expect(find.byType(XLPill), findsNothing);
@@ -96,9 +95,8 @@ void main() {
       },
     ]);
 
-    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
-          home: Scaffold(body: FutureEventsList(events: events)),
-        )));
+    await mockNetworkImagesFor(() =>
+        tester.pumpWidget(localizedApp(FutureEventsList(events: events))));
 
     expect(find.widgetWithText(OutlinedButton, "4.8 km"), findsOneWidget);
     expect(find.widgetWithText(OutlinedButton, "9.6 km"), findsOneWidget);
@@ -114,9 +112,8 @@ void main() {
       "e_sponsor": "",
     });
 
-    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
-          home: Scaffold(body: FutureEventsList(events: [event])),
-        )));
+    await mockNetworkImagesFor(() =>
+        tester.pumpWidget(localizedApp(FutureEventsList(events: [event]))));
 
     expect(find.byType(OutlinedButton), findsNothing);
   });
@@ -140,12 +137,32 @@ void main() {
       },
     ]);
 
-    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
-          home: Scaffold(body: FutureEventsList(events: events)),
-        )));
+    await mockNetworkImagesFor(() =>
+        tester.pumpWidget(localizedApp(FutureEventsList(events: events))));
 
     expect(find.byType(XLRegistrationSection), findsOneWidget);
     expect(find.text("Регистрация"), findsOneWidget);
+  });
+
+  testWidgets('the registration strip header follows the app locale',
+      (tester) async {
+    final events = Event.listFromXLJson([
+      {
+        "e_id": 394,
+        "n_name": "с. Кътина 4.8 км",
+        "e_num": 5,
+        "e_date": 1786827600,
+        "e_time": "9:00",
+      },
+    ]);
+
+    await mockNetworkImagesFor(() => tester.pumpWidget(localizedApp(
+          FutureEventsList(events: events),
+          locale: const Locale('en'),
+        )));
+
+    expect(find.text("Registration"), findsOneWidget);
+    expect(find.text("Регистрация"), findsNothing);
   });
 
   testWidgets('regular event has no registration strip', (tester) async {
@@ -158,9 +175,8 @@ void main() {
       "e_sponsor": "",
     });
 
-    await mockNetworkImagesFor(() => tester.pumpWidget(MaterialApp(
-          home: Scaffold(body: FutureEventsList(events: [event])),
-        )));
+    await mockNetworkImagesFor(() =>
+        tester.pumpWidget(localizedApp(FutureEventsList(events: [event]))));
 
     expect(find.byType(XLRegistrationSection), findsNothing);
   });

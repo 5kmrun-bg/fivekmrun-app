@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
 import '../common/int_extensions.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class BestTimesByRouteChart extends StatelessWidget {
   final List<charts.Series<dynamic, String>> seriesList;
@@ -29,7 +28,9 @@ class BestTimesByRouteChart extends StatelessWidget {
         child: Column(
           children: <Widget>[
             IntrinsicHeight(
-                child: Text(AppLocalizations.of(context)!.best_time_by_route_chart_widget_records,
+                child: Text(
+                    AppLocalizations.of(context)!
+                        .best_time_by_route_chart_widget_records,
                     style: theme.textTheme.titleSmall)),
             Expanded(
                 child: charts.BarChart(seriesList,
@@ -49,14 +50,15 @@ class BestTimesByRouteChart extends StatelessWidget {
   static List<charts.Series<BestTimeByRouteEntry, String>> _createData(
       List<Run> runs) {
     List<BestTimeByRouteEntry> series = groupBy<Run, String>(
-            runs.where((r) => r.runType == RunType.official), (r) => r.location!)
-            .entries
-            .map((e) => BestTimeByRouteEntry(
-                e.key,
-                minBy<Run, int>(e.value, (r) => r.timeInSeconds ?? 0)
-                        ?.timeInSeconds ??
-                    0))
-            .toList();
+            runs.where((r) => r.runType == RunType.official),
+            (r) => r.location!)
+        .entries
+        .map((e) => BestTimeByRouteEntry(
+            e.key,
+            minBy<Run, int>(e.value, (r) => r.timeInSeconds ?? 0)
+                    ?.timeInSeconds ??
+                0))
+        .toList();
 
     return [
       new charts.Series<BestTimeByRouteEntry, String>(

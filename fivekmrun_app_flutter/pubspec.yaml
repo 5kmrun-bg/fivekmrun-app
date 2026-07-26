@@ -36,7 +36,9 @@ dependencies:
   community_charts_flutter: ^1.0.1
   colorful_safe_area: ^1.0.0
 
-  intl: ^0.17.0
+  # Pinned by flutter_localizations from the Flutter SDK — must match its
+  # intl constraint or version solving fails.
+  intl: ^0.20.2
 
   strava_client:
     git:

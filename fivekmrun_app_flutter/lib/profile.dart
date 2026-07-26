@@ -20,6 +20,7 @@ import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:fivekmrun_flutter/state/xl_stats.dart';
 import 'package:fivekmrun_flutter/timekeeping/timekeeping.dart';
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
@@ -38,6 +39,7 @@ class ProfileDashboard extends StatelessWidget {
 
     final user = userResource.value;
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     final runs = runsRes.value;
     final hasAnyRuns = runs != null && runs.length > 0;
@@ -117,7 +119,7 @@ class ProfileDashboard extends StatelessWidget {
                                           .length
                                           .toInt() ??
                                       0),
-                              title: "Легионер\nselfie"),
+                              title: l10n.profile_page_legionary_selfie),
                         ],
                       ),
                     ),
@@ -182,7 +184,7 @@ class ProfileDashboard extends StatelessWidget {
                                           .length
                                           .toInt() ??
                                       0),
-                              title: "Легионер\nсъщинско"),
+                              title: l10n.profile_page_legionary_official),
                         ],
                       ),
                     ),
@@ -193,11 +195,11 @@ class ProfileDashboard extends StatelessWidget {
                 ),
                 if (runsRes.loading) Center(child: CircularProgressIndicator()),
                 if (hasOfficialRuns)
-                  this.buildRunsCards(runsRes.bestOfficialRun!,
-                      runsRes.lastOfficialRun!, "същинско"),
+                  this.buildRunsCards(context, runsRes.bestOfficialRun!,
+                      runsRes.lastOfficialRun!, l10n.profile_page_official),
                 if (hasSelfieRuns)
-                  this.buildRunsCards(
-                      runsRes.bestSelfieRun!, runsRes.lastSelfieRun!, "selfie"),
+                  this.buildRunsCards(context, runsRes.bestSelfieRun!,
+                      runsRes.lastSelfieRun!, "selfie"),
                 if (xlStats != null)
                   this.buildXLStatsCard(xlStats, nextXLEvent),
                 if (hasAnyRuns) this.buildRunsChartCard(runs),
@@ -208,8 +210,7 @@ class ProfileDashboard extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Center(
-                            child: Text(
-                                "Все още не сте направили първото си бягане"),
+                            child: Text(l10n.no_runs),
                           ),
                         ),
                       )
@@ -221,18 +222,20 @@ class ProfileDashboard extends StatelessWidget {
             )));
   }
 
-  Widget buildRunsCards(Run bestRun, Run lastRun, String runType) {
+  Widget buildRunsCards(
+      BuildContext context, Run bestRun, Run lastRun, String runType) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: <Widget>[
         Expanded(
           child: RunCard(
-            title: "Последно " + runType,
+            title: l10n.profile_page_last_run + runType,
             run: lastRun,
           ),
         ),
         Expanded(
           child: RunCard(
-            title: "Най-добро " + runType,
+            title: l10n.profile_page_best_run + runType,
             run: bestRun,
           ),
         ),
@@ -250,6 +253,7 @@ class ProfileDashboard extends StatelessWidget {
             padding: const EdgeInsets.all(12.0),
             child: Builder(builder: (context) {
               final theme = Theme.of(context);
+              final l10n = AppLocalizations.of(context)!;
               final labelStyle = theme.textTheme.bodyMedium;
               final valueStyle = theme.textTheme.titleLarge
                   ?.copyWith(color: theme.colorScheme.secondary);
@@ -344,15 +348,20 @@ class ProfileDashboard extends StatelessWidget {
                       // "км тази година" reads as inconsistent.
                       if (stats.runsThisYear > 0) ...<Widget>[
                         Expanded(
-                            child: stat(
-                                stats.runsThisYear.toString(), "тази година")),
+                            child: stat(stats.runsThisYear.toString(),
+                                l10n.profile_page_xl_this_year)),
                         if (kmThisYear != null)
-                          Expanded(child: stat(kmThisYear, "км тази година")),
+                          Expanded(
+                              child: stat(kmThisYear,
+                                  l10n.profile_page_xl_km_this_year)),
                       ],
                       Expanded(
-                          child: stat(stats.runsAllTime.toString(), "общо")),
+                          child: stat(stats.runsAllTime.toString(),
+                              l10n.profile_page_xl_all_time)),
                       if (kmAllTime != null)
-                        Expanded(child: stat(kmAllTime, "км общо")),
+                        Expanded(
+                            child: stat(
+                                kmAllTime, l10n.profile_page_xl_km_all_time)),
                     ],
                   ),
                   // Splits the card into its two halves: the aggregate
@@ -361,7 +370,7 @@ class ProfileDashboard extends StatelessWidget {
                   if (lastRun != null)
                     metaRow(
                       Icons.terrain,
-                      "Последно: ",
+                      l10n.profile_page_xl_last_run,
                       linkText: (lastRun.location ?? "").isNotEmpty
                           ? "${lastRun.displayDate} · ${lastRun.location}"
                           : lastRun.displayDate,
