@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
+import '../localized_app.dart';
+
 // Fake that throws, so only the .catchError() path runs. That path also
 // reports to Crashlytics, which has no initialised Firebase app under test —
 // the widget treats that reporting as best-effort, so the error UI still
@@ -22,17 +24,18 @@ class _ThrowingAuthResource extends AuthenticationResource {
   }
 }
 
+// localizedApp, not a bare MaterialApp: the widget reads its strings through
+// AppLocalizations.of(context)!, which is null without the delegates.
 Widget _buildWidget(AuthenticationResource auth) {
-  return MaterialApp(
-    home: Scaffold(
-      body: ChangeNotifierProvider<AuthenticationResource>.value(
-        value: auth,
-        child: LoginWithUsername(),
-      ),
+  return localizedApp(
+    ChangeNotifierProvider<AuthenticationResource>.value(
+      value: auth,
+      child: LoginWithUsername(),
     ),
   );
 }
 
+// The Bulgarian text, since localizedApp defaults to bg.
 const _errorText = 'Грешно потребителско име или парола';
 
 void main() {
