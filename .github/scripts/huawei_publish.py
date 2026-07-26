@@ -184,6 +184,10 @@ def get_upload_url(headers, app_id, file_name, file_size, sha256, release_type):
     url_info = payload.get("urlInfo")
     if not url_info or not url_info.get("url"):
         raise PublishError(f"upload-url/for-obs returned no urlInfo: {describe(resp)}")
+    if not url_info.get("objectId"):
+        # attach_file needs it, and its absence would surface much later as an
+        # opaque 204144662 rather than here where the cause is obvious.
+        raise PublishError(f"upload-url/for-obs returned no objectId: {describe(resp)}")
     print("Upload URL obtained", flush=True)
     return url_info
 
@@ -224,7 +228,13 @@ def attach_file(headers, app_id, url_info, file_name, file_size, sha256, release
             "files": [
                 {
                     "fileName": file_name,
-                    "fileDestUrl": url_info["url"].split("?")[0],
+                    # The OBS objectId, NOT the upload URL. Passing the URL (even
+                    # with its query string stripped) is accepted as HTTP 200 and
+                    # then fails with ret.code 204144662 "[fileURLToDb Exception]".
+                    # Verified against the live API: objectId succeeds, the URL
+                    # does not. The field name really is fileDestUrl — sending
+                    # Huawei's fileDestUlr typo gets "The files url is empty."
+                    "fileDestUrl": url_info["objectId"],
                     "size": file_size,
                     "sha256": sha256,
                 }

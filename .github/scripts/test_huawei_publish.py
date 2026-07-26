@@ -102,20 +102,43 @@ class EndpointShapeTest(unittest.TestCase):
     def test_attach_file_puts_to_app_file_info(self):
         with mock.patch.object(hp, "requests") as req:
             req.put.return_value = self.OK
-            hp.attach_file({}, "109680919", {"url": "https://obs/x.apk?sig=1"}, "x.apk", 1, "ab", "1")
+            url_info = {"url": "https://obs/x.apk?sig=1", "objectId": "DE/x.apk"}
+            hp.attach_file({}, "109680919", url_info, "x.apk", 1, "ab", "1")
 
         self.assertTrue(req.put.called, "app-file-info must be a PUT")
         self.assertFalse(req.post.called, "app-file-info must not be POSTed")
         url = req.put.call_args[0][0]
         self.assertTrue(url.endswith("/publish/v2/app-file-info"), f"wrong endpoint: {url}")
 
-    def test_attach_file_strips_the_obs_query_string(self):
+    def test_attach_file_sends_the_object_id_not_the_url(self):
+        """Verified against the live API on 2026-07-26.
+
+        fileDestUrl = the OBS URL           -> 204144662 "[fileURLToDb Exception]"
+        fileDestUrl = the objectId          -> ret.code 0, success
+        fileDestUlr (Huawei's typo) = eithr -> 204144641 "The files url is empty."
+
+        So the field name is fileDestUrl and its value is the objectId.
+        """
+        url_info = {"url": "https://obs/DE/x.apk?sig=secret", "objectId": "DE/2026/x.apk"}
         with mock.patch.object(hp, "requests") as req:
             req.put.return_value = self.OK
-            hp.attach_file({}, "1", {"url": "https://obs/x.apk?sig=secret"}, "x.apk", 7, "ab", "1")
+            hp.attach_file({}, "1", url_info, "x.apk", 7, "ab", "1")
 
-        body = req.put.call_args[1]["json"]
-        self.assertEqual(body["files"][0]["fileDestUrl"], "https://obs/x.apk")
+        sent = req.put.call_args[1]["json"]["files"][0]
+        self.assertEqual(sent["fileDestUrl"], "DE/2026/x.apk")
+        self.assertNotIn("fileDestUlr", sent)
+
+    def test_missing_object_id_fails_early_and_clearly(self):
+        resp = FakeResponse(
+            200,
+            text=json.dumps({"ret": {"code": 0}, "urlInfo": {"url": "https://obs/x.apk"}}),
+            reason="OK",
+        )
+        with mock.patch.object(hp, "requests") as req:
+            req.get.return_value = resp
+            with self.assertRaises(hp.PublishError) as caught:
+                hp.get_upload_url({}, "1", "x.apk", 1, "ab", "1")
+        self.assertIn("no objectId", str(caught.exception))
 
     def test_submit_posts_to_app_submit(self):
         with mock.patch.object(hp, "requests") as req:
