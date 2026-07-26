@@ -178,5 +178,10 @@
   "barcode_scanner_participant": "Participant: {value}",
   "barcode_scanner_place": "Place: {value}",
   "barcode_scanner_place_pending": "Place: (waiting for scan)",
-  "barcode_scanner_save_error": "Error saving: {error}"
+  "barcode_scanner_save_error": "Error saving: {error}",
+
+  "barcode_page_wallet_error": "Could not add the pass to Wallet",
+  "barcode_page_add_to_apple_wallet": "Add to Apple Wallet",
+  "add_offline_entry_page_invalid_run": "Invalid run",
+  "add_offline_entry_page_invalid_run_message": "Please choose a run from the current week."
 }

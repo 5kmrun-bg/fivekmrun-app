@@ -202,5 +202,10 @@
   "barcode_scanner_save_error": "Грешка при запис: {error}",
   "@barcode_scanner_save_error": {
     "placeholders": { "error": { "type": "String" } }
-  }
+  },
+
+  "barcode_page_wallet_error": "Грешка при добавяне в Wallet",
+  "barcode_page_add_to_apple_wallet": "Добави в Apple Wallet",
+  "add_offline_entry_page_invalid_run": "Невалидно бягане",
+  "add_offline_entry_page_invalid_run_message": "Моля изберете бягане от текущата седмица."
 }

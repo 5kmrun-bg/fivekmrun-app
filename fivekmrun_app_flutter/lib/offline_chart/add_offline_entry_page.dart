@@ -125,11 +125,14 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Невалидно бягане"),
-              content: Text("Моля изберете бягане от текущата седмица."),
+              title: Text(AppLocalizations.of(context)!
+                  .add_offline_entry_page_invalid_run),
+              content: Text(AppLocalizations.of(context)!
+                  .add_offline_entry_page_invalid_run_message),
               actions: <Widget>[
                 TextButton(
-                  child: Text("OK"),
+                  child: Text(
+                      AppLocalizations.of(context)!.add_offline_entry_page_ok),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

@@ -122,7 +122,9 @@ class _BarcodePageState extends State<BarcodePage> {
                 print(e);
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Грешка при добавяне в Wallet')),
+                    SnackBar(
+                        content: Text(AppLocalizations.of(context)!
+                            .barcode_page_wallet_error)),
                   );
                 }
               }
@@ -242,7 +244,8 @@ class _AddToAppleWalletButton extends StatelessWidget {
         errorBuilder: (_, __, ___) => ElevatedButton.icon(
           onPressed: onPressed,
           icon: Icon(Icons.wallet),
-          label: Text('Add to Apple Wallet'),
+          label: Text(
+              AppLocalizations.of(context)!.barcode_page_add_to_apple_wallet),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
