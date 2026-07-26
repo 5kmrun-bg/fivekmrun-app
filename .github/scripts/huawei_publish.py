@@ -38,6 +38,7 @@ AppGallery Connect prerequisite for the credentials (console-side, one time):
 
 import hashlib
 import os
+import re
 import sys
 import time
 
@@ -52,14 +53,31 @@ class PublishError(Exception):
     """A failure we can explain to a human without a traceback."""
 
 
+def redact(text):
+    """Strip AGC access tokens out of anything we are about to print.
+
+    This repository is PUBLIC, so Actions logs are world-readable. GitHub masks
+    registered secrets, but the access token is minted at runtime and is not one
+    of them — nothing masks it for us by default. It is valid for ~48 hours and
+    can publish releases, so it must never reach the log.
+
+    Belt and braces: get_token() also emits ::add-mask:: for the token itself, so
+    a path that bypasses this funnel is still covered.
+    """
+    return re.sub(r'("access_token"\s*:\s*")[^"]*(")', r"\1[redacted]\2", text)
+
+
 def describe(resp):
-    """Status, reason phrase and body.
+    """Status, reason phrase and body, with any token redacted.
+
+    Every AGC response is logged through here, so this is the one choke point
+    where a secret could escape into the log.
 
     The reason phrase matters. AGC returns the 403 authorisation refusal with an
     EMPTY body and puts its only diagnostic ("client token authorization fail.")
     in the reason phrase, so logging the body alone throws that away.
     """
-    body = resp.text
+    body = redact(resp.text)
     if len(body) > 4000:
         body = body[:4000] + "... [truncated]"
     return f"HTTP {resp.status_code} {resp.reason or ''} {body}".rstrip()
@@ -141,6 +159,10 @@ def get_token(client_id, client_secret):
     token = payload.get("access_token")
     if not token:
         raise PublishError(f"token call returned no access_token: {describe(resp)}")
+    # Ask the runner to mask the token for the rest of the job. This does not
+    # print the token: GitHub consumes the workflow command and renders it as ***.
+    # It covers anything that prints the token without going through describe().
+    print(f"::add-mask::{token}", flush=True)
     print("Token obtained successfully", flush=True)
     return token
 

@@ -129,6 +129,54 @@ class EndpointShapeTest(unittest.TestCase):
         self.assertEqual(params["releaseType"], "1")
 
 
+class TokenNeverLoggedTest(unittest.TestCase):
+    """This repo is public, so Actions logs are world-readable.
+
+    The AGC access token is minted at runtime, so it is not a registered secret
+    and nothing masks it by default. It lives ~48h and can publish releases.
+    """
+
+    TOKEN = "CF1a2b3c4d5e6f7890abcdefSECRETTOKENVALUE=="
+
+    def test_describe_redacts_the_token(self):
+        resp = FakeResponse(
+            200, text=json.dumps({"access_token": self.TOKEN, "expires_in": 172799}), reason="OK"
+        )
+        out = hp.describe(resp)
+        self.assertNotIn(self.TOKEN, out)
+        self.assertIn("[redacted]", out)
+        # The rest of the body must survive — it is why we log it at all.
+        self.assertIn("172799", out)
+
+    def test_check_does_not_leak_the_token_on_success(self):
+        resp = FakeResponse(
+            200, text=json.dumps({"ret": {"code": 0}, "access_token": self.TOKEN}), reason="OK"
+        )
+        with mock.patch("builtins.print") as printed:
+            hp.check("token", resp)
+        logged = " ".join(str(c) for c in printed.call_args_list)
+        self.assertNotIn(self.TOKEN, logged)
+
+    def test_token_is_masked_with_add_mask(self):
+        resp = FakeResponse(200, text=json.dumps({"access_token": self.TOKEN}), reason="OK")
+        with mock.patch.object(hp, "requests") as req, mock.patch("builtins.print") as printed:
+            req.post.return_value = resp
+            self.assertEqual(hp.get_token("id", "secret"), self.TOKEN)
+        emitted = [str(c) for c in printed.call_args_list]
+        self.assertTrue(
+            any(f"::add-mask::{self.TOKEN}" in e for e in emitted),
+            "get_token must emit ::add-mask:: so the runner masks the token everywhere",
+        )
+
+    def test_redaction_handles_whitespace_variants(self):
+        for body in (
+            '{"access_token":"%s"}' % self.TOKEN,
+            '{"access_token" : "%s"}' % self.TOKEN,
+            '{"expires_in":1,"access_token"  :  "%s"}' % self.TOKEN,
+        ):
+            self.assertNotIn(self.TOKEN, hp.redact(body), f"leaked from: {body}")
+
+
 class MalformedResponseTest(unittest.TestCase):
     def test_non_json_body_is_reported_legibly(self):
         resp = FakeResponse(200, text="<html>gateway</html>", reason="OK")
