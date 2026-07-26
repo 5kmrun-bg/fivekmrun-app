@@ -49,8 +49,14 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
       // captive portal answers with HTML instead of JSON. Ordering also keeps
       // the user-facing feedback independent of the telemetry call.
       if (mounted) setState(() => this.loginError = true);
-      FirebaseCrashlytics.instance
-          .recordError(error, stackTrace, reason: "authenticate with username");
+
+      // Best-effort: reporting must not become a second failure on top of the
+      // one being reported. Crashlytics throws if Firebase never initialised,
+      // and an exception raised here would escape as an unhandled async error.
+      try {
+        FirebaseCrashlytics.instance.recordError(error, stackTrace,
+            reason: "authenticate with username");
+      } catch (_) {}
     });
   }
 
