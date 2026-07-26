@@ -97,10 +97,16 @@ class FutureEventsList extends StatelessWidget {
 /// header, with one button per distance tier. Each button opens that tier's
 /// registration page in an in-app webview.
 class XLRegistrationSection extends StatelessWidget {
-  const XLRegistrationSection({Key? key, required this.links})
+  const XLRegistrationSection({Key? key, required this.links, this.subtitle})
       : super(key: key);
 
   final List<XLRegistrationLink> links;
+
+  /// Optional context appended to the "Регистрация" header, e.g. which event
+  /// these buttons belong to. The events tab omits it — the card above the
+  /// strip already names the event — but the profile card needs it, since
+  /// there the strip is the only thing identifying the upcoming event.
+  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +136,17 @@ class XLRegistrationSection extends StatelessWidget {
                   letterSpacing: 0.3,
                 ),
               ),
+              if (subtitle != null)
+                Expanded(
+                  child: Text(
+                    " · ${subtitle!}",
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
             ],
           ),
           const SizedBox(height: 8),
@@ -166,4 +183,3 @@ class XLRegistrationSection extends StatelessWidget {
     await launchUrl(Uri.parse(url), mode: LaunchMode.inAppWebView);
   }
 }
-
