@@ -1,15 +1,14 @@
 # Builds, signs, uploads and SUBMITS the APK to Huawei AppGallery. A successful
 # run ends with the build in Huawei's review queue — no console interaction.
 #
-# AppGallery Connect console prerequisites (one-time, cannot be done from CI):
-#   1. Enable the AppGallery Connect API for the account
-#      (Users and permissions -> API management).
-#   2. The API client behind HUAWEI_CLIENT_ID must be team/project level, not personal.
-#   3. Grant that client a publishing role (App administrator, or equivalent with
-#      App release rights), scoped to the app matching HUAWEI_APP_ID.
-# If any of these is missing the OAuth token is still issued, but the first
-# publishing call fails with "client token auth failed" (401) or
-# "client token authorization fail." (403). See .github/scripts/huawei_publish.py.
+# AppGallery Connect console prerequisite (one-time, cannot be done from CI):
+#   The API client MUST be team-level. Users and permissions -> API key ->
+#   Connect API -> Create, with **Project = N/A**.
+#   A project-scoped client (JSON: "type": "project_client_id") authenticates
+#   fine and is then refused by every publishing endpoint with 403
+#   "client token authorization fail.", whatever role it holds — publishing is an
+#   account-level resource. A correct client says "type": "team_client_id".
+#   This cost ten failed runs; check the client TYPE before suspecting anything else.
 #
 # All HUAWEI_* secrets live in the `production` environment, not at repo level,
 # so this job must keep `environment: production`.

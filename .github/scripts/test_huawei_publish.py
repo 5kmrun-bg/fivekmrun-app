@@ -7,6 +7,7 @@ exercise against the real AppGallery Connect API from a test.
 
 import json
 import unittest
+from unittest import mock
 
 import huawei_publish as hp
 
@@ -45,8 +46,12 @@ class TokenAuthorityFailureTest(unittest.TestCase):
             hp.check("upload-url/for-obs", self.resp)
         message = str(caught.exception)
         self.assertIn("not authorised to publish", message)
-        self.assertIn("API management", message)
-        self.assertIn("team/project level", message)
+        # The message must name the actual cause: a project-scoped client. Earlier
+        # wording listed three vague prerequisites and sent us hunting the role,
+        # which was never wrong. Ten runs failed before the client type was checked.
+        self.assertIn("project_client_id", message)
+        self.assertIn("team_client_id", message)
+        self.assertIn("Project = N/A", message)
 
     def test_401_variant_is_caught_too(self):
         resp = FakeResponse(401, text="", reason="client token auth failed")
@@ -81,6 +86,47 @@ class AgcBusinessErrorTest(unittest.TestCase):
     def test_success_without_a_ret_block_passes(self):
         resp = FakeResponse(200, text=json.dumps({"access_token": "t"}))
         self.assertEqual(hp.check("token", resp)["access_token"], "t")
+
+
+class EndpointShapeTest(unittest.TestCase):
+    """The AGC endpoints are easy to get subtly wrong and only fail at runtime.
+
+    Regression: attach_file POSTed to /publish/v2/app-file-info/update, which does
+    not exist and returned 404. The real endpoint is PUT /publish/v2/app-file-info.
+    Auth failed on every earlier run, so this was never reached until run
+    30205429816 uploaded the APK to OBS successfully and then 404'd.
+    """
+
+    OK = FakeResponse(200, text=json.dumps({"ret": {"code": 0}}), reason="OK")
+
+    def test_attach_file_puts_to_app_file_info(self):
+        with mock.patch.object(hp, "requests") as req:
+            req.put.return_value = self.OK
+            hp.attach_file({}, "109680919", {"url": "https://obs/x.apk?sig=1"}, "x.apk", 1, "ab", "1")
+
+        self.assertTrue(req.put.called, "app-file-info must be a PUT")
+        self.assertFalse(req.post.called, "app-file-info must not be POSTed")
+        url = req.put.call_args[0][0]
+        self.assertTrue(url.endswith("/publish/v2/app-file-info"), f"wrong endpoint: {url}")
+
+    def test_attach_file_strips_the_obs_query_string(self):
+        with mock.patch.object(hp, "requests") as req:
+            req.put.return_value = self.OK
+            hp.attach_file({}, "1", {"url": "https://obs/x.apk?sig=secret"}, "x.apk", 7, "ab", "1")
+
+        body = req.put.call_args[1]["json"]
+        self.assertEqual(body["files"][0]["fileDestUrl"], "https://obs/x.apk")
+
+    def test_submit_posts_to_app_submit(self):
+        with mock.patch.object(hp, "requests") as req:
+            req.post.return_value = self.OK
+            hp.submit({}, "109680919", "1", "note")
+
+        url = req.post.call_args[0][0]
+        self.assertTrue(url.endswith("/publish/v2/app-submit"), f"wrong endpoint: {url}")
+        params = req.post.call_args[1]["params"]
+        self.assertEqual(params["appId"], "109680919")
+        self.assertEqual(params["releaseType"], "1")
 
 
 class MalformedResponseTest(unittest.TestCase):

@@ -5,7 +5,7 @@ Sequence:
   1. POST /oauth2/v1/token                  -> access token
   2. GET  /publish/v2/upload-url/for-obs    -> a one-shot OBS upload URL
   3. PUT  <obs url>                         -> the APK bytes
-  4. POST /publish/v2/app-file-info/update  -> attach the uploaded file to the draft
+  4. PUT  /publish/v2/app-file-info         -> attach the uploaded file to the draft
   5. POST /publish/v2/app-submit            -> put the draft into Huawei's review queue
 
 Every AGC call logs its HTTP status and response body before it is checked, so a
@@ -18,16 +18,22 @@ Optional:
   HUAWEI_APP_VERSION  - only used to make error messages legible
   HUAWEI_RELEASE_TYPE - 1 = full release (default)
 
-AppGallery Connect prerequisites for the credentials (console-side, one time):
-  * The AppGallery Connect API must be enabled for the account
-    (Users and permissions -> API management).
-  * The API client behind HUAWEI_CLIENT_ID must be team/project level, not personal.
-  * That client needs a publishing role (App administrator, or equivalent with
-    App release rights), scoped to the app matching HUAWEI_APP_ID.
-  A token that authenticates but gets "client token auth failed" (401) or
-  "client token authorization fail." (403) on the first publishing call means one
-  of the three above is missing. Both were observed on this repo before the
-  console was configured.
+AppGallery Connect prerequisite for the credentials (console-side, one time):
+
+  The API client MUST be team-level. Create it under
+  Users and permissions -> API key -> Connect API, and set Project to N/A.
+
+  A client with a project set (its JSON says `"type": "project_client_id"` and
+  carries a project_id) authenticates fine and is then refused by EVERY
+  publishing endpoint with 403 "client token authorization fail." — including
+  account-wide ones that take no appId at all. Publishing is an account-level
+  resource, so a project-scoped client cannot reach it no matter which role it
+  holds. A correct client's JSON says `"type": "team_client_id"` and has no
+  project_id.
+
+  This cost this repo ten failed runs. The role was never the problem: both
+  original clients held administrator and both failed identically. If you see
+  that 403, check the client's TYPE before anything else.
 """
 
 import hashlib
@@ -72,11 +78,12 @@ def check(label, resp):
         raise PublishError(
             f"{label} was rejected: the OAuth token is valid but is not authorised to "
             f"publish this app.\n"
-            f"This is an AppGallery Connect console configuration problem, not a bad secret. Check:\n"
-            f"  1. The AppGallery Connect API is enabled (Users and permissions -> API management).\n"
-            f"  2. The API client behind HUAWEI_CLIENT_ID is team/project level, not personal.\n"
-            f"  3. That client has a publishing role (App administrator / App release) scoped to "
-            f"HUAWEI_APP_ID.\n"
+            f"This is an AppGallery Connect console configuration problem, not a bad secret.\n"
+            f"Almost always the API client is PROJECT-level. Publishing is account-level, so a\n"
+            f"project-scoped client is refused by every publishing endpoint regardless of role.\n"
+            f"Fix: Users and permissions -> API key -> Connect API -> Create, with Project = N/A.\n"
+            f"A correct client's JSON says \"type\": \"team_client_id\" and has no project_id;\n"
+            f"a broken one says \"type\": \"project_client_id\".\n"
             f"Response: {describe(resp)}"
         )
 
@@ -186,8 +193,10 @@ def upload_to_obs(url_info, apk_path):
 
 
 def attach_file(headers, app_id, url_info, file_name, file_size, sha256, release_type):
-    resp = requests.post(
-        f"{DOMAIN}/publish/v2/app-file-info/update",
+    # PUT /publish/v2/app-file-info — not POST, and no /update suffix. The wrong
+    # form returns a bare 404 and was only reachable once auth started working.
+    resp = requests.put(
+        f"{DOMAIN}/publish/v2/app-file-info",
         json={
             "fileType": 5,
             "files": [
@@ -203,7 +212,7 @@ def attach_file(headers, app_id, url_info, file_name, file_size, sha256, release
         headers={**headers, "Content-Type": "application/json"},
         timeout=120,
     )
-    check("app-file-info/update", resp)
+    check("app-file-info", resp)
     print("Upload committed successfully", flush=True)
 
 
