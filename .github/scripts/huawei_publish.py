@@ -46,18 +46,29 @@ class PublishError(Exception):
     """A failure we can explain to a human without a traceback."""
 
 
-def log_response(label, resp):
+def describe(resp):
+    """Status, reason phrase and body.
+
+    The reason phrase matters. AGC returns the 403 authorisation refusal with an
+    EMPTY body and puts its only diagnostic ("client token authorization fail.")
+    in the reason phrase, so logging the body alone throws that away.
+    """
     body = resp.text
     if len(body) > 4000:
         body = body[:4000] + "... [truncated]"
-    print(f"{label}: HTTP {resp.status_code} {body}", flush=True)
+    return f"HTTP {resp.status_code} {resp.reason or ''} {body}".rstrip()
+
+
+def log_response(label, resp):
+    print(f"{label}: {describe(resp)}", flush=True)
 
 
 def check(label, resp):
     """Fail on an HTTP error or on a non-zero AGC ret.code."""
     log_response(label, resp)
 
-    if resp.status_code in (401, 403) or "client token" in resp.text.lower():
+    detail = f"{resp.reason or ''} {resp.text}".lower()
+    if resp.status_code in (401, 403) or "client token" in detail:
         raise PublishError(
             f"{label} was rejected: the OAuth token is valid but is not authorised to "
             f"publish this app.\n"
@@ -66,16 +77,16 @@ def check(label, resp):
             f"  2. The API client behind HUAWEI_CLIENT_ID is team/project level, not personal.\n"
             f"  3. That client has a publishing role (App administrator / App release) scoped to "
             f"HUAWEI_APP_ID.\n"
-            f"Response: HTTP {resp.status_code} {resp.text}"
+            f"Response: {describe(resp)}"
         )
 
     if not resp.ok:
-        raise PublishError(f"{label} failed: HTTP {resp.status_code} {resp.text}")
+        raise PublishError(f"{label} failed: {describe(resp)}")
 
     try:
         payload = resp.json()
     except ValueError:
-        raise PublishError(f"{label} returned a non-JSON body: {resp.text}")
+        raise PublishError(f"{label} returned a non-JSON body: {describe(resp)}")
 
     ret = payload.get("ret") or {}
     code = ret.get("code", 0)
@@ -122,7 +133,7 @@ def get_token(client_id, client_secret):
     payload = check("token", resp)
     token = payload.get("access_token")
     if not token:
-        raise PublishError(f"token call returned no access_token: {resp.text}")
+        raise PublishError(f"token call returned no access_token: {describe(resp)}")
     print("Token obtained successfully", flush=True)
     return token
 
@@ -143,7 +154,7 @@ def get_upload_url(headers, app_id, file_name, file_size, sha256, release_type):
     payload = check("upload-url/for-obs", resp)
     url_info = payload.get("urlInfo")
     if not url_info or not url_info.get("url"):
-        raise PublishError(f"upload-url/for-obs returned no urlInfo: {resp.text}")
+        raise PublishError(f"upload-url/for-obs returned no urlInfo: {describe(resp)}")
     print("Upload URL obtained", flush=True)
     return url_info
 
@@ -161,7 +172,7 @@ def upload_to_obs(url_info, apk_path):
             if resp.ok:
                 print("File uploaded to OBS", flush=True)
                 return
-            last_error = f"HTTP {resp.status_code} {resp.text}"
+            last_error = describe(resp)
         except requests.RequestException as exc:
             last_error = str(exc)
             print(f"OBS upload attempt {attempt} raised: {exc}", flush=True)
