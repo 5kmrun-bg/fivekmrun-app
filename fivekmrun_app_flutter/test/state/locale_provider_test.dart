@@ -31,18 +31,30 @@ void main() {
 
     final provider = await loadedProvider();
 
-    expect(AppLocalizations.supportedLocales, contains(provider.locale));
+    expect(provider.locale, defaultLocale);
   });
 
-  test('picks a supported locale when nothing is saved', () async {
+  test('defaults to Bulgarian when nothing is saved', () async {
     SharedPreferences.setMockInitialValues({});
 
     final provider = await loadedProvider();
 
-    expect(AppLocalizations.supportedLocales, contains(provider.locale));
+    expect(provider.locale, const Locale('bg'));
   });
 
-  test('persists the resolved locale when nothing was saved', () async {
+  test('the default ignores the device locale', () async {
+    // The host running these tests is en_US (see Platform.localeName), so a
+    // device-matching implementation would resolve to English here. 5kmRun's
+    // members largely run English phones, and the app should still open in
+    // Bulgarian for them.
+    SharedPreferences.setMockInitialValues({});
+
+    final provider = await loadedProvider();
+
+    expect(provider.locale, isNot(const Locale('en')));
+  });
+
+  test('persists the default so it is stable across launches', () async {
     SharedPreferences.setMockInitialValues({});
 
     final provider = await loadedProvider();
@@ -67,7 +79,7 @@ void main() {
     expect(preferences.getString('locale'), 'en');
   });
 
-  test('the fallback locale is one the app actually ships', () {
-    expect(AppLocalizations.supportedLocales, contains(fallbackLocale));
+  test('the default locale is one the app actually ships', () {
+    expect(AppLocalizations.supportedLocales, contains(defaultLocale));
   });
 }

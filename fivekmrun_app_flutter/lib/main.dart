@@ -81,17 +81,19 @@ class MyApp extends StatelessWidget {
             navigatorKey: MyApp.navKey,
             debugShowCheckedModeBanner: false,
             title: '5kmRun.bg',
-            locale: localeProvider.locale,
+            // `locale` is null for the first frames, while LocaleProvider
+            // reads the saved preference. Leaving it null there would let
+            // Flutter resolve against the *device* locale, so an English
+            // phone would flash an English UI before settling on the saved
+            // choice — hence the explicit default.
+            locale: localeProvider.locale ?? defaultLocale,
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            // Kept in sync with the .arb files by the generator. Order
-            // matters: while LocaleProvider is still reading the saved
-            // preference, `locale` is null and Flutter falls back to the
-            // first entry — bg, which is the intended default.
+            // Kept in sync with the .arb files by the generator.
             supportedLocales: AppLocalizations.supportedLocales,
             themeMode: ThemeMode.dark,
             darkTheme: ThemeData(

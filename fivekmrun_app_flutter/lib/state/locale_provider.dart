@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Used when neither a saved preference nor the device locale names a
-/// language the app ships translations for.
-const Locale fallbackLocale = Locale("bg");
+/// The language the app starts in until the user picks another one in
+/// Settings.
+///
+/// Deliberately not derived from the device locale: 5kmRun is a Bulgarian
+/// club, and most of its members run phones set to English, so matching the
+/// device would open the app in English for people who never asked for it.
+/// English is opt-in through the switcher.
+const Locale defaultLocale = Locale("bg");
 
 class LocaleProvider extends ChangeNotifier {
   Locale? _locale;
@@ -34,22 +38,9 @@ class LocaleProvider extends ChangeNotifier {
         AppLocalizations.supportedLocales.contains(Locale(localeCode))) {
       _locale = Locale(localeCode);
     } else {
-      Locale platformLocale = _getLocale(Platform.localeName);
-
-      _locale = (AppLocalizations.supportedLocales.contains(platformLocale))
-          ? platformLocale
-          : fallbackLocale;
+      _locale = defaultLocale;
       await preferences.setString('locale', _locale!.languageCode);
     }
     notifyListeners();
-  }
-
-  Locale _getLocale(String localeString) {
-    if (localeString.contains('_') || localeString.contains('-')) {
-      var parts = localeString.split(RegExp(r'[_-]'));
-      return Locale(parts.first);
-    } else {
-      return Locale(localeString);
-    }
   }
 }
