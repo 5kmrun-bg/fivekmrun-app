@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/barcode_page.dart';
@@ -31,6 +32,14 @@ void main() async {
   await Firebase.initializeApp();
 
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+  // Which store this build was published to. Compile-time, so no runtime cost and
+  // no HMS/GMS detection: each release workflow passes --dart-define=STORE=...
+  // Local and debug builds stay 'unknown' rather than polluting a real store's
+  // numbers. Note this only reaches Analytics on devices with Google Play
+  // services, so the huawei segment undercounts GMS-less Huawei devices.
+  const store = String.fromEnvironment('STORE', defaultValue: 'unknown');
+  await FirebaseAnalytics.instance.setUserProperty(name: 'store', value: store);
 
   // Pass all uncaught errors to Crashlytics.
   final originalOnError = FlutterError.onError;
