@@ -10,6 +10,11 @@ import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
 import 'package:fivekmrun_flutter/constants.dart';
 import 'package:fivekmrun_flutter/custom_icons.dart';
+import 'package:fivekmrun_flutter/events/future_events.dart'
+    show XLRegistrationSection;
+import 'package:fivekmrun_flutter/home.dart';
+import 'package:fivekmrun_flutter/state/event_model.dart';
+import 'package:fivekmrun_flutter/state/events_resource.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
@@ -41,6 +46,13 @@ class ProfileDashboard extends StatelessWidget {
     final hasSelfieRuns = runs != null &&
         runs.where((r) => r.runType == RunType.selfie).length > 0;
     final xlStats = XLStats.fromRuns(runs ?? <Run>[]);
+    // Promote the next XL event to anyone who has ever run one. The events
+    // are already fetched for the events tab (AllFutureEventsResource is
+    // loaded on home), so this adds no request.
+    final nextXLEvent = xlStats == null
+        ? null
+        : nextUpcomingXLEvent(
+            Provider.of<AllFutureEventsResource>(context).value);
 
     final goToSettings = () {
       Navigator.of(context, rootNavigator: true).pushNamed("settings");
@@ -158,8 +170,8 @@ class ProfileDashboard extends StatelessWidget {
                           ]),
                           MilestoneTile(
                               value: runsRes.value
-                                      ?.where((r) =>
-                                          r.runType == RunType.official)
+                                      ?.where(
+                                          (r) => r.runType == RunType.official)
                                       .length
                                       .toInt() ??
                                   0,
@@ -186,7 +198,8 @@ class ProfileDashboard extends StatelessWidget {
                 if (hasSelfieRuns)
                   this.buildRunsCards(
                       runsRes.bestSelfieRun!, runsRes.lastSelfieRun!, "selfie"),
-                if (xlStats != null) this.buildXLStatsCard(xlStats),
+                if (xlStats != null)
+                  this.buildXLStatsCard(xlStats, nextXLEvent),
                 if (hasAnyRuns) this.buildRunsChartCard(runs),
                 if (!runsRes.loading && !hasAnyRuns)
                   Row(
@@ -227,55 +240,154 @@ class ProfileDashboard extends StatelessWidget {
     );
   }
 
-  Widget buildXLStatsCard(XLStats stats) {
+  Widget buildXLStatsCard(XLStats stats, XLEvent? nextEvent) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Builder(builder: (context) {
-          final theme = Theme.of(context);
-          final labelStyle = theme.textTheme.bodyMedium;
-          final valueStyle = theme.textTheme.titleLarge
-              ?.copyWith(color: theme.colorScheme.secondary);
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Builder(builder: (context) {
+              final theme = Theme.of(context);
+              final labelStyle = theme.textTheme.bodyMedium;
+              final valueStyle = theme.textTheme.titleLarge
+                  ?.copyWith(color: theme.colorScheme.secondary);
 
-          Widget stat(String value, String label) {
-            return Column(
-              children: <Widget>[
-                Text(value, style: valueStyle),
-                Text(label, style: labelStyle, textAlign: TextAlign.center),
-              ],
-            );
-          }
+              Widget stat(String value, String label) {
+                return Column(
+                  children: <Widget>[
+                    Text(value, style: valueStyle),
+                    Text(label, style: labelStyle, textAlign: TextAlign.center),
+                  ],
+                );
+              }
 
-          final km = stats.totalDistanceMeters != null
-              ? (stats.totalDistanceMeters! / 1000).toStringAsFixed(1)
-              : null;
+              // Deliberately lighter than ListTileRow (which styles tile
+              // *titles*): this is secondary context under the stats, so it
+              // uses a smaller icon and smaller body text.
+              final rowTextStyle =
+                  theme.textTheme.bodySmall?.copyWith(color: Colors.white);
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text("XLrun", style: theme.textTheme.titleSmall),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  stat(stats.runsThisYear.toString(), "тази година"),
-                  stat(stats.runsAllTime.toString(), "общо"),
-                  if (km != null) stat(km, "км общо"),
-                ],
-              ),
-              if (stats.mostRecentRun != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    (stats.mostRecentRun!.location ?? "").isNotEmpty
-                        ? "Последно: ${stats.mostRecentRun!.displayDate} · ${stats.mostRecentRun!.location}"
-                        : "Последно: ${stats.mostRecentRun!.displayDate}",
-                    style: labelStyle,
+              // [label] is always plain text; only [linkText] is tappable,
+              // and only it carries the chevron marking the row as a link.
+              Widget metaRow(IconData icon, String label,
+                  {String? linkText, VoidCallback? onTap}) {
+                return Padding(
+                  // The extra 4 on the left lines this row up with the
+                  // registration strip below, which sits outside the card's
+                  // 12px padding and uses 16 of its own.
+                  padding: const EdgeInsets.fromLTRB(4, 3, 0, 3),
+                  child: Row(
+                    children: <Widget>[
+                      // Boxed to the registration header's 18px icon width so
+                      // both labels start at the same x, while the glyph
+                      // itself stays smaller and less prominent.
+                      SizedBox(
+                        width: 18,
+                        child: Icon(icon,
+                            size: 14, color: theme.colorScheme.secondary),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        label,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.secondary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (linkText != null)
+                        Flexible(
+                          child: InkWell(
+                            onTap: onTap,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Flexible(
+                                  child: Text(
+                                    linkText,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: rowTextStyle,
+                                  ),
+                                ),
+                                // The chevron is what actually marks this as
+                                // tappable — colour alone reads as emphasis.
+                                Icon(Icons.chevron_right,
+                                    size: 16,
+                                    color: theme.colorScheme.secondary),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                ),
-            ],
-          );
-        }),
+                );
+              }
+
+              String? km(int? meters) =>
+                  meters != null ? (meters / 1000).toStringAsFixed(1) : null;
+
+              final kmThisYear = km(stats.distanceThisYearMeters);
+              final kmAllTime = km(stats.totalDistanceMeters);
+
+              final lastRun = stats.mostRecentRun;
+
+              return Column(
+                children: <Widget>[
+                  Text("XLrun", style: theme.textTheme.titleSmall),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      // The this-year pair is hidden entirely when there are no
+                      // runs this year — showing "0 тази година" next to a hidden
+                      // "км тази година" reads as inconsistent.
+                      if (stats.runsThisYear > 0) ...<Widget>[
+                        Expanded(
+                            child: stat(
+                                stats.runsThisYear.toString(), "тази година")),
+                        if (kmThisYear != null)
+                          Expanded(child: stat(kmThisYear, "км тази година")),
+                      ],
+                      Expanded(
+                          child: stat(stats.runsAllTime.toString(), "общо")),
+                      if (kmAllTime != null)
+                        Expanded(child: stat(kmAllTime, "км общо")),
+                    ],
+                  ),
+                  // Splits the card into its two halves: the aggregate
+                  // numbers above, the last run below.
+                  if (lastRun != null) const Divider(height: 20),
+                  if (lastRun != null)
+                    metaRow(
+                      Icons.terrain,
+                      "Последно: ",
+                      linkText: (lastRun.location ?? "").isNotEmpty
+                          ? "${lastRun.displayDate} · ${lastRun.location}"
+                          : lastRun.displayDate,
+                      onTap: () {
+                        final tabHelper = Provider.of<TabNavigationHelper>(
+                            context,
+                            listen: false);
+                        tabHelper.selectTab(AppTab.runs);
+                        tabHelper.pushToTab(AppTab.runs, "/run-details",
+                            arguments: lastRun);
+                      },
+                    ),
+                ],
+              );
+            }),
+          ),
+          // The strip doubles as the "next event" teaser here: its header
+          // carries the event's location and date, so no separate line is
+          // needed above it.
+          if (nextEvent != null && nextEvent.registrationLinks.isNotEmpty)
+            XLRegistrationSection(
+              links: nextEvent.registrationLinks,
+              subtitle:
+                  "${nextEvent.location}, ${dateFromat.format(nextEvent.date)}",
+            ),
+        ],
       ),
     );
   }
