@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:fivekmrun_flutter/common/locale_switch.dart';
 import 'package:fivekmrun_flutter/login/login_with_id.dart';
 import 'package:fivekmrun_flutter/login/login_with_username.dart';
 import 'package:flutter/material.dart';
@@ -24,40 +25,49 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Container(
-            width: 220,
-            height: 400,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                this._buildLogo(),
-                SizedBox(height: 10),
-                Spacer(),
-                this.loginWithId ? LoginWithId() : LoginWithUsername(),
-                SizedBox(height: 4),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    child: Text(this.loginWithId
-                        ? l10n.login_widget_login_with_password
-                        : l10n.login_widget_login_with_id),
-                    onPressed: this._toggleLogin,
-                  ),
+        child: Stack(
+          children: <Widget>[
+            Center(
+              child: Container(
+                width: 220,
+                height: 400,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    this._buildLogo(),
+                    SizedBox(height: 10),
+                    Spacer(),
+                    this.loginWithId ? LoginWithId() : LoginWithUsername(),
+                    SizedBox(height: 4),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        child: Text(this.loginWithId
+                            ? l10n.login_widget_login_with_password
+                            : l10n.login_widget_login_with_id),
+                        onPressed: this._toggleLogin,
+                      ),
+                    ),
+                    Spacer(),
+                    Text(l10n.login_widget_no_registration),
+                    GestureDetector(
+                      onTap: () => _loadRegistrationScreen(),
+                      child: Text(l10n.login_widget_register,
+                          style: TextStyle(
+                              color: accentColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold)),
+                    )
+                  ],
                 ),
-                Spacer(),
-                Text(l10n.login_widget_no_registration),
-                GestureDetector(
-                  onTap: () => _loadRegistrationScreen(),
-                  child: Text(l10n.login_widget_register,
-                      style: TextStyle(
-                          color: accentColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold)),
-                )
-              ],
+              ),
             ),
-          ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: LocaleSwitcherWidget(),
+            ),
+          ],
         ),
       ),
     );

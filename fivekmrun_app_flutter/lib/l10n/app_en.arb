@@ -12,6 +12,7 @@
     "settings_page_settings":"Settings",
     "settings_page_strava":"Strava integration",
     "settings_page_language":"Language",
+    "locale_switcher_semantics_label": "Switch language",
     "settings_page_exit":"Exit",
 
     "profile_page_last_run": "Last ",

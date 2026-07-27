@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../localized_app.dart';
 
-Future<void> pumpSwitcher(WidgetTester tester) async {
+Future<LocaleProvider> pumpSwitcher(WidgetTester tester) async {
   final provider = LocaleProvider();
   await tester.pumpWidget(localizedApp(
     ChangeNotifierProvider<LocaleProvider>.value(
@@ -18,47 +18,70 @@ Future<void> pumpSwitcher(WidgetTester tester) async {
   ));
   // Let the provider finish reading the saved preference.
   await tester.pumpAndSettle();
+  return provider;
 }
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('offers one entry per supported locale', (tester) async {
+  testWidgets('shows the Bulgarian flag when the active locale is bg',
+      (tester) async {
     SharedPreferences.setMockInitialValues({'locale': 'bg'});
 
     await pumpSwitcher(tester);
-    await tester.tap(find.byType(DropdownButton<Locale>));
-    await tester.pumpAndSettle();
 
-    for (final locale in AppLocalizations.supportedLocales) {
-      // Two per locale once the menu is open: the button's own child and the
-      // menu item.
-      expect(find.text(locale.toString().toUpperCase()), findsWidgets,
-          reason: 'no entry for $locale');
-    }
+    final image = tester.widget<Image>(find.byType(Image));
+    expect((image.image as AssetImage).assetName, 'assets/flag_bg.png');
   });
 
-  testWidgets('shows the active locale on the closed button', (tester) async {
+  testWidgets('shows the UK flag when the active locale is en',
+      (tester) async {
     SharedPreferences.setMockInitialValues({'locale': 'en'});
 
     await pumpSwitcher(tester);
 
-    expect(find.text('EN'), findsOneWidget);
-    expect(find.text('BG'), findsNothing);
+    final image = tester.widget<Image>(find.byType(Image));
+    expect((image.image as AssetImage).assetName, 'assets/flag_gb.png');
   });
 
-  testWidgets('picking a locale switches the app language', (tester) async {
+  testWidgets('tapping the flag switches to the other supported locale',
+      (tester) async {
     SharedPreferences.setMockInitialValues({'locale': 'bg'});
 
-    await pumpSwitcher(tester);
-    await tester.tap(find.byType(DropdownButton<Locale>));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('EN').last);
+    final provider = await pumpSwitcher(tester);
+
+    await tester.tap(find.byType(GestureDetector));
     await tester.pumpAndSettle();
 
-    expect(find.text('EN'), findsOneWidget);
+    expect(provider.locale, const Locale('en'));
+
+    final image = tester.widget<Image>(find.byType(Image));
+    expect((image.image as AssetImage).assetName, 'assets/flag_gb.png');
 
     final preferences = await SharedPreferences.getInstance();
     expect(preferences.getString('locale'), 'en');
+  });
+
+  testWidgets('tapping again toggles back to Bulgarian', (tester) async {
+    SharedPreferences.setMockInitialValues({'locale': 'en'});
+
+    final provider = await pumpSwitcher(tester);
+
+    await tester.tap(find.byType(GestureDetector));
+    await tester.pumpAndSettle();
+
+    expect(provider.locale, const Locale('bg'));
+  });
+
+  testWidgets('exposes a semantics label for accessibility', (tester) async {
+    SharedPreferences.setMockInitialValues({'locale': 'bg'});
+
+    await pumpSwitcher(tester);
+
+    final l10n = await AppLocalizations.delegate.load(const Locale('bg'));
+    expect(
+      find.bySemanticsLabel(l10n.locale_switcher_semantics_label),
+      findsOneWidget,
+    );
   });
 }
