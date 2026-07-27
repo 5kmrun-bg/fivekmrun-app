@@ -7,6 +7,66 @@ import 'package:strava_client/strava_client.dart';
 
 typedef StravaCallback<T> = Future<T> Function(StravaClient strava);
 
+/// Describes an error thrown by the strava_client package for logging.
+///
+/// [Fault] (the package's error model for a failed API call) has no
+/// `toString()` override, so an uncaught one only ever logs as the useless
+/// "Instance of 'Fault'". This surfaces the actual message/error codes
+/// instead, falling back to `error.toString()` for anything else.
+String describeStravaError(Object error) {
+  if (error is Fault) {
+    final codes = (error.errors ?? [])
+        .map((e) => [e.resource, e.field, e.code]
+            .where((part) => part != null)
+            .join(":"))
+        .where((s) => s.isNotEmpty)
+        .join(", ");
+    final message = error.message ?? "no message";
+    return codes.isEmpty ? message : "$message ($codes)";
+  }
+  return error.toString();
+}
+
+/// Reports an error/stackTrace pair with a human-readable [reason], e.g. to
+/// Crashlytics. Injected so callers can be unit-tested without Firebase.
+typedef StravaErrorReporter = void Function(
+    Object error, StackTrace stackTrace, String reason);
+
+void _reportStravaErrorToCrashlytics(
+    Object error, StackTrace stackTrace, String reason) {
+  FirebaseCrashlytics.instance.recordError(error, stackTrace, reason: reason);
+}
+
+/// Fetches the authenticated athlete via [getAthlete], re-authenticating and
+/// retrying once if the first attempt fails (e.g. an expired/revoked token).
+///
+/// Both attempts are guarded: if [getAthlete] fails again after
+/// [reAuthenticate] runs, this returns `null` instead of letting the second
+/// failure escape unhandled, and each failure is reported via [reportError]
+/// with the underlying message rather than a bare "Instance of 'Fault'".
+Future<DetailedAthlete?> fetchAuthenticatedAthleteWithRetry(
+  Future<DetailedAthlete> Function() getAthlete,
+  Future<void> Function() reAuthenticate, {
+  StravaErrorReporter reportError = _reportStravaErrorToCrashlytics,
+}) async {
+  try {
+    return await getAthlete();
+  } catch (error, stackTrace) {
+    reportError(error, stackTrace,
+        "Strava getAuthenticatedAthlete failed: ${describeStravaError(error)}");
+  }
+
+  await reAuthenticate();
+
+  try {
+    return await getAthlete();
+  } catch (error, stackTrace) {
+    reportError(error, stackTrace,
+        "Strava getAuthenticatedAthlete retry failed: ${describeStravaError(error)}");
+    return null;
+  }
+}
+
 class StravaResource extends ChangeNotifier {
   static StravaClient? strava;
 
@@ -37,13 +97,16 @@ class StravaResource extends ChangeNotifier {
   }
 
   Future<bool> _assureAuthenticated(StravaClient strava) async {
-    DetailedAthlete athlete;
-    try {
-      athlete = await strava.athletes.getAuthenticatedAthlete();
-    } catch (e) {
-      this.deAuthenticate();
-      this.authenticate();
-      athlete = await strava.athletes.getAuthenticatedAthlete();
+    final athlete = await fetchAuthenticatedAthleteWithRetry(
+      strava.athletes.getAuthenticatedAthlete,
+      () async {
+        await this.deAuthenticate();
+        await this.authenticate();
+      },
+    );
+
+    if (athlete == null) {
+      return false;
     }
 
     FirebaseCrashlytics.instance.setCustomKey("stravaUserID", athlete.id);
@@ -67,9 +130,18 @@ class StravaResource extends ChangeNotifier {
               redirectUrl: "fivekmrun://redirect/",
               callbackUrlScheme: "fivekmrun")
           .then((t) => true)
-          .onError((error, stackTrace) {
-        FirebaseCrashlytics.instance.recordError(error, stackTrace);
-        strava.authentication.deAuthorize();
+          .onError((error, stackTrace) async {
+        FirebaseCrashlytics.instance.recordError(error, stackTrace,
+            reason: "Strava authenticate failed: "
+                "${describeStravaError(error!)}");
+        try {
+          await strava.authentication.deAuthorize();
+        } catch (deAuthorizeError, deAuthorizeStackTrace) {
+          FirebaseCrashlytics.instance.recordError(
+              deAuthorizeError, deAuthorizeStackTrace,
+              reason: "Strava deAuthorize after failed authenticate failed: "
+                  "${describeStravaError(deAuthorizeError)}");
+        }
         return false;
       });
 
@@ -79,7 +151,7 @@ class StravaResource extends ChangeNotifier {
     });
   }
 
-  void deAuthenticate() async {
+  Future<void> deAuthenticate() async {
     return _withStrava((strava) async {
       FirebaseCrashlytics.instance.log("Strava deAuthenticate");
       FirebaseCrashlytics.instance.setCustomKey("stravaUserID", -1);
