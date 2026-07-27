@@ -133,4 +133,119 @@ void main() {
       expect(summary.fastestSplit.elapsedTime, 1150);
     });
   });
+
+  group('describeStravaError', () {
+    test('describes a Fault by its message', () {
+      final fault = Fault(message: "Authorization Error");
+
+      expect(describeStravaError(fault), "Authorization Error");
+    });
+
+    test('appends error codes from a Fault when present', () {
+      final fault = Fault(message: "Bad Request", errors: [
+        Error(resource: "Application", field: "refresh_token", code: "invalid")
+      ]);
+
+      expect(describeStravaError(fault),
+          "Bad Request (Application:refresh_token:invalid)");
+    });
+
+    test('falls back to toString for a non-Fault error', () {
+      final error = Exception("network unreachable");
+
+      expect(describeStravaError(error), error.toString());
+    });
+  });
+
+  group('fetchAuthenticatedAthleteWithRetry', () {
+    DetailedAthlete athlete(int id) => DetailedAthlete(
+          id: id,
+          username: "runner",
+          resourceState: 3,
+          firstname: "First",
+          lastname: "Last",
+          city: "Sofia",
+          state: "",
+          country: "Bulgaria",
+          sex: "M",
+          premium: false,
+          createdAt: null,
+          updatedAt: null,
+          badgeTypeId: 0,
+          profileMedium: null,
+          profile: null,
+          friend: null,
+          follower: null,
+          followerCount: 0,
+          friendCount: 0,
+          mutualFriendCount: 0,
+          athleteType: 0,
+          datePreference: "%m/%d/%Y",
+          measurementPreference: "meters",
+          clubs: [],
+          ftp: null,
+          weight: null,
+          bikes: [],
+          shoes: [],
+        );
+
+    test('returns the athlete without retrying when the first call succeeds',
+        () async {
+      var reAuthenticateCalls = 0;
+
+      final result = await fetchAuthenticatedAthleteWithRetry(
+        () async => athlete(42),
+        () async => reAuthenticateCalls++,
+        reportError: (_, __, ___) {},
+      );
+
+      expect(result?.id, 42);
+      expect(reAuthenticateCalls, 0);
+    });
+
+    test('re-authenticates and retries once when the first call throws',
+        () async {
+      var callCount = 0;
+      var reAuthenticateCalls = 0;
+      final reportedReasons = <String>[];
+
+      final result = await fetchAuthenticatedAthleteWithRetry(
+        () async {
+          callCount++;
+          if (callCount == 1) {
+            throw Fault(message: "Authorization Error");
+          }
+          return athlete(7);
+        },
+        () async => reAuthenticateCalls++,
+        reportError: (_, __, reason) => reportedReasons.add(reason),
+      );
+
+      expect(result?.id, 7);
+      expect(reAuthenticateCalls, 1);
+      expect(reportedReasons, hasLength(1));
+      expect(reportedReasons.single, contains("Authorization Error"));
+    });
+
+    // Regression test for the unhandled 'Fault' exception (#167): before the
+    // fix, the retry call was made without a guarding try/catch, so a second
+    // failure escaped as an unhandled exception instead of being reported and
+    // resolved to null.
+    test('returns null instead of throwing when the retry also fails',
+        () async {
+      var reAuthenticateCalls = 0;
+      final reportedReasons = <String>[];
+
+      final result = await fetchAuthenticatedAthleteWithRetry(
+        () async => throw Fault(message: "invalid_grant"),
+        () async => reAuthenticateCalls++,
+        reportError: (_, __, reason) => reportedReasons.add(reason),
+      );
+
+      expect(result, isNull);
+      expect(reAuthenticateCalls, 1);
+      expect(reportedReasons, hasLength(2));
+      expect(reportedReasons.every((r) => r.contains("invalid_grant")), isTrue);
+    });
+  });
 }
