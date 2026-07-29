@@ -73,6 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Row(
               children: <Widget>[
                 Text(AppLocalizations.of(context)!.settings_page_language),
+                SizedBox(width: 12),
                 LocaleSwitcherWidget(),
               ],
             ),
