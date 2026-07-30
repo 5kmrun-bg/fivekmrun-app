@@ -143,10 +143,18 @@ class ProfileDashboard extends StatelessWidget {
                                 )
                               ],
                             ),
-                            Text(
-                              user?.name ?? "",
-                              style: textTheme.titleMedium,
-                              textAlign: TextAlign.center,
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Flexible(
+                                  child: Text(
+                                    user?.name ?? "",
+                                    style: textTheme.titleMedium,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const Icon(Icons.expand_more, size: 18),
+                              ],
                             ),
                             Text(""),
                           ],
