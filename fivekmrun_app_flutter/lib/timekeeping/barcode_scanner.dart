@@ -6,22 +6,26 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
+import 'package:fivekmrun_flutter/timekeeping/manual_entry_dialog.dart';
 import 'dart:convert';
 import 'dart:io';
 
 class ScannedBarcode {
   final String value;
   final DateTime timestamp;
+  final bool isManual;
 
   ScannedBarcode({
     required this.value,
     required this.timestamp,
+    this.isManual = false,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'value': value,
       'timestamp': timestamp.toIso8601String(),
+      'isManual': isManual,
     };
   }
 
@@ -29,6 +33,9 @@ class ScannedBarcode {
     return ScannedBarcode(
       value: json['value'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
+      // Missing in JSON saved by a previous app version — default false so
+      // an in-progress session survives the update.
+      isManual: json['isManual'] as bool? ?? false,
     );
   }
 }
@@ -241,6 +248,83 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     }
   }
 
+  bool _isDuplicateRunnerId(String formattedRunnerId, {int? excludingIndex}) {
+    for (var i = 0; i < scannedValues.length; i += 2) {
+      if (i == excludingIndex) continue;
+      if (scannedValues[i].value == formattedRunnerId) return true;
+    }
+    return false;
+  }
+
+  /// Appends a manually-entered pair, or — if the last scan is a dangling
+  /// runner ID with no place yet — completes that pair instead of starting a
+  /// new one, so pair numbering stays correct.
+  Future<void> _addManually() async {
+    final bool completingDanglingPair = scannedValues.length.isOdd;
+    final String? initialRunnerId =
+        completingDanglingPair ? stripRunnerId(scannedValues.last.value) : null;
+
+    final result = await showDialog<ManualEntryResult>(
+      context: context,
+      builder: (context) => ManualEntryDialog(
+        initialRunnerIdDigits: initialRunnerId,
+        lockRunnerId: completingDanglingPair,
+        isDuplicateRunner: (id) => _isDuplicateRunnerId(id),
+      ),
+    );
+    if (result == null || !mounted) return;
+
+    final now = DateTime.now();
+    setState(() {
+      if (completingDanglingPair) {
+        scannedValues.add(ScannedBarcode(
+            value: result.place, timestamp: now, isManual: true));
+      } else {
+        scannedValues.add(ScannedBarcode(
+            value: result.runnerId!, timestamp: now, isManual: true));
+        scannedValues.add(ScannedBarcode(
+            value: result.place, timestamp: now, isManual: true));
+      }
+      // A stray camera re-detection of the same code right after a manual
+      // entry must not duplicate it.
+      lastScannedValue = scannedValues.last.value;
+    });
+    _saveState();
+  }
+
+  /// Opens the same dialog pre-filled with an existing pair's values so it
+  /// can be corrected in place. Keeps both entries' original timestamps —
+  /// only the values change — preserving chronology and export line order.
+  Future<void> _editPair(int firstIndex, int? secondIndex) async {
+    if (secondIndex == null) {
+      // Tapped the trailing dangling pair — complete it rather than editing
+      // a place entry that doesn't exist yet.
+      return _addManually();
+    }
+
+    final first = scannedValues[firstIndex];
+    final second = scannedValues[secondIndex];
+
+    final result = await showDialog<ManualEntryResult>(
+      context: context,
+      builder: (context) => ManualEntryDialog(
+        initialRunnerIdDigits: stripRunnerId(first.value),
+        initialPlaceDigits: stripPlace(second.value),
+        isDuplicateRunner: (id) =>
+            _isDuplicateRunnerId(id, excludingIndex: firstIndex),
+      ),
+    );
+    if (result == null || !mounted) return;
+
+    setState(() {
+      scannedValues[firstIndex] = ScannedBarcode(
+          value: result.runnerId!, timestamp: first.timestamp, isManual: true);
+      scannedValues[secondIndex] = ScannedBarcode(
+          value: result.place, timestamp: second.timestamp, isManual: true);
+    });
+    _saveState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -249,6 +333,11 @@ class _BarcodeScannerState extends State<BarcodeScanner>
         title: Text(l10n.timekeeping_scanning),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_note),
+            onPressed: _addManually,
+            tooltip: l10n.barcode_scanner_add_manually,
+          ),
           IconButton(
             key: _saveButtonKey,
             icon: const Icon(Icons.save_alt),
@@ -392,6 +481,11 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                           return shouldDelete;
                         },
                         child: ListTile(
+                          onTap: () => _editPair(
+                              firstIndex,
+                              secondIndex < scannedValues.length
+                                  ? secondIndex
+                                  : null),
                           leading: CircleAvatar(
                               child: Text('${_getPairCount() - index}')),
                           title: Text(
@@ -414,6 +508,14 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                                   : FontWeight.normal,
                             ),
                           ),
+                          trailing: (first.isManual ||
+                                  (second?.isManual ?? false))
+                              ? Tooltip(
+                                  message:
+                                      l10n.barcode_scanner_manual_entry_badge,
+                                  child: const Icon(Icons.edit, size: 18),
+                                )
+                              : null,
                         ),
                       );
                     },
