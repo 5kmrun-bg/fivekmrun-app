@@ -1,11 +1,10 @@
+import 'package:fivekmrun_flutter/common/profile_switcher.dart';
 import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/common/results_list.dart';
 import 'package:fivekmrun_flutter/common/select_button.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/offline_results_resource.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
-import 'package:fivekmrun_flutter/state/runs_resource.dart';
-import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -103,12 +102,10 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               child: new Text(
                   AppLocalizations.of(context)!.offline_chart_page_login),
               onPressed: () async {
-                await authResource.logout();
-                Provider.of<UserResource>(context, listen: false).clear();
-                Provider.of<RunsResource>(context, listen: false).clear();
-
-                Navigator.of(context, rootNavigator: true)
-                    .pushNamedAndRemoveUntil("/", (_) => false);
+                Navigator.of(context).pop();
+                final profile = authResource.activeProfile;
+                if (profile == null) return;
+                await authenticateProfileWithPassword(this.context, profile);
               },
             ),
             TextButton(

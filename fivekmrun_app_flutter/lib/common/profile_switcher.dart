@@ -114,6 +114,25 @@ Future<void> removeProfileFromSwitcher(BuildContext context, int userId) async {
   }
 }
 
+/// Prompts for a password to authenticate [profile] — upgrading it from
+/// ID-only to a password profile if needed — reloading per-user resources on
+/// success. Every other saved profile is untouched. Used where a token-gated
+/// action (e.g. Selfie submission) needs the *active* profile specifically
+/// authenticated, as distinct from [switchToProfile]'s expired-token reauth
+/// on a *different* profile. Returns whether authentication succeeded.
+Future<bool> authenticateProfileWithPassword(
+    BuildContext context, Profile profile) async {
+  final reauthed = await showDialog<bool>(
+    context: context,
+    builder: (context) => _ReauthDialog(profile: profile),
+  );
+  if (reauthed != true) return false;
+
+  if (!context.mounted) return true;
+  resetAndReloadForActiveProfile(context);
+  return true;
+}
+
 /// Prompts for a password (and, for a profile with no stored email — a
 /// pre-multi-profile migrated profile — the email too) to refresh an expired
 /// password profile's token, then performs the switch itself. Pops `true` on

@@ -98,23 +98,25 @@ class AuthenticationResource extends ChangeNotifier {
     return true;
   }
 
-  /// Re-authenticates an already-saved password profile whose token has
-  /// expired (or was rejected), refreshing its token and making it active.
-  /// Returns false on a wrong password / failed request — the profile is
-  /// left untouched so the prompt can be retried.
+  /// Re-authenticates an already-saved profile with a password, refreshing
+  /// its token and making it active. Works for a password profile whose
+  /// token has expired (or was rejected) as much as for an ID-only profile
+  /// that needs upgrading to a password one (e.g. to unlock a token-gated
+  /// action like Selfie submission) — either way the profile is updated in
+  /// place by user id, so every other saved profile is untouched. Returns
+  /// false on a wrong password / failed request — the profile is left
+  /// untouched so the prompt can be retried.
   ///
   /// The server authenticates by email, not by user id, so this needs the
   /// profile's email — normally its stored [Profile.username], but that's
   /// null for a profile migrated from the pre-multi-profile single-account
-  /// keys (which never recorded it). [username] lets the caller supply it in
-  /// that case; once supplied it's saved on the profile so this only needs
-  /// asking for it once.
+  /// keys (which never recorded it), or one that started ID-only. [username]
+  /// lets the caller supply it in that case; once supplied it's saved on the
+  /// profile so this only needs asking for it once.
   Future<bool> reauthenticateAndSwitch(int userId, String password,
       {String? username}) async {
     final existing = _profiles.firstWhereOrNull((p) => p.userId == userId);
-    if (existing == null || existing.type != ProfileType.password) {
-      return false;
-    }
+    if (existing == null) return false;
 
     final email = username ?? existing.username;
     if (email == null) return false;
@@ -141,6 +143,7 @@ class AuthenticationResource extends ChangeNotifier {
 
     await this._upsertProfile(
       existing.copyWith(
+        type: ProfileType.password,
         token: token,
         tokenTimestamp: DateTime.now().millisecondsSinceEpoch,
         username: email,
