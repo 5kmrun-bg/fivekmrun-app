@@ -24,6 +24,25 @@ let raceVenues: [RaceVenue] = [
     // route's own page: https://5kmrun.bg/route/94
     RaceVenue(name: "Южен парк, София", latitude: 42.672028, longitude: 23.307750),
 
+    // Западен парк (West Park), Sofia — https://5kmrun.bg/route/95
+    RaceVenue(name: "Западен парк, София", latitude: 42.708978, longitude: 23.275349),
+
+    // гр. Пловдив, Гребна база (Гребен канал 2) — https://5kmrun.bg/route/99
+    RaceVenue(name: "Гребен канал 2, Пловдив", latitude: 42.146111, longitude: 24.713056),
+
+    // Парк Лаута, Пловдив — https://5kmrun.bg/route/100 (site page has no
+    // text coordinates; taken from its own Google Maps pin instead).
+    // NOTE: Plovdiv has two routes listed on 5kmrun.bg/routes/5km (this one
+    // and Гребен канал 2 above) — both are included since it wasn't
+    // specified which is "the" regular run; remove whichever doesn't apply.
+    RaceVenue(name: "Парк Лаута, Пловдив", latitude: 42.139019, longitude: 24.779428),
+
+    // гр. Бургас, Морска градина (Sea Garden) — https://5kmrun.bg/route/97
+    RaceVenue(name: "Морска градина, Бургас", latitude: 42.500944, longitude: 27.480722),
+
+    // гр. Варна, Морска градина (Sea Garden) — https://5kmrun.bg/route/96
+    RaceVenue(name: "Морска градина, Варна", latitude: 43.205944, longitude: 27.926444),
+
     // Add more venues here, one per line, following the same shape:
     // RaceVenue(name: "<venue name>", latitude: <lat>, longitude: <lon>),
 ]
