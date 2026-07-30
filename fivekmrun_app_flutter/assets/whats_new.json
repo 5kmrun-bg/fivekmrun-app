@@ -1,0 +1,36 @@
+{
+  "3.18.0": {
+    "bg": [
+      "Дръпни надолу, за да опресниш профила, бяганията и събитията",
+      "Поддръжка на най-новата версия на Android",
+      "Отстранен проблем при зареждане на профила",
+      "Корекции на грешки и подобрения в стабилността"
+    ],
+    "en": [
+      "Pull down to refresh your profile, runs and events",
+      "Support for the latest version of Android",
+      "Fixed an issue when loading your profile",
+      "Bug fixes and stability improvements"
+    ]
+  },
+  "3.17.0": {
+    "bg": [
+      "Подобрен баркод скенер — по-бързо и точно сканиране",
+      "Звуков сигнал при успешно сканиране на финала",
+      "Баркодът се показва и без интернет връзка",
+      "Най-новите резултати са най-отгоре",
+      "Коригирана автентикация със Strava",
+      "Начална поддръжка на хронометриране",
+      "Корекции на грешки и подобрения"
+    ],
+    "en": [
+      "Improved barcode scanner — faster and more accurate scanning",
+      "Sound feedback when your barcode is scanned at the finish line",
+      "Barcode now works without an internet connection",
+      "Newest results appear at the top",
+      "Fixed Strava authentication on Android",
+      "Initial timekeeping support",
+      "Bug fixes and stability improvements"
+    ]
+  }
+}

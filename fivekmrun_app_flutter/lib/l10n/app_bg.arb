@@ -208,5 +208,21 @@
   "barcode_page_wallet_error": "Грешка при добавяне в Wallet",
   "barcode_page_add_to_apple_wallet": "Добави в Apple Wallet",
   "add_offline_entry_page_invalid_run": "Невалидно бягане",
-  "add_offline_entry_page_invalid_run_message": "Моля изберете бягане от текущата седмица."
+  "add_offline_entry_page_invalid_run_message": "Моля изберете бягане от текущата седмица.",
+
+  "settings_page_whats_new": "Какво ново",
+  "settings_page_version": "Версия {version}",
+  "@settings_page_version": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "whats_new_page_title": "Какво ново",
+  "whats_new_page_current_version": "Текуща версия: {version}",
+  "@whats_new_page_current_version": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "whats_new_sheet_title": "Ново във версия {version}",
+  "@whats_new_sheet_title": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "whats_new_sheet_dismiss": "Разбрах"
 }

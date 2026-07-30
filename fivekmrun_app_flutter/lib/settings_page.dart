@@ -2,8 +2,10 @@ import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
+import 'package:fivekmrun_flutter/whats_new/whats_new_page.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'common/locale_switch.dart';
 import 'common/strava_connect.dart';
@@ -78,13 +80,37 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
             Divider(color: dividerColor),
+            InkWell(
+              onTap: () => Navigator.of(context, rootNavigator: true)
+                  .push(MaterialPageRoute(builder: (_) => WhatsNewPage())),
+              child: Row(
+                children: <Widget>[
+                  Text(AppLocalizations.of(context)!.settings_page_whats_new),
+                  Spacer(),
+                  Icon(Icons.chevron_right),
+                ],
+              ),
+            ),
+            Divider(color: dividerColor),
             Row(children: <Widget>[
               Text(AppLocalizations.of(context)!.settings_page_exit),
               IconButton(
                 icon: const Icon(Icons.exit_to_app),
                 onPressed: logout,
               ),
-            ])
+            ]),
+            Divider(color: dividerColor),
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const SizedBox.shrink();
+                return Text(
+                  AppLocalizations.of(context)!
+                      .settings_page_version(snapshot.data!.version),
+                  style: Theme.of(context).textTheme.bodySmall,
+                );
+              },
+            ),
           ]),
         ));
   }
