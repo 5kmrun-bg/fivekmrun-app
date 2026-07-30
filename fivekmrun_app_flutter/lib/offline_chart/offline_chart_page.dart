@@ -1,3 +1,4 @@
+import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/common/results_list.dart';
 import 'package:fivekmrun_flutter/common/select_button.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
@@ -11,7 +12,17 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class OfflineChartPage extends StatefulWidget {
-  OfflineChartPage({Key? key}) : super(key: key);
+  /// Injectable for tests; defaults to real resources in production.
+  OfflineChartPage({
+    Key? key,
+    OfflineResultsResource? lastWeekResource,
+    OfflineResultsResource? thisWeekResource,
+  })  : lastWeekResource = lastWeekResource ?? OfflineResultsResource(),
+        thisWeekResource = thisWeekResource ?? OfflineResultsResource(),
+        super(key: key);
+
+  final OfflineResultsResource lastWeekResource;
+  final OfflineResultsResource thisWeekResource;
 
   @override
   _OfflineChartPageState createState() => _OfflineChartPageState();
@@ -20,8 +31,6 @@ class OfflineChartPage extends StatefulWidget {
 class _OfflineChartPageState extends State<OfflineChartPage> {
   bool thisWeekSelected = true;
   List<Result>? results;
-  OfflineResultsResource lastWeekResource = OfflineResultsResource();
-  OfflineResultsResource thisWeekResource = OfflineResultsResource();
 
   selectThisWeek() {
     if (this.thisWeekSelected) {
@@ -121,22 +130,34 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
     this._loadThisWeekResult();
   }
 
-  _loadLastWeekResult() {
+  Future<void> _loadLastWeekResult() async {
     setState(() {
       this.results = null;
-      this.lastWeekResource.getPastWeekResults().then((loadedResults) {
-        this.setState(() => this.results = loadedResults);
-      });
     });
+    final loadedResults =
+        await this.widget.lastWeekResource.getPastWeekResults();
+    if (!this.mounted) return;
+    this.setState(() => this.results = loadedResults);
   }
 
-  _loadThisWeekResult() {
+  Future<void> _loadThisWeekResult() async {
     setState(() {
       this.results = null;
-      this.thisWeekResource.getThisWeekResults().then((loadedResults) {
-        this.setState(() => this.results = loadedResults);
-      });
     });
+    final loadedResults =
+        await this.widget.thisWeekResource.getThisWeekResults();
+    if (!this.mounted) return;
+    this.setState(() => this.results = loadedResults);
+  }
+
+  /// Backs the pull-to-refresh gesture on this tab, reloading whichever week
+  /// is currently selected. Kept separate from [refreshAllData]: this page
+  /// has its own week-scoped resources rather than the shared ones that
+  /// helper refreshes.
+  Future<void> _refresh() {
+    return this.thisWeekSelected
+        ? this._loadThisWeekResult()
+        : this._loadLastWeekResult();
   }
 
   @override
@@ -168,73 +189,76 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
           ),
         ),
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                SelectButton(
-                  text: AppLocalizations.of(context)!
-                      .offline_chart_page_previous_week,
-                  onPressed: this.selectLastWeek,
-                  selected: !this.thisWeekSelected,
-                ),
-                SelectButton(
-                  text: AppLocalizations.of(context)!
-                      .offline_chart_page_current_week,
-                  onPressed: this.selectThisWeek,
-                  selected: this.thisWeekSelected,
-                ),
-              ],
-            ),
-            Expanded(child: this._buildResults()),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ElevatedButton(
-                    onPressed: () => this.goToAddEntry(),
-                    child: Row(
-                      children: [
-                        Text(
-                            AppLocalizations.of(context)!
-                                .offline_chart_page_join,
-                            style: TextStyle()),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8, right: 8),
-                          child: Icon(Icons.add_circle_outline),
-                        )
-                      ],
-                    ),
+      body: RefreshIndicator(
+        onRefresh: this._refresh,
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  SelectButton(
+                    text: AppLocalizations.of(context)!
+                        .offline_chart_page_previous_week,
+                    onPressed: this.selectLastWeek,
+                    selected: !this.thisWeekSelected,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: OutlinedButton(
-                      onPressed: () => {
-                            launchUrl(
-                              Uri.parse("https://5kmrun.bg/selfie/ofc"),
-                            )
-                          },
+                  SelectButton(
+                    text: AppLocalizations.of(context)!
+                        .offline_chart_page_current_week,
+                    onPressed: this.selectThisWeek,
+                    selected: this.thisWeekSelected,
+                  ),
+                ],
+              ),
+              Expanded(child: this._buildResults()),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: ElevatedButton(
+                      onPressed: () => this.goToAddEntry(),
                       child: Row(
                         children: [
                           Text(
-                            AppLocalizations.of(context)!
-                                .offline_chart_page_results,
-                            style: TextStyle(
-                              fontSize: 8,
-                            ),
-                          ),
+                              AppLocalizations.of(context)!
+                                  .offline_chart_page_join,
+                              style: TextStyle()),
                           Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Icon(Icons.open_in_browser),
+                            padding: const EdgeInsets.only(left: 8, right: 8),
+                            child: Icon(Icons.add_circle_outline),
                           )
                         ],
-                      )),
-                )
-              ],
-            )
-          ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: OutlinedButton(
+                        onPressed: () => {
+                              launchUrl(
+                                Uri.parse("https://5kmrun.bg/selfie/ofc"),
+                              )
+                            },
+                        child: Row(
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!
+                                  .offline_chart_page_results,
+                              style: TextStyle(
+                                fontSize: 8,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Icon(Icons.open_in_browser),
+                            )
+                          ],
+                        )),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -242,11 +266,10 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
 
   Widget _buildResults() {
     if (this.results == null) {
-      return Center(child: CircularProgressIndicator());
+      return refreshableMessage(CircularProgressIndicator());
     } else if (this.results?.length == 0) {
-      return Center(
-          child: Text(
-              AppLocalizations.of(context)!.offline_chart_page_no_results));
+      return refreshableMessage(
+          Text(AppLocalizations.of(context)!.offline_chart_page_no_results));
     } else {
       return ResultsList(results: this.results!);
     }
