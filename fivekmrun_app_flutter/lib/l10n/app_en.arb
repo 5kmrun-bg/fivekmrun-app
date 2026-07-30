@@ -180,6 +180,16 @@
   "barcode_scanner_place": "Place: {value}",
   "barcode_scanner_place_pending": "Place: (waiting for scan)",
   "barcode_scanner_save_error": "Error saving: {error}",
+  "barcode_scanner_add_manually": "Add manually",
+  "barcode_scanner_manual_entry_badge": "Manually added or edited",
+
+  "manual_entry_dialog_title": "Manual entry",
+  "manual_entry_dialog_runner_id_label": "Runner ID",
+  "manual_entry_dialog_place_label": "Place",
+  "manual_entry_dialog_invalid_runner_id": "Enter a valid runner ID (up to 10 digits)",
+  "manual_entry_dialog_invalid_place": "Enter a valid place",
+  "manual_entry_dialog_duplicate_runner_warning": "This runner ID is already recorded",
+  "manual_entry_dialog_save": "Save",
 
   "barcode_page_wallet_error": "Could not add the pass to Wallet",
   "barcode_page_add_to_apple_wallet": "Add to Apple Wallet",

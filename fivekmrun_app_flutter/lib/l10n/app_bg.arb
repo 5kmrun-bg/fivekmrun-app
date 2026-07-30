@@ -204,6 +204,16 @@
   "@barcode_scanner_save_error": {
     "placeholders": { "error": { "type": "String" } }
   },
+  "barcode_scanner_add_manually": "Добави ръчно",
+  "barcode_scanner_manual_entry_badge": "Добавено/коригирано ръчно",
+
+  "manual_entry_dialog_title": "Ръчно въвеждане",
+  "manual_entry_dialog_runner_id_label": "Номер на участник",
+  "manual_entry_dialog_place_label": "Място",
+  "manual_entry_dialog_invalid_runner_id": "Въведете валиден номер на участник (до 10 цифри)",
+  "manual_entry_dialog_invalid_place": "Въведете валидно място",
+  "manual_entry_dialog_duplicate_runner_warning": "Този номер вече е записан",
+  "manual_entry_dialog_save": "Запази",
 
   "barcode_page_wallet_error": "Грешка при добавяне в Wallet",
   "barcode_page_add_to_apple_wallet": "Добави в Apple Wallet",
