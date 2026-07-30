@@ -6,6 +6,7 @@ import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
 import 'package:fivekmrun_flutter/common/badges.dart';
 import 'package:fivekmrun_flutter/common/legioner_status_helper.dart';
+import 'package:fivekmrun_flutter/common/profile_switcher_sheet.dart';
 import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
 import 'package:fivekmrun_flutter/constants.dart';
@@ -125,25 +126,39 @@ class ProfileDashboard extends StatelessWidget {
                     ),
                     Expanded(
                       flex: 5,
-                      child: Column(
-                        children: <Widget>[
-                          Stack(
-                            children: <Widget>[
-                              Avatar(url: user?.avatarUrl ?? ""),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: profileBadge(),
-                              )
-                            ],
-                          ),
-                          Text(
-                            user?.name ?? "",
-                            style: textTheme.titleMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(""),
-                        ],
+                      child: GestureDetector(
+                        // The quick profile switcher (#184) — this avatar/name
+                        // is the app's stand-in for an app-bar identity menu,
+                        // since the Profile tab has no literal app bar.
+                        onTap: () => showProfileSwitcherSheet(context),
+                        child: Column(
+                          children: <Widget>[
+                            Stack(
+                              children: <Widget>[
+                                Avatar(url: user?.avatarUrl ?? ""),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: profileBadge(),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Flexible(
+                                  child: Text(
+                                    user?.name ?? "",
+                                    style: textTheme.titleMedium,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const Icon(Icons.expand_more, size: 18),
+                              ],
+                            ),
+                            Text(""),
+                          ],
+                        ),
                       ),
                     ),
                     Expanded(

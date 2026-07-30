@@ -21,5 +21,13 @@ const String key_tokenTimestamp = "5kmrun_Token_Created";
 const int tokenExpiryDays = 30;
 const String key_lastSeenWhatsNewVersion = "5kmrun_LastSeenWhatsNewVersion";
 
+// Multi-profile storage (#184). key_userId/key_token/key_tokenTimestamp above
+// are the pre-multi-profile single-account keys — loadFromLocalStore()
+// migrates them into a one-profile list under key_profiles the first time it
+// finds no profiles list yet, then leaves them alone (harmless dead keys).
+const String key_profiles = "5kmrun_Profiles";
+const String key_activeProfileId = "5kmrun_ActiveProfileId";
+const int maxProfiles = 5;
+
 const int stravaFilterMinDistance = 4900;
 const int stravaFilterMaxDistance = 5300;

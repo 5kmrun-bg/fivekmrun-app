@@ -1,15 +1,14 @@
 import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
-import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/whats_new/whats_new_page.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'common/locale_switch.dart';
+import 'common/profile_switcher.dart';
 import 'common/strava_connect.dart';
-import 'state/user_resource.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key? key}) : super(key: key);
@@ -29,13 +28,27 @@ class _SettingsPageState extends State<SettingsPage> {
     localStorage.isSubscribedForGeneral.then(
         (value) => setState(() => this._pushNotificationsSubscribed = value));
 
+    // Removes only the current profile — falls back to another saved
+    // profile if one remains, or to the login screen if this was the last
+    // one. Either way Settings itself is no longer the right screen to be
+    // on: closing it back to Profile is what lets the user actually see
+    // which profile (if any) they landed on, rather than silently staying
+    // on a Settings screen that gives no indication anything changed.
+    //
+    // Only pop when a profile is left to fall back to: when none remain,
+    // removeProfileFromSwitcher already replaces the *entire* navigation
+    // stack with the login screen — popping again on top of that would
+    // empty the Navigator's history outright (`context.mounted` isn't a
+    // reliable guard here, since disposal of the old route isn't
+    // necessarily flushed to the element tree the instant that call
+    // returns).
     final logout = () async {
-      await authResource.logout();
-      Provider.of<UserResource>(context, listen: false).clear();
-      Provider.of<RunsResource>(context, listen: false).clear();
-
-      Navigator.of(context, rootNavigator: true)
-          .pushNamedAndRemoveUntil("/", (_) => false);
+      final userId = authResource.getUserId();
+      if (userId == null) return;
+      await removeProfileFromSwitcher(context, userId);
+      if (authResource.activeProfileId != null && context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
     };
 
     final dividerColor = Theme.of(context).colorScheme.secondary;

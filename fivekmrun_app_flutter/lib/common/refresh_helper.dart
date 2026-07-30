@@ -48,12 +48,16 @@ Future<void> reportOnFailure(Future<dynamic> future, String label) async {
   try {
     await future;
   } catch (error, stackTrace) {
-    await FirebaseCrashlytics.instance.recordError(
-      error,
-      stackTrace,
-      reason: "refresh failed: $label",
-      fatal: false,
-    );
+    // Best-effort: reporting must not become a second failure on top of the
+    // one being reported — Crashlytics throws if Firebase never initialised.
+    try {
+      await FirebaseCrashlytics.instance.recordError(
+        error,
+        stackTrace,
+        reason: "refresh failed: $label",
+        fatal: false,
+      );
+    } catch (_) {}
   }
 }
 
