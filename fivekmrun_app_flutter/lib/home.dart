@@ -13,8 +13,10 @@ import 'package:fivekmrun_flutter/runs/run_details_page.dart';
 import 'package:fivekmrun_flutter/runs/user_runs_page.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/events_resource.dart';
+import 'package:fivekmrun_flutter/state/local_storage_resource.dart';
 import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
+import 'package:fivekmrun_flutter/whats_new/whats_new_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
@@ -152,7 +154,21 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
 
   @override
   void afterFirstLayout(BuildContext context) {
-    AppRatingManager(context);
+    _showWhatsNewThenRating(context);
+  }
+
+  /// The what's-new popup takes precedence on an update launch; if it shows,
+  /// the rating dialog is skipped this launch rather than stacking behind
+  /// it — `AppRatingManager` runs again naturally on a later launch.
+  Future<void> _showWhatsNewThenRating(BuildContext context) async {
+    final localStorage =
+        Provider.of<LocalStorageResource>(context, listen: false);
+    final manager = WhatsNewManager(localStorage: localStorage);
+    final shown = await manager.maybeShowPopup(context);
+    if (!mounted) return;
+    if (!shown) {
+      AppRatingManager(context);
+    }
   }
 
   @override

@@ -19,6 +19,7 @@ const String key_userId = "5kmrun_UserID";
 const String key_token = "5kmrun_Token";
 const String key_tokenTimestamp = "5kmrun_Token_Created";
 const int tokenExpiryDays = 30;
+const String key_lastSeenWhatsNewVersion = "5kmrun_LastSeenWhatsNewVersion";
 
 const int stravaFilterMinDistance = 4900;
 const int stravaFilterMaxDistance = 5300;

@@ -184,5 +184,12 @@
   "barcode_page_wallet_error": "Could not add the pass to Wallet",
   "barcode_page_add_to_apple_wallet": "Add to Apple Wallet",
   "add_offline_entry_page_invalid_run": "Invalid run",
-  "add_offline_entry_page_invalid_run_message": "Please choose a run from the current week."
+  "add_offline_entry_page_invalid_run_message": "Please choose a run from the current week.",
+
+  "settings_page_whats_new": "What's new",
+  "settings_page_version": "Version {version}",
+  "whats_new_page_title": "What's new",
+  "whats_new_page_current_version": "Current version: {version}",
+  "whats_new_sheet_title": "New in version {version}",
+  "whats_new_sheet_dismiss": "Got it"
 }

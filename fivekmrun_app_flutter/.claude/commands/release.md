@@ -30,6 +30,10 @@ Prepare a new release of the app. Follow these steps in order.
 
    Commit both files directly to `master` with message `chore: add release notes for vX.Y.Z` and push.
 
+   **Also update the in-app "What's new" archive (`assets/whats_new.json`)** — but only for a release with genuinely significant, user-facing changes. Skip this sub-step entirely for a patch or tech-only release (dependency bumps, refactors, CI, "stability improvements" with nothing else): the app already treats a version with no entry as silent (no popup), which is correct, so don't manufacture an entry just to have one.
+
+   Propose a trimmed bullet list drawn from the same changes as the store notes (reuse them if they're already a good fit) and **ask the user to confirm or edit the list** before writing anything — don't derive it silently from the commit log. Once confirmed, add a new top-level `"X.Y.Z"` key to `assets/whats_new.json` with `bg` and `en` bullet arrays, keeping existing entries untouched. Commit it together with the two `whatsnew/` files in the same commit.
+
 7. **Create a GitHub Release** — Create a GitHub Release from the tag using the English release notes as the body:
    ```
    gh release create vX.Y.Z --repo 5kmrun-bg/fivekmrun-app --title "vX.Y.Z" --notes "..."
