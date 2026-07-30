@@ -7,6 +7,14 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class Login extends StatefulWidget {
+  /// True when reached via "Add profile" (#184) rather than the app's
+  /// initial sign-in — swaps in an app bar (with a back button, since this
+  /// is now a screen pushed on top of the switcher) and has the two login
+  /// widgets add a profile instead of starting the one and only session.
+  final bool addingProfile;
+
+  const Login({Key? key, this.addingProfile = false}) : super(key: key);
+
   @override
   _LoginState createState() => _LoginState();
 }
@@ -24,6 +32,13 @@ class _LoginState extends State<Login> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
+      appBar: widget.addingProfile
+          ? AppBar(
+              leading: BackButton(color: Colors.white),
+              title: Text(l10n.profile_switcher_add_profile),
+              centerTitle: true,
+            )
+          : null,
       body: SafeArea(
         child: Stack(
           children: <Widget>[
@@ -34,10 +49,15 @@ class _LoginState extends State<Login> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    this._buildLogo(),
-                    SizedBox(height: 10),
+                    if (!widget.addingProfile) ...[
+                      this._buildLogo(),
+                      SizedBox(height: 10),
+                    ],
                     Spacer(),
-                    this.loginWithId ? LoginWithId() : LoginWithUsername(),
+                    this.loginWithId
+                        ? LoginWithId(addingProfile: widget.addingProfile)
+                        : LoginWithUsername(
+                            addingProfile: widget.addingProfile),
                     SizedBox(height: 4),
                     SizedBox(
                       width: double.infinity,
@@ -49,24 +69,27 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     Spacer(),
-                    Text(l10n.login_widget_no_registration),
-                    GestureDetector(
-                      onTap: () => _loadRegistrationScreen(),
-                      child: Text(l10n.login_widget_register,
-                          style: TextStyle(
-                              color: accentColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold)),
-                    )
+                    if (!widget.addingProfile) ...[
+                      Text(l10n.login_widget_no_registration),
+                      GestureDetector(
+                        onTap: () => _loadRegistrationScreen(),
+                        child: Text(l10n.login_widget_register,
+                            style: TextStyle(
+                                color: accentColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold)),
+                      )
+                    ],
                   ],
                 ),
               ),
             ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: LocaleSwitcherWidget(),
-            ),
+            if (!widget.addingProfile)
+              Positioned(
+                top: 8,
+                right: 8,
+                child: LocaleSwitcherWidget(),
+              ),
           ],
         ),
       ),

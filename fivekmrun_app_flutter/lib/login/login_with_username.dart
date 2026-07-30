@@ -8,6 +8,16 @@ import 'package:provider/provider.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class LoginWithUsername extends StatefulWidget {
+  /// True when this screen is adding an additional profile (#184) rather
+  /// than starting the app's one and only session — the new profile is
+  /// added without disturbing whichever profile is currently active, and
+  /// success pops back to the caller instead of replacing the whole
+  /// navigation stack with "home".
+  final bool addingProfile;
+
+  const LoginWithUsername({Key? key, this.addingProfile = false})
+      : super(key: key);
+
   @override
   _LoginWithUsernameState createState() => _LoginWithUsernameState();
 }
@@ -16,6 +26,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
   final usernameInputController = TextEditingController();
   final passwordInputController = TextEditingController();
   bool loginError = false;
+  bool maxProfilesError = false;
 
   @override
   void dispose() {
@@ -29,19 +40,45 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
     String password = this.passwordInputController.text;
 
     Provider.of<AuthenticationResource>(context, listen: false)
-        .authenticate(username, password)
+        .authenticate(username, password, makeActive: !widget.addingProfile)
         .then((isAuthenticated) {
-      FirebaseCrashlytics.instance
-          .log("authenticate with username result: $isAuthenticated");
+      // Best-effort, like the error-path reporting below: a telemetry
+      // failure here must not be mistaken for an authentication failure by
+      // the catchError below, which would otherwise show the wrong error
+      // message despite a successful login.
+      try {
+        FirebaseCrashlytics.instance
+            .log("authenticate with username result: $isAuthenticated");
+      } catch (_) {}
 
       if (isAuthenticated) {
-        FirebaseAnalytics.instance.logEvent(name: "login");
-        if (mounted) setState(() => this.loginError = false);
-        Navigator.pushNamedAndRemoveUntil(context, "home", (_) => false);
+        if (mounted) {
+          setState(() {
+            this.loginError = false;
+            this.maxProfilesError = false;
+          });
+        }
+        if (widget.addingProfile) {
+          try {
+            FirebaseAnalytics.instance.logEvent(
+                name: "profile_add", parameters: {"type": "password"});
+          } catch (_) {}
+          Navigator.of(context).pop(true);
+        } else {
+          try {
+            FirebaseAnalytics.instance.logEvent(name: "login");
+          } catch (_) {}
+          Navigator.pushNamedAndRemoveUntil(context, "home", (_) => false);
+        }
       } else {
         if (mounted) setState(() => this.loginError = true);
       }
     }).catchError((error, stackTrace) {
+      if (error is MaxProfilesReachedException) {
+        if (mounted) setState(() => this.maxProfilesError = true);
+        return;
+      }
+
       // Show the error before reporting it. Reporting alone left the tap with
       // no visible effect at all, indistinguishable from a request that is
       // merely slow. Every failure mode of authenticate() lands here — a
@@ -72,6 +109,18 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
               child: Text(
                 AppLocalizations.of(context)!
                     .login_with_username_widget_wrong_auth,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ),
+          if (this.maxProfilesError)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
+              child: Text(
+                AppLocalizations.of(context)!
+                    .profile_switcher_max_profiles_reached,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,

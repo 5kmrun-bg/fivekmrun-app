@@ -112,6 +112,7 @@
   "login_with_id_widget_personal_id": "личен номер",
   "login_with_id_widget_participation": "Участието в ",
   "login_with_id_widget_authentication": " класацията е достъпно само с парола!",
+  "login_with_id_widget_invalid_id": "Моля въведете валиден личен номер",
 
   "login_with_username_widget_wrong_auth": "Грешно потребителско име или парола",
   "login_with_username_widget_password": "парола",
@@ -234,5 +235,24 @@
   "@whats_new_sheet_title": {
     "placeholders": { "version": { "type": "String" } }
   },
-  "whats_new_sheet_dismiss": "Разбрах"
+  "whats_new_sheet_dismiss": "Разбрах",
+
+  "profile_switcher_title": "Профили",
+  "profile_switcher_add_profile": "Добави профил",
+  "profile_switcher_manage_profiles": "Управление на профили",
+  "profile_switcher_type_password": "Парола",
+  "profile_switcher_type_id_only": "Само номер",
+  "profile_switcher_max_profiles_reached": "Достигнат е максималният брой профили (5)",
+  "profile_switcher_reauth_title": "Въведете парола за {name}",
+  "@profile_switcher_reauth_title": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "profile_switcher_reauth_error": "Грешна парола",
+
+  "manage_profiles_page_remove_title": "Премахни профила?",
+  "manage_profiles_page_remove_content": "Сигурни ли сте, че искате да премахнете профила на {name}?",
+  "@manage_profiles_page_remove_content": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "manage_profiles_page_remove": "Премахни"
 }

@@ -6,6 +6,7 @@ import 'package:fivekmrun_flutter/home.dart';
 import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/login/login.dart';
 import 'package:fivekmrun_flutter/login/loginPreview.dart';
+import 'package:fivekmrun_flutter/manage_profiles_page.dart';
 import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/settings_page.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
@@ -133,6 +134,8 @@ class MyApp extends StatelessWidget {
             initialRoute: _initialRoute,
             routes: {
               '/': (_) => Login(),
+              'add-profile': (_) => Login(addingProfile: true),
+              'manage-profiles': (_) => ManageProfilesPage(),
               'loginPreview': (_) => LoginPreview(),
               'home': (_) => Home(),
               'barcode': (_) => BarcodePage(),

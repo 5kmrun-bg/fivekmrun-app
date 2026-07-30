@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/state/authentication_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
@@ -6,7 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class LoginWithId extends StatefulWidget {
-  LoginWithId({Key? key}) : super(key: key);
+  /// See [LoginWithUsername.addingProfile] — same meaning here. An ID-only
+  /// profile has no confirm-and-switch step of its own (unlike the initial
+  /// login's "loginPreview"), so adding one just pops back to the caller on
+  /// success without touching the currently active profile's data.
+  final bool addingProfile;
+
+  LoginWithId({Key? key, this.addingProfile = false}) : super(key: key);
 
   @override
   _LoginWithIdState createState() => _LoginWithIdState();
@@ -23,13 +30,35 @@ class _LoginWithIdState extends State<LoginWithId> {
   }
 
   void onPressed() async {
+    final l10n = AppLocalizations.of(context)!;
     final userId = parseUserId(numberInputController.text);
     if (userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Моля въведете валиден личен номер')),
+        SnackBar(content: Text(l10n.login_with_id_widget_invalid_id)),
       );
       return;
     }
+
+    if (widget.addingProfile) {
+      try {
+        await Provider.of<AuthenticationResource>(context, listen: false)
+            .authenticateWithUserId(userId, makeActive: false);
+      } on MaxProfilesReachedException {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.profile_switcher_max_profiles_reached)),
+        );
+        return;
+      }
+      // Best-effort: a telemetry failure must not block completing the add.
+      try {
+        FirebaseAnalytics.instance
+            .logEvent(name: "profile_add", parameters: {"type": "idOnly"});
+      } catch (_) {}
+      if (mounted) Navigator.of(context).pop(true);
+      return;
+    }
+
     await Provider.of<AuthenticationResource>(context, listen: false)
         .authenticateWithUserId(userId);
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;

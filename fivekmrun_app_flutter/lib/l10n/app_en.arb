@@ -112,6 +112,7 @@
     "login_with_id_widget_personal_id": "personal id",
     "login_with_id_widget_participation": "Access to the ",
     "login_with_id_widget_authentication": " leaderboard requires a password!",
+    "login_with_id_widget_invalid_id": "Please enter a valid personal id",
 
     "login_with_username_widget_wrong_auth": "Wrong username or password",
     "login_with_username_widget_password": "password",
@@ -201,5 +202,18 @@
   "whats_new_page_title": "What's new",
   "whats_new_page_current_version": "Current version: {version}",
   "whats_new_sheet_title": "New in version {version}",
-  "whats_new_sheet_dismiss": "Got it"
+  "whats_new_sheet_dismiss": "Got it",
+
+  "profile_switcher_title": "Profiles",
+  "profile_switcher_add_profile": "Add profile",
+  "profile_switcher_manage_profiles": "Manage profiles",
+  "profile_switcher_type_password": "Password",
+  "profile_switcher_type_id_only": "ID only",
+  "profile_switcher_max_profiles_reached": "Maximum number of profiles reached (5)",
+  "profile_switcher_reauth_title": "Enter the password for {name}",
+  "profile_switcher_reauth_error": "Wrong password",
+
+  "manage_profiles_page_remove_title": "Remove this profile?",
+  "manage_profiles_page_remove_content": "Are you sure you want to remove {name}'s profile?",
+  "manage_profiles_page_remove": "Remove"
 }
