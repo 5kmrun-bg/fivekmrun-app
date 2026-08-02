@@ -1,0 +1,278 @@
+#!/usr/bin/env python3
+"""Tests for huawei_publish.py — run with `python3 -m unittest discover .github/scripts`.
+
+These cover the failure reporting, which is the part of the pipeline we cannot
+exercise against the real AppGallery Connect API from a test.
+"""
+
+import json
+import unittest
+from unittest import mock
+
+import huawei_publish as hp
+
+
+class FakeResponse:
+    """The bits of requests.Response that huawei_publish reads."""
+
+    def __init__(self, status_code, text="", reason=""):
+        self.status_code = status_code
+        self.text = text
+        self.reason = reason
+
+    @property
+    def ok(self):
+        return 200 <= self.status_code < 300
+
+    def json(self):
+        return json.loads(self.text)
+
+
+class TokenAuthorityFailureTest(unittest.TestCase):
+    """The real 403 seen in run 30198840817: empty body, diagnostic in the reason phrase."""
+
+    def setUp(self):
+        self.resp = FakeResponse(403, text="", reason="client token authorization fail.")
+
+    def test_reports_the_reason_phrase(self):
+        # Regression: describe() once logged only status + body, so this exact
+        # response degraded to a bare "HTTP 403" and lost the only diagnostic AGC gave.
+        with self.assertRaises(hp.PublishError) as caught:
+            hp.check("upload-url/for-obs", self.resp)
+        self.assertIn("client token authorization fail.", str(caught.exception))
+
+    def test_points_at_the_console_prerequisites(self):
+        with self.assertRaises(hp.PublishError) as caught:
+            hp.check("upload-url/for-obs", self.resp)
+        message = str(caught.exception)
+        self.assertIn("not authorised to publish", message)
+        # The message must name the actual cause: a project-scoped client. Earlier
+        # wording listed three vague prerequisites and sent us hunting the role,
+        # which was never wrong. Ten runs failed before the client type was checked.
+        self.assertIn("project_client_id", message)
+        self.assertIn("team_client_id", message)
+        self.assertIn("Project = N/A", message)
+
+    def test_401_variant_is_caught_too(self):
+        resp = FakeResponse(401, text="", reason="client token auth failed")
+        with self.assertRaises(hp.PublishError):
+            hp.check("upload-url/for-obs", resp)
+
+
+class AgcBusinessErrorTest(unittest.TestCase):
+    """AGC returns HTTP 200 with a non-zero ret.code for business errors."""
+
+    def test_non_zero_ret_code_is_a_failure(self):
+        resp = FakeResponse(200, text=json.dumps({"ret": {"code": 204144660, "msg": "boom"}}))
+        with self.assertRaises(hp.PublishError) as caught:
+            hp.check("app-submit", resp)
+        self.assertIn("204144660", str(caught.exception))
+
+    def test_duplicate_version_is_explained_not_raw(self):
+        resp = FakeResponse(
+            200,
+            text=json.dumps({"ret": {"code": 204144660, "msg": "the version already exists"}}),
+        )
+        with self.assertRaises(hp.PublishError) as caught:
+            hp.check("app-file-info/update", resp)
+        message = str(caught.exception)
+        self.assertIn("already has this version", message)
+        self.assertIn("Bump the build number", message)
+
+    def test_zero_ret_code_passes_through(self):
+        resp = FakeResponse(200, text=json.dumps({"ret": {"code": 0}, "urlInfo": {"url": "x"}}))
+        self.assertEqual(hp.check("upload-url/for-obs", resp)["urlInfo"]["url"], "x")
+
+    def test_success_without_a_ret_block_passes(self):
+        resp = FakeResponse(200, text=json.dumps({"access_token": "t"}))
+        self.assertEqual(hp.check("token", resp)["access_token"], "t")
+
+
+class EndpointShapeTest(unittest.TestCase):
+    """The AGC endpoints are easy to get subtly wrong and only fail at runtime.
+
+    Regression: attach_file POSTed to /publish/v2/app-file-info/update, which does
+    not exist and returned 404. The real endpoint is PUT /publish/v2/app-file-info.
+    Auth failed on every earlier run, so this was never reached until run
+    30205429816 uploaded the APK to OBS successfully and then 404'd.
+    """
+
+    OK = FakeResponse(200, text=json.dumps({"ret": {"code": 0}}), reason="OK")
+
+    def test_attach_file_puts_to_app_file_info(self):
+        with mock.patch.object(hp, "requests") as req:
+            req.put.return_value = self.OK
+            url_info = {"url": "https://obs/x.apk?sig=1", "objectId": "DE/x.apk"}
+            hp.attach_file({}, "109680919", url_info, "x.apk", 1, "ab", "1")
+
+        self.assertTrue(req.put.called, "app-file-info must be a PUT")
+        self.assertFalse(req.post.called, "app-file-info must not be POSTed")
+        url = req.put.call_args[0][0]
+        self.assertTrue(url.endswith("/publish/v2/app-file-info"), f"wrong endpoint: {url}")
+
+    def test_attach_file_sends_the_object_id_not_the_url(self):
+        """Verified against the live API on 2026-07-26.
+
+        fileDestUrl = the OBS URL           -> 204144662 "[fileURLToDb Exception]"
+        fileDestUrl = the objectId          -> ret.code 0, success
+        fileDestUlr (Huawei's typo) = eithr -> 204144641 "The files url is empty."
+
+        So the field name is fileDestUrl and its value is the objectId.
+        """
+        url_info = {"url": "https://obs/DE/x.apk?sig=secret", "objectId": "DE/2026/x.apk"}
+        with mock.patch.object(hp, "requests") as req:
+            req.put.return_value = self.OK
+            hp.attach_file({}, "1", url_info, "x.apk", 7, "ab", "1")
+
+        sent = req.put.call_args[1]["json"]["files"][0]
+        self.assertEqual(sent["fileDestUrl"], "DE/2026/x.apk")
+        self.assertNotIn("fileDestUlr", sent)
+
+    def test_missing_object_id_fails_early_and_clearly(self):
+        resp = FakeResponse(
+            200,
+            text=json.dumps({"ret": {"code": 0}, "urlInfo": {"url": "https://obs/x.apk"}}),
+            reason="OK",
+        )
+        with mock.patch.object(hp, "requests") as req:
+            req.get.return_value = resp
+            with self.assertRaises(hp.PublishError) as caught:
+                hp.get_upload_url({}, "1", "x.apk", 1, "ab", "1")
+        self.assertIn("no objectId", str(caught.exception))
+
+    def test_submit_posts_to_app_submit(self):
+        with mock.patch.object(hp, "requests") as req:
+            req.post.return_value = self.OK
+            hp.submit({}, "109680919", "1", "note")
+
+        url = req.post.call_args[0][0]
+        self.assertTrue(url.endswith("/publish/v2/app-submit"), f"wrong endpoint: {url}")
+        params = req.post.call_args[1]["params"]
+        self.assertEqual(params["appId"], "109680919")
+        self.assertEqual(params["releaseType"], "1")
+
+
+class TokenNeverLoggedTest(unittest.TestCase):
+    """This repo is public, so Actions logs are world-readable.
+
+    The AGC access token is minted at runtime, so it is not a registered secret
+    and nothing masks it by default. It lives ~48h and can publish releases.
+    """
+
+    TOKEN = "CF1a2b3c4d5e6f7890abcdefSECRETTOKENVALUE=="
+
+    def test_describe_redacts_the_token(self):
+        resp = FakeResponse(
+            200, text=json.dumps({"access_token": self.TOKEN, "expires_in": 172799}), reason="OK"
+        )
+        out = hp.describe(resp)
+        self.assertNotIn(self.TOKEN, out)
+        self.assertIn("[redacted]", out)
+        # The rest of the body must survive — it is why we log it at all.
+        self.assertIn("172799", out)
+
+    def test_check_does_not_leak_the_token_on_success(self):
+        resp = FakeResponse(
+            200, text=json.dumps({"ret": {"code": 0}, "access_token": self.TOKEN}), reason="OK"
+        )
+        with mock.patch("builtins.print") as printed:
+            hp.check("token", resp)
+        logged = " ".join(str(c) for c in printed.call_args_list)
+        self.assertNotIn(self.TOKEN, logged)
+
+    def test_token_is_masked_with_add_mask(self):
+        resp = FakeResponse(200, text=json.dumps({"access_token": self.TOKEN}), reason="OK")
+        with mock.patch.object(hp, "requests") as req, mock.patch("builtins.print") as printed:
+            req.post.return_value = resp
+            self.assertEqual(hp.get_token("id", "secret"), self.TOKEN)
+        emitted = [str(c) for c in printed.call_args_list]
+        self.assertTrue(
+            any(f"::add-mask::{self.TOKEN}" in e for e in emitted),
+            "get_token must emit ::add-mask:: so the runner masks the token everywhere",
+        )
+
+    def test_redaction_handles_whitespace_variants(self):
+        for body in (
+            '{"access_token":"%s"}' % self.TOKEN,
+            '{"access_token" : "%s"}' % self.TOKEN,
+            '{"expires_in":1,"access_token"  :  "%s"}' % self.TOKEN,
+        ):
+            self.assertNotIn(self.TOKEN, hp.redact(body), f"leaked from: {body}")
+
+
+class SubmitWaitsForCompilationTest(unittest.TestCase):
+    """AGC compiles the package asynchronously after the upload succeeds.
+
+    Observed on run 30206217782: app-file-info returned ret.code 0, then
+    app-submit immediately returned HTTP 200 with ret.code 204144727,
+    "The package is being compiled, please try again in 3-5 minutes".
+    The upload always finishes before compilation, so an upload-then-submit
+    pipeline hits this on essentially every run.
+    """
+
+    COMPILING = FakeResponse(
+        200,
+        text=json.dumps({"ret": {"code": 204144727, "msg": "The package is being compiled, please try again in 3-5 minutes"}}),
+        reason="OK",
+    )
+    DONE = FakeResponse(200, text=json.dumps({"ret": {"code": 0, "msg": "success"}}), reason="OK")
+
+    def test_retries_until_compilation_finishes(self):
+        with mock.patch.object(hp, "requests") as req, mock.patch.object(hp, "time") as clock:
+            req.post.side_effect = [self.COMPILING, self.COMPILING, self.DONE]
+            hp.submit({}, "1", "1", "note")
+
+        self.assertEqual(req.post.call_count, 3)
+        self.assertEqual(clock.sleep.call_count, 2, "must wait between attempts")
+
+    def test_gives_up_with_an_actionable_message(self):
+        with mock.patch.object(hp, "requests") as req, mock.patch.object(hp, "time"):
+            req.post.return_value = self.COMPILING
+            with self.assertRaises(hp.PublishError) as caught:
+                hp.submit({}, "1", "1", "note")
+
+        self.assertEqual(req.post.call_count, hp.SUBMIT_ATTEMPTS, "must not retry forever")
+        message = str(caught.exception)
+        self.assertIn("still compiling", message)
+        self.assertIn("uploaded and attached successfully", message)
+
+    def test_a_real_error_is_not_mistaken_for_compiling(self):
+        broken = FakeResponse(
+            200, text=json.dumps({"ret": {"code": 204144662, "msg": "add apk failed"}}), reason="OK"
+        )
+        with mock.patch.object(hp, "requests") as req, mock.patch.object(hp, "time"):
+            req.post.return_value = broken
+            with self.assertRaises(hp.PublishError):
+                hp.submit({}, "1", "1", "note")
+        self.assertEqual(req.post.call_count, 1, "a real failure must fail fast, not retry")
+
+    def test_success_first_time_does_not_sleep(self):
+        with mock.patch.object(hp, "requests") as req, mock.patch.object(hp, "time") as clock:
+            req.post.return_value = self.DONE
+            hp.submit({}, "1", "1", "note")
+        self.assertEqual(req.post.call_count, 1)
+        clock.sleep.assert_not_called()
+
+
+class MalformedResponseTest(unittest.TestCase):
+    def test_non_json_body_is_reported_legibly(self):
+        resp = FakeResponse(200, text="<html>gateway</html>", reason="OK")
+        with self.assertRaises(hp.PublishError) as caught:
+            hp.check("token", resp)
+        self.assertIn("non-JSON body", str(caught.exception))
+
+    def test_server_error_reports_status_and_body(self):
+        resp = FakeResponse(500, text="upstream exploded", reason="Internal Server Error")
+        with self.assertRaises(hp.PublishError) as caught:
+            hp.check("app-submit", resp)
+        message = str(caught.exception)
+        self.assertIn("500", message)
+        self.assertIn("upstream exploded", message)
+
+    def test_long_body_is_truncated(self):
+        resp = FakeResponse(500, text="x" * 9000, reason="Internal Server Error")
+        self.assertIn("[truncated]", hp.describe(resp))
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,3 +1,17 @@
+# Builds, signs, uploads and SUBMITS the APK to Huawei AppGallery. A successful
+# run ends with the build in Huawei's review queue — no console interaction.
+#
+# AppGallery Connect console prerequisite (one-time, cannot be done from CI):
+#   The API client MUST be team-level. Users and permissions -> API key ->
+#   Connect API -> Create, with **Project = N/A**.
+#   A project-scoped client (JSON: "type": "project_client_id") authenticates
+#   fine and is then refused by every publishing endpoint with 403
+#   "client token authorization fail.", whatever role it holds — publishing is an
+#   account-level resource. A correct client says "type": "team_client_id".
+#   This cost ten failed runs; check the client TYPE before suspecting anything else.
+#
+# All HUAWEI_* secrets live in the `production` environment, not at repo level,
+# so this job must keep `environment: production`.
 name: Build and Upload to Huawei AppGallery
 on: workflow_dispatch
 env:
@@ -58,55 +72,13 @@ jobs:
           name: release-android
           path: ./fivekmrun_app_flutter/build/app/outputs/flutter-apk/
 
-      - name: Upload to Huawei AppGallery
+      - name: Upload and submit to Huawei AppGallery
         env:
           HUAWEI_CLIENT_ID: ${{ secrets.HUAWEI_CLIENT_ID }}
           HUAWEI_CLIENT_SECRET: ${{ secrets.HUAWEI_CLIENT_SECRET }}
           HUAWEI_APP_ID: ${{ secrets.HUAWEI_APP_ID }}
+          HUAWEI_APK_PATH: ./fivekmrun_app_flutter/build/app/outputs/flutter-apk/app-release.apk
         run: |
           pip3 install requests --quiet
-          python3 - <<'EOF'
-          import os, hashlib, requests
-
-          client_id = os.environ['HUAWEI_CLIENT_ID']
-          client_secret = os.environ['HUAWEI_CLIENT_SECRET']
-          app_id = os.environ['HUAWEI_APP_ID']
-          apk_path = './fivekmrun_app_flutter/build/app/outputs/flutter-apk/app-release.apk'
-          domain = 'https://connect-api.cloud.huawei.com/api'
-
-          # Get access token
-          token_resp = requests.post(f'{domain}/oauth2/v1/token', json={
-              'client_id': client_id, 'client_secret': client_secret, 'grant_type': 'client_credentials',
-          })
-          token_resp.raise_for_status()
-          access_token = token_resp.json()['access_token']
-          print('Token obtained successfully')
-
-          # Get upload URL
-          file_name = os.path.basename(apk_path)
-          file_size = os.path.getsize(apk_path)
-          sha256 = hashlib.sha256(open(apk_path,'rb').read()).hexdigest()
-          headers = {'Authorization': f'Bearer {access_token}', 'client_id': client_id}
-          url_resp = requests.get(f'{domain}/publish/v2/upload-url/for-obs', params={
-              'appId': app_id, 'fileName': file_name, 'sha256': sha256,
-              'contentLength': file_size, 'releaseType': 1,
-          }, headers=headers)
-          url_resp.raise_for_status()
-          upload_info = url_resp.json()['urlInfo']
-          print('Upload URL obtained')
-
-          # Upload file to OBS
-          with open(apk_path, 'rb') as f:
-              obs_resp = requests.put(upload_info['url'], data=f, headers=upload_info['headers'])
-          obs_resp.raise_for_status()
-          print('File uploaded to OBS')
-
-          # Commit the release
-          commit_resp = requests.post(f'{domain}/publish/v2/app-file-info/update', json={
-              'fileType': 5,
-              'files': [{'fileName': file_name, 'fileDestUrl': upload_info['url'].split('?')[0], 'size': file_size, 'sha256': sha256}],
-          }, params={'appId': app_id}, headers={**headers, 'Content-Type': 'application/json'})
-          print(f'Commit response: {commit_resp.status_code} {commit_resp.text}')
-          commit_resp.raise_for_status()
-          print('Upload committed successfully')
-          EOF
+          export HUAWEI_APP_VERSION="$(grep '^version:' fivekmrun_app_flutter/pubspec.yaml | awk '{print $2}')"
+          python3 .github/scripts/huawei_publish.py
