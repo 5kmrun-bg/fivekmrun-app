@@ -93,7 +93,10 @@ jobs:
           APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
           APPSTORE_API_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
         run: |
-          pip3 install PyJWT cryptography --quiet
+          # --break-system-packages: the runner's Homebrew Python is marked
+          # externally managed (PEP 668), which makes a plain install abort.
+          # Safe here — the runner is discarded after the job.
+          pip3 install PyJWT cryptography --quiet --break-system-packages
           export VERSION=$(grep '^version:' fivekmrun_app_flutter/pubspec.yaml | sed 's/version: //' | cut -d'+' -f1)
           python3 - <<EOF
           import jwt, time, json, urllib.request, urllib.error, os, sys
