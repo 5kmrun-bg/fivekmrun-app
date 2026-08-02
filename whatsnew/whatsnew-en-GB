@@ -1,4 +1,2 @@
-• Pull down to refresh your profile, runs and events
-• Support for the latest version of Android
-• Fixed an issue when loading your profile
-• Bug fixes and stability improvements
+• Fixed an issue where your runs were missing and your profile looked empty
+• Your history now loads even when some of the data is unavailable
