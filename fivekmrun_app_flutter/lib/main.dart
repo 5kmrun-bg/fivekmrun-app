@@ -17,6 +17,7 @@ import 'package:fivekmrun_flutter/state/runs_resource.dart';
 import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:fivekmrun_flutter/state/locale_provider.dart';
@@ -29,6 +30,20 @@ final appAccentColor = Color.fromRGBO(218, 3, 56, 1.0);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Opt in explicitly instead of relying on Android 15+ enforcement. Icons
+  // are always light because the app is permanently in dark theme (see
+  // themeMode: ThemeMode.dark below) regardless of the device setting.
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light,
+    statusBarBrightness: Brightness.dark,
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarIconBrightness: Brightness.light,
+    systemNavigationBarDividerColor: Colors.transparent,
+  ));
+
   await Firebase.initializeApp();
 
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
