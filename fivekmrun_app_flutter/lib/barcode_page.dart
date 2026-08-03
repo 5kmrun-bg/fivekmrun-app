@@ -136,93 +136,96 @@ class _BarcodePageState extends State<BarcodePage> {
       }
 
       return Scaffold(
-          appBar: AppBar(
-            leading: BackButton(color: Colors.white),
-            title: Text(AppLocalizations.of(context)!.barcode_page_barcode),
-            centerTitle: true,
-          ),
-          backgroundColor: Colors.black,
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(
-                child: Card(
-              elevation: 8,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
+        appBar: AppBar(
+          leading: BackButton(color: Colors.white),
+          title: Text(AppLocalizations.of(context)!.barcode_page_barcode),
+          centerTitle: true,
+        ),
+        backgroundColor: Colors.black,
+        body: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
+                  child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      accentColor,
-                      accentColor.withOpacity(0.8),
-                    ],
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        accentColor,
+                        accentColor.withOpacity(0.8),
+                      ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          "5kmrun",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          userName!,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          userStatus,
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.8),
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(height: 24),
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: BarCodeImage(
+                              params: Code39BarCodeParams(
+                            formatBarcode(userId),
+                            lineWidth: 1.5,
+                            barHeight: 60.0,
+                            withText: false,
+                          )),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          userId.toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(height: 24),
+                        buildButton(),
+                      ],
+                    ),
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        "5kmrun",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        userName!,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        userStatus,
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(height: 24),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: BarCodeImage(
-                            params: Code39BarCodeParams(
-                          formatBarcode(userId),
-                          lineWidth: 1.5,
-                          barHeight: 60.0,
-                          withText: false,
-                        )),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        userId.toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(height: 24),
-                      buildButton(),
-                    ],
-                  ),
-                ),
-              ),
+              )),
             )),
-          ));
+      );
     });
   }
 
