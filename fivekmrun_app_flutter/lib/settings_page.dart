@@ -59,72 +59,77 @@ class _SettingsPageState extends State<SettingsPage> {
           title: Text(AppLocalizations.of(context)!.settings_page_settings),
           centerTitle: true,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text(AppLocalizations.of(context)!.settings_page_notifications),
-                Switch(
-                  onChanged: (value) {
-                    final pushNotificationManager =
-                        PushNotificationsManager.getInstance();
-                    setState(() => localStorage.isSubscrubedForGeneral = value);
-                    this._pushNotificationsSubscribed = value;
-                    if (value) {
-                      pushNotificationManager.subscribeTopic("general");
-                    } else {
-                      pushNotificationManager.unsubscribeTopic("general");
-                    }
+        body: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(AppLocalizations.of(context)!
+                        .settings_page_notifications),
+                    Switch(
+                      onChanged: (value) {
+                        final pushNotificationManager =
+                            PushNotificationsManager.getInstance();
+                        setState(
+                            () => localStorage.isSubscrubedForGeneral = value);
+                        this._pushNotificationsSubscribed = value;
+                        if (value) {
+                          pushNotificationManager.subscribeTopic("general");
+                        } else {
+                          pushNotificationManager.unsubscribeTopic("general");
+                        }
+                      },
+                      value: this._pushNotificationsSubscribed,
+                    )
+                  ],
+                ),
+                Divider(color: dividerColor),
+                Text(AppLocalizations.of(context)!.settings_page_strava),
+                StravaConnect(),
+                Divider(color: dividerColor),
+                Row(
+                  children: <Widget>[
+                    Text(AppLocalizations.of(context)!.settings_page_language),
+                    SizedBox(width: 12),
+                    LocaleSwitcherWidget(),
+                  ],
+                ),
+                Divider(color: dividerColor),
+                InkWell(
+                  onTap: () => Navigator.of(context, rootNavigator: true)
+                      .push(MaterialPageRoute(builder: (_) => WhatsNewPage())),
+                  child: Row(
+                    children: <Widget>[
+                      Text(AppLocalizations.of(context)!
+                          .settings_page_whats_new),
+                      Spacer(),
+                      Icon(Icons.chevron_right),
+                    ],
+                  ),
+                ),
+                Divider(color: dividerColor),
+                Row(children: <Widget>[
+                  Text(AppLocalizations.of(context)!.settings_page_exit),
+                  IconButton(
+                    icon: const Icon(Icons.exit_to_app),
+                    onPressed: logout,
+                  ),
+                ]),
+                Divider(color: dividerColor),
+                FutureBuilder<PackageInfo>(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return const SizedBox.shrink();
+                    return Text(
+                      AppLocalizations.of(context)!
+                          .settings_page_version(snapshot.data!.version),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    );
                   },
-                  value: this._pushNotificationsSubscribed,
-                )
-              ],
-            ),
-            Divider(color: dividerColor),
-            Text(AppLocalizations.of(context)!.settings_page_strava),
-            StravaConnect(),
-            Divider(color: dividerColor),
-            Row(
-              children: <Widget>[
-                Text(AppLocalizations.of(context)!.settings_page_language),
-                SizedBox(width: 12),
-                LocaleSwitcherWidget(),
-              ],
-            ),
-            Divider(color: dividerColor),
-            InkWell(
-              onTap: () => Navigator.of(context, rootNavigator: true)
-                  .push(MaterialPageRoute(builder: (_) => WhatsNewPage())),
-              child: Row(
-                children: <Widget>[
-                  Text(AppLocalizations.of(context)!.settings_page_whats_new),
-                  Spacer(),
-                  Icon(Icons.chevron_right),
-                ],
-              ),
-            ),
-            Divider(color: dividerColor),
-            Row(children: <Widget>[
-              Text(AppLocalizations.of(context)!.settings_page_exit),
-              IconButton(
-                icon: const Icon(Icons.exit_to_app),
-                onPressed: logout,
-              ),
-            ]),
-            Divider(color: dividerColor),
-            FutureBuilder<PackageInfo>(
-              future: PackageInfo.fromPlatform(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const SizedBox.shrink();
-                return Text(
-                  AppLocalizations.of(context)!
-                      .settings_page_version(snapshot.data!.version),
-                  style: Theme.of(context).textTheme.bodySmall,
-                );
-              },
-            ),
-          ]),
-        ));
+                ),
+              ]),
+            )));
   }
 }
