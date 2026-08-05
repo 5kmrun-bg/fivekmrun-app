@@ -52,7 +52,11 @@ final _xl = {
 /// gives most users (see [RunsResource.retrieveXLRuns]) so existing
 /// official/selfie-only assertions don't need to account for an XL run
 /// they didn't ask for.
-MockClient _client({int selfieStatus = 200, http.Response? xlResponse}) =>
+MockClient _client({
+  int selfieStatus = 200,
+  http.Response? xlResponse,
+  http.Response? officialResponse,
+}) =>
     MockClient((request) async {
       if (request.url.path.contains("selfie")) {
         return http.Response(jsonEncode(_selfie), selfieStatus,
@@ -63,8 +67,20 @@ MockClient _client({int selfieStatus = 200, http.Response? xlResponse}) =>
             http.Response("<html>not found</html>", 200,
                 headers: {"content-type": "text/html; charset=utf-8"});
       }
-      return http.Response(jsonEncode(_official), 200, headers: _jsonHeaders);
+      return officialResponse ??
+          http.Response(jsonEncode(_official), 200, headers: _jsonHeaders);
     });
+
+/// What `5kmrun/user/<id>` actually answers for a user with no official
+/// results: it errors server-side and redirects to an article page, so the
+/// client sees 200 text/html rather than an empty array.
+final _officialNoHistoryPage = http.Response(
+  "<br /> <b>Notice</b>:  Undefined offset: 0 in "
+  "<b>/home/kmrunbg/appCore/classes/Logic/Pub/Petkmrun/ApiUser.php</b> "
+  "on line <b>132</b><br />",
+  200,
+  headers: {"content-type": "text/html; charset=utf-8"},
+);
 
 void main() {
   group('RunsResource.getByUserId', () {
@@ -93,13 +109,46 @@ void main() {
       expect(called, isFalse);
     });
 
-    test('rethrows FetchException and stops loading when a fetch fails',
-        () async {
-      final resource = RunsResource(client: _client(selfieStatus: 500));
+    test(
+        'rethrows FetchException and stops loading when every source fails, '
+        'so a server outage never looks like "no runs"', () async {
+      final resource = RunsResource(
+          client: _client(
+              selfieStatus: 500,
+              officialResponse: http.Response("server error", 500)));
 
       await expectLater(
           resource.getByUserId(42), throwsA(isA<FetchException>()));
       expect(resource.loading, isFalse);
+      expect(resource.value, isNull);
+    });
+
+    test(
+        'keeps the selfie runs when the official endpoint serves its '
+        'no-history error page', () async {
+      // The reported bug: users with no official results (IDs 24342, 22237,
+      // 33679) saw an empty list despite hundreds of selfie runs, because the
+      // official endpoint's HTML error page aborted the whole load.
+      final resource =
+          RunsResource(client: _client(officialResponse: _officialNoHistoryPage));
+
+      final runs = await resource.getByUserId(24342);
+
+      expect(runs, hasLength(1));
+      expect(runs.single.runType, RunType.selfie);
+      expect(resource.lastSelfieRun, isNotNull);
+      expect(resource.loading, isFalse);
+    });
+
+    test('still returns official runs when only the selfie source fails',
+        () async {
+      final resource = RunsResource(client: _client(selfieStatus: 500));
+
+      final runs = await resource.getByUserId(42);
+
+      expect(runs, hasLength(1));
+      expect(runs.single.runType, RunType.official);
+      expect(resource.lastOfficialRun, isNotNull);
     });
 
     test('merges XL runs in when the endpoint answers with JSON', () async {

@@ -5,6 +5,15 @@ import 'package:http/http.dart' as http;
 import 'package:fivekmrun_flutter/constants.dart' as constants;
 import 'dart:convert';
 
+/// The outcome of loading one run source: the runs it returned, or the error
+/// that stopped it. Exactly one of the two is meaningful.
+class _SourceResult {
+  final List<Run> runs;
+  final Object? failure;
+
+  const _SourceResult(this.runs, this.failure);
+}
+
 class RunsResource extends ChangeNotifier {
   /// Injectable for tests; defaults to a real client in production.
   final http.Client _client;
@@ -52,33 +61,62 @@ class RunsResource extends ChangeNotifier {
     this._lastOfficialRun = null;
   }
 
-  /// Fetches the user's runs and replaces [value] on success.
+  /// Fetches the user's runs from each source and replaces [value].
   ///
-  /// If the fetch fails the previously loaded runs are kept — an unreachable
-  /// server must not look the same as "this user has never run". The error is
-  /// rethrown so callers can react; see [refreshAllData].
+  /// The sources are independent. `5kmrun/user/<id>` does not answer with an
+  /// empty array for a user with no official results — it errors server-side
+  /// and redirects to an HTML page. Loading them in one `try` meant that page
+  /// aborted the whole load, so every user whose history is selfie-only saw an
+  /// empty runs list despite having hundreds of runs. A source that fails now
+  /// contributes nothing and the others still load.
+  ///
+  /// If *every* source fails the previously loaded runs are kept and the error
+  /// is rethrown — an unreachable server must not look the same as "this user
+  /// has never run". See [refreshAllData].
+  ///
+  /// A partial failure does replace [value] with what did load, so a source
+  /// that is down drops its runs from the list until the next refresh. That is
+  /// deliberate: showing the rest beats showing nothing, and it self-heals.
   Future<List<Run>> getByUserId(int? userId) async {
     if (userId == null) {
       return this.value ?? <Run>[];
     }
 
-    final List<Run> runs;
-    try {
-      runs = await this.retrieve5kmRuns(userId);
-      final List<Run> selfieRuns = await this.retrieveSelfieRuns(userId);
-      runs.addAll(selfieRuns.where((r) => r.timeInSeconds != null));
-      final List<Run> xlRuns = await this.retrieveXLRuns(userId);
-      runs.addAll(xlRuns.where((r) => r.timeInSeconds != null));
-    } catch (_) {
+    final official = await _tryRetrieve(() => this.retrieve5kmRuns(userId));
+    final selfie = await _tryRetrieve(() => this.retrieveSelfieRuns(userId));
+    final xl = await _tryRetrieve(() => this.retrieveXLRuns(userId));
+
+    // Only the two mandatory sources decide this. [retrieveXLRuns] already
+    // answers "no XL runs" for its own error page, so it succeeds with an
+    // empty list for nearly every user — letting it vote here would mean a
+    // total outage of the other two still looked like "no runs".
+    if (official.failure != null && selfie.failure != null) {
       this.loading = false;
-      rethrow;
+      throw official.failure!;
     }
+
+    final List<Run> runs = <Run>[
+      ...official.runs,
+      ...selfie.runs.where((r) => r.timeInSeconds != null),
+      ...xl.runs.where((r) => r.timeInSeconds != null),
+    ];
 
     this._processRuns(runs);
 
     this.value = runs;
     this.loading = false;
     return runs;
+  }
+
+  /// Runs [retrieve], turning a failure into an empty result that records the
+  /// error instead of propagating it.
+  Future<_SourceResult> _tryRetrieve(
+      Future<List<Run>> Function() retrieve) async {
+    try {
+      return _SourceResult(await retrieve(), null);
+    } catch (error) {
+      return _SourceResult(const <Run>[], error);
+    }
   }
 
   Future<List<Run>> retrieve5kmRuns(int? userId) async {
