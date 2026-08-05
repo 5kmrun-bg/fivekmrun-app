@@ -114,8 +114,6 @@ class PushNotificationsManager {
         break;
       case false:
         break;
-      case null:
-        break;
     }
   }
   // }
