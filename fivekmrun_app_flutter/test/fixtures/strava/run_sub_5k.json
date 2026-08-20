@@ -1,0 +1,27 @@
+{
+  "id": 1004,
+  "resource_state": 2,
+  "name": "Short shakeout run",
+  "distance": 3000.0,
+  "moving_time": 900,
+  "elapsed_time": 905,
+  "total_elevation_gain": 5,
+  "type": "Run",
+  "sport_type": "Run",
+  "start_date": "2026-06-04T06:00:00Z",
+  "start_date_local": "2026-06-04T09:00:00Z",
+  "start_latlng": [42.6977, 23.3219],
+  "end_latlng": [42.6981, 23.3225],
+  "trainer": false,
+  "commute": false,
+  "manual": false,
+  "private": false,
+  "average_speed": 3.33,
+  "max_speed": 3.9,
+  "calories": 180.0,
+  "splits_metric": [
+    {"distance": 1000.0, "elapsed_time": 300},
+    {"distance": 1000.0, "elapsed_time": 300},
+    {"distance": 1000.0, "elapsed_time": 305}
+  ]
+}
