@@ -27,6 +27,17 @@ String describeStravaError(Object error) {
   return error.toString();
 }
 
+/// Whether a summary activity qualifies as a run worth fetching full details
+/// for: a non-manual run of at least [stravaFilterMinDistance] with both
+/// endpoints geolocated.
+bool isEligibleWeeklyRun(SummaryActivity activity) {
+  return activity.type!.toLowerCase() == "run" &&
+      activity.distance! >= stravaFilterMinDistance &&
+      (activity.startLatlng?.isNotEmpty ?? false) &&
+      (activity.endLatlng?.isNotEmpty ?? false) &&
+      activity.manual == false;
+}
+
 /// Reports an error/stackTrace pair with a human-readable [reason], e.g. to
 /// Crashlytics. Injected so callers can be unit-tested without Firebase.
 typedef StravaErrorReporter = void Function(
@@ -223,12 +234,7 @@ class StravaResource extends ChangeNotifier {
             .log("Strava get activities results: ${activities.length}");
 
         final runActivites = await Future.wait(activities
-            .where((a) =>
-                a.type!.toLowerCase() == "run" &&
-                a.distance! >= stravaFilterMinDistance &&
-                (a.startLatlng?.isNotEmpty ?? false) &&
-                (a.endLatlng?.isNotEmpty ?? false) &&
-                a.manual == false)
+            .where(isEligibleWeeklyRun)
             .map((a) => strava.activities.getActivity(a.id!)));
 
         FirebaseCrashlytics.instance.log(
