@@ -51,31 +51,34 @@ class ManageProfilesPage extends StatelessWidget {
         title: Text(l10n.profile_switcher_manage_profiles),
         centerTitle: true,
       ),
-      body: ListView(
-        children: <Widget>[
-          for (final profile in authRes.profiles)
-            ListTile(
-              leading: CircleAvatar(
-                backgroundImage: profile.avatarUrl.isNotEmpty
-                    ? NetworkImage(profile.avatarUrl)
-                    : null,
-                child:
-                    profile.avatarUrl.isEmpty ? const Icon(Icons.person) : null,
-              ),
-              title: Text(profile.name.isNotEmpty
-                  ? profile.name
-                  : profile.userId.toString()),
-              subtitle: Text(profile.type == ProfileType.password
-                  ? l10n.profile_switcher_type_password
-                  : l10n.profile_switcher_type_id_only),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete_outline),
-                onPressed: () => _confirmAndRemove(context, profile, l10n),
-              ),
-              selected: profile.userId == activeId,
-            ),
-        ],
-      ),
+      body: SafeArea(
+          top: false,
+          child: ListView(
+            children: <Widget>[
+              for (final profile in authRes.profiles)
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: profile.avatarUrl.isNotEmpty
+                        ? NetworkImage(profile.avatarUrl)
+                        : null,
+                    child: profile.avatarUrl.isEmpty
+                        ? const Icon(Icons.person)
+                        : null,
+                  ),
+                  title: Text(profile.name.isNotEmpty
+                      ? profile.name
+                      : profile.userId.toString()),
+                  subtitle: Text(profile.type == ProfileType.password
+                      ? l10n.profile_switcher_type_password
+                      : l10n.profile_switcher_type_id_only),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    onPressed: () => _confirmAndRemove(context, profile, l10n),
+                  ),
+                  selected: profile.userId == activeId,
+                ),
+            ],
+          )),
     );
   }
 }

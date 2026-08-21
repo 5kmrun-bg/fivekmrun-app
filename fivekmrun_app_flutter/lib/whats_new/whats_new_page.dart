@@ -62,40 +62,43 @@ class _WhatsNewPageState extends State<WhatsNewPage> {
         title: Text(l10n.whats_new_page_title),
         centerTitle: true,
       ),
-      body: _loading
-          ? Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: <Widget>[
-                if (_currentVersion != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: Text(
-                      l10n.whats_new_page_current_version(_currentVersion!),
-                      style: Theme.of(context).textTheme.bodyMedium,
+      body: SafeArea(
+        top: false,
+        child: _loading
+            ? Center(child: CircularProgressIndicator())
+            : ListView(
+                padding: const EdgeInsets.all(16.0),
+                children: <Widget>[
+                  if (_currentVersion != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        l10n.whats_new_page_current_version(_currentVersion!),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     ),
-                  ),
-                for (final entry in widget.resource.recentEntries)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          entry.version,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 8),
-                        for (final bullet in entry.bulletsFor(localeCode))
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 4.0),
-                            child: Text("• $bullet"),
+                  for (final entry in widget.resource.recentEntries)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            entry.version,
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
-                      ],
+                          const SizedBox(height: 8),
+                          for (final bullet in entry.bulletsFor(localeCode))
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 4.0),
+                              child: Text("• $bullet"),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 }
