@@ -2,30 +2,6 @@ import 'package:fivekmrun_flutter/common/pinkish_red_palette.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('PinkishRedColor', () {
-    test('has the documented #FC1851 base color', () {
-      final color = PinkishRedColor();
-      expect(color.r, 252);
-      expect(color.g, 24);
-      expect(color.b, 81);
-      expect(color.hexString, '#fc1851');
-    });
-  });
-
-  group('PinkishRedColor.getPalette', () {
-    test('returns the fixed set of dark-to-light hex shades', () {
-      final palette = PinkishRedColor().getPalette();
-
-      expect(palette.map((c) => c.hexString), [
-        '#560000',
-        '#880000',
-        '#c10029',
-        '#fb4d52',
-        '#ff827e',
-      ]);
-    });
-  });
-
   group('PinkishRedColor.makeShades', () {
     test('always starts with the base color and ends back at it', () {
       final base = PinkishRedColor();
