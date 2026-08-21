@@ -86,6 +86,10 @@ dependency_overrides:
 
 dev_dependencies:
   flutter_lints: ^2.0.3
+  # Test-only: lets a test swap in a slow-write store so the awaited write in
+  # LocalStorageResource.setLastSeenWhatsNewVersion is actually pinned.
+  # Already present transitively at this exact version.
+  shared_preferences_platform_interface: ^2.4.1
   build_runner: ^2.4.6
   flutter_test:
     sdk: flutter
