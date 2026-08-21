@@ -107,22 +107,23 @@ void main() {
       await tester.pumpWidget(_harness(strava));
       await tester.pumpAndSettle();
 
-      // Unlike connect(), disconnect() fires strava.deAuthenticate() without
-      // awaiting it before flipping isLoading back off, so the two setState
-      // calls land in the same synchronous pass — there's no observable
-      // loading frame here, just the immediate optimistic switch to
-      // "connect".
+      // deAuthenticate() is awaited, so there is a real loading frame before
+      // the flip — the button must not claim "connect" until the
+      // deauthorization has actually completed.
       await tester.tap(find.text('disconnect'));
       await tester.pump();
 
-      expect(find.text('connect'), findsOneWidget);
+      expect(find.byType(ElevatedButton), findsNothing);
       expect(strava.deAuthenticateCallCount, 1);
 
       await tester.pumpAndSettle();
       expect(find.text('connect'), findsOneWidget);
     });
 
-    testWidgets('tapping connect again while loading is a no-op',
+    // Named for what this actually asserts: while the call is in flight the
+    // button is replaced by the spinner, so a second tap is unreachable
+    // through the UI. It does not exercise connect()'s isLoading guard.
+    testWidgets('hides the button while authenticate is in flight',
         (tester) async {
       final strava = _FakeStravaResource(initiallyAuthenticated: false);
       await tester.pumpWidget(_harness(strava));

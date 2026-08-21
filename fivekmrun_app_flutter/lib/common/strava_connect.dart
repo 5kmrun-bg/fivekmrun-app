@@ -58,10 +58,10 @@ class _StravaConnectState extends State<StravaConnect> {
 
       this.setState(() => this.isLoading = true);
 
-      // NOTE: deliberately not awaited today, so the two setState calls run
-      // in the same tick and no dispose window opens. Guarded anyway so that
-      // adding the missing `await` later cannot reintroduce the crash.
-      strava.deAuthenticate();
+      // Awaited so the button doesn't flip to "connect" before the
+      // deauthorization has actually completed — and so a failure surfaces
+      // here rather than as an unhandled async error.
+      await strava.deAuthenticate();
 
       if (!mounted) return;
 
