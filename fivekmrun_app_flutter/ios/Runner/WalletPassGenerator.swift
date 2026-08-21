@@ -7,11 +7,25 @@ class WalletPassGenerator {
     private static let passTypeIdentifier = "pass.bg.fivekmpark.5kmrun"
     private static let teamIdentifier = "48HKWHQ6FS"
 
+    // #212: how far ahead to pre-populate Saturday relevance windows. Apple
+    // documents no cap on `relevantDates` array length; this is a
+    // conservative starting point pending empirical testing of any real
+    // ceiling (see the issue). At 12 weeks, the pass needs regenerating
+    // (re-tapping "Add to Wallet") roughly every 3 months to keep surfacing —
+    // acceptable since no auto-update was wanted for this feature.
+    private static let relevantWeeksAhead = 12
+
+    // Apple's default geofence radius is an undocumented, adjustable-only-
+    // downward implementation detail. 500m comfortably covers approaching a
+    // park-sized venue on foot or by car without a documented number to rely
+    // on more precisely.
+    private static let maxRelevantDistanceMeters = 500
+
     static func generatePass(userId: Int, userName: String, userStatus: String) throws -> URL {
         let barcodeValue = String(format: "%010d", userId)
         let barcodeFormat = "PKBarcodeFormatCode128"
 
-        let passJSON: [String: Any] = [
+        var passJSON: [String: Any] = [
             "formatVersion": 1,
             "passTypeIdentifier": passTypeIdentifier,
             "serialNumber": "5kmrun-\(userId)",
@@ -45,6 +59,22 @@ class WalletPassGenerator {
             ]
         ]
 
+        // #212: surface the pass on the lock screen only when BOTH a
+        // Saturday 9:00-12:00 window AND proximity to a race venue hold —
+        // documented as AND semantics for `generic`-style passes (this pass
+        // stays `generic` above; `coupon`/`storeCard` ignore dates entirely
+        // and must not be used here). `relevantDates` has no recurrence
+        // primitive, so each upcoming Saturday gets its own explicit entry.
+        passJSON["relevantDates"] = upcomingSaturdayWindows(weeksAhead: relevantWeeksAhead)
+        passJSON["locations"] = raceVenues.map { venue in
+            [
+                "latitude": venue.latitude,
+                "longitude": venue.longitude,
+                "relevantText": "5kmRun \(venue.name) — покажи баркода си"
+            ]
+        }
+        passJSON["maxDistance"] = maxRelevantDistanceMeters
+
         let passData = try JSONSerialization.data(withJSONObject: passJSON, options: .prettyPrinted)
 
         // Brand the pass with the app logo (falls back to a blank pixel if missing).
@@ -63,6 +93,63 @@ class WalletPassGenerator {
         let signature = try signManifest(manifestData: manifestData)
 
         return try buildPassArchive(files: files, manifestData: manifestData, signature: signature)
+    }
+
+    // MARK: - Relevance (#212)
+
+    /// Builds one `Pass.RelevantDates` entry per upcoming Saturday's
+    /// 9:00-12:00 window, `weeksAhead` weeks out starting from (and
+    /// including, if today is a Saturday) today. Each entry's UTC offset is
+    /// computed per-date against Europe/Sofia so the EET/EEST DST switch
+    /// doesn't shift the wall-clock 9:00/12:00 window.
+    private static func upcomingSaturdayWindows(weeksAhead: Int) -> [[String: String]] {
+        guard let sofiaTimeZone = TimeZone(identifier: "Europe/Sofia") else { return [] }
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = sofiaTimeZone
+
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = sofiaTimeZone
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+
+        // Walk forward by whole days (not exact instants) so a Saturday
+        // afternoon "now" still counts today as this week's Saturday, rather
+        // than skipping to next week because the loop compared instants.
+        var candidateDay = calendar.startOfDay(for: Date())
+        while calendar.component(.weekday, from: candidateDay) != 7 { // 7 = Saturday
+            guard let nextDay = calendar.date(byAdding: .day, value: 1, to: candidateDay) else {
+                return []
+            }
+            candidateDay = nextDay
+        }
+
+        var windows: [[String: String]] = []
+        for week in 0..<weeksAhead {
+            guard let saturday = calendar.date(byAdding: .day, value: week * 7, to: candidateDay)
+            else { continue }
+
+            let dayComponents = calendar.dateComponents([.year, .month, .day], from: saturday)
+
+            var startComponents = dayComponents
+            startComponents.hour = 9
+            startComponents.minute = 0
+            startComponents.second = 0
+
+            var endComponents = dayComponents
+            endComponents.hour = 12
+            endComponents.minute = 0
+            endComponents.second = 0
+
+            guard let start = calendar.date(from: startComponents),
+                  let end = calendar.date(from: endComponents) else { continue }
+
+            windows.append([
+                "startDate": formatter.string(from: start),
+                "endDate": formatter.string(from: end)
+            ])
+        }
+        return windows
     }
 
     // MARK: - Helpers
