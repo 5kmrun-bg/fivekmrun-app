@@ -20,6 +20,11 @@ class _StravaConnectState extends State<StravaConnect> {
     final strava = Provider.of<StravaResource>(this.context, listen: false);
     final isConnectedToStrava = await strava.isAuthenticated();
 
+    // The State can be torn down while the call above is in flight — backing
+    // out of Settings mid-check is an ordinary action, and the real resource
+    // talks to an OAuth client, so the window is wide.
+    if (!mounted) return;
+
     setState(() {
       this.isLoading = false;
       this.isConnectedToStrava = isConnectedToStrava;
@@ -38,6 +43,8 @@ class _StravaConnectState extends State<StravaConnect> {
 
       final result = await strava.authenticate();
 
+      if (!mounted) return;
+
       this.setState(() {
         this.isLoading = false;
         this.isConnectedToStrava = result;
@@ -51,7 +58,12 @@ class _StravaConnectState extends State<StravaConnect> {
 
       this.setState(() => this.isLoading = true);
 
-      strava.deAuthenticate();
+      // Awaited so the button doesn't flip to "connect" before the
+      // deauthorization has actually completed — and so a failure surfaces
+      // here rather than as an unhandled async error.
+      await strava.deAuthenticate();
+
+      if (!mounted) return;
 
       this.setState(() {
         this.isLoading = false;
