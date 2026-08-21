@@ -1,7 +1,7 @@
 PODS:
   - app_badge_plus (1.2.3):
     - Flutter
-  - app_links (6.4.1):
+  - app_links (7.0.0):
     - Flutter
   - audioplayers_darwin (0.0.1):
     - Flutter
@@ -112,7 +112,7 @@ PODS:
     - PromisesSwift (~> 2.1)
   - FirebaseSharedSwift (11.15.0)
   - Flutter (1.0.0)
-  - flutter_web_auth_2 (3.0.0):
+  - flutter_web_auth_2 (5.0.0):
     - Flutter
   - geocoding_ios (1.0.5):
     - Flutter
@@ -292,7 +292,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   app_badge_plus: 0e3470f993dd08094e16463f57a7e0db04c6b587
-  app_links: 3dbc685f76b1693c66a6d9dd1e9ab6f73d97dc0a
+  app_links: a754cbec3c255bd4bbb4d236ecc06f28cd9a7ce8
   audioplayers_darwin: 835ced6edd4c9fc8ebb0a7cc9e294a91d99917d5
   Firebase: d99ac19b909cd2c548339c2241ecd0d1599ab02e
   firebase_analytics: 0e25ca1d4001ccedd40b4e5b74c0ec34e18f6425
@@ -313,7 +313,7 @@ SPEC CHECKSUMS:
   FirebaseSessions: b9a92c1c51bbb81e78fc3142cda6d925d700f8e7
   FirebaseSharedSwift: e17c654ef1f1a616b0b33054e663ad1035c8fd40
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_web_auth_2: 5c8d9dcd7848b5a9efb086d24e7a9adcae979c80
+  flutter_web_auth_2: 646fc9df97a01c59e5eea99b237da2c6360f8439
   geocoding_ios: 33776c9ebb98d037b5e025bb0e7537f6dd19646e
   GoogleAdsOnDeviceConversion: 2be6297a4f048459e0ae17fad9bfd2844e10cf64
   GoogleAppMeasurement: 700dce7541804bec33db590a5c496b663fbe2539
