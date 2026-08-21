@@ -8,15 +8,27 @@ import 'package:provider/provider.dart';
 /// call out to a real strava_client (OAuth) and Firebase Crashlytics — same
 /// pattern as _NoOpStravaResource in test/settings_page_test.dart.
 class _FakeStravaResource extends StravaResource {
-  _FakeStravaResource({bool initiallyAuthenticated = false})
-      : _isAuthenticated = initiallyAuthenticated;
+  _FakeStravaResource({
+    bool initiallyAuthenticated = false,
+    this.isAuthenticatedDelay = Duration.zero,
+  }) : _isAuthenticated = initiallyAuthenticated;
+
+  /// Widens the async gap in [isAuthenticated] so a test can dispose the
+  /// widget while the call is still in flight. The real resource talks to an
+  /// OAuth client, so that window is far wider in production than in tests.
+  final Duration isAuthenticatedDelay;
 
   bool _isAuthenticated;
   int authenticateCallCount = 0;
   int deAuthenticateCallCount = 0;
 
   @override
-  Future<bool> isAuthenticated() async => _isAuthenticated;
+  Future<bool> isAuthenticated() async {
+    if (isAuthenticatedDelay > Duration.zero) {
+      await Future.delayed(isAuthenticatedDelay);
+    }
+    return _isAuthenticated;
+  }
 
   @override
   Future<bool> authenticate() async {
@@ -123,6 +135,53 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(strava.authenticateCallCount, 1);
+    });
+
+    // Each of the three async paths below calls setState after an await.
+    // Backing out of Settings (which hosts this widget) while the call is
+    // still in flight tears the State down first, so setState lands on a
+    // defunct State and throws unless guarded by `mounted`.
+    testWidgets('does not setState when disposed during isAuthenticated',
+        (tester) async {
+      final strava = _FakeStravaResource(
+          isAuthenticatedDelay: const Duration(milliseconds: 50));
+      await tester.pumpWidget(_harness(strava));
+      await tester.pump(); // mounted; isAuthenticated still pending
+
+      await tester.pumpWidget(const MaterialApp(home: SizedBox()));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('does not setState when disposed during authenticate',
+        (tester) async {
+      final strava = _FakeStravaResource(initiallyAuthenticated: false);
+      await tester.pumpWidget(_harness(strava));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('connect'));
+      await tester.pump(); // authenticate in flight
+
+      await tester.pumpWidget(const MaterialApp(home: SizedBox()));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('does not setState when disposed during deAuthenticate',
+        (tester) async {
+      final strava = _FakeStravaResource(initiallyAuthenticated: true);
+      await tester.pumpWidget(_harness(strava));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('disconnect'));
+      await tester.pump(); // deAuthenticate in flight
+
+      await tester.pumpWidget(const MaterialApp(home: SizedBox()));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(tester.takeException(), isNull);
     });
   });
 }
