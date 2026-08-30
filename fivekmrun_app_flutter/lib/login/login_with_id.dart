@@ -13,10 +13,10 @@ class LoginWithId extends StatefulWidget {
   /// success without touching the currently active profile's data.
   final bool addingProfile;
 
-  LoginWithId({Key? key, this.addingProfile = false}) : super(key: key);
+  const LoginWithId({Key? key, this.addingProfile = false}) : super(key: key);
 
   @override
-  _LoginWithIdState createState() => _LoginWithIdState();
+  State<LoginWithId> createState() => _LoginWithIdState();
 }
 
 class _LoginWithIdState extends State<LoginWithId> {
@@ -61,6 +61,7 @@ class _LoginWithIdState extends State<LoginWithId> {
 
     await Provider.of<AuthenticationResource>(context, listen: false)
         .authenticateWithUserId(userId);
+    if (!mounted) return;
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;
 
     Navigator.pushNamed(context, 'loginPreview');
@@ -79,7 +80,7 @@ class _LoginWithIdState extends State<LoginWithId> {
           decoration: InputHelpers.decoration(
               AppLocalizations.of(context)!.login_with_id_widget_personal_id),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
@@ -101,7 +102,7 @@ class _LoginWithIdState extends State<LoginWithId> {
             ],
           ),
         ),
-        SizedBox(height: 18),
+        const SizedBox(height: 18),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(

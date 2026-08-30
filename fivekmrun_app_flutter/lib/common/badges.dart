@@ -7,7 +7,7 @@ int getSundaysCountInYear(int year) {
   var sundays = 0;
   while (date.year == year) {
     sundays++;
-    date = date.add(Duration(days: 7));
+    date = date.add(const Duration(days: 7));
   }
 
   return sundays;
@@ -19,7 +19,7 @@ int getSaturdaysCountInYear(int year) {
   var sundays = 0;
   while (date.year == year) {
     sundays++;
-    date = date.subtract(Duration(days: 7));
+    date = date.subtract(const Duration(days: 7));
   }
 
   return sundays;
@@ -48,7 +48,7 @@ bool hasMaxBadge(List<Run>? runs) {
     }
   }
 
-  return yearsWon.length > 0;
+  return yearsWon.isNotEmpty;
 }
 
 bool hasSelfieBadge(List<Run>? runs) {
@@ -74,5 +74,5 @@ bool hasSelfieBadge(List<Run>? runs) {
     }
   }
 
-  return yearsWon.length > 0;
+  return yearsWon.isNotEmpty;
 }

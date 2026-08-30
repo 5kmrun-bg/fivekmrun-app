@@ -17,7 +17,7 @@ class ListTileRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color =
-        this.iconColor != null ? this.iconColor : theme.colorScheme.secondary;
+        iconColor ?? theme.colorScheme.secondary;
     return Row(
       children: <Widget>[
         Padding(
@@ -25,7 +25,7 @@ class ListTileRow extends StatelessWidget {
           child: Icon(
             icon,
             color: color,
-            size: this.iconSize.toDouble(),
+            size: iconSize.toDouble(),
           ),
         ),
         Expanded(

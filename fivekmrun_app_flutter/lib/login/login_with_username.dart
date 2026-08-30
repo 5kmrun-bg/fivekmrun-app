@@ -19,7 +19,7 @@ class LoginWithUsername extends StatefulWidget {
       : super(key: key);
 
   @override
-  _LoginWithUsernameState createState() => _LoginWithUsernameState();
+  State<LoginWithUsername> createState() => _LoginWithUsernameState();
 }
 
 class _LoginWithUsernameState extends State<LoginWithUsername> {
@@ -30,14 +30,14 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
 
   @override
   void dispose() {
-    this.usernameInputController.dispose();
-    this.passwordInputController.dispose();
+    usernameInputController.dispose();
+    passwordInputController.dispose();
     super.dispose();
   }
 
   void onPressed() async {
-    String username = this.usernameInputController.text.trim();
-    String password = this.passwordInputController.text;
+    String username = usernameInputController.text.trim();
+    String password = passwordInputController.text;
 
     Provider.of<AuthenticationResource>(context, listen: false)
         .authenticate(username, password, makeActive: !widget.addingProfile)
@@ -52,12 +52,11 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
       } catch (_) {}
 
       if (isAuthenticated) {
-        if (mounted) {
-          setState(() {
-            this.loginError = false;
-            this.maxProfilesError = false;
-          });
-        }
+        if (!mounted) return;
+        setState(() {
+          loginError = false;
+          maxProfilesError = false;
+        });
         if (widget.addingProfile) {
           try {
             FirebaseAnalytics.instance.logEvent(
@@ -71,11 +70,11 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
           Navigator.pushNamedAndRemoveUntil(context, "home", (_) => false);
         }
       } else {
-        if (mounted) setState(() => this.loginError = true);
+        if (mounted) setState(() => loginError = true);
       }
     }).catchError((error, stackTrace) {
       if (error is MaxProfilesReachedException) {
-        if (mounted) setState(() => this.maxProfilesError = true);
+        if (mounted) setState(() => maxProfilesError = true);
         return;
       }
 
@@ -85,7 +84,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
       // SocketException with no usable network, a FormatException when a
       // captive portal answers with HTML instead of JSON. Ordering also keeps
       // the user-facing feedback independent of the telemetry call.
-      if (mounted) setState(() => this.loginError = true);
+      if (mounted) setState(() => loginError = true);
 
       // Best-effort: reporting must not become a second failure on top of the
       // one being reported. Crashlytics throws if Firebase never initialised,
@@ -103,7 +102,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          if (this.loginError)
+          if (loginError)
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
               child: Text(
@@ -115,7 +114,7 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
                 ),
               ),
             ),
-          if (this.maxProfilesError)
+          if (maxProfilesError)
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
               child: Text(
@@ -129,23 +128,23 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
             ),
           TextField(
             autocorrect: false,
-            controller: this.usernameInputController,
+            controller: usernameInputController,
             keyboardType: TextInputType.emailAddress,
-            autofillHints: [AutofillHints.username],
+            autofillHints: const [AutofillHints.username],
             decoration: InputHelpers.decoration("email"),
             textInputAction: TextInputAction.next,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextField(
-            controller: this.passwordInputController,
+            controller: passwordInputController,
             autocorrect: false,
             obscureText: true,
-            autofillHints: [AutofillHints.password],
+            autofillHints: const [AutofillHints.password],
             decoration: InputHelpers.decoration(AppLocalizations.of(context)!
                 .login_with_username_widget_password),
             onEditingComplete: () => TextInput.finishAutofillContext(),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(

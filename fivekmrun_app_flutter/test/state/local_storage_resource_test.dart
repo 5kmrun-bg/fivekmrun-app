@@ -77,7 +77,7 @@ void main() {
 
     test('reflects a previously saved version', () async {
       SharedPreferences.setMockInitialValues(
-          {constants.key_lastSeenWhatsNewVersion: '3.18.0'});
+          {constants.keyLastSeenWhatsNewVersion: '3.18.0'});
 
       final resource = LocalStorageResource();
 
@@ -93,7 +93,7 @@ void main() {
 
       expect(await resource.lastSeenWhatsNewVersion, '3.19.0');
       final preferences = await SharedPreferences.getInstance();
-      expect(preferences.getString(constants.key_lastSeenWhatsNewVersion),
+      expect(preferences.getString(constants.keyLastSeenWhatsNewVersion),
           '3.19.0');
     });
 
@@ -116,7 +116,7 @@ void main() {
       // the write still in flight. If the setter stops awaiting, this read
       // happens 50ms before the write lands and the key is absent.
       final stored = await SharedPreferencesStorePlatform.instance.getAll();
-      expect(stored['flutter.${constants.key_lastSeenWhatsNewVersion}'],
+      expect(stored['flutter.${constants.keyLastSeenWhatsNewVersion}'],
           '3.19.0');
     });
   });

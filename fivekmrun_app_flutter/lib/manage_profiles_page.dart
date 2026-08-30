@@ -34,7 +34,7 @@ class ManageProfilesPage extends StatelessWidget {
       ),
     );
 
-    if (confirmed == true) {
+    if (confirmed == true && context.mounted) {
       await removeProfileFromSwitcher(context, profile.userId);
     }
   }
@@ -47,7 +47,7 @@ class ManageProfilesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(color: Colors.white),
+        leading: const BackButton(color: Colors.white),
         title: Text(l10n.profile_switcher_manage_profiles),
         centerTitle: true,
       ),

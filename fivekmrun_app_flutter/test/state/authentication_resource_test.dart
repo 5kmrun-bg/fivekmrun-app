@@ -72,8 +72,8 @@ void main() {
       await auth.authenticateWithUserId(111);
 
       final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getString(constants.key_profiles), isNotNull);
-      expect(prefs.getInt(constants.key_activeProfileId), 111);
+      expect(prefs.getString(constants.keyProfiles), isNotNull);
+      expect(prefs.getInt(constants.keyActiveProfileId), 111);
     });
   });
 
@@ -158,8 +158,8 @@ void main() {
       expect(auth.getUserId(), isNull);
 
       final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getString(constants.key_profiles), isNull);
-      expect(prefs.getInt(constants.key_activeProfileId), isNull);
+      expect(prefs.getString(constants.keyProfiles), isNull);
+      expect(prefs.getInt(constants.keyActiveProfileId), isNull);
     });
   });
 
@@ -190,7 +190,7 @@ void main() {
   group('loadFromLocalStore', () {
     test('loads an already-saved profile list', () async {
       final profiles = [
-        Profile(userId: 111, type: ProfileType.idOnly, name: 'A'),
+        const Profile(userId: 111, type: ProfileType.idOnly, name: 'A'),
         Profile(
             userId: 222,
             type: ProfileType.password,
@@ -199,8 +199,8 @@ void main() {
             name: 'B'),
       ];
       SharedPreferences.setMockInitialValues({
-        constants.key_profiles: _profilesJson(profiles),
-        constants.key_activeProfileId: 222,
+        constants.keyProfiles: _profilesJson(profiles),
+        constants.keyActiveProfileId: 222,
       });
       final auth = AuthenticationResource();
 
@@ -214,9 +214,9 @@ void main() {
     test('migrates the pre-multi-profile single password-account keys',
         () async {
       SharedPreferences.setMockInitialValues({
-        constants.key_userId: 555,
-        constants.key_token: 'legacy-token',
-        constants.key_tokenTimestamp: DateTime.now().millisecondsSinceEpoch,
+        constants.keyUserId: 555,
+        constants.keyToken: 'legacy-token',
+        constants.keyTokenTimestamp: DateTime.now().millisecondsSinceEpoch,
       });
       final auth = AuthenticationResource();
 
@@ -232,12 +232,12 @@ void main() {
       // The migration is persisted, so a following launch reads the new
       // profiles list directly rather than re-migrating.
       final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getString(constants.key_profiles), isNotNull);
+      expect(prefs.getString(constants.keyProfiles), isNotNull);
     });
 
     test('migrates the pre-multi-profile single ID-only account', () async {
       SharedPreferences.setMockInitialValues({
-        constants.key_userId: 555,
+        constants.keyUserId: 555,
       });
       final auth = AuthenticationResource();
 
@@ -251,9 +251,9 @@ void main() {
     test('an expired migrated token is not usable, but the identity is kept',
         () async {
       SharedPreferences.setMockInitialValues({
-        constants.key_userId: 555,
-        constants.key_token: 'legacy-token',
-        constants.key_tokenTimestamp: DateTime.now()
+        constants.keyUserId: 555,
+        constants.keyToken: 'legacy-token',
+        constants.keyTokenTimestamp: DateTime.now()
             .subtract(const Duration(days: 31))
             .millisecondsSinceEpoch,
       });

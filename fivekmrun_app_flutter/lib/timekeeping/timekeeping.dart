@@ -68,7 +68,7 @@ class Timekeeping extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChronometerView()),
+                                builder: (context) => const ChronometerView()),
                           );
                         },
                         icon: const Icon(Icons.timer),

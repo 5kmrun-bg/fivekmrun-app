@@ -32,18 +32,18 @@ class OfflineChartSubmissionModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'userId': this.userId,
-      'elapsedTime': this.elapsedTime,
-      'distance': this.distance,
-      'startDate': this.startDate.toString(),
-      'mapPath': this.mapPath,
-      'startGeoLocation': this.startGeoLocation,
-      'elevationLow': this.elevationLow,
-      'elevationHigh': this.elevationHigh,
-      'elevationGainedTotal': this.elevationGainedTotal,
-      'startLocation': this.startLocation,
-      'stravaLink': this.stravaLink,
-      'segments': this.segments.toString()
+      'userId': userId,
+      'elapsedTime': elapsedTime,
+      'distance': distance,
+      'startDate': startDate.toString(),
+      'mapPath': mapPath,
+      'startGeoLocation': startGeoLocation,
+      'elevationLow': elevationLow,
+      'elevationHigh': elevationHigh,
+      'elevationGainedTotal': elevationGainedTotal,
+      'startLocation': startLocation,
+      'stravaLink': stravaLink,
+      'segments': segments.toString()
     };
   }
 }

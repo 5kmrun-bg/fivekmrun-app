@@ -33,17 +33,17 @@ abstract class EventsResource extends ChangeNotifier {
   Future<List<Event>> getAll() async {
     final http.Response response;
     try {
-      response = await _client.get(Uri.parse("${this.getEventUrl()}"));
+      response = await _client.get(Uri.parse(getEventUrl()));
       ensureJsonResponse(response, "events");
     } catch (_) {
-      this.loading = false;
+      loading = false;
       rethrow;
     }
 
     String body = utf8.decode(response.bodyBytes);
-    this.loading = false;
-    this.value = listFromJsonParser(jsonDecode(body));
-    return this.value;
+    loading = false;
+    value = listFromJsonParser(jsonDecode(body));
+    return value;
   }
 }
 
@@ -164,14 +164,14 @@ class AllFutureEventsResource extends ChangeNotifier {
         ..addAll(kidsFutureEvents);
     } catch (_) {
       // Keep whatever was already loaded rather than blanking the events tab.
-      this.loading = false;
+      loading = false;
       rethrow;
     }
 
-    this.loading = false;
-    this.value = combined..sortBy((e) => e.date);
+    loading = false;
+    value = combined..sortBy((e) => e.date);
 
-    return this.value;
+    return value;
   }
 }
 
@@ -208,15 +208,15 @@ class AllPastEventsResource extends ChangeNotifier {
         ..addAll(kidsPastEvents);
     } catch (_) {
       // Keep whatever was already loaded rather than blanking the events tab.
-      this.loading = false;
+      loading = false;
       rethrow;
     }
 
-    this.loading = false;
+    loading = false;
     // Past events read most-recent-first (unlike future events, which are
     // soonest-first), so sort by date descending across all sources.
-    this.value = combined..sort((a, b) => b.date.compareTo(a.date));
+    value = combined..sort((a, b) => b.date.compareTo(a.date));
 
-    return this.value;
+    return value;
   }
 }

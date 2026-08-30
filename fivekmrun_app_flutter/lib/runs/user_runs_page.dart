@@ -20,9 +20,9 @@ class UserRunsPage extends StatelessWidget {
           child:
               Consumer<RunsResource>(builder: (context, runsResource, child) {
             if (runsResource.loading) {
-              return refreshableMessage(CircularProgressIndicator());
+              return refreshableMessage(const CircularProgressIndicator());
             } else if (runsResource.value == null ||
-                runsResource.value?.length == 0) {
+                (runsResource.value?.isEmpty ?? false)) {
               return refreshableMessage(Text(l10n.no_runs));
             } else {
               return UserRunsList(runs: runsResource.value!);
@@ -70,7 +70,7 @@ class UserRunsList extends StatelessWidget {
                 ),
                 ListTileRow(
                   icon: Icons.timer,
-                  text: run.time! + " " + AppLocalizations.of(context)!.min,
+                  text: "${run.time!} ${AppLocalizations.of(context)!.min}",
                 ),
               ],
             ),

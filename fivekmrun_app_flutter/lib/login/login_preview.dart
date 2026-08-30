@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class LoginPreview extends StatelessWidget {
-  LoginPreview({Key? key}) : super(key: key);
+  const LoginPreview({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +35,10 @@ class LoginPreview extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(right: 12.0),
-                      child: Container(
+                      child: SizedBox(
                         width: 60,
                         child: ElevatedButton(
-                          child: Icon(
+                          child: const Icon(
                             Icons.edit,
                           ),
                           onPressed: () {
@@ -47,7 +47,7 @@ class LoginPreview extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       width: 150,
                       child: ElevatedButton(
                           child: Text(l10n.next),

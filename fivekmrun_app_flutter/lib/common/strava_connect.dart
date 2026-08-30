@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StravaConnect extends StatefulWidget {
-  StravaConnect({Key? key}) : super(key: key);
+  const StravaConnect({Key? key}) : super(key: key);
 
   @override
-  _StravaConnectState createState() => _StravaConnectState();
+  State<StravaConnect> createState() => _StravaConnectState();
 }
 
 class _StravaConnectState extends State<StravaConnect> {
@@ -17,7 +17,7 @@ class _StravaConnectState extends State<StravaConnect> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final strava = Provider.of<StravaResource>(this.context, listen: false);
+    final strava = Provider.of<StravaResource>(context, listen: false);
     final isConnectedToStrava = await strava.isAuthenticated();
 
     // The State can be torn down while the call above is in flight — backing
@@ -26,7 +26,7 @@ class _StravaConnectState extends State<StravaConnect> {
     if (!mounted) return;
 
     setState(() {
-      this.isLoading = false;
+      isLoading = false;
       this.isConnectedToStrava = isConnectedToStrava;
     });
   }
@@ -36,27 +36,27 @@ class _StravaConnectState extends State<StravaConnect> {
     final strava = Provider.of<StravaResource>(this.context, listen: false);
 
     void connect() async {
-      if (this.isLoading) {
+      if (isLoading) {
         return;
       }
-      this.setState(() => this.isLoading = true);
+      setState(() => isLoading = true);
 
       final result = await strava.authenticate();
 
       if (!mounted) return;
 
-      this.setState(() {
-        this.isLoading = false;
-        this.isConnectedToStrava = result;
+      setState(() {
+        isLoading = false;
+        isConnectedToStrava = result;
       });
     }
 
     void disconnect() async {
-      if (this.isLoading) {
+      if (isLoading) {
         return;
       }
 
-      this.setState(() => this.isLoading = true);
+      setState(() => isLoading = true);
 
       // Awaited so the button doesn't flip to "connect" before the
       // deauthorization has actually completed — and so a failure surfaces
@@ -65,23 +65,23 @@ class _StravaConnectState extends State<StravaConnect> {
 
       if (!mounted) return;
 
-      this.setState(() {
-        this.isLoading = false;
-        this.isConnectedToStrava = false;
+      setState(() {
+        isLoading = false;
+        isConnectedToStrava = false;
       });
     }
 
     return Container(
-      child: this.isLoading
-          ? CircularProgressIndicator()
-          : this.isConnectedToStrava
+      child: isLoading
+          ? const CircularProgressIndicator()
+          : isConnectedToStrava
               ? ElevatedButton(
-                  child: Text("disconnect"),
                   onPressed: disconnect,
+                  child: const Text("disconnect"),
                 )
               : ElevatedButton(
-                  child: Text("connect"),
                   onPressed: connect,
+                  child: const Text("connect"),
                 ),
     );
   }

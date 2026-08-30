@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
+final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 
 class FutureEventsList extends StatelessWidget {
   const FutureEventsList({
@@ -117,9 +117,9 @@ class XLRegistrationSection extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
+        color: Colors.white.withValues(alpha: 0.04),
         border: Border(
-          top: BorderSide(color: accent.withOpacity(0.35)),
+          top: BorderSide(color: accent.withValues(alpha: 0.35)),
         ),
       ),
       child: Column(

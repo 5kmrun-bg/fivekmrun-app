@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class NoResultsComponent extends StatelessWidget {
+  const NoResultsComponent({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(

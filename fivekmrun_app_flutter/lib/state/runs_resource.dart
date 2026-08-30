@@ -55,10 +55,10 @@ class RunsResource extends ChangeNotifier {
   }
 
   clear() {
-    this.value = null;
-    this.loading = true;
-    this._bestOfficialRun = null;
-    this._lastOfficialRun = null;
+    value = null;
+    loading = true;
+    _bestOfficialRun = null;
+    _lastOfficialRun = null;
   }
 
   /// Fetches the user's runs from each source and replaces [value].
@@ -79,19 +79,19 @@ class RunsResource extends ChangeNotifier {
   /// deliberate: showing the rest beats showing nothing, and it self-heals.
   Future<List<Run>> getByUserId(int? userId) async {
     if (userId == null) {
-      return this.value ?? <Run>[];
+      return value ?? <Run>[];
     }
 
-    final official = await _tryRetrieve(() => this.retrieve5kmRuns(userId));
-    final selfie = await _tryRetrieve(() => this.retrieveSelfieRuns(userId));
-    final xl = await _tryRetrieve(() => this.retrieveXLRuns(userId));
+    final official = await _tryRetrieve(() => retrieve5kmRuns(userId));
+    final selfie = await _tryRetrieve(() => retrieveSelfieRuns(userId));
+    final xl = await _tryRetrieve(() => retrieveXLRuns(userId));
 
     // Only the two mandatory sources decide this. [retrieveXLRuns] already
     // answers "no XL runs" for its own error page, so it succeeds with an
     // empty list for nearly every user — letting it vote here would mean a
     // total outage of the other two still looked like "no runs".
     if (official.failure != null && selfie.failure != null) {
-      this.loading = false;
+      loading = false;
       throw official.failure!;
     }
 
@@ -101,10 +101,10 @@ class RunsResource extends ChangeNotifier {
       ...xl.runs.where((r) => r.timeInSeconds != null),
     ];
 
-    this._processRuns(runs);
+    _processRuns(runs);
 
-    this.value = runs;
-    this.loading = false;
+    value = runs;
+    loading = false;
     return runs;
   }
 
@@ -155,28 +155,28 @@ class RunsResource extends ChangeNotifier {
   }
 
   void _processRuns(List<Run> runs) {
-    if (runs.length == 0) {
-      this._bestOfficialRun = null;
-      this._lastOfficialRun = null;
-      this._bestSelfieRun = null;
-      this._lastSelfieRun = null;
+    if (runs.isEmpty) {
+      _bestOfficialRun = null;
+      _lastOfficialRun = null;
+      _bestSelfieRun = null;
+      _lastSelfieRun = null;
       return;
     }
 
     runs.sort((r1, r2) => r2.date?.compareTo(r1.date!) ?? 0);
 
     final officialRuns = runs.where((r) => r.runType == RunType.official);
-    if (officialRuns.length > 0) {
-      this._lastOfficialRun = officialRuns.first;
-      this._bestOfficialRun = officialRuns.reduce((a, b) =>
+    if (officialRuns.isNotEmpty) {
+      _lastOfficialRun = officialRuns.first;
+      _bestOfficialRun = officialRuns.reduce((a, b) =>
           (a.timeInSeconds ?? 0) < (b.timeInSeconds ?? 0) ? a : b);
       //Function.apply((r) => r.differenceFromBest = r.timeInSeconds - this._bestOfficialRun.timeInSeconds, runs.where((r) => !r.isSelfie).toList());
     }
 
     final selfieRuns = runs.where((r) => r.runType == RunType.selfie);
-    if (selfieRuns.length > 0) {
-      this._lastSelfieRun = selfieRuns.first;
-      this._bestSelfieRun = selfieRuns.reduce(
+    if (selfieRuns.isNotEmpty) {
+      _lastSelfieRun = selfieRuns.first;
+      _bestSelfieRun = selfieRuns.reduce(
           (a, b) => (a.timeInSeconds ?? 0) < (b.timeInSeconds ?? 0) ? a : b);
       //Function.apply((r) => r.differenceFromBest = r.timeInSeconds - this._bestSelfieRun.timeInSeconds, runs.where((r) => r.isSelfie).toList());
     }

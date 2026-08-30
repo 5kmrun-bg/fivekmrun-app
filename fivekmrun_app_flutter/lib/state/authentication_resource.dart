@@ -50,7 +50,7 @@ class AuthenticationResource extends ChangeNotifier {
       {bool makeActive = true}) async {
     _logCrashlytics("authenticate username - $username");
 
-    HttpClient httpClient = new HttpClient();
+    HttpClient httpClient = HttpClient();
     HttpClientRequest request =
         await httpClient.postUrl(Uri.parse("https://5kmrun.bg/api/auth"));
     request.headers.set('content-type', 'application/x-www-form-urlencoded');
@@ -67,7 +67,7 @@ class AuthenticationResource extends ChangeNotifier {
       final userId = map["answer"]["id"];
 
       if (token != null && token != "" && userId != null) {
-        await this._upsertProfile(
+        await _upsertProfile(
           Profile(
             userId: userId,
             type: ProfileType.password,
@@ -91,7 +91,7 @@ class AuthenticationResource extends ChangeNotifier {
       {bool makeActive = true}) async {
     _logCrashlytics("authenticate userID - $userId");
 
-    await this._upsertProfile(
+    await _upsertProfile(
       Profile(userId: userId, type: ProfileType.idOnly),
       makeActive: makeActive,
     );
@@ -121,7 +121,7 @@ class AuthenticationResource extends ChangeNotifier {
     final email = username ?? existing.username;
     if (email == null) return false;
 
-    HttpClient httpClient = new HttpClient();
+    HttpClient httpClient = HttpClient();
     HttpClientRequest request =
         await httpClient.postUrl(Uri.parse("https://5kmrun.bg/api/auth"));
     request.headers.set('content-type', 'application/x-www-form-urlencoded');
@@ -141,7 +141,7 @@ class AuthenticationResource extends ChangeNotifier {
       return false;
     }
 
-    await this._upsertProfile(
+    await _upsertProfile(
       existing.copyWith(
         type: ProfileType.password,
         token: token,
@@ -158,9 +158,9 @@ class AuthenticationResource extends ChangeNotifier {
   Future<bool> switchProfile(int userId) async {
     if (!_profiles.any((p) => p.userId == userId)) return false;
 
-    this._activeProfileId = userId;
+    _activeProfileId = userId;
     _setCrashlyticsUser(userId.toString());
-    await this._persistActiveProfileId();
+    await _persistActiveProfileId();
     notifyListeners();
     return true;
   }
@@ -170,19 +170,19 @@ class AuthenticationResource extends ChangeNotifier {
   /// falls back to another saved profile, or to no active profile (login
   /// screen) if none remain. Returns the new active profile id, or null.
   Future<int?> removeProfile(int userId) async {
-    final wasActive = this._activeProfileId == userId;
-    this._profiles.removeWhere((p) => p.userId == userId);
-    await this._persistProfiles();
+    final wasActive = _activeProfileId == userId;
+    _profiles.removeWhere((p) => p.userId == userId);
+    await _persistProfiles();
 
     if (wasActive) {
-      this._activeProfileId =
-          this._profiles.isNotEmpty ? this._profiles.first.userId : null;
-      _setCrashlyticsUser(this._activeProfileId?.toString());
-      await this._persistActiveProfileId();
+      _activeProfileId =
+          _profiles.isNotEmpty ? _profiles.first.userId : null;
+      _setCrashlyticsUser(_activeProfileId?.toString());
+      await _persistActiveProfileId();
     }
 
     notifyListeners();
-    return this._activeProfileId;
+    return _activeProfileId;
   }
 
   String? getToken() {
@@ -204,18 +204,18 @@ class AuthenticationResource extends ChangeNotifier {
   /// single profile from the switcher.
   Future<void> logout() async {
     _logCrashlytics("logout() started");
-    this._profiles = <Profile>[];
-    this._activeProfileId = null;
+    _profiles = <Profile>[];
+    _activeProfileId = null;
     _setCrashlyticsUser(null);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(constants.key_profiles);
-    await prefs.remove(constants.key_activeProfileId);
+    await prefs.remove(constants.keyProfiles);
+    await prefs.remove(constants.keyActiveProfileId);
     // Pre-multi-profile keys — removed too so a stale copy can't resurrect
     // itself on the next migration check.
-    await prefs.remove(constants.key_userId);
-    await prefs.remove(constants.key_token);
-    await prefs.remove(constants.key_tokenTimestamp);
+    await prefs.remove(constants.keyUserId);
+    await prefs.remove(constants.keyToken);
+    await prefs.remove(constants.keyTokenTimestamp);
 
     notifyListeners();
     _logCrashlytics("logout() completed");
@@ -226,44 +226,44 @@ class AuthenticationResource extends ChangeNotifier {
   /// or migrated with only an id.
   Future<void> updateProfileDisplay(int userId,
       {required String name, required String avatarUrl}) async {
-    final index = this._profiles.indexWhere((p) => p.userId == userId);
+    final index = _profiles.indexWhere((p) => p.userId == userId);
     if (index == -1) return;
-    if (this._profiles[index].name == name &&
-        this._profiles[index].avatarUrl == avatarUrl) {
+    if (_profiles[index].name == name &&
+        _profiles[index].avatarUrl == avatarUrl) {
       return;
     }
 
-    this._profiles[index] =
-        this._profiles[index].copyWith(name: name, avatarUrl: avatarUrl);
-    await this._persistProfiles();
+    _profiles[index] =
+        _profiles[index].copyWith(name: name, avatarUrl: avatarUrl);
+    await _persistProfiles();
     notifyListeners();
   }
 
   Future<void> _upsertProfile(Profile profile,
       {required bool makeActive}) async {
-    final index = this._profiles.indexWhere((p) => p.userId == profile.userId);
+    final index = _profiles.indexWhere((p) => p.userId == profile.userId);
     if (index != -1) {
       // Re-adding an existing profile refreshes it (e.g. an ID-only profile
       // upgraded to a password one, or a token refresh) instead of
       // duplicating it — the cap below only applies to genuinely new ids.
-      this._profiles[index] = profile.copyWith(
-        username: profile.username ?? this._profiles[index].username,
-        name: this._profiles[index].name,
-        avatarUrl: this._profiles[index].avatarUrl,
+      _profiles[index] = profile.copyWith(
+        username: profile.username ?? _profiles[index].username,
+        name: _profiles[index].name,
+        avatarUrl: _profiles[index].avatarUrl,
       );
     } else {
-      if (this._profiles.length >= constants.maxProfiles) {
+      if (_profiles.length >= constants.maxProfiles) {
         throw MaxProfilesReachedException();
       }
-      this._profiles.add(profile);
+      _profiles.add(profile);
     }
 
-    await this._persistProfiles();
+    await _persistProfiles();
 
     if (makeActive) {
-      this._activeProfileId = profile.userId;
+      _activeProfileId = profile.userId;
       _setCrashlyticsUser(profile.userId.toString());
-      await this._persistActiveProfileId();
+      await _persistActiveProfileId();
     }
 
     notifyListeners();
@@ -271,47 +271,47 @@ class AuthenticationResource extends ChangeNotifier {
 
   Future<void> _persistProfiles() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(constants.key_profiles,
-        jsonEncode(this._profiles.map((p) => p.toJson()).toList()));
+    await prefs.setString(constants.keyProfiles,
+        jsonEncode(_profiles.map((p) => p.toJson()).toList()));
   }
 
   Future<void> _persistActiveProfileId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (this._activeProfileId != null) {
-      await prefs.setInt(constants.key_activeProfileId, this._activeProfileId!);
+    if (_activeProfileId != null) {
+      await prefs.setInt(constants.keyActiveProfileId, _activeProfileId!);
     } else {
-      await prefs.remove(constants.key_activeProfileId);
+      await prefs.remove(constants.keyActiveProfileId);
     }
   }
 
   Future<void> loadFromLocalStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final profilesJson = prefs.getString(constants.key_profiles);
+    final profilesJson = prefs.getString(constants.keyProfiles);
     if (profilesJson != null) {
       final List<dynamic> decoded = jsonDecode(profilesJson);
-      this._profiles = decoded
+      _profiles = decoded
           .map((e) => Profile.fromJson(e as Map<String, dynamic>))
           .toList();
-      this._activeProfileId = prefs.getInt(constants.key_activeProfileId);
+      _activeProfileId = prefs.getInt(constants.keyActiveProfileId);
     } else {
-      await this._migrateSingleAccount(prefs);
+      await _migrateSingleAccount(prefs);
     }
 
-    _setCrashlyticsUser(this._activeProfileId?.toString());
+    _setCrashlyticsUser(_activeProfileId?.toString());
   }
 
   /// One-time migration for a device that predates multi-profile support:
   /// wraps the old single `{userId, token, timestamp}` keys into a one-item
   /// profile list, so an existing user is never signed out by the upgrade.
   Future<void> _migrateSingleAccount(SharedPreferences prefs) async {
-    final userId = prefs.getInt(constants.key_userId);
+    final userId = prefs.getInt(constants.keyUserId);
     if (userId == null) return;
 
-    final token = prefs.getString(constants.key_token);
-    final tokenTimestamp = prefs.getInt(constants.key_tokenTimestamp);
+    final token = prefs.getString(constants.keyToken);
+    final tokenTimestamp = prefs.getInt(constants.keyTokenTimestamp);
 
-    this._profiles = <Profile>[
+    _profiles = <Profile>[
       Profile(
         userId: userId,
         type: token != null ? ProfileType.password : ProfileType.idOnly,
@@ -319,9 +319,9 @@ class AuthenticationResource extends ChangeNotifier {
         tokenTimestamp: tokenTimestamp,
       ),
     ];
-    this._activeProfileId = userId;
+    _activeProfileId = userId;
 
-    await this._persistProfiles();
-    await this._persistActiveProfileId();
+    await _persistProfiles();
+    await _persistActiveProfileId();
   }
 }

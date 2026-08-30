@@ -55,7 +55,7 @@ class Result {
 
   // For Selfie
   Result.fromJson(dynamic json)
-      : name = json["u_name"] + " " + json["u_surname"],
+      : name = "${json["u_name"]} ${json["u_surname"]}",
         userId = json["s_uid"],
         time = (json["s_time"] as int).parseSecondsToTimestamp(),
         totalTime = _getNonZeroTime(json, "s_total_elapsed_time"),
@@ -94,7 +94,7 @@ class Result {
 
   // For official
   Result.fromEventJson(dynamic json)
-      : name = json["u_name"] + " " + json["u_surname"],
+      : name = "${json["u_name"]} ${json["u_surname"]}",
         userId = json["r_uid"],
         time = (json["r_time"] as int).parseSecondsToTimestamp(),
         position = json["r_finish_pos"],

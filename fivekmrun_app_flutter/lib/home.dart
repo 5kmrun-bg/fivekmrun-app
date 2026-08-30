@@ -24,10 +24,10 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 enum AppTab { profile, runs, events, offlineChart, donate }
 
 class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class TabNavigationHelper {
@@ -39,12 +39,15 @@ class TabNavigationHelper {
     AppTab.donate: GlobalKey<NavigatorState>(),
   };
 
-  _HomeState _home;
+  /// Set by the owning `Home` state. Held as a callback rather than a
+  /// reference to the private state class so this public helper does not
+  /// expose a private type in its API.
+  final ValueSetter<int> _onTabSelected;
 
-  TabNavigationHelper(this._home);
+  TabNavigationHelper(this._onTabSelected);
 
   void selectTab(AppTab tab) {
-    this._home.selectedIndex = tab.index;
+    _onTabSelected(tab.index);
   }
 
   pushToTab(AppTab tab, String routeName, {Object? arguments}) {
@@ -58,7 +61,7 @@ class TabNavigator extends StatelessWidget {
   final Map<String, WidgetBuilder> routes;
   final GlobalKey<NavigatorState> navigatorKey;
   const TabNavigator(
-      {Key? key, @required required this.routes, required this.navigatorKey})
+      {Key? key, required this.routes, required this.navigatorKey})
       : super(key: key);
 
   @override
@@ -110,39 +113,39 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
         Provider.of<AllPastEventsResource>(context, listen: false).getAll(),
         "past events");
 
-    this._tabHelper = TabNavigationHelper(this);
-    this._widgetOptions = <Widget>[
+    _tabHelper = TabNavigationHelper((index) => selectedIndex = index);
+    _widgetOptions = <Widget>[
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.profile]!,
+        navigatorKey: _tabHelper.navigatorKeys[AppTab.profile]!,
         routes: {
-          '/': (context) => ProfileDashboard(),
+          '/': (context) => const ProfileDashboard(),
         },
       ),
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.runs]!,
+        navigatorKey: _tabHelper.navigatorKeys[AppTab.runs]!,
         routes: {
-          '/': (context) => UserRunsPage(),
-          '/run-details': (context) => RunDetailsPage(),
+          '/': (context) => const UserRunsPage(),
+          '/run-details': (context) => const RunDetailsPage(),
         },
       ),
       TabNavigator(
-          navigatorKey: this._tabHelper.navigatorKeys[AppTab.offlineChart]!,
+          navigatorKey: _tabHelper.navigatorKeys[AppTab.offlineChart]!,
           routes: {
             '/': (context) => OfflineChartPage(),
-            '/add': (context) => AddOfflineEntryPage(),
-            '/details': (context) => OfflineChartDetailsPage(),
+            '/add': (context) => const AddOfflineEntryPage(),
+            '/details': (context) => const OfflineChartDetailsPage(),
           }),
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.events]!,
+        navigatorKey: _tabHelper.navigatorKeys[AppTab.events]!,
         routes: {
-          '/': (context) => EventsPage(),
-          '/event-results': (context) => EventResultsPage(),
+          '/': (context) => const EventsPage(),
+          '/event-results': (context) => const EventResultsPage(),
         },
       ),
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.donate]!,
+        navigatorKey: _tabHelper.navigatorKeys[AppTab.donate]!,
         routes: {
-          '/': (context) => DonatePage(),
+          '/': (context) => const DonatePage(),
         },
       ),
     ];
@@ -165,7 +168,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
         Provider.of<LocalStorageResource>(context, listen: false);
     final manager = WhatsNewManager(localStorage: localStorage);
     final shown = await manager.maybeShowPopup(context);
-    if (!mounted) return;
+    if (!context.mounted) return;
     if (!shown) {
       AppRatingManager(context);
     }
@@ -189,22 +192,22 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
           selectedItemColor: selectedColor,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.person),
+                icon: const Icon(Icons.person),
                 label: AppLocalizations.of(context)!.home_label_profile),
             BottomNavigationBarItem(
-              icon: Icon(Icons.directions_run),
+              icon: const Icon(Icons.directions_run),
               label: AppLocalizations.of(context)!.home_label_runs,
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(CustomIcons.award),
               label: 'Selfie',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
+              icon: const Icon(Icons.calendar_today),
               label: AppLocalizations.of(context)!.home_label_events,
             ),
             BottomNavigationBarItem(
-              icon: Icon(CustomIcons.hand_holding_heart),
+              icon: const Icon(CustomIcons.handHoldingHeart),
               label: AppLocalizations.of(context)!.home_label_support,
             ),
           ],

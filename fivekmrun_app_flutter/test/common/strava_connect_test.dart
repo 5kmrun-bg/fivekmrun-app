@@ -51,7 +51,7 @@ class _FakeStravaResource extends StravaResource {
 Widget _harness(StravaResource strava) {
   return ChangeNotifierProvider<StravaResource>.value(
     value: strava,
-    child: MaterialApp(home: Scaffold(body: StravaConnect())),
+    child: const MaterialApp(home: Scaffold(body: StravaConnect())),
   );
 }
 

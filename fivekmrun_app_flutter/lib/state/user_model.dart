@@ -16,7 +16,7 @@ class User {
     final user = json["user"][0];
     if (user != null) {
       id = userId;
-      name = user["u_name"] + " " + user["u_surname"];
+      name = "${user["u_name"]} ${user["u_surname"]}";
       avatarUrl = user["pic"];
       donationsCount = user["u_sponsor"] ?? 0;
       age = calculateAge(

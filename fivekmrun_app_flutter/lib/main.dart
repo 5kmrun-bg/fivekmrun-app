@@ -5,7 +5,7 @@ import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/home.dart';
 import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/login/login.dart';
-import 'package:fivekmrun_flutter/login/loginPreview.dart';
+import 'package:fivekmrun_flutter/login/login_preview.dart';
 import 'package:fivekmrun_flutter/manage_profiles_page.dart';
 import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/settings_page.dart';
@@ -26,7 +26,7 @@ import 'package:provider/provider.dart';
 final userRes = UserResource();
 final authRes = AuthenticationResource();
 
-final appAccentColor = Color.fromRGBO(218, 3, 56, 1.0);
+const appAccentColor = Color.fromRGBO(218, 3, 56, 1.0);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,9 +71,9 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final String _initialRoute;
-  static final navKey = new GlobalKey<NavigatorState>();
+  static final navKey = GlobalKey<NavigatorState>();
 
-  MyApp(this._initialRoute);
+  const MyApp(this._initialRoute, {super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
             // phone would flash an English UI before settling on the saved
             // choice — hence the explicit default.
             locale: localeProvider.locale ?? defaultLocale,
-            localizationsDelegates: [
+            localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
@@ -115,7 +115,7 @@ class MyApp extends StatelessWidget {
             darkTheme: ThemeData(
               useMaterial3: false,
               dividerColor: Colors.black12,
-              textTheme: TextTheme(
+              textTheme: const TextTheme(
                 titleSmall:
                     TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 bodyLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
@@ -133,8 +133,8 @@ class MyApp extends StatelessWidget {
                 }),
               )),
               appBarTheme: AppBarTheme(
-                  backgroundColor: Color.fromRGBO(66, 66, 66, 1),
-                  iconTheme: IconThemeData(color: Colors.white),
+                  backgroundColor: const Color.fromRGBO(66, 66, 66, 1),
+                  iconTheme: const IconThemeData(color: Colors.white),
                   titleTextStyle: Theme.of(context)
                       .textTheme
                       .titleLarge
@@ -148,14 +148,14 @@ class MyApp extends StatelessWidget {
             ),
             initialRoute: _initialRoute,
             routes: {
-              '/': (_) => Login(),
-              'add-profile': (_) => Login(addingProfile: true),
-              'manage-profiles': (_) => ManageProfilesPage(),
-              'loginPreview': (_) => LoginPreview(),
-              'home': (_) => Home(),
-              'barcode': (_) => BarcodePage(),
-              'settings': (_) => SettingsPage(),
-              'donation': (_) => DonatePage(),
+              '/': (_) => const Login(),
+              'add-profile': (_) => const Login(addingProfile: true),
+              'manage-profiles': (_) => const ManageProfilesPage(),
+              'loginPreview': (_) => const LoginPreview(),
+              'home': (_) => const Home(),
+              'barcode': (_) => const BarcodePage(),
+              'settings': (_) => const SettingsPage(),
+              'donation': (_) => const DonatePage(),
             },
           );
         },

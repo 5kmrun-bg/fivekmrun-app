@@ -42,7 +42,7 @@ class _ProfileHarness extends StatelessWidget {
           const Text('profile-screen'),
           ElevatedButton(
             onPressed: () => Navigator.of(context, rootNavigator: true)
-                .push(MaterialPageRoute<void>(builder: (_) => SettingsPage())),
+                .push(MaterialPageRoute<void>(builder: (_) => const SettingsPage())),
             child: const Text('open settings'),
           ),
         ],

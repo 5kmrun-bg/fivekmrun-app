@@ -50,7 +50,7 @@ class _AddProfileHarnessState extends State<_AddProfileHarness> {
               final result = await Navigator.of(context).push<Object?>(
                 MaterialPageRoute(
                   builder: (_) =>
-                      Scaffold(body: LoginWithId(addingProfile: true)),
+                      const Scaffold(body: LoginWithId(addingProfile: true)),
                 ),
               );
               setState(() {

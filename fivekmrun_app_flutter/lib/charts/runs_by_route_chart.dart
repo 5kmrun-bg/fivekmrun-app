@@ -10,10 +10,10 @@ class RunsByRouteChart extends StatelessWidget {
   final List<charts.Series<dynamic, String>> seriesList;
   final bool? animate;
 
-  RunsByRouteChart(this.seriesList, {this.animate});
+  const RunsByRouteChart(this.seriesList, {super.key, this.animate});
 
   factory RunsByRouteChart.withRuns(List<Run> runs) {
-    return new RunsByRouteChart(
+    return RunsByRouteChart(
       _createData(runs),
     );
   }
@@ -23,24 +23,24 @@ class RunsByRouteChart extends StatelessWidget {
     final subTitleStyle = theme.textTheme.titleSmall;
 
     return Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(children: <Widget>[
           IntrinsicHeight(
               child: Text(
                   AppLocalizations.of(context)!.runs_by_route_chart_title,
                   style: subTitleStyle)),
           Expanded(
-              child: new charts.PieChart<String>(seriesList,
+              child: charts.PieChart<String>(seriesList,
                   animate: animate,
-                  defaultRenderer: new charts.ArcRendererConfig(
+                  defaultRenderer: charts.ArcRendererConfig(
                       arcWidth: 60,
                       arcRendererDecorators: [
-                        new charts.ArcLabelDecorator(
-                            outsideLabelStyleSpec: charts.TextStyleSpec(
+                        charts.ArcLabelDecorator(
+                            outsideLabelStyleSpec: const charts.TextStyleSpec(
                                 fontSize: 12, color: charts.Color.white))
                       ]),
                   behaviors: [
-                new charts.DatumLegend(
+                charts.DatumLegend(
                   // Positions for "start" and "end" will be left and right respectively
                   // for widgets with a build context that has directionality ltr.
                   // For rtl, "start" and "end" will be right and left respectively.
@@ -56,7 +56,7 @@ class RunsByRouteChart extends StatelessWidget {
                   // legend entries will grow as new rows first instead of a new column.
                   horizontalFirst: false,
                   // This defines the padding around each legend entry.
-                  cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                  cellPadding: const EdgeInsets.only(right: 4.0, bottom: 4.0),
                 )
               ])),
         ]));
@@ -72,10 +72,10 @@ class RunsByRouteChart extends StatelessWidget {
         .toList();
 
     return [
-      new charts.Series<RunsByRouteEntry, String>(
+      charts.Series<RunsByRouteEntry, String>(
         id: 'RunsByRoute',
-        colorFn: (_, i) => PinkishRedColor()
-            .getPalette()[i! % PinkishRedColor().getPalette().length],
+        colorFn: (_, i) => const PinkishRedColor()
+            .getPalette()[i! % const PinkishRedColor().getPalette().length],
         domainFn: (RunsByRouteEntry run, _) => run.location,
         measureFn: (RunsByRouteEntry run, _) => run.timeInSeconds,
         data: series,

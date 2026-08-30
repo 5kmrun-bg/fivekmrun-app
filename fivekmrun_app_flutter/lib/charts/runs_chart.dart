@@ -12,10 +12,10 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 class RunsChart extends StatefulWidget {
   final List<Run> runs;
 
-  RunsChart({key, required this.runs}) : super(key: key);
+  const RunsChart({key, required this.runs}) : super(key: key);
 
   @override
-  _RunsChartState createState() => _RunsChartState();
+  State<RunsChart> createState() => _RunsChartState();
 }
 
 class _RunsChartState extends State<RunsChart> {
@@ -29,11 +29,11 @@ class _RunsChartState extends State<RunsChart> {
 
   @override
   Widget build(BuildContext context) {
-    this.seriesList = _createData(this.widget.runs);
+    seriesList = _createData(widget.runs);
 
     final theme = Theme.of(context);
 
-    _onSelectionChanged(charts.SelectionModel model) {
+    onSelectionChanged(charts.SelectionModel model) {
       final selectedDatum = model.selectedDatum;
       String time;
       DateTime date;
@@ -42,12 +42,8 @@ class _RunsChartState extends State<RunsChart> {
         date = selectedDatum.first.datum.date;
         time = selectedDatum.first.datum.time;
 
-        setState(() => this.dataPointLabel =
-            AppLocalizations.of(context)!.runs_chart_date +
-                DateFormat(Constants.DATE_FORMAT).format(date) +
-                AppLocalizations.of(context)!.runs_chart_time +
-                time +
-                "");
+        setState(() => dataPointLabel =
+            "${AppLocalizations.of(context)!.runs_chart_date}${DateFormat(Constants.dateFormat).format(date)}${AppLocalizations.of(context)!.runs_chart_time}$time");
       }
     }
 
@@ -58,10 +54,10 @@ class _RunsChartState extends State<RunsChart> {
             IntrinsicHeight(
                 child: Text(
                     AppLocalizations.of(context)!.runs_chart_trend +
-                        this.widget.runs.length.toString() +
+                        widget.runs.length.toString() +
                         AppLocalizations.of(context)!.runs_chart_runs,
                     style: theme.textTheme.titleSmall)),
-            IntrinsicHeight(child: Text(this.dataPointLabel)),
+            IntrinsicHeight(child: Text(dataPointLabel)),
             Expanded(
               child: charts.TimeSeriesChart(
                 seriesList!,
@@ -75,7 +71,7 @@ class _RunsChartState extends State<RunsChart> {
                   // set by providing a [dashPattern] or it can be turned off by passing in
                   // an empty list. An empty list is necessary because passing in a null
                   // value will be treated the same as not passing in a value at all.
-                  new charts.LinePointHighlighter(
+                  charts.LinePointHighlighter(
                       showHorizontalFollowLine:
                           charts.LinePointHighlighterFollowLineType.none,
                       showVerticalFollowLine:
@@ -85,19 +81,19 @@ class _RunsChartState extends State<RunsChart> {
                   // // highlighter. Changing the trigger to tap and drag allows the
                   // // highlighter to follow the dragging gesture but it is not
                   // // recommended to be used when pan/zoom behavior is enabled.
-                  new charts.SelectNearest(
+                  charts.SelectNearest(
                       eventTrigger: charts.SelectionTrigger.tapAndDrag),
                 ],
                 selectionModels: [
-                  new charts.SelectionModelConfig(
+                  charts.SelectionModelConfig(
                     type: charts.SelectionModelType.info,
-                    changedListener: _onSelectionChanged,
+                    changedListener: onSelectionChanged,
                   )
                 ],
-                primaryMeasureAxis: new charts.NumericAxisSpec(
-                    viewport: new charts.NumericExtents(
+                primaryMeasureAxis: charts.NumericAxisSpec(
+                    viewport: charts.NumericExtents(
                         lowestValues!, highestValues!),
-                    renderSpec: charts.NoneRenderSpec()),
+                    renderSpec: const charts.NoneRenderSpec()),
               ),
             )
           ],
@@ -114,9 +110,9 @@ class _RunsChartState extends State<RunsChart> {
     runs.sort((r1, r2) => r1.date?.compareTo(r2.date!) ?? 0);
 
     return [
-      new charts.Series<Run, DateTime>(
+      charts.Series<Run, DateTime>(
         id: 'Runs',
-        colorFn: (Run run, i) => PinkishRedColor().makeShades(runs.length)[i!],
+        colorFn: (Run run, i) => const PinkishRedColor().makeShades(runs.length)[i!],
         domainFn: (Run run, _) => run.date!,
         measureFn: (Run run, _) => run.timeInSeconds,
         labelAccessorFn: (Run run, _) =>

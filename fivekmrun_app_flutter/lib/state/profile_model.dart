@@ -51,7 +51,7 @@ class Profile {
     }
 
     final created = DateTime.fromMillisecondsSinceEpoch(tokenTimestamp!);
-    final expiresAt = created.add(Duration(days: constants.tokenExpiryDays));
+    final expiresAt = created.add(const Duration(days: constants.tokenExpiryDays));
     return !expiresAt.isAfter(DateTime.now());
   }
 

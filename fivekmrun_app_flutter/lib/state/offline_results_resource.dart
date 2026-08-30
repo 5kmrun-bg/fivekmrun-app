@@ -57,7 +57,7 @@ class OfflineResultsResource extends ChangeNotifier {
         .get(Uri.parse("${constants.offlineChartEndpointUrl}$weekFilter"));
     if (!isJsonResponse(
         response.statusCode, response.headers["content-type"])) {
-      this.loading = false;
+      loading = false;
 
       return null;
     }
@@ -66,8 +66,8 @@ class OfflineResultsResource extends ChangeNotifier {
     List<Result> results = Result.listFromJson(jsonDecode(body));
     List<Result> processedResults = processResults(results);
 
-    this.value = processedResults;
-    this.loading = false;
+    value = processedResults;
+    loading = false;
 
     return processedResults;
   }
@@ -75,11 +75,15 @@ class OfflineResultsResource extends ChangeNotifier {
   List<Result> processResults(List<Result> res) {
     final ofcList = res.where((r) => !r.isDisqualified);
     var ofcPos = 1;
-    ofcList.forEach((r) => r.officialPosition = ofcPos++);
+    for (var r in ofcList) {
+      r.officialPosition = ofcPos++;
+    }
 
     var dsqPos = 1;
     final dsqList = res.where((r) => r.isDisqualified);
-    dsqList.forEach((r) => r.officialPosition = dsqPos++);
+    for (var r in dsqList) {
+      r.officialPosition = dsqPos++;
+    }
 
     return [...ofcList, ...dsqList];
   }

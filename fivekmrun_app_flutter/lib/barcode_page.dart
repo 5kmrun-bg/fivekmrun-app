@@ -13,14 +13,16 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class BarcodePage extends StatefulWidget {
+  const BarcodePage({super.key});
+
   @override
-  _BarcodePageState createState() => _BarcodePageState();
+  State<BarcodePage> createState() => _BarcodePageState();
 }
 
 class _BarcodePageState extends State<BarcodePage> {
-  static final _walletChannel = MethodChannel('bg.fivekmpark.5kmrun/wallet');
+  static const _walletChannel = MethodChannel('bg.fivekmpark.5kmrun/wallet');
 
-  final Uuid uuid = Uuid();
+  final Uuid uuid = const Uuid();
   final issuerId = '3388000000022281825';
   final classId = 'MembershipCard';
 
@@ -118,8 +120,7 @@ class _BarcodePageState extends State<BarcodePage> {
                 FirebaseAnalytics.instance
                     .logEvent(name: "button_add_to_apple_wallet_clicked");
               } catch (e) {
-                print("Error: ");
-                print(e);
+                debugPrint("Error adding pass to Google Wallet: $e");
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -132,12 +133,12 @@ class _BarcodePageState extends State<BarcodePage> {
           );
         }
 
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       }
 
       return Scaffold(
         appBar: AppBar(
-          leading: BackButton(color: Colors.white),
+          leading: const BackButton(color: Colors.white),
           title: Text(AppLocalizations.of(context)!.barcode_page_barcode),
           centerTitle: true,
         ),
@@ -160,7 +161,7 @@ class _BarcodePageState extends State<BarcodePage> {
                       end: Alignment.bottomRight,
                       colors: [
                         accentColor,
-                        accentColor.withOpacity(0.8),
+                        accentColor.withValues(alpha: 0.8),
                       ],
                     ),
                   ),
@@ -169,7 +170,7 @@ class _BarcodePageState extends State<BarcodePage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text(
+                        const Text(
                           "5kmrun",
                           style: TextStyle(
                             color: Colors.white,
@@ -177,26 +178,26 @@ class _BarcodePageState extends State<BarcodePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           userName!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           userStatus,
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(alpha: 0.8),
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 24),
+                        const SizedBox(height: 24),
                         Container(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8),
@@ -209,15 +210,15 @@ class _BarcodePageState extends State<BarcodePage> {
                             withText: false,
                           )),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           userId.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 24),
+                        const SizedBox(height: 24),
                         buildButton(),
                       ],
                     ),
@@ -246,7 +247,7 @@ class _AddToAppleWalletButton extends StatelessWidget {
         height: 48,
         errorBuilder: (_, __, ___) => ElevatedButton.icon(
           onPressed: onPressed,
-          icon: Icon(Icons.wallet),
+          icon: const Icon(Icons.wallet),
           label: Text(
               AppLocalizations.of(context)!.barcode_page_add_to_apple_wallet),
           style: ElevatedButton.styleFrom(

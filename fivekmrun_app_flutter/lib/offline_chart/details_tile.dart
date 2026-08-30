@@ -19,12 +19,12 @@ class DetailsTile extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: 12),
-          child: Text(this.title, style: textTheme.bodyMedium),
+          child: Text(title, style: textTheme.bodyMedium),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 8),
           child: Text(
-            this.value,
+            value,
             style: TextStyle(color: accentColor, fontSize: 14),
           ),
         ),

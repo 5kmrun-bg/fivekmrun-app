@@ -11,10 +11,10 @@ import 'common/profile_switcher.dart';
 import 'common/strava_connect.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
@@ -24,9 +24,9 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final authResource =
         Provider.of<AuthenticationResource>(context, listen: false);
-    final localStorage = new LocalStorageResource();
+    final localStorage = LocalStorageResource();
     localStorage.isSubscribedForGeneral.then(
-        (value) => setState(() => this._pushNotificationsSubscribed = value));
+        (value) => setState(() => _pushNotificationsSubscribed = value));
 
     // Removes only the current profile — falls back to another saved
     // profile if one remains, or to the login screen if this was the last
@@ -42,20 +42,20 @@ class _SettingsPageState extends State<SettingsPage> {
     // reliable guard here, since disposal of the old route isn't
     // necessarily flushed to the element tree the instant that call
     // returns).
-    final logout = () async {
+    Future<void> logout() async {
       final userId = authResource.getUserId();
       if (userId == null) return;
       await removeProfileFromSwitcher(context, userId);
       if (authResource.activeProfileId != null && context.mounted) {
         Navigator.of(context, rootNavigator: true).pop();
       }
-    };
+    }
 
     final dividerColor = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(color: Colors.white),
+          leading: const BackButton(color: Colors.white),
           title: Text(AppLocalizations.of(context)!.settings_page_settings),
           centerTitle: true,
         ),
@@ -74,26 +74,26 @@ class _SettingsPageState extends State<SettingsPage> {
                             PushNotificationsManager.getInstance();
                         setState(
                             () => localStorage.isSubscrubedForGeneral = value);
-                        this._pushNotificationsSubscribed = value;
+                        _pushNotificationsSubscribed = value;
                         if (value) {
                           pushNotificationManager.subscribeTopic("general");
                         } else {
                           pushNotificationManager.unsubscribeTopic("general");
                         }
                       },
-                      value: this._pushNotificationsSubscribed,
+                      value: _pushNotificationsSubscribed,
                     )
                   ],
                 ),
                 Divider(color: dividerColor),
                 Text(AppLocalizations.of(context)!.settings_page_strava),
-                StravaConnect(),
+                const StravaConnect(),
                 Divider(color: dividerColor),
                 Row(
                   children: <Widget>[
                     Text(AppLocalizations.of(context)!.settings_page_language),
-                    SizedBox(width: 12),
-                    LocaleSwitcherWidget(),
+                    const SizedBox(width: 12),
+                    const LocaleSwitcherWidget(),
                   ],
                 ),
                 Divider(color: dividerColor),
@@ -104,8 +104,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     children: <Widget>[
                       Text(AppLocalizations.of(context)!
                           .settings_page_whats_new),
-                      Spacer(),
-                      Icon(Icons.chevron_right),
+                      const Spacer(),
+                      const Icon(Icons.chevron_right),
                     ],
                   ),
                 ),

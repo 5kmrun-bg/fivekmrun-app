@@ -5,19 +5,25 @@ class LegionerStatusHelper {
     Color legionerColor = defaultColor;
     // print("TOTAL RUNS: " + totalRuns.toString());
 
-    if (totalRuns >= 50 && totalRuns < 100)
-      legionerColor = Color.fromRGBO(36, 132, 208, 1);
-    if (totalRuns >= 100 && totalRuns < 200)
-      legionerColor = Color.fromRGBO(202, 202, 202, 1);
-    if (totalRuns >= 200 && totalRuns < 300)
-      legionerColor = Color.fromRGBO(65, 170, 71, 1);
-    if (totalRuns >= 300 && totalRuns < 400)
-      legionerColor = Color.fromRGBO(129, 74, 177, 1);
-    if (totalRuns >= 400 && totalRuns < 500)
-      legionerColor = Color.fromRGBO(255, 22, 17, 1);
-    if (totalRuns >= 500 && totalRuns < 600)
-      legionerColor = Color.fromRGBO(222, 198, 62, 1);
-    if (totalRuns >= 600) legionerColor = Color.fromRGBO(50, 173, 159, 1);
+    if (totalRuns >= 50 && totalRuns < 100) {
+      legionerColor = const Color.fromRGBO(36, 132, 208, 1);
+    }
+    if (totalRuns >= 100 && totalRuns < 200) {
+      legionerColor = const Color.fromRGBO(202, 202, 202, 1);
+    }
+    if (totalRuns >= 200 && totalRuns < 300) {
+      legionerColor = const Color.fromRGBO(65, 170, 71, 1);
+    }
+    if (totalRuns >= 300 && totalRuns < 400) {
+      legionerColor = const Color.fromRGBO(129, 74, 177, 1);
+    }
+    if (totalRuns >= 400 && totalRuns < 500) {
+      legionerColor = const Color.fromRGBO(255, 22, 17, 1);
+    }
+    if (totalRuns >= 500 && totalRuns < 600) {
+      legionerColor = const Color.fromRGBO(222, 198, 62, 1);
+    }
+    if (totalRuns >= 600) legionerColor = const Color.fromRGBO(50, 173, 159, 1);
 
     // print("COLOR: " + legionerColor.toString());
 

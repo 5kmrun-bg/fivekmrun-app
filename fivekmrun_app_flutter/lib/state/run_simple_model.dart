@@ -1,7 +1,7 @@
 import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:intl/intl.dart';
 
-final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
+final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 
 class RunSimple {
   final int id;
@@ -39,10 +39,7 @@ class RunSimple {
       timeInSeconds = timeInSeconds < 0 ? -timeInSeconds : timeInSeconds;
     }
 
-    return signString +
-        (timeInSeconds ~/ 60).toString().padLeft(2, '0') +
-        ":" +
-        (timeInSeconds % 60).toString().padLeft(2, '0');
+    return "$signString${(timeInSeconds ~/ 60).toString().padLeft(2, '0')}:${(timeInSeconds % 60).toString().padLeft(2, '0')}";
   }
 
   static String timeInSecondsToSpeed(int timeInSeconds) {

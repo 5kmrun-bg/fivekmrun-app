@@ -11,22 +11,22 @@ const wrapUrl = "https://wrapped.5kmrun.bg/";
 
 const endpointBaseUrl = "https://5kmrun.bg/api/5kmrun/";
 const userEndpointUrl = "https://5kmrun.bg/api/selfie/user/";
-const runsEndpointUrl = endpointBaseUrl + "user/";
+const runsEndpointUrl = "${endpointBaseUrl}user/";
 const offlineChartEndpointUrl = "https://5kmrun.bg/api/selfie/ofc/";
 const xlUserEndpointUrl = "https://5kmrun.bg/api/xlrun/user/";
 
-const String key_userId = "5kmrun_UserID";
-const String key_token = "5kmrun_Token";
-const String key_tokenTimestamp = "5kmrun_Token_Created";
+const String keyUserId = "5kmrun_UserID";
+const String keyToken = "5kmrun_Token";
+const String keyTokenTimestamp = "5kmrun_Token_Created";
 const int tokenExpiryDays = 30;
-const String key_lastSeenWhatsNewVersion = "5kmrun_LastSeenWhatsNewVersion";
+const String keyLastSeenWhatsNewVersion = "5kmrun_LastSeenWhatsNewVersion";
 
-// Multi-profile storage (#184). key_userId/key_token/key_tokenTimestamp above
+// Multi-profile storage (#184). keyUserId/keyToken/keyTokenTimestamp above
 // are the pre-multi-profile single-account keys — loadFromLocalStore()
-// migrates them into a one-profile list under key_profiles the first time it
+// migrates them into a one-profile list under keyProfiles the first time it
 // finds no profiles list yet, then leaves them alone (harmless dead keys).
-const String key_profiles = "5kmrun_Profiles";
-const String key_activeProfileId = "5kmrun_ActiveProfileId";
+const String keyProfiles = "5kmrun_Profiles";
+const String keyActiveProfileId = "5kmrun_ActiveProfileId";
 const int maxProfiles = 5;
 
 const int stravaFilterMinDistance = 4900;

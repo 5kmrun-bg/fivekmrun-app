@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const double SIZE = 150;
+const double size = 150;
 
 class Avatar extends StatelessWidget {
   final String url;
@@ -11,16 +11,16 @@ class Avatar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
       child: SizedBox(
-        width: SIZE,
-        height: SIZE,
+        width: size,
+        height: size,
         child: Container(
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Theme.of(context).colorScheme.secondary),
-                padding: EdgeInsets.all(2),
+                padding: const EdgeInsets.all(2),
                 child: (url.isNotEmpty)
                     ? CircleAvatar(
-                        radius: SIZE / 2, backgroundImage: NetworkImage(url))
+                        radius: size / 2, backgroundImage: NetworkImage(url))
                     : Container(),
               )
             ,

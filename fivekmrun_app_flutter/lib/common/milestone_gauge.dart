@@ -10,7 +10,7 @@ class MilestoneGauge extends StatelessWidget {
   final int milestone;
   final Color accentColor;
 
-  MilestoneGauge(this.value, this.milestone, this.accentColor, {this.animate});
+  const MilestoneGauge(this.value, this.milestone, this.accentColor, {super.key, this.animate});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class MilestoneGauge extends StatelessWidget {
         children: <Widget>[
           charts.PieChart<String>(seriesList,
               animate: animate,
-              defaultRenderer: new charts.ArcRendererConfig(
+              defaultRenderer: charts.ArcRendererConfig(
                   strokeWidthPx: 0,
                   arcWidth: 8,
                   startAngle: 4 / 5 * pi,
@@ -46,13 +46,13 @@ class MilestoneGauge extends StatelessWidget {
   List<charts.Series<GaugeSegment, String>> _createData(
       int value, int milestone, BuildContext context) {
     final data = [
-      new GaugeSegment('value', value),
-      new GaugeSegment('milestone', milestone - value),
+      GaugeSegment('value', value),
+      GaugeSegment('milestone', milestone - value),
     ];
 
     final darkerColor = Color.lerp(accentColor, Colors.black, 0.4);
     return [
-      new charts.Series<GaugeSegment, String>(
+      charts.Series<GaugeSegment, String>(
         id: 'Segments',
         colorFn: (GaugeSegment segment, i) =>
             charts.ColorUtil.fromDartColor(i == 0 ? accentColor : darkerColor!),

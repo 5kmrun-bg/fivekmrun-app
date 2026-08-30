@@ -5,7 +5,7 @@ import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
+final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 
 class PastEventsList extends StatelessWidget {
   const PastEventsList({
@@ -64,7 +64,7 @@ class PastEventsList extends StatelessWidget {
                   ),
                 ),
                 if (events[i].imageUrl != "")
-                  Container(
+                  SizedBox(
                     width: 120,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5.0),
