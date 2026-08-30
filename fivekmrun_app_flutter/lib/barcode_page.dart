@@ -30,13 +30,13 @@ class _BarcodePageState extends State<BarcodePage> {
   void initState() {
     super.initState();
     WakelockPlus.enable();
-    ScreenBrightness().setScreenBrightness(1.0);
+    ScreenBrightness().setApplicationScreenBrightness(1.0);
   }
 
   @override
   void dispose() {
     WakelockPlus.disable();
-    ScreenBrightness().resetScreenBrightness();
+    ScreenBrightness().resetApplicationScreenBrightness();
     super.dispose();
   }
 
