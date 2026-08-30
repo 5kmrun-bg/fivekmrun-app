@@ -1,8 +1,10 @@
 
 plugins {
     id "com.android.application"
-    id "kotlin-android"
+    id "org.jetbrains.kotlin.android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin plugins.
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
     id "com.google.firebase.crashlytics"
 }
 
@@ -24,49 +26,42 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
-
 android {
-    compileSdkVersion 36
+    compileSdk 36
+    ndkVersion flutter.ndkVersion
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
+    lint {
         disable 'InvalidPackage'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     defaultConfig {
         applicationId "bg.fivekmpark.fivekmrun"
         namespace "bg.fivekmpark.fivekmrun"
-        minSdkVersion 26
-        targetSdkVersion 36
+        minSdk 26
+        targetSdk 36
 
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        release {
-            //keyAlias keystoreProperties['keyAlias']
-            //keyPassword keystoreProperties['keyPassword']
-            //storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            //storePassword keystoreProperties['storePassword']
-        }
-    }
+    // Release builds are signed outside Gradle: the CI workflow runs jarsigner
+    // over the built .aab/.apk with the keystore from repository secrets. There
+    // is deliberately no signingConfig here, so `flutter run --release` locally
+    // falls back to the debug keys.
+}
 
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            //signingConfig signingConfigs.release
-        }
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 
@@ -75,13 +70,5 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0"
     implementation 'com.google.android.gms:play-services-pay:16.0.3'
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    
 }
-
-apply plugin: 'com.google.gms.google-services'

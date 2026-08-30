@@ -1,26 +1,22 @@
 allprojects {
     repositories {
         google()
-        jcenter()
+        // Replaces jcenter(), which has been read-only since 2021 and is being
+        // sunset. mavenCentral() was already used for plugin resolution in
+        // settings.gradle but was missing here, where module dependencies resolve.
+        mavenCentral()
     }
 }
 
-rootProject.buildDir = '../build'
-subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
+// Gradle 8 deprecated rootProject.buildDir / project.buildDir and Gradle 9
+// removes them. layout.buildDirectory is the replacement. The resulting path is
+// unchanged — fivekmrun_app_flutter/build — which the release workflows depend
+// on (they read build/app/outputs/bundle/release/app-release.aab).
+def newBuildDir = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
 
-
 subprojects {
-   afterEvaluate { project ->
-       if (project.hasProperty('android')) {
-           project.android {
-               if (namespace == null) {
-                   namespace project.group
-               }
-           }
-       }
-   }
+    project.layout.buildDirectory.value(newBuildDir.dir(project.name))
 }
 
 subprojects {
@@ -28,5 +24,5 @@ subprojects {
 }
 
 tasks.register("clean", Delete) {
-    delete rootProject.buildDir
+    delete rootProject.layout.buildDirectory
 }
