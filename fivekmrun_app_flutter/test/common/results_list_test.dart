@@ -75,6 +75,28 @@ void main() {
       expect(find.text("Georgi Georgiev"), findsNothing);
     });
 
+    // The lowercase case above only pins that the *name* is lowercased. This
+    // pins the other half — that the *query* is too. It is the half real
+    // users hit: mobile keyboards capitalise the first letter, so "Ivan" is
+    // what actually gets typed.
+    testWidgets('filters when the typed query is capitalised',
+        (tester) async {
+      final results = <Result>[
+        _result(name: "Ivan Ivanov", userId: 111),
+        _result(name: "Georgi Georgiev", userId: 222),
+      ];
+      final authRes = AuthenticationResource();
+
+      await tester.pumpWidget(_harness(results, authRes));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), "IVAN");
+      await tester.pumpAndSettle();
+
+      expect(find.text("Ivan Ivanov"), findsOneWidget);
+      expect(find.text("Georgi Georgiev"), findsNothing);
+    });
+
     testWidgets('filters by an exact userId match, not a substring',
         (tester) async {
       final results = <Result>[
