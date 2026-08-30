@@ -13,7 +13,7 @@ class LoginWithId extends StatefulWidget {
   /// success without touching the currently active profile's data.
   final bool addingProfile;
 
-  const LoginWithId({Key? key, this.addingProfile = false}) : super(key: key);
+  const LoginWithId({super.key, this.addingProfile = false});
 
   @override
   State<LoginWithId> createState() => _LoginWithIdState();

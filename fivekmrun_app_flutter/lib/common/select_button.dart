@@ -6,11 +6,10 @@ class SelectButton extends StatelessWidget {
   final String text;
 
   const SelectButton(
-      {Key? key,
+      {super.key,
       required this.onPressed,
       required this.selected,
-      required this.text})
-      : super(key: key);
+      required this.text});
 
   @override
   Widget build(BuildContext context) {

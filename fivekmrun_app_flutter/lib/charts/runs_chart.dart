@@ -12,7 +12,7 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 class RunsChart extends StatefulWidget {
   final List<Run> runs;
 
-  const RunsChart({key, required this.runs}) : super(key: key);
+  const RunsChart({super.key, required this.runs});
 
   @override
   State<RunsChart> createState() => _RunsChartState();

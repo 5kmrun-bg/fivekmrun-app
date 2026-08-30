@@ -12,7 +12,7 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 
 class EventsPage extends StatefulWidget {
-  const EventsPage({Key? key}) : super(key: key);
+  const EventsPage({super.key});
 
   @override
   State<EventsPage> createState() => _EventsPage();
@@ -21,7 +21,7 @@ class EventsPage extends StatefulWidget {
 class _EventsPage extends State<EventsPage> {
   bool futureEventSelected = true;
 
-  toggleEvents() {
+  void toggleEvents() {
     setState(() {
       futureEventSelected = !futureEventSelected;
     });

@@ -207,7 +207,7 @@ void main() {
       final result = await fetchAuthenticatedAthleteWithRetry(
         () async => athlete(42),
         () async => reAuthenticateCalls++,
-        reportError: (_, __, ___) {},
+        reportError: (_, _, _) {},
       );
 
       expect(result?.id, 42);
@@ -229,7 +229,7 @@ void main() {
           return athlete(7);
         },
         () async => reAuthenticateCalls++,
-        reportError: (_, __, reason) => reportedReasons.add(reason),
+        reportError: (_, _, reason) => reportedReasons.add(reason),
       );
 
       expect(result?.id, 7);
@@ -250,7 +250,7 @@ void main() {
       final result = await fetchAuthenticatedAthleteWithRetry(
         () async => throw Fault(message: "invalid_grant"),
         () async => reAuthenticateCalls++,
-        reportError: (_, __, reason) => reportedReasons.add(reason),
+        reportError: (_, _, reason) => reportedReasons.add(reason),
       );
 
       expect(result, isNull);

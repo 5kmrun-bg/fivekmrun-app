@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class LoginPreview extends StatelessWidget {
-  const LoginPreview({Key? key}) : super(key: key);
+  const LoginPreview({super.key});
 
   @override
   Widget build(BuildContext context) {

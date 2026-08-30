@@ -10,7 +10,7 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'dart:io';
 
 class ChronometerView extends StatefulWidget {
-  const ChronometerView({Key? key}) : super(key: key);
+  const ChronometerView({super.key});
 
   @override
   State<ChronometerView> createState() => _ChronometerViewState();

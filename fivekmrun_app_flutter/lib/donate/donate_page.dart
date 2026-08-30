@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class DonatePage extends StatelessWidget {
-  const DonatePage({Key? key}) : super(key: key);
+  const DonatePage({super.key});
 
   @override
   Widget build(BuildContext context) {

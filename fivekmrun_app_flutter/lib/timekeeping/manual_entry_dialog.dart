@@ -58,12 +58,12 @@ class ManualEntryDialog extends StatefulWidget {
   final bool Function(String formattedRunnerId) isDuplicateRunner;
 
   const ManualEntryDialog({
-    Key? key,
+    super.key,
     this.initialRunnerIdDigits,
     this.initialPlaceDigits,
     this.lockRunnerId = false,
     required this.isDuplicateRunner,
-  }) : super(key: key);
+  });
 
   @override
   State<ManualEntryDialog> createState() => _ManualEntryDialogState();

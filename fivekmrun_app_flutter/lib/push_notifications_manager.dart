@@ -116,11 +116,11 @@ class PushNotificationsManager {
   }
   // }
 
-  subscribeTopic(String topic) async {
+  Future<void> subscribeTopic(String topic) async {
     await FirebaseMessaging.instance.subscribeToTopic(topic);
   }
 
-  unsubscribeTopic(String topic) async {
+  Future<void> unsubscribeTopic(String topic) async {
     await FirebaseMessaging.instance.unsubscribeFromTopic(topic);
   }
 }

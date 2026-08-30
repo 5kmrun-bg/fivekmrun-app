@@ -26,8 +26,7 @@ Future<void> showProfileSwitcherSheet(BuildContext callerContext) {
 class _ProfileSwitcherSheet extends StatelessWidget {
   final BuildContext callerContext;
 
-  const _ProfileSwitcherSheet({Key? key, required this.callerContext})
-      : super(key: key);
+  const _ProfileSwitcherSheet({required this.callerContext});
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +87,10 @@ class _ProfileRow extends StatelessWidget {
   final VoidCallback onSelect;
 
   const _ProfileRow({
-    Key? key,
     required this.profile,
     required this.isActive,
     required this.onSelect,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

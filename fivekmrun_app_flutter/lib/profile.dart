@@ -31,7 +31,7 @@ import 'charts/runs_chart.dart';
 import 'common/milestone.dart';
 
 class ProfileDashboard extends StatelessWidget {
-  const ProfileDashboard({Key? key}) : super(key: key);
+  const ProfileDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {

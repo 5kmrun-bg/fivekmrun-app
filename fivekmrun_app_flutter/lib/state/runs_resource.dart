@@ -54,7 +54,7 @@ class RunsResource extends ChangeNotifier {
     }
   }
 
-  clear() {
+  void clear() {
     value = null;
     loading = true;
     _bestOfficialRun = null;
@@ -137,7 +137,7 @@ class RunsResource extends ChangeNotifier {
     return Run.selfieListFromJson(jsonDecode(body));
   }
 
-  /// Unlike the other two endpoints, xlrun/user/<id> answers with a non-JSON
+  /// Unlike the other two endpoints, `xlrun/user/<id>` answers with a non-JSON
   /// error page (not an empty array) for the vast majority of users who have
   /// no XL history — so, unlike [retrieve5kmRuns]/[retrieveSelfieRuns], that
   /// response is treated as "no XL runs" rather than a fetch failure. Letting

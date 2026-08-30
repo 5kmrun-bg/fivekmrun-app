@@ -27,7 +27,7 @@ class User {
     }
   }
 
-  calculateAge(DateTime birthDate) {
+  int calculateAge(DateTime birthDate) {
     DateTime currentDate = DateTime.now();
     int age = currentDate.year - birthDate.year;
     int month1 = currentDate.month;

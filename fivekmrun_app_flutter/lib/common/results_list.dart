@@ -11,7 +11,7 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 class ResultsList extends StatefulWidget {
   final List<Result> results;
 
-  const ResultsList({Key? key, required this.results}) : super(key: key);
+  const ResultsList({super.key, required this.results});
 
   @override
   State<ResultsList> createState() => _ResultsListState();
@@ -246,11 +246,11 @@ class SearchBox extends StatelessWidget {
   final Function? locateCB;
 
   const SearchBox({
-    Key? key,
+    super.key,
     required this.controller,
     required this.showLoacateButton,
     required this.locateCB,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -16,13 +16,12 @@ class WhatsNewPage extends StatefulWidget {
   final AssetBundle? bundle;
 
   WhatsNewPage({
-    Key? key,
+    super.key,
     WhatsNewResource? resource,
     Future<PackageInfo> Function()? packageInfoProvider,
     this.bundle,
   })  : resource = resource ?? WhatsNewResource(),
-        packageInfoProvider = packageInfoProvider ?? PackageInfo.fromPlatform,
-        super(key: key);
+        packageInfoProvider = packageInfoProvider ?? PackageInfo.fromPlatform;
 
   @override
   State<WhatsNewPage> createState() => _WhatsNewPageState();

@@ -5,11 +5,10 @@ class DetailsTile extends StatelessWidget {
   final String value;
   final Color accentColor;
   const DetailsTile(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.value,
-      required this.accentColor})
-      : super(key: key);
+      required this.accentColor});
 
   @override
   Widget build(BuildContext context) {

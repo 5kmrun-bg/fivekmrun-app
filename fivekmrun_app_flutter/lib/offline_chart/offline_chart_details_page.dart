@@ -10,7 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class OfflineChartDetailsPage extends StatelessWidget {
-  const OfflineChartDetailsPage({Key? key}) : super(key: key);
+  const OfflineChartDetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -230,8 +230,7 @@ class CircleWidget extends StatelessWidget {
 class IconText extends StatelessWidget {
   final IconData icon;
   final String text;
-  const IconText({Key? key, required this.icon, required this.text})
-      : super(key: key);
+  const IconText({super.key, required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -257,8 +256,7 @@ class IconText extends StatelessWidget {
 class ComapreTime extends StatelessWidget {
   final int time;
   final String text;
-  const ComapreTime({Key? key, required this.time, required this.text})
-      : super(key: key);
+  const ComapreTime({super.key, required this.time, required this.text});
 
   @override
   Widget build(BuildContext context) {

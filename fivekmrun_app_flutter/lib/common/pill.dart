@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 /// and colors so the shape and typography stay consistent everywhere.
 class Pill extends StatelessWidget {
   const Pill({
-    Key? key,
+    super.key,
     required this.label,
     required this.backgroundColor,
     required this.textColor,
-  }) : super(key: key);
+  });
 
   final String label;
   final Color backgroundColor;
@@ -38,7 +38,7 @@ class Pill extends StatelessWidget {
 
 /// XLrun marker — used on both run cards and future-event cards.
 class XLPill extends StatelessWidget {
-  const XLPill({Key? key}) : super(key: key);
+  const XLPill({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class XLPill extends StatelessWidget {
 
 /// KidsRun marker — used on future-event cards.
 class KidsPill extends StatelessWidget {
-  const KidsPill({Key? key}) : super(key: key);
+  const KidsPill({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class KidsPill extends StatelessWidget {
 
 /// Official (Saturday 5kmrun) marker — used on run cards.
 class OfficialPill extends StatelessWidget {
-  const OfficialPill({Key? key}) : super(key: key);
+  const OfficialPill({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,7 @@ class OfficialPill extends StatelessWidget {
 /// Selfie run marker — used on run cards. Uses the theme accent so it stays
 /// consistent with the app's palette.
 class SelfiePill extends StatelessWidget {
-  const SelfiePill({Key? key}) : super(key: key);
+  const SelfiePill({super.key});
 
   @override
   Widget build(BuildContext context) {

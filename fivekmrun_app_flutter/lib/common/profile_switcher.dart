@@ -141,7 +141,7 @@ Future<bool> authenticateProfileWithPassword(
 class _ReauthDialog extends StatefulWidget {
   final Profile profile;
 
-  const _ReauthDialog({Key? key, required this.profile}) : super(key: key);
+  const _ReauthDialog({required this.profile});
 
   @override
   State<_ReauthDialog> createState() => _ReauthDialogState();
