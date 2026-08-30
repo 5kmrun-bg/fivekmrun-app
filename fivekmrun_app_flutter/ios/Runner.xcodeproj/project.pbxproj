@@ -325,7 +325,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n${PODS_ROOT}/FirebaseCrashlytics/run\n";
+			shellScript = "# Firebase Crashlytics dSYM upload.\n# The `run` script ships inside whichever dependency manager provided\n# FirebaseCrashlytics. #222 moved the Firebase dependencies to Swift Package\n# Manager, so ${PODS_ROOT}/FirebaseCrashlytics/run no longer exists and this\n# phase failed the build. Prefer the SPM checkout, keep the CocoaPods path as\n# a fallback, and never fail the build just because dSYM upload is skipped.\nSPM_RUN=\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nPODS_RUN=\"${PODS_ROOT}/FirebaseCrashlytics/run\"\nif [ -f \"$SPM_RUN\" ]; then\n  \"$SPM_RUN\"\nelif [ -f \"$PODS_RUN\" ]; then\n  \"$PODS_RUN\"\nelse\n  echo \"warning: FirebaseCrashlytics run script not found; dSYMs were not uploaded\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
