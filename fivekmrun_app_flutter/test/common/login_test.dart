@@ -81,4 +81,24 @@ void main() {
     expect(find.text('Нямате регистрация?'), findsNothing);
     expect(find.text("You don't have an account?"), findsOneWidget);
   });
+
+  testWidgets(
+      'does not overflow in landscape with the keyboard open',
+      (tester) async {
+    SharedPreferences.setMockInitialValues({'locale': 'bg'});
+    final provider = LocaleProvider();
+
+    // Reproduces #230: a landscape phone viewport (1080x600, matching the
+    // reported Pixel 7 repro) with the soft keyboard's inset eating into the
+    // bottom of the screen, as happens once a text field is focused.
+    tester.view.physicalSize = const Size(2280, 1080);
+    tester.view.devicePixelRatio = 1.0;
+    tester.view.viewInsets = const FakeViewPadding(bottom: 500);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(_buildLoginApp(provider));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+  });
 }

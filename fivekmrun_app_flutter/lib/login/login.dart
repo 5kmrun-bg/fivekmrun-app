@@ -42,45 +42,53 @@ class _LoginState extends State<Login> {
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            Center(
-              child: SizedBox(
-                width: 220,
-                height: 400,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    if (!widget.addingProfile) ...[
-                      _buildLogo(),
-                      const SizedBox(height: 10),
-                    ],
-                    const Spacer(),
-                    loginWithId
-                        ? LoginWithId(addingProfile: widget.addingProfile)
-                        : LoginWithUsername(
-                            addingProfile: widget.addingProfile),
-                    const SizedBox(height: 4),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: _toggleLogin,
-                        child: Text(loginWithId
-                            ? l10n.login_widget_login_with_password
-                            : l10n.login_widget_login_with_id),
+            LayoutBuilder(
+              builder: (context, constraints) => SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints:
+                      BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Center(
+                    child: SizedBox(
+                      width: 220,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          if (!widget.addingProfile) ...[
+                            _buildLogo(),
+                            const SizedBox(height: 10),
+                          ],
+                          const SizedBox(height: 24),
+                          loginWithId
+                              ? LoginWithId(
+                                  addingProfile: widget.addingProfile)
+                              : LoginWithUsername(
+                                  addingProfile: widget.addingProfile),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton(
+                              onPressed: _toggleLogin,
+                              child: Text(loginWithId
+                                  ? l10n.login_widget_login_with_password
+                                  : l10n.login_widget_login_with_id),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          if (!widget.addingProfile) ...[
+                            Text(l10n.login_widget_no_registration),
+                            GestureDetector(
+                              onTap: () => _loadRegistrationScreen(),
+                              child: Text(l10n.login_widget_register,
+                                  style: TextStyle(
+                                      color: accentColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold)),
+                            )
+                          ],
+                        ],
                       ),
                     ),
-                    const Spacer(),
-                    if (!widget.addingProfile) ...[
-                      Text(l10n.login_widget_no_registration),
-                      GestureDetector(
-                        onTap: () => _loadRegistrationScreen(),
-                        child: Text(l10n.login_widget_register,
-                            style: TextStyle(
-                                color: accentColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold)),
-                      )
-                    ],
-                  ],
+                  ),
                 ),
               ),
             ),
