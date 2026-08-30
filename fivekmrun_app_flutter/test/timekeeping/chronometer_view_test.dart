@@ -1,9 +1,23 @@
+import 'dart:io';
+
 import 'package:fivekmrun_flutter/timekeeping/chronometer_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../localized_app.dart';
+
+const _pathProviderChannel = MethodChannel('plugins.flutter.io/path_provider');
+const _shareChannel = MethodChannel('dev.fluttercommunity.plus/share');
+
+// ChronometerView toggles the wakelock. Its pigeon channel is unhandled in
+// tests; fake-async silently never resolves it, but once real time is allowed
+// to pass (runAsync, below) it throws a channel-error. Stub it out.
+const _wakelockChannels = <String>[
+  'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle',
+  'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.isEnabled',
+];
 
 Widget _harness() =>
     localizedApp(const ChronometerView(), locale: const Locale('en'));
@@ -258,6 +272,84 @@ void main() {
       await tester.pump();
 
       expect(_startStopButton(), findsOneWidget);
+    });
+  });
+
+  // The exported file is the artifact that leaves the app and gets used to
+  // record real race results, and it has its own formatter and its own split
+  // arithmetic — neither shared with the on-screen display. Asserting on the
+  // generated content is the only thing that pins either.
+  group('export file content', () {
+    testWidgets('writes per-lap splits and cumulative totals', (tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{
+        'chronometer_paused_at': 5000,
+        'chronometer_laps': '[1000,2500,5000]',
+      });
+
+      // Sync: real async I/O never completes inside the fake-async zone.
+      final tempDir =
+          Directory.systemTemp.createTempSync('chronometer_export_test');
+      final messenger =
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+
+      var shared = false;
+      messenger.setMockMethodCallHandler(
+        _pathProviderChannel,
+        (call) async =>
+            call.method == 'getTemporaryDirectory' ? tempDir.path : null,
+      );
+      // Returning null makes share_plus fall back to its "unavailable"
+      // sentinel, which parses cleanly — the sharing itself isn't under test.
+      messenger.setMockMethodCallHandler(_shareChannel, (call) async {
+        shared = true;
+        return null;
+      });
+      for (final name in _wakelockChannels) {
+        messenger.setMockMessageHandler(
+          name,
+          (_) async =>
+              const StandardMessageCodec().encodeMessage(<Object?>[false]),
+        );
+      }
+
+      addTearDown(() {
+        messenger.setMockMethodCallHandler(_pathProviderChannel, null);
+        messenger.setMockMethodCallHandler(_shareChannel, null);
+        for (final name in _wakelockChannels) {
+          messenger.setMockMessageHandler(name, null);
+        }
+        tempDir.deleteSync(recursive: true);
+      });
+
+      await tester.pumpWidget(_harness());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.save_alt));
+      await tester.pump();
+
+      // The export chains three real-I/O awaits (temp dir -> write -> share),
+      // none of which advance inside testWidgets' fake-async zone. runAsync
+      // lets real time pass; the pump after it flushes the continuations. Both
+      // are needed, and repeatedly — one cycle only drains one link of the
+      // chain. tap/pump must stay outside runAsync; pumping inside deadlocks.
+      for (var i = 0; i < 10 && !shared; i++) {
+        await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 50)));
+        await tester.pump();
+      }
+
+      expect(shared, isTrue, reason: 'the share sheet should be invoked');
+
+      final written = tempDir.listSync().whereType<File>().toList();
+      expect(written, hasLength(1));
+      final content = written.single.readAsStringSync();
+
+      // Export uses its own format — h:mm'ss.hh — not the UI's hh:mm:ss.hh.
+      // "Lap" is the split from the previous lap; "Split" is the running
+      // total, so from lap 2 on the two columns must differ.
+      expect(content, contains("Lap1:\t0:00'01.00\tSplit1:\t0:00'01.00"));
+      expect(content, contains("Lap2:\t0:00'01.50\tSplit2:\t0:00'02.50"));
+      expect(content, contains("Lap3:\t0:00'02.50\tSplit3:\t0:00'05.00"));
     });
   });
 }
