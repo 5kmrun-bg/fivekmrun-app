@@ -141,8 +141,25 @@ void main() {
       showProfileSwitcherSheet(ctx);
       await tester.pumpAndSettle();
 
-      expect(find.text('Само номер'), findsOneWidget);
-      expect(find.text('Парола'), findsOneWidget);
+      // Asserted per row, not merely "both labels appear somewhere": if the
+      // type check were inverted the two subtitles would swap and a
+      // presence-only check would still see one of each.
+      expect(
+        find.descendant(
+          of: find.widgetWithText(ListTile, '111'),
+          matching: find.text('Само номер'),
+        ),
+        findsOneWidget,
+        reason: 'the id-only profile should show the id-only subtitle',
+      );
+      expect(
+        find.descendant(
+          of: find.widgetWithText(ListTile, 'Kid'),
+          matching: find.text('Парола'),
+        ),
+        findsOneWidget,
+        reason: 'the password profile should show the password subtitle',
+      );
     });
 
     testWidgets(
