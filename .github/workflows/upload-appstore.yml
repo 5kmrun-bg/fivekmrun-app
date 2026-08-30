@@ -82,9 +82,9 @@ jobs:
           # applies command-line build settings to EVERY target, and since the Swift
           # Package Manager migration (#222) that includes the SPM package targets,
           # which are automatically signed and fail with "conflicting provisioning
-          # settings". This was previously masked by a Podfile post_install hook that
-          # set CODE_SIGNING_ALLOWED=NO on pod targets; CocoaPods has since been
-          # deintegrated entirely, so nothing masks it any more.
+          # settings". A Podfile post_install hook used to set CODE_SIGNING_ALLOWED=NO
+          # on the pod targets, so they ignored the stray settings and the problem went
+          # unnoticed; CocoaPods has since been deintegrated, so nothing absorbs them.
           xcodebuild -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive clean archive
       - name: Create export options plist
         run: |
