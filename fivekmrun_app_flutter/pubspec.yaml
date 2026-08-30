@@ -14,7 +14,7 @@ description: A mobile application for 5kmRun.bg.
 version: 3.18.0+474
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
+  sdk: ^3.12.0
 
 publish_to: none
 dependencies:
@@ -54,7 +54,7 @@ dependencies:
   rate_my_app: ^2.0.0
   after_layout: ^1.0.7+2
   progress_state_button: ^1.0.3
-  geocoding: ^3.0.0
+  geocoding: ^5.0.0
   file: ^7.0.1
   uuid: ^4.1.0
   add_to_google_wallet: ^0.0.5
@@ -63,7 +63,7 @@ dependencies:
   share_plus: ^13.0.0
   firebase_remote_config: ^5.0.0
   wakelock_plus: ^1.2.0
-  screen_brightness: ^1.0.1
+  screen_brightness: ^2.1.5
   app_badge_plus: ^1.2.3
   mobile_scanner: ^7.4.0
   audioplayers: ^6.6.0
@@ -80,12 +80,6 @@ dependencies:
 # the top-level constraints and changed nothing in resolution.)
 dependency_overrides:
   http: ^0.13.0
-  # strava_client 2.3.1 requires app_links ^7.1.1, but that floor bumps the
-  # SDK requirement to >=3.12.0 — one Dart minor ahead of what this Flutter
-  # version (3.38.3 / Dart 3.10.1) ships. 7.0.0 satisfies strava_client's
-  # actual API usage (deep-link URI stream) and only needs Dart >=3.10.0.
-  # Remove this override once the Flutter/Dart floor moves past 3.12 (#222).
-  app_links: ">=7.0.0 <7.1.0"
 
 dev_dependencies:
   flutter_lints: ^2.0.3

@@ -82,7 +82,15 @@ jobs:
         run: xcodebuild -resolvePackageDependencies -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release
       - name: Build xArchive
         run: |
-          xcodebuild -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=48HKWHQ6FS -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=0258673b-a8aa-43be-ab3c-97f5617fe07f clean archive CODE_SIGN_IDENTITY="Apple Distribution: 5 KM PARK BG (48HKWHQ6FS)"
+          # Signing lives on the Runner target in project.pbxproj (Release config:
+          # CODE_SIGN_STYLE=Manual, DEVELOPMENT_TEAM, PROVISIONING_PROFILE_SPECIFIER,
+          # CODE_SIGN_IDENTITY). It must NOT be passed on the command line: xcodebuild
+          # applies command-line build settings to EVERY target, and since the Swift
+          # Package Manager migration (#222) that includes the SPM package targets,
+          # which are automatically signed and fail with "conflicting provisioning
+          # settings". Under CocoaPods this was masked by the Podfile post_install hook
+          # setting CODE_SIGNING_ALLOWED=NO on pod targets; SPM targets have no such hook.
+          xcodebuild -workspace fivekmrun_app_flutter/ios/Runner.xcworkspace -scheme Runner -configuration Release -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive clean archive
       - name: Create export options plist
         run: |
           echo -n "${{ vars.IOS_EXPORT_OPTIONS }}" > $RUNNER_TEMP/exportOptions.plist

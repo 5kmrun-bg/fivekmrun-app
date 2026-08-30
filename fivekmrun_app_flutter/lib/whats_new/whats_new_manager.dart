@@ -17,12 +17,10 @@ class WhatsNewManager {
   final LocalStorageResource _localStorage;
 
   WhatsNewManager({
-    required LocalStorageResource localStorage,
-    WhatsNewResource? resource,
+    required this._localStorage,
+    this._resource,
     Future<PackageInfo> Function()? packageInfoProvider,
-  })  : _localStorage = localStorage,
-        _resource = resource,
-        _packageInfoProvider = packageInfoProvider ?? PackageInfo.fromPlatform;
+  }) : _packageInfoProvider = packageInfoProvider ?? PackageInfo.fromPlatform;
 
   /// Returns whether the popup was shown, so the caller can skip the rating
   /// prompt this launch rather than stacking it behind this one.

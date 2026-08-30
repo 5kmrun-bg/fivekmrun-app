@@ -135,7 +135,7 @@ class AllFutureEventsResource extends ChangeNotifier {
   /// Injectable for tests; forwarded to the composed per-type resources.
   final http.Client? _client;
 
-  AllFutureEventsResource({http.Client? client}) : _client = client;
+  AllFutureEventsResource({this._client});
 
   // Not `late`: a failed fetch now leaves [value] untouched, so it has to be
   // readable before the first successful load.
@@ -179,7 +179,7 @@ class AllPastEventsResource extends ChangeNotifier {
   /// Injectable for tests; forwarded to the composed per-type resources.
   final http.Client? _client;
 
-  AllPastEventsResource({http.Client? client}) : _client = client;
+  AllPastEventsResource({this._client});
 
   // Not `late`: a failed fetch now leaves [value] untouched, so it has to be
   // readable before the first successful load.

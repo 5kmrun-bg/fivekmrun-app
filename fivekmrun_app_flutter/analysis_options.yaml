@@ -13,6 +13,10 @@ analyzer:
     # These are surfaced in the IDE/`flutter analyze` but do not fail as errors.
     avoid_print: warning
     deprecated_member_use: info
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
 
 linter:
   rules:

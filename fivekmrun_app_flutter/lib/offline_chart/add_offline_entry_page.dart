@@ -86,13 +86,16 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         activity.startLatlng!.length != 2) {
       return "";
     }
-    var placemark = await placemarkFromCoordinates(
+    // geocoding 5 moved these off top-level functions onto a Geocoding
+    // instance. The previous code also called setLocaleIdentifier('en_US')
+    // *after* the lookup, so it never affected the result; the device locale
+    // has always been what came back. Passing `locale:` here would change
+    // that, so it is deliberately left alone — see #222.
+    var placemark = await Geocoding().placemarkFromCoordinates(
         activity.startLatlng!.first, activity.startLatlng!.last);
 
     var locality = placemark.first.locality;
     var country = placemark.first.country;
-
-    await setLocaleIdentifier('en_US');
 
     if (locality == null || country == null) {
       return "";
