@@ -5,6 +5,46 @@ on:
 env:
   FLUTTER_VERSION: "${{ vars.FLUTTER_VERSION }}"
 jobs:
+  # Decides whether the app itself needs building. `flutter build` never
+  # compiles anything under test/, so a PR that only touches test files
+  # produces a byte-identical binary and the two build jobs below can tell us
+  # nothing new. The `test` job always runs.
+  #
+  # Deliberately a deny-list: builds are skipped only when *every* changed file
+  # is a test file, so anything unexpected (pubspec, native config, workflow
+  # changes, new top-level files) still builds.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.filter.outputs.app }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # Full history so the PR can be diffed against its base.
+          fetch-depth: 0
+      - id: filter
+        run: |
+          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")
+          echo "Changed files:"
+          echo "$CHANGED"
+
+          if [ -z "$CHANGED" ]; then
+            echo "Empty diff - building rather than guessing."
+            echo "app=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Emptiness of the filtered list, rather than `grep -q`, so the
+          # decision does not depend on grep's exit code.
+          NON_TEST=$(printf '%s\n' "$CHANGED" | grep -vE '^fivekmrun_app_flutter/test/' || true)
+          if [ -n "$NON_TEST" ]; then
+            echo "Non-test changes present - building the app:"
+            echo "$NON_TEST"
+            echo "app=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Test-only change - skipping the Android/iOS builds."
+            echo "app=false" >> "$GITHUB_OUTPUT"
+          fi
   test:
     runs-on: ubuntu-latest
     environment: development
@@ -31,6 +71,8 @@ jobs:
       - name: Run Unit Tests
         run: cd fivekmrun_app_flutter && flutter test
   build-android:
+    needs: changes
+    if: needs.changes.outputs.app == 'true'
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -54,6 +96,8 @@ jobs:
           EOF
       - run: cd fivekmrun_app_flutter && flutter build appbundle --no-shrink
   build-ios:
+    needs: changes
+    if: needs.changes.outputs.app == 'true'
     runs-on: macos-latest
     environment: development
     steps:
