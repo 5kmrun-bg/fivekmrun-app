@@ -67,7 +67,7 @@ class RunCard extends StatelessWidget {
                         Icon(Icons.timer, size: 16, color: iconColor)
                       ],
                     ),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,14 +79,13 @@ class RunCard extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Text(
                                 run.pace ??
-                                    "" +
-                                        " ${AppLocalizations.of(context)!.min_km}",
+                                    "" " ${AppLocalizations.of(context)!.min_km}",
                                 style: valueStyle,
                                 overflow: TextOverflow.ellipsis),
                           ),
                           Text(
                               run.time ??
-                                  "" + " ${AppLocalizations.of(context)!.min}",
+                                  "" " ${AppLocalizations.of(context)!.min}",
                               style: valueStyle,
                               overflow: TextOverflow.ellipsis),
                         ],

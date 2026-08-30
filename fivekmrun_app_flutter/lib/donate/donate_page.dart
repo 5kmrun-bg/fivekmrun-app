@@ -11,7 +11,7 @@ class DonatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     ButtonStyle secondaryStyle = ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,
-        side: BorderSide(
+        side: const BorderSide(
           width: 1.0,
           color: Colors.white,
         ));
@@ -35,7 +35,7 @@ class DonatePage extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 32.0),
                   child: Row(children: [
                     ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: 120),
+                      constraints: const BoxConstraints(minWidth: 120),
                       child: ElevatedButton(
                         child: Row(
                           children: [
@@ -65,12 +65,12 @@ class DonatePage extends StatelessWidget {
                 ),
                 Row(children: [
                   ConstrainedBox(
-                    constraints: BoxConstraints(minWidth: 120),
+                    constraints: const BoxConstraints(minWidth: 120),
                     child: ElevatedButton(
                       style: secondaryStyle,
                       child: Row(
                         children: [
-                          Icon(CustomIcons.paypal, size: 16),
+                          const Icon(CustomIcons.paypal, size: 16),
                           Text(AppLocalizations.of(context)!
                               .donate_page_pay_pal),
                         ],
@@ -96,12 +96,12 @@ class DonatePage extends StatelessWidget {
                 Row(
                   children: [
                     ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: 120),
+                      constraints: const BoxConstraints(minWidth: 120),
                       child: ElevatedButton(
                         style: secondaryStyle,
                         child: Row(
                           children: [
-                            Icon(Icons.shopping_bag),
+                            const Icon(Icons.shopping_bag),
                             Text(AppLocalizations.of(context)!
                                 .donate_page_fan_store),
                           ],
@@ -128,12 +128,12 @@ class DonatePage extends StatelessWidget {
                 Row(
                   children: [
                     ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: 120),
+                      constraints: const BoxConstraints(minWidth: 120),
                       child: ElevatedButton(
                         style: secondaryStyle,
                         child: Row(
                           children: [
-                            Icon(Icons.directions_run),
+                            const Icon(Icons.directions_run),
                             Text(AppLocalizations.of(context)!
                                 .donate_page_xl_run),
                           ],

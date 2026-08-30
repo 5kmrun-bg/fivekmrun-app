@@ -43,11 +43,11 @@ class ProfileDashboard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     final runs = runsRes.value;
-    final hasAnyRuns = runs != null && runs.length > 0;
+    final hasAnyRuns = runs != null && runs.isNotEmpty;
     final hasOfficialRuns = runs != null &&
-        runs.where((r) => r.runType == RunType.official).length > 0;
+        runs.where((r) => r.runType == RunType.official).isNotEmpty;
     final hasSelfieRuns = runs != null &&
-        runs.where((r) => r.runType == RunType.selfie).length > 0;
+        runs.where((r) => r.runType == RunType.selfie).isNotEmpty;
     final xlStats = XLStats.fromRuns(runs ?? <Run>[]);
     // Promote the next XL event to anyone who has ever run one. The events
     // are already fetched for the events tab (AllFutureEventsResource is
@@ -57,35 +57,35 @@ class ProfileDashboard extends StatelessWidget {
         : nextUpcomingXLEvent(
             Provider.of<AllFutureEventsResource>(context).value);
 
-    final goToSettings = () {
+    void goToSettings() {
       Navigator.of(context, rootNavigator: true).pushNamed("settings");
-    };
+    }
 
-    final goToBarcode = () {
+    void goToBarcode() {
       Navigator.of(context, rootNavigator: true).pushNamed("barcode");
-    };
+    }
 
     Widget profileBadge() {
       if (hasMaxBadge(runs)) {
-        return Image(
+        return const Image(
             height: 64,
             alignment: Alignment.bottomRight,
             image: AssetImage('assets/max-badge.png'));
       }
 
       if (hasSelfieBadge(runs)) {
-        return Image(
+        return const Image(
             height: 64,
             alignment: Alignment.bottomRight,
             image: AssetImage('assets/selfie-badge.png'));
       }
 
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return ColorfulSafeArea(
-        color: Color.fromRGBO(66, 66, 66, 0.7),
-        overflowRules: OverflowRules.all(true),
+        color: const Color.fromRGBO(66, 66, 66, 0.7),
+        overflowRules: const OverflowRules.all(true),
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: RefreshIndicator(
             onRefresh: () => refreshAllData(context),
@@ -103,7 +103,7 @@ class ProfileDashboard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           IconButton(
-                            icon: Icon(CustomIcons.barcode),
+                            icon: const Icon(CustomIcons.barcode),
                             onPressed: goToBarcode,
                           ),
                           MilestoneTile(
@@ -156,7 +156,7 @@ class ProfileDashboard extends StatelessWidget {
                                 const Icon(Icons.expand_more, size: 18),
                               ],
                             ),
-                            Text(""),
+                            const Text(""),
                           ],
                         ),
                       ),
@@ -205,19 +205,19 @@ class ProfileDashboard extends StatelessWidget {
                     ),
                   ],
                 ),
-                Row(
+                const Row(
                   children: [Timekeeping()],
                 ),
-                if (runsRes.loading) Center(child: CircularProgressIndicator()),
+                if (runsRes.loading) const Center(child: CircularProgressIndicator()),
                 if (hasOfficialRuns)
-                  this.buildRunsCards(context, runsRes.bestOfficialRun!,
+                  buildRunsCards(context, runsRes.bestOfficialRun!,
                       runsRes.lastOfficialRun!, l10n.profile_page_official),
                 if (hasSelfieRuns)
-                  this.buildRunsCards(context, runsRes.bestSelfieRun!,
+                  buildRunsCards(context, runsRes.bestSelfieRun!,
                       runsRes.lastSelfieRun!, "selfie"),
                 if (xlStats != null)
-                  this.buildXLStatsCard(xlStats, nextXLEvent),
-                if (hasAnyRuns) this.buildRunsChartCard(runs),
+                  buildXLStatsCard(xlStats, nextXLEvent),
+                if (hasAnyRuns) buildRunsChartCard(runs),
                 if (!runsRes.loading && !hasAnyRuns)
                   Row(
                     children: <Widget>[
@@ -231,8 +231,8 @@ class ProfileDashboard extends StatelessWidget {
                       )
                     ],
                   ),
-                if (hasOfficialRuns) this.buildRunsByRouteCard(runs),
-                if (hasOfficialRuns) this.buildBestTimesCard(runs),
+                if (hasOfficialRuns) buildRunsByRouteCard(runs),
+                if (hasOfficialRuns) buildBestTimesCard(runs),
               ],
             )));
   }
@@ -418,7 +418,7 @@ class ProfileDashboard extends StatelessWidget {
 
   Widget buildRunsChartCard(List<Run> runs) {
     return Card(
-      child: Container(
+      child: SizedBox(
         height: 200,
         child: RunsChart(runs: runs.take(30).toList()),
       ),
@@ -427,7 +427,7 @@ class ProfileDashboard extends StatelessWidget {
 
   Widget buildRunsByRouteCard(List<Run> runs) {
     return Card(
-      child: Container(
+      child: SizedBox(
         height: 200,
         child: RunsByRouteChart.withRuns(runs),
       ),
@@ -436,7 +436,7 @@ class ProfileDashboard extends StatelessWidget {
 
   Widget buildBestTimesCard(List<Run> runs) {
     return Card(
-      child: Container(
+      child: SizedBox(
         height: 350,
         child: BestTimesByRouteChart.withRuns(runs),
       ),

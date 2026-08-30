@@ -11,7 +11,7 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 class ResultsList extends StatefulWidget {
   final List<Result> results;
 
-  ResultsList({Key? key, required this.results}) : super(key: key);
+  const ResultsList({Key? key, required this.results}) : super(key: key);
 
   @override
   _ResultsListState createState() => _ResultsListState();
@@ -19,12 +19,13 @@ class ResultsList extends StatefulWidget {
 
 class _ResultsListState extends State<ResultsList> {
   TextEditingController? _controller;
-  ItemScrollController _scrollController = ItemScrollController();
+  final ItemScrollController _scrollController = ItemScrollController();
   List<Result>? _filteredResults;
   int _userRunIndex = -1;
   int? _userId;
   bool _showScrollBtn = false;
 
+  @override
   void initState() {
     super.initState();
     _userId =
@@ -33,9 +34,9 @@ class _ResultsListState extends State<ResultsList> {
     _filteredResults = widget.results;
     _controller = TextEditingController();
     _controller?.addListener(() {
-      this._doFilter();
+      _doFilter();
     });
-    this._doFilter();
+    _doFilter();
     // print("Results.initState $_userId $_showScrollBtn $_userRunIndex");
   }
 
@@ -48,15 +49,15 @@ class _ResultsListState extends State<ResultsList> {
         Provider.of<AuthenticationResource>(context, listen: false).getUserId();
     _showScrollBtn = widget.results.any((r) => r.userId == _userId);
 
-    if (this.widget.results != oldWidget.results) {
-      this._doFilter();
+    if (widget.results != oldWidget.results) {
+      _doFilter();
     }
   }
 
   void _scrollToView() {
-    this._scrollController.scrollTo(
-          index: this._userRunIndex,
-          duration: Duration(seconds: 1),
+    _scrollController.scrollTo(
+          index: _userRunIndex,
+          duration: const Duration(seconds: 1),
         );
   }
 
@@ -69,8 +70,8 @@ class _ResultsListState extends State<ResultsList> {
                   .contains(_controller?.text.toLowerCase() ?? "") ||
               res.userId.toString() == (_controller?.text ?? "").trim())
           .toList();
-      this._userRunIndex =
-          _filteredResults!.indexWhere((r) => r.userId == this._userId);
+      _userRunIndex =
+          _filteredResults!.indexWhere((r) => r.userId == _userId);
     });
   }
 
@@ -87,7 +88,7 @@ class _ResultsListState extends State<ResultsList> {
       children: <Widget>[
         SearchBox(
           controller: _controller!,
-          showLoacateButton: this._showScrollBtn,
+          showLoacateButton: _showScrollBtn,
           locateCB: _userRunIndex >= 0 ? _scrollToView : null,
         ),
         Expanded(
@@ -163,11 +164,11 @@ class _ResultsListState extends State<ResultsList> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.only(right: 10),
+                        margin: const EdgeInsets.only(right: 10),
                         width: 10,
                         decoration: BoxDecoration(
                             color: cardColor,
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(5),
                                 topLeft: Radius.circular(5))),
                       ),
@@ -189,10 +190,8 @@ class _ResultsListState extends State<ResultsList> {
                               if (res.isSelfie)
                                 ListTileRow(
                                   icon: Icons.terrain,
-                                  text: res.elevationGainedTotal
-                                          .round()
-                                          .toString() +
-                                      "m",
+                                  text: "${res.elevationGainedTotal
+                                          .round()}m",
                                   iconColor: iconColor,
                                 )
                             ],
@@ -260,28 +259,28 @@ class SearchBox extends StatelessWidget {
       child: Card(
         child: Row(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
               child: Icon(Icons.search),
             ),
             Expanded(
               child: TextField(
                 controller: controller,
-                decoration: new InputDecoration(
+                decoration: InputDecoration(
                     hintText:
                         AppLocalizations.of(context)!.results_list_search_bar,
                     border: InputBorder.none),
               ),
             ),
             IconButton(
-              icon: new Icon(Icons.cancel),
+              icon: const Icon(Icons.cancel),
               onPressed: () {
                 controller.clear();
               },
             ),
             if (showLoacateButton)
-              new IconButton(
-                icon: new Icon(Icons.location_searching),
+              IconButton(
+                icon: const Icon(Icons.location_searching),
                 onPressed: () => locateCB!(),
               ),
           ],

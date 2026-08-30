@@ -82,9 +82,7 @@ class StravaResource extends ChangeNotifier {
   static StravaClient? strava;
 
   Future<T> _withStrava<T>(StravaCallback<T> fn) async {
-    if (strava == null) {
-      strava = StravaClient(clientId: stravaClientId, secret: stravaSecret);
-    }
+    strava ??= StravaClient(clientId: stravaClientId, secret: stravaSecret);
     try {
       return await fn(strava!);
     } finally {}
@@ -95,13 +93,13 @@ class StravaResource extends ChangeNotifier {
       final token = await strava.getStravaAuthToken();
       final hasValidToken = token != null &&
           token.accessToken != "null" &&
-          !this._isTokenExpired(token);
+          !_isTokenExpired(token);
 
       if (!hasValidToken) {
         return false;
       }
 
-      final assureAuthenticated = this._assureAuthenticated(strava);
+      final assureAuthenticated = _assureAuthenticated(strava);
 
       return assureAuthenticated;
     });
@@ -111,8 +109,8 @@ class StravaResource extends ChangeNotifier {
     final athlete = await fetchAuthenticatedAthleteWithRetry(
       strava.athletes.getAuthenticatedAthlete,
       () async {
-        await this.deAuthenticate();
-        await this.authenticate();
+        await deAuthenticate();
+        await authenticate();
       },
     );
 
@@ -205,14 +203,14 @@ class StravaResource extends ChangeNotifier {
     FirebaseCrashlytics.instance.log("Strava get activities");
 
     return _withStrava((strava) async {
-      final authOK = await this.authenticate();
+      final authOK = await authenticate();
       if (!authOK) {
         FirebaseCrashlytics.instance
             .log("Strava get activities - authOK: false");
         return null;
       }
 
-      final isReallyAuthenticated = await this._assureAuthenticated(strava);
+      final isReallyAuthenticated = await _assureAuthenticated(strava);
       if (!isReallyAuthenticated) {
         // Return null in case of error
         return null;

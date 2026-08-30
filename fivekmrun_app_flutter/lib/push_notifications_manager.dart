@@ -11,7 +11,7 @@ class PushNotificationsManager {
   PushNotificationsManager._();
 
   factory PushNotificationsManager() => _instance;
-  static int _lastOnResumeCall = 0;
+  static const int _lastOnResumeCall = 0;
   static final PushNotificationsManager _instance =
       PushNotificationsManager._();
   static PushNotificationsManager getInstance() {
@@ -81,9 +81,9 @@ class PushNotificationsManager {
       //   },
       // );
 
-      LocalStorageResource localStorageResource = new LocalStorageResource();
+      LocalStorageResource localStorageResource = LocalStorageResource();
       localStorageResource.isSubscribedForGeneral.then((isSubscribed) {
-        if (isSubscribed) this.subscribeTopic("general");
+        if (isSubscribed) subscribeTopic("general");
       });
 
       // For testing purposes print the Firebase Messaging token
@@ -106,7 +106,7 @@ class PushNotificationsManager {
               content: Text(body),
               actions: <Widget>[
                 TextButton(
-                    child: Text("OK"),
+                    child: const Text("OK"),
                     onPressed: () => Navigator.of(context).pop())
               ],
             ))) {

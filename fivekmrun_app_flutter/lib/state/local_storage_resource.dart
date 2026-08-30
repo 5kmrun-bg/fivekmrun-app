@@ -6,16 +6,16 @@ class LocalStorageResource extends ChangeNotifier {
   final String _keySubscribedForGeneral =
       "push_notifications_subscribed_general";
 
-  Future<SharedPreferences> _storage = SharedPreferences.getInstance();
+  final Future<SharedPreferences> _storage = SharedPreferences.getInstance();
 
   Future<bool> get isSubscribedForGeneral async {
     final SharedPreferences storage = await _storage;
-    return storage.getBool(this._keySubscribedForGeneral) ?? false;
+    return storage.getBool(_keySubscribedForGeneral) ?? false;
   }
 
   set isSubscrubedForGeneral(bool value) {
     _storage.then(
-        (storage) => storage.setBool(this._keySubscribedForGeneral, value));
+        (storage) => storage.setBool(_keySubscribedForGeneral, value));
   }
 
   /// Null on a fresh install: nothing has been acknowledged yet.

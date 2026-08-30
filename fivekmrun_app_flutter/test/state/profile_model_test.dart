@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Profile.isTokenExpired', () {
     test('an ID-only profile never expires', () {
-      final profile = Profile(userId: 1, type: ProfileType.idOnly);
+      const profile = Profile(userId: 1, type: ProfileType.idOnly);
       expect(profile.isTokenExpired, isFalse);
     });
 
@@ -31,14 +31,14 @@ void main() {
     });
 
     test('a password profile with no token is expired', () {
-      final profile = Profile(userId: 1, type: ProfileType.password);
+      const profile = Profile(userId: 1, type: ProfileType.password);
       expect(profile.isTokenExpired, isTrue);
     });
   });
 
   group('Profile JSON', () {
     test('round-trips every field', () {
-      final profile = Profile(
+      const profile = Profile(
         userId: 42,
         type: ProfileType.password,
         token: 'tkn',
@@ -75,7 +75,7 @@ void main() {
 
   group('Profile.copyWith', () {
     test('overrides only the given fields', () {
-      final original = Profile(
+      const original = Profile(
         userId: 1,
         type: ProfileType.idOnly,
         name: 'Ivan',

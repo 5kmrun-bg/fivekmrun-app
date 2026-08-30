@@ -1,7 +1,6 @@
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:fivekmrun_flutter/state/whats_new_resource.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show AssetBundle;
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// Lists the last few versions' highlights, newest first, reachable from
@@ -58,14 +57,14 @@ class _WhatsNewPageState extends State<WhatsNewPage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(color: Colors.white),
+        leading: const BackButton(color: Colors.white),
         title: Text(l10n.whats_new_page_title),
         centerTitle: true,
       ),
       body: SafeArea(
         top: false,
         child: _loading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : ListView(
                 padding: const EdgeInsets.all(16.0),
                 children: <Widget>[

@@ -174,10 +174,7 @@ class Run {
       timeInSeconds = timeInSeconds < 0 ? -timeInSeconds : timeInSeconds;
     }
 
-    return signString +
-        (timeInSeconds ~/ 60).toString().padLeft(2, '0') +
-        ":" +
-        (timeInSeconds % 60).toString().padLeft(2, '0');
+    return "$signString${(timeInSeconds ~/ 60).toString().padLeft(2, '0')}:${(timeInSeconds % 60).toString().padLeft(2, '0')}";
   }
 
   static String timeInSecondsToSpeed(int timeInSeconds,

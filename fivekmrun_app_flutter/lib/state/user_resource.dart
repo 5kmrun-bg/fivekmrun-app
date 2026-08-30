@@ -37,21 +37,21 @@ class UserResource extends ChangeNotifier {
   int? _currentUserId;
   int? get currentUserId => _currentUserId;
   set currentUserId(int? v) {
-    this._currentUserId = v;
+    _currentUserId = v;
     if (v != null) {
       // Show barcode immediately; getById will overwrite with full profile data.
-      this.value = User(age: 0, name: "", donationsCount: 0, id: v, avatarUrl: "");
-      this._loading = false;
-      this.getById(v, true);
+      value = User(age: 0, name: "", donationsCount: 0, id: v, avatarUrl: "");
+      _loading = false;
+      getById(v, true);
     } else {
-      this.value = null;
+      value = null;
     }
   }
 
   clear() {
-    this.currentUserId = null;
-    this.value = null;
-    this.loading = true;
+    currentUserId = null;
+    value = null;
+    loading = true;
   }
 
   Future<User?> getById(int userId, [bool force = false]) async {
@@ -69,17 +69,17 @@ class UserResource extends ChangeNotifier {
           await _client.get(Uri.parse("${constants.userEndpointUrl}$userId"));
     } catch (e) {
       // No internet or server unreachable — show barcode with cached user ID.
-      this.loading = false;
-      this.value = new User(age: 0, name: "", donationsCount: 0, id: userId, avatarUrl: "");
-      return this.value;
+      loading = false;
+      value = User(age: 0, name: "", donationsCount: 0, id: userId, avatarUrl: "");
+      return value;
     }
 
     if (!isJsonResponse(
         response.statusCode, response.headers["content-type"])) {
-      this.loading = false;
-      this.value =
-          new User(age: 0, name: " ", donationsCount: 0, id: -1, avatarUrl: "");
-      return this.value;
+      loading = false;
+      value =
+          User(age: 0, name: " ", donationsCount: 0, id: -1, avatarUrl: "");
+      return value;
     }
 
     String body = utf8.decode(response.bodyBytes);
@@ -87,9 +87,9 @@ class UserResource extends ChangeNotifier {
     User user = User.fromJson(userId, decodedBody);
     List<RunSimple> runs = RunSimple.listFromJson(decodedBody);
 
-    this._sendToAnalytics(user, runs);
-    this.value = user;
-    this.loading = false;
+    _sendToAnalytics(user, runs);
+    value = user;
+    loading = false;
     return user;
   }
 
@@ -99,7 +99,7 @@ class UserResource extends ChangeNotifier {
     FirebaseAnalytics.instance.setUserProperty(
         name: "donation_total",
         value: user.donationsCount.toString().padLeft(3, '0'));
-    if (runs.length > 0) {
+    if (runs.isNotEmpty) {
       runs.sort((r1, r2) => r1.date.compareTo(r2.date));
 
       RunSimple lastRun = runs.last;

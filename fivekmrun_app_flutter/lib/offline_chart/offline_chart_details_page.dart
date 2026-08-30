@@ -10,7 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class OfflineChartDetailsPage extends StatelessWidget {
-  OfflineChartDetailsPage({Key? key}) : super(key: key);
+  const OfflineChartDetailsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,30 +19,25 @@ class OfflineChartDetailsPage extends StatelessWidget {
     final imgSize = MediaQuery.of(context).size.width.round() - 32;
 
     final mapUrl =
-        "https://maps.googleapis.com/maps/api/staticmap?size=${imgSize}x${imgSize}&zoom=14&maptype=terrain&path=weight:3%7Ccolor:0xFC1851%7Cenc:" +
-            result.mapPolyline +
-            "&key=" +
-            googleMapsKey;
+        "https://maps.googleapis.com/maps/api/staticmap?size=${imgSize}x$imgSize&zoom=14&maptype=terrain&path=weight:3%7Ccolor:0xFC1851%7Cenc:${result.mapPolyline}&key=$googleMapsKey";
     return Scaffold(
       appBar: AppBar(
-        title: Text(result.name, style: TextStyle(fontSize: 16)),
+        title: Text(result.name, style: const TextStyle(fontSize: 16)),
         actions: [
           IconButton(
             onPressed: () => launchUrl(
-                Uri.parse("https://5kmrun.bg/selfie/user/" +
-                    result.userId.toString()),
+                Uri.parse("https://5kmrun.bg/selfie/user/${result.userId}"),
                 mode: LaunchMode.externalApplication),
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
             iconSize: 20,
           ),
           if (result.stravaLink != null && result.stravaLink != "")
             IconButton(
               onPressed: () => launchUrl(
-                  Uri.parse("https://www.strava.com/activities/" +
-                      result.stravaLink!),
+                  Uri.parse("https://www.strava.com/activities/${result.stravaLink!}"),
                   mode: LaunchMode.externalApplication),
-              icon: Icon(CustomIcons.strava),
+              icon: const Icon(CustomIcons.strava),
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
               iconSize: 20,
             )
@@ -58,7 +53,7 @@ class OfflineChartDetailsPage extends StatelessWidget {
                   children: <Widget>[
                     SizedBox(
                       height: imgSize.toDouble(),
-                      child: Center(child: CircularProgressIndicator()),
+                      child: const Center(child: CircularProgressIndicator()),
                     ),
                     FadeInImage.memoryNetwork(
                       image: mapUrl,
@@ -106,23 +101,20 @@ class OfflineChartDetailsPage extends StatelessWidget {
                             DetailsTile(
                               title: AppLocalizations.of(context)!
                                   .offline_chart_details_page_pace,
-                              value: result.pace +
-                                  " ${AppLocalizations.of(context)!.min_km}",
+                              value: "${result.pace} ${AppLocalizations.of(context)!.min_km}",
                               accentColor: iconColor,
                             ),
                             DetailsTile(
                               title: AppLocalizations.of(context)!
                                   .offline_chart_details_page_total_elevation_gained,
-                              value: result.elevationGainedTotal
-                                      .round()
-                                      .toString() +
-                                  " m",
+                              value: "${result.elevationGainedTotal
+                                      .round()} m",
                               accentColor: iconColor,
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                         width: 5,
                       ),
@@ -132,7 +124,7 @@ class OfflineChartDetailsPage extends StatelessWidget {
                         indent: 10,
                         endIndent: 10,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                         width: 5,
                       ),
@@ -168,10 +160,7 @@ class OfflineChartDetailsPage extends StatelessWidget {
                           DetailsTile(
                             title: AppLocalizations.of(context)!
                                 .offline_chart_details_page_elevation,
-                            value: result.elevationLow.toStringAsFixed(0) +
-                                " m - " +
-                                result.elevationHigh.toStringAsFixed(0) +
-                                " m",
+                            value: "${result.elevationLow.toStringAsFixed(0)} m - ${result.elevationHigh.toStringAsFixed(0)} m",
                             accentColor: iconColor,
                           ),
                           if (result.status > 0 && result.status <= 2)
@@ -216,23 +205,23 @@ class CircleWidget extends StatelessWidget {
   final String value;
   final String measurement;
 
-  CircleWidget(this.value, this.measurement);
+  const CircleWidget(this.value, this.measurement, {super.key});
 
   @override
   Widget build(BuildContext context) {
     final textStyle =
         Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black);
     return Container(
-      padding: EdgeInsets.all(24),
-      child: Column(
-        children: <Widget>[
-          Text(this.value, style: textStyle),
-          Text(this.measurement, style: textStyle)
-        ],
-      ),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(24),
+      decoration: const BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
+      ),
+      child: Column(
+        children: <Widget>[
+          Text(value, style: textStyle),
+          Text(measurement, style: textStyle)
+        ],
       ),
     );
   }
@@ -276,8 +265,8 @@ class ComapreTime extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     final color = time < 0
-        ? Color.fromRGBO(0, 173, 25, 1)
-        : Color.fromRGBO(250, 32, 87, 1);
+        ? const Color.fromRGBO(0, 173, 25, 1)
+        : const Color.fromRGBO(250, 32, 87, 1);
 
     final numberStyle = textTheme.titleSmall?.copyWith(color: color);
     return Row(

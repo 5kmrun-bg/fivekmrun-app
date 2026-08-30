@@ -46,7 +46,7 @@ void main() {
     test('uses a square-cornered outline border', () {
       final decoration = InputHelpers.decoration('email');
       final border = decoration.border as OutlineInputBorder;
-      expect(border.borderRadius, BorderRadius.all(Radius.circular(0)));
+      expect(border.borderRadius, const BorderRadius.all(Radius.circular(0)));
     });
   });
 
@@ -60,7 +60,7 @@ void main() {
     });
 
     test('keeps the input color as the 500 step', () {
-      final color = Color(0xFF336699);
+      const color = Color(0xFF336699);
       final swatch = getSwatch(color);
       expect(swatch[500], color);
     });
@@ -86,13 +86,13 @@ void main() {
 
   group('getColor', () {
     test('builds a MaterialColor whose value matches the input color', () {
-      final color = Color(0xFF336699);
+      const color = Color(0xFF336699);
       final materialColor = getColor(color);
       expect(materialColor.value, color.value);
     });
 
     test('exposes the same swatch getSwatch would produce', () {
-      final color = Colors.green;
+      const color = Colors.green;
       final materialColor = getColor(color);
       final swatch = getSwatch(color);
       expect(materialColor[500], swatch[500]);

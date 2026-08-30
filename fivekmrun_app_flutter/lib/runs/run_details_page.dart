@@ -13,7 +13,7 @@ class RunDetailsPage extends StatelessWidget {
     // 5kmrun one this gauge queries — showing it here would either fetch the
     // wrong event's results or fail outright, so skip it like selfie runs
     // until XL has its own results integration.
-    if (run.runType != RunType.official) return SizedBox.shrink();
+    if (run.runType != RunType.official) return const SizedBox.shrink();
 
     ResultsResource results = ResultsResource();
     return FutureBuilder<List<Result>>(
@@ -23,19 +23,20 @@ class RunDetailsPage extends StatelessWidget {
             case ConnectionState.none:
             case ConnectionState.active:
             case ConnectionState.waiting:
-              return AspectRatio(
+              return const AspectRatio(
                 aspectRatio: 1,
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
               );
             case ConnectionState.done:
-              if (snapshot.hasError)
+              if (snapshot.hasError) {
                 return MilestoneGauge(run.position!, 400,
                     Theme.of(context).colorScheme.secondary);
-              else
+              } else {
                 return MilestoneGauge(run.position!, snapshot.data?.length ?? 0,
                     Theme.of(context).colorScheme.secondary);
+              }
           }
         });
   }
@@ -54,7 +55,7 @@ class RunDetailsPage extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                Expanded(flex: 2, child: SizedBox()),
+                const Expanded(flex: 2, child: SizedBox()),
                 Expanded(
                     flex: 3,
                     child: Stack(
@@ -73,10 +74,10 @@ class RunDetailsPage extends StatelessWidget {
                         ),
                       ],
                     )),
-                Expanded(flex: 2, child: SizedBox()),
+                const Expanded(flex: 2, child: SizedBox()),
               ],
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -84,7 +85,7 @@ class RunDetailsPage extends StatelessWidget {
                   children: <Widget>[
                     CircleWidget(
                         run.pace!, AppLocalizations.of(context)!.min_km),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       AppLocalizations.of(context)!.run_details_page_pace,
                       style: theme.textTheme.titleSmall,
@@ -94,7 +95,7 @@ class RunDetailsPage extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     CircleWidget(run.time!, AppLocalizations.of(context)!.min),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       AppLocalizations.of(context)!.run_details_page_time,
                       style: theme.textTheme.titleSmall,
@@ -105,7 +106,7 @@ class RunDetailsPage extends StatelessWidget {
                   children: <Widget>[
                     CircleWidget(
                         run.speed!, AppLocalizations.of(context)!.km_per_h),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       AppLocalizations.of(context)!.run_details_page_speed,
                       style: theme.textTheme.titleSmall,
@@ -114,7 +115,7 @@ class RunDetailsPage extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -136,15 +137,13 @@ class RunDetailsPage extends StatelessWidget {
                 children: <Widget>[
                   IconText(
                       icon: Icons.watch,
-                      text: run.totalTime! +
-                          " ${AppLocalizations.of(context)!.min}"),
+                      text: "${run.totalTime!} ${AppLocalizations.of(context)!.min}"),
                   IconText(
                       icon: Icons.straighten,
-                      text: (run.distance! / 1000).toStringAsFixed(2) +
-                          " ${AppLocalizations.of(context)!.km}"),
+                      text: "${(run.distance! / 1000).toStringAsFixed(2)} ${AppLocalizations.of(context)!.km}"),
                 ],
               ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // if (!run.isSelfie)
             //   CompareTime(
             //     text: "Предишно бягане: ",
@@ -167,23 +166,23 @@ class CircleWidget extends StatelessWidget {
   final String value;
   final String measurement;
 
-  CircleWidget(this.value, this.measurement);
+  const CircleWidget(this.value, this.measurement, {super.key});
 
   @override
   Widget build(BuildContext context) {
     final textStyle =
         Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black);
     return Container(
-      padding: EdgeInsets.all(24),
-      child: Column(
-        children: <Widget>[
-          Text(this.value, style: textStyle),
-          Text(this.measurement, style: textStyle)
-        ],
-      ),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(24),
+      decoration: const BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
+      ),
+      child: Column(
+        children: <Widget>[
+          Text(value, style: textStyle),
+          Text(measurement, style: textStyle)
+        ],
       ),
     );
   }
@@ -227,8 +226,8 @@ class CompareTime extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     final color = time < 0
-        ? Color.fromRGBO(0, 173, 25, 1)
-        : Color.fromRGBO(250, 32, 87, 1);
+        ? const Color.fromRGBO(0, 173, 25, 1)
+        : const Color.fromRGBO(250, 32, 87, 1);
 
     final numberStyle = textTheme.titleSmall?.copyWith(color: color);
     return Row(

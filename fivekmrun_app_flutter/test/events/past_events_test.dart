@@ -1,7 +1,6 @@
 import 'package:fivekmrun_flutter/common/pill.dart';
 import 'package:fivekmrun_flutter/events/past_events.dart';
 import 'package:fivekmrun_flutter/state/event_model.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 

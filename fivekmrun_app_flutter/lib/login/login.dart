@@ -23,7 +23,7 @@ class _LoginState extends State<Login> {
   bool loginWithId = false;
 
   _toggleLogin() {
-    this.setState(() => this.loginWithId = !this.loginWithId);
+    setState(() => loginWithId = !loginWithId);
   }
 
   @override
@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: widget.addingProfile
           ? AppBar(
-              leading: BackButton(color: Colors.white),
+              leading: const BackButton(color: Colors.white),
               title: Text(l10n.profile_switcher_add_profile),
               centerTitle: true,
             )
@@ -43,32 +43,32 @@ class _LoginState extends State<Login> {
         child: Stack(
           children: <Widget>[
             Center(
-              child: Container(
+              child: SizedBox(
                 width: 220,
                 height: 400,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     if (!widget.addingProfile) ...[
-                      this._buildLogo(),
-                      SizedBox(height: 10),
+                      _buildLogo(),
+                      const SizedBox(height: 10),
                     ],
-                    Spacer(),
-                    this.loginWithId
+                    const Spacer(),
+                    loginWithId
                         ? LoginWithId(addingProfile: widget.addingProfile)
                         : LoginWithUsername(
                             addingProfile: widget.addingProfile),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
-                        child: Text(this.loginWithId
+                        onPressed: _toggleLogin,
+                        child: Text(loginWithId
                             ? l10n.login_widget_login_with_password
                             : l10n.login_widget_login_with_id),
-                        onPressed: this._toggleLogin,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     if (!widget.addingProfile) ...[
                       Text(l10n.login_widget_no_registration),
                       GestureDetector(
@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
               ),
             ),
             if (!widget.addingProfile)
-              Positioned(
+              const Positioned(
                 top: 8,
                 right: 8,
                 child: LocaleSwitcherWidget(),

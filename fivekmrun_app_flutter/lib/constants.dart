@@ -11,7 +11,7 @@ const wrapUrl = "https://wrapped.5kmrun.bg/";
 
 const endpointBaseUrl = "https://5kmrun.bg/api/5kmrun/";
 const userEndpointUrl = "https://5kmrun.bg/api/selfie/user/";
-const runsEndpointUrl = endpointBaseUrl + "user/";
+const runsEndpointUrl = "${endpointBaseUrl}user/";
 const offlineChartEndpointUrl = "https://5kmrun.bg/api/selfie/ofc/";
 const xlUserEndpointUrl = "https://5kmrun.bg/api/xlrun/user/";
 

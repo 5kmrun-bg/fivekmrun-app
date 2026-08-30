@@ -11,10 +11,10 @@ class BestTimesByRouteChart extends StatelessWidget {
   final List<charts.Series<dynamic, String>> seriesList;
   final bool? animate;
 
-  BestTimesByRouteChart(this.seriesList, {this.animate});
+  const BestTimesByRouteChart(this.seriesList, {super.key, this.animate});
 
   factory BestTimesByRouteChart.withRuns(List<Run> runs) {
-    return new BestTimesByRouteChart(
+    return BestTimesByRouteChart(
       _createData(runs),
     );
   }
@@ -24,7 +24,7 @@ class BestTimesByRouteChart extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
             IntrinsicHeight(
@@ -34,14 +34,14 @@ class BestTimesByRouteChart extends StatelessWidget {
                     style: theme.textTheme.titleSmall)),
             Expanded(
                 child: charts.BarChart(seriesList,
-                    animate: this.animate,
+                    animate: animate,
                     vertical: false,
                     barRendererDecorator:
-                        new charts.BarLabelDecorator<String>(),
+                        charts.BarLabelDecorator<String>(),
                     // Hide domain axis.
-                    domainAxis: new charts.OrdinalAxisSpec(
-                        renderSpec: new charts.NoneRenderSpec()),
-                    primaryMeasureAxis: new charts.NumericAxisSpec(
+                    domainAxis: const charts.OrdinalAxisSpec(
+                        renderSpec: charts.NoneRenderSpec()),
+                    primaryMeasureAxis: const charts.NumericAxisSpec(
                         renderSpec: charts.NoneRenderSpec())))
           ],
         ));
@@ -61,10 +61,10 @@ class BestTimesByRouteChart extends StatelessWidget {
         .toList();
 
     return [
-      new charts.Series<BestTimeByRouteEntry, String>(
+      charts.Series<BestTimeByRouteEntry, String>(
         id: 'BestTimeByRoute',
         //TODO: Add chart color to Theme
-        colorFn: (_, __) => PinkishRedColor().darker,
+        colorFn: (_, __) => const PinkishRedColor().darker,
         domainFn: (BestTimeByRouteEntry run, _) => run.location,
         measureFn: (BestTimeByRouteEntry run, _) => run.timeInSeconds,
         labelAccessorFn: (BestTimeByRouteEntry run, _) =>

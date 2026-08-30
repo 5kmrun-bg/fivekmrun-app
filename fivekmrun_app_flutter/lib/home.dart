@@ -24,7 +24,7 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 enum AppTab { profile, runs, events, offlineChart, donate }
 
 class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -39,12 +39,12 @@ class TabNavigationHelper {
     AppTab.donate: GlobalKey<NavigatorState>(),
   };
 
-  _HomeState _home;
+  final _HomeState _home;
 
   TabNavigationHelper(this._home);
 
   void selectTab(AppTab tab) {
-    this._home.selectedIndex = tab.index;
+    _home.selectedIndex = tab.index;
   }
 
   pushToTab(AppTab tab, String routeName, {Object? arguments}) {
@@ -110,39 +110,39 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
         Provider.of<AllPastEventsResource>(context, listen: false).getAll(),
         "past events");
 
-    this._tabHelper = TabNavigationHelper(this);
-    this._widgetOptions = <Widget>[
+    _tabHelper = TabNavigationHelper(this);
+    _widgetOptions = <Widget>[
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.profile]!,
+        navigatorKey: _tabHelper.navigatorKeys[AppTab.profile]!,
         routes: {
-          '/': (context) => ProfileDashboard(),
+          '/': (context) => const ProfileDashboard(),
         },
       ),
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.runs]!,
+        navigatorKey: _tabHelper.navigatorKeys[AppTab.runs]!,
         routes: {
-          '/': (context) => UserRunsPage(),
-          '/run-details': (context) => RunDetailsPage(),
+          '/': (context) => const UserRunsPage(),
+          '/run-details': (context) => const RunDetailsPage(),
         },
       ),
       TabNavigator(
-          navigatorKey: this._tabHelper.navigatorKeys[AppTab.offlineChart]!,
+          navigatorKey: _tabHelper.navigatorKeys[AppTab.offlineChart]!,
           routes: {
             '/': (context) => OfflineChartPage(),
-            '/add': (context) => AddOfflineEntryPage(),
-            '/details': (context) => OfflineChartDetailsPage(),
+            '/add': (context) => const AddOfflineEntryPage(),
+            '/details': (context) => const OfflineChartDetailsPage(),
           }),
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.events]!,
+        navigatorKey: _tabHelper.navigatorKeys[AppTab.events]!,
         routes: {
-          '/': (context) => EventsPage(),
-          '/event-results': (context) => EventResultsPage(),
+          '/': (context) => const EventsPage(),
+          '/event-results': (context) => const EventResultsPage(),
         },
       ),
       TabNavigator(
-        navigatorKey: this._tabHelper.navigatorKeys[AppTab.donate]!,
+        navigatorKey: _tabHelper.navigatorKeys[AppTab.donate]!,
         routes: {
-          '/': (context) => DonatePage(),
+          '/': (context) => const DonatePage(),
         },
       ),
     ];
@@ -189,22 +189,22 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
           selectedItemColor: selectedColor,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.person),
+                icon: const Icon(Icons.person),
                 label: AppLocalizations.of(context)!.home_label_profile),
             BottomNavigationBarItem(
-              icon: Icon(Icons.directions_run),
+              icon: const Icon(Icons.directions_run),
               label: AppLocalizations.of(context)!.home_label_runs,
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(CustomIcons.award),
               label: 'Selfie',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
+              icon: const Icon(Icons.calendar_today),
               label: AppLocalizations.of(context)!.home_label_events,
             ),
             BottomNavigationBarItem(
-              icon: Icon(CustomIcons.hand_holding_heart),
+              icon: const Icon(CustomIcons.hand_holding_heart),
               label: AppLocalizations.of(context)!.home_label_support,
             ),
           ],

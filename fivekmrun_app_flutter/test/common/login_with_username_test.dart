@@ -31,7 +31,7 @@ Widget _buildWidget(AuthenticationResource auth) {
   return localizedApp(
     ChangeNotifierProvider<AuthenticationResource>.value(
       value: auth,
-      child: LoginWithUsername(),
+      child: const LoginWithUsername(),
     ),
   );
 }
@@ -81,7 +81,7 @@ class _AddProfileHarnessState extends State<_AddProfileHarness> {
               final result = await Navigator.of(context).push<Object?>(
                 MaterialPageRoute(
                   builder: (_) =>
-                      Scaffold(body: LoginWithUsername(addingProfile: true)),
+                      const Scaffold(body: LoginWithUsername(addingProfile: true)),
                 ),
               );
               setState(() {

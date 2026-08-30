@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class EventResultsPage extends StatefulWidget {
-  EventResultsPage({Key? key}) : super(key: key);
+  const EventResultsPage({Key? key}) : super(key: key);
 
   @override
   _EventResultsPageState createState() => _EventResultsPageState();
@@ -34,21 +34,22 @@ class _EventResultsPageState extends State<EventResultsPage> {
               Text(AppLocalizations.of(context)!.events_results_page_results)),
       body: FutureBuilder<List<Result>>(
         future: results.getAll(event.id, baseUrl: baseUrl),
-        initialData: [],
+        initialData: const [],
         builder: (BuildContext context, AsyncSnapshot<List<Result>> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.active:
             case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             case ConnectionState.done:
-              if (snapshot.hasError)
+              if (snapshot.hasError) {
                 return Text(
                   'Error:\n\n${snapshot.error}',
                   textAlign: TextAlign.center,
                 );
-              else
+              } else {
                 return ResultsList(results: snapshot.data!);
+              }
           }
         },
       ),

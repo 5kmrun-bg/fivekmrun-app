@@ -64,7 +64,7 @@ class PastEventsList extends StatelessWidget {
                   ),
                 ),
                 if (events[i].imageUrl != "")
-                  Container(
+                  SizedBox(
                     width: 120,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5.0),

@@ -32,26 +32,26 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   List<Result>? results;
 
   selectThisWeek() {
-    if (this.thisWeekSelected) {
+    if (thisWeekSelected) {
       return;
     }
     setState(() {
-      this.thisWeekSelected = true;
+      thisWeekSelected = true;
     });
 
-    this._loadThisWeekResult();
+    _loadThisWeekResult();
   }
 
   selectLastWeek() {
-    if (!this.thisWeekSelected) {
+    if (!thisWeekSelected) {
       return;
     }
 
     setState(() {
-      this.thisWeekSelected = false;
+      thisWeekSelected = false;
     });
 
-    this._loadLastWeekResult();
+    _loadLastWeekResult();
   }
 
   void goToAddEntry() {
@@ -61,7 +61,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
     if (authResource.isLoggedIn()) {
       Navigator.of(context).pushNamed("/add");
     } else {
-      this.showLogoutDialog();
+      showLogoutDialog();
     }
   }
 
@@ -76,7 +76,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title:
-              new Text(AppLocalizations.of(context)!.offline_chart_page_login),
+              Text(AppLocalizations.of(context)!.offline_chart_page_login),
           content: RichText(
             text: TextSpan(
               style: textStlyle,
@@ -99,7 +99,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: new Text(
+              child: Text(
                   AppLocalizations.of(context)!.offline_chart_page_login),
               onPressed: () async {
                 Navigator.of(context).pop();
@@ -109,7 +109,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
               },
             ),
             TextButton(
-              child: new Text(
+              child: Text(
                   AppLocalizations.of(context)!.offline_chart_page_cancel),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -124,27 +124,27 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   @override
   void initState() {
     super.initState();
-    this._loadThisWeekResult();
+    _loadThisWeekResult();
   }
 
   Future<void> _loadLastWeekResult() async {
     setState(() {
-      this.results = null;
+      results = null;
     });
     final loadedResults =
-        await this.widget.lastWeekResource.getPastWeekResults();
-    if (!this.mounted) return;
-    this.setState(() => this.results = loadedResults);
+        await widget.lastWeekResource.getPastWeekResults();
+    if (!mounted) return;
+    setState(() => results = loadedResults);
   }
 
   Future<void> _loadThisWeekResult() async {
     setState(() {
-      this.results = null;
+      results = null;
     });
     final loadedResults =
-        await this.widget.thisWeekResource.getThisWeekResults();
-    if (!this.mounted) return;
-    this.setState(() => this.results = loadedResults);
+        await widget.thisWeekResource.getThisWeekResults();
+    if (!mounted) return;
+    setState(() => results = loadedResults);
   }
 
   /// Backs the pull-to-refresh gesture on this tab, reloading whichever week
@@ -152,9 +152,9 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   /// has its own week-scoped resources rather than the shared ones that
   /// helper refreshes.
   Future<void> _refresh() {
-    return this.thisWeekSelected
-        ? this._loadThisWeekResult()
-        : this._loadLastWeekResult();
+    return thisWeekSelected
+        ? _loadThisWeekResult()
+        : _loadLastWeekResult();
   }
 
   @override
@@ -187,7 +187,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
         ),
       ),
       body: RefreshIndicator(
-        onRefresh: this._refresh,
+        onRefresh: _refresh,
         child: Center(
           child: Column(
             children: <Widget>[
@@ -196,32 +196,32 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                   SelectButton(
                     text: AppLocalizations.of(context)!
                         .offline_chart_page_previous_week,
-                    onPressed: this.selectLastWeek,
-                    selected: !this.thisWeekSelected,
+                    onPressed: selectLastWeek,
+                    selected: !thisWeekSelected,
                   ),
                   SelectButton(
                     text: AppLocalizations.of(context)!
                         .offline_chart_page_current_week,
-                    onPressed: this.selectThisWeek,
-                    selected: this.thisWeekSelected,
+                    onPressed: selectThisWeek,
+                    selected: thisWeekSelected,
                   ),
                 ],
               ),
-              Expanded(child: this._buildResults()),
+              Expanded(child: _buildResults()),
               Row(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8),
                     child: ElevatedButton(
-                      onPressed: () => this.goToAddEntry(),
+                      onPressed: () => goToAddEntry(),
                       child: Row(
                         children: [
                           Text(
                               AppLocalizations.of(context)!
                                   .offline_chart_page_join,
-                              style: TextStyle()),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8, right: 8),
+                              style: const TextStyle()),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8, right: 8),
                             child: Icon(Icons.add_circle_outline),
                           )
                         ],
@@ -241,12 +241,12 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
                             Text(
                               AppLocalizations.of(context)!
                                   .offline_chart_page_results,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 8,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
                               child: Icon(Icons.open_in_browser),
                             )
                           ],
@@ -262,13 +262,13 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   }
 
   Widget _buildResults() {
-    if (this.results == null) {
-      return refreshableMessage(CircularProgressIndicator());
-    } else if (this.results?.length == 0) {
+    if (results == null) {
+      return refreshableMessage(const CircularProgressIndicator());
+    } else if (results?.length == 0) {
       return refreshableMessage(
           Text(AppLocalizations.of(context)!.offline_chart_page_no_results));
     } else {
-      return ResultsList(results: this.results!);
+      return ResultsList(results: results!);
     }
   }
 }

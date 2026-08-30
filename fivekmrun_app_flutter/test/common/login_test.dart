@@ -30,7 +30,7 @@ Widget _buildLoginApp(LocaleProvider localeProvider) {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: Login(),
+          home: const Login(),
         );
       },
     ),

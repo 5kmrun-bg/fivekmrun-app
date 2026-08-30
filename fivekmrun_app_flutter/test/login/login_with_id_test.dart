@@ -123,7 +123,7 @@ void main() {
                   onPressed: () async {
                     poppedWith = await Navigator.of(context).push<bool>(
                       MaterialPageRoute(
-                        builder: (_) => Scaffold(
+                        builder: (_) => const Scaffold(
                           body: LoginWithId(addingProfile: true),
                         ),
                       ),

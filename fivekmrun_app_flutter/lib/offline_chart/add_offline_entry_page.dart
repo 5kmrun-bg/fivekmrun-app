@@ -28,10 +28,10 @@ import 'no_results_component.dart';
 
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
-typedef void ActivityPressedCB(StravaSummaryRun activity);
+typedef ActivityPressedCB = void Function(StravaSummaryRun activity);
 
 class AddOfflineEntryPage extends StatefulWidget {
-  AddOfflineEntryPage({Key? key}) : super(key: key);
+  const AddOfflineEntryPage({Key? key}) : super(key: key);
 
   @override
   _AddOfflineEntryPageState createState() => _AddOfflineEntryPageState();
@@ -48,11 +48,11 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final strava = Provider.of<StravaResource>(this.context);
+    final strava = Provider.of<StravaResource>(context);
     final isConnectedToStrava = await strava.isAuthenticated();
 
     setState(() {
-      this.isLoading = false;
+      isLoading = false;
       this.isConnectedToStrava = isConnectedToStrava;
 
       if (isConnectedToStrava) {
@@ -63,18 +63,18 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
   void loadActivities(StravaResource strava) {
     setState(() {
-      this.isLoading = true;
+      isLoading = true;
     });
 
     strava.getThisWeekActivities().then((loadedActivites) {
-      this.setState(() {
-        this.isLoading = false;
+      setState(() {
+        isLoading = false;
         if (loadedActivites != null) {
-          this.activities = loadedActivites;
+          activities = loadedActivites;
         } else {
           // Returning null means error while getting runs.
-          this.activities = null;
-          this.isConnectedToStrava = false;
+          activities = null;
+          isConnectedToStrava = false;
         }
       });
     });
@@ -105,7 +105,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     setState(() {
       submitButtonState = ButtonState.loading;
     });
-    if (this.selectedActivity == null) {
+    if (selectedActivity == null) {
       return;
     }
 
@@ -116,7 +116,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
         DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
 
     DateTime runDate = DateTime.parse(
-        this.selectedActivity?.detailedActivity.startDateLocal ?? "");
+        selectedActivity?.detailedActivity.startDateLocal ?? "");
     if (runDate.isBefore(startOfWeek)) {
       setState(() {
         submitButtonState = ButtonState.idle;
@@ -143,9 +143,9 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       return;
     }
 
-    StravaSummaryRun? runSummary = this.selectedActivity;
+    StravaSummaryRun? runSummary = selectedActivity;
 
-    DetailedActivity? stravaActivity = this.selectedActivity?.detailedActivity;
+    DetailedActivity? stravaActivity = selectedActivity?.detailedActivity;
     UserResource userResource =
         Provider.of<UserResource>(context, listen: false);
     AuthenticationResource authResource =
@@ -155,7 +155,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
 
     var segments =
         stravaActivity?.segmentEfforts?.map((s) => s.segment?.id).toList();
-    OfflineChartSubmissionModel model = new OfflineChartSubmissionModel(
+    OfflineChartSubmissionModel model = OfflineChartSubmissionModel(
       userId: userResource.currentUserId.toString(),
       elapsedTime: runSummary?.fastestSplit.elapsedTime.floor() ?? 0,
       distance: runSummary?.fastestSplit.distance ?? 0,
@@ -173,7 +173,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
     );
 
     FirebaseCrashlytics.instance
-        .log("5kmRun Submission model: " + jsonEncode(model.toJson()));
+        .log("5kmRun Submission model: ${jsonEncode(model.toJson())}");
 
     Map<String, dynamic> result;
     try {
@@ -214,7 +214,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           useRootNavigator: true,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: new Text(AppLocalizations.of(context)!
+              title: Text(AppLocalizations.of(context)!
                   .add_offline_entry_page_authentication_error),
               content: RichText(
                 text: TextSpan(
@@ -229,7 +229,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
               actions: <Widget>[
                 // usually buttons at the bottom of the dialog
                 TextButton(
-                  child: new Text(AppLocalizations.of(context)!
+                  child: Text(AppLocalizations.of(context)!
                       .add_offline_entry_page_login),
                   onPressed: () async {
                     await authResource.logout();
@@ -241,7 +241,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                   },
                 ),
                 TextButton(
-                  child: new Text(AppLocalizations.of(context)!
+                  child: Text(AppLocalizations.of(context)!
                       .add_offline_entry_page_cancel),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -259,7 +259,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           useRootNavigator: true,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: new Text(AppLocalizations.of(context)!
+              title: Text(AppLocalizations.of(context)!
                   .add_offline_entry_page_server_sending_error),
               actions: <Widget>[
                 TextButton(
@@ -295,23 +295,23 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       });
       submitButtonState = ButtonState.fail;
       FirebaseCrashlytics.instance.recordError(
-          Exception("Error from 5kmrun: " + result.toString()),
+          Exception("Error from 5kmrun: $result"),
           StackTrace.current);
     }
   }
 
   void toggleActivity(StravaSummaryRun activity) {
-    this.setState(() => this.selectedActivity =
-        this.selectedActivity == activity ? null : activity);
+    setState(() => selectedActivity =
+        selectedActivity == activity ? null : activity);
   }
 
   void triggerStravaAuth() {
-    final strava = Provider.of<StravaResource>(this.context, listen: false);
+    final strava = Provider.of<StravaResource>(context, listen: false);
     strava.authenticate().then(
-          (success) => this.setState(() {
-            this.isConnectedToStrava = success;
+          (success) => setState(() {
+            isConnectedToStrava = success;
             if (success) {
-              this.loadActivities(strava);
+              loadActivities(strava);
             }
           }),
         );
@@ -325,11 +325,11 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
             .add_offline_entry_page_join_leaderboard),
       ),
       body: Center(
-          child: this.isLoading
-              ? CircularProgressIndicator()
-              : this.isConnectedToStrava
-                  ? this._buildList(context)
-                  : this._buildStravaAuth(context)),
+          child: isLoading
+              ? const CircularProgressIndicator()
+              : isConnectedToStrava
+                  ? _buildList(context)
+                  : _buildStravaAuth(context)),
     );
   }
 
@@ -352,11 +352,11 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,
-              padding: EdgeInsets.all(0)),
-          child: Image(
+              padding: const EdgeInsets.all(0)),
+          onPressed: triggerStravaAuth,
+          child: const Image(
             image: AssetImage('assets/btn_strava_connectwith_orange.png'),
           ),
-          onPressed: this.triggerStravaAuth,
         ),
       ],
     );
@@ -369,20 +369,20 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
       children: <Widget>[
         Expanded(
           child: StravaActivityList(
-              activities: this.activities!,
-              selectedActivity: this.selectedActivity,
+              activities: activities!,
+              selectedActivity: selectedActivity,
               onActivityTap: toggleActivity),
         ),
         SizedBox(
           width: double.infinity,
           child: Padding(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: ProgressButton.icon(
               iconedButtons: {
                 ButtonState.idle: IconedButton(
                     text: AppLocalizations.of(context)!
                         .add_offline_entry_page_join_with_current_run,
-                    icon: Icon(Icons.send, color: Colors.white),
+                    icon: const Icon(Icons.send, color: Colors.white),
                     color: selectedColor),
                 ButtonState.loading: IconedButton(
                     text: AppLocalizations.of(context)!
@@ -391,18 +391,18 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                 ButtonState.fail: IconedButton(
                     text: AppLocalizations.of(context)!
                         .add_offline_entry_page_uploading_error,
-                    icon: Icon(Icons.cancel, color: Colors.white),
+                    icon: const Icon(Icons.cancel, color: Colors.white),
                     color: selectedColor),
                 ButtonState.success: IconedButton(
                     text: "",
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.check_circle,
                       color: Colors.white,
                     ),
                     color: Colors.green.shade400)
               },
               state: submitButtonState,
-              onPressed: this.selectedActivity != null
+              onPressed: selectedActivity != null
                   ? () async {
                       submitOfflineEntry();
                       return () {};
@@ -430,8 +430,8 @@ class StravaActivityList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (activities.length == 0) {
-      return NoResultsComponent();
+    if (activities.isEmpty) {
+      return const NoResultsComponent();
     } else {
       return ListView.builder(
         scrollDirection: Axis.vertical,
@@ -455,12 +455,12 @@ class StravaActivityList extends StatelessWidget {
         activity.fastestSplit.elapsedTime.floor().parseSecondsToTimestamp();
     final fastestSplitDistance = activity.fastestSplit.distance.metersToKm();
     return Card(
-      color: this.selectedActivity == activity
+      color: selectedActivity == activity
           ? selectedColor
           : Colors.transparent,
       child: ListTile(
-        onTap: () => this.onActivityTap(activity),
-        selected: this.selectedActivity == activity,
+        onTap: () => onActivityTap(activity),
+        selected: selectedActivity == activity,
         title: Row(
           children: <Widget>[
             Expanded(
@@ -480,13 +480,10 @@ class StravaActivityList extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: 140,
               child: Image.network(
-                "https://maps.googleapis.com/maps/api/staticmap?size=140x140&zoom=13&path=weight:3%7Ccolor:blue%7Cenc:" +
-                    activity.detailedActivity.map!.polyline! +
-                    "&key=" +
-                    googleMapsKey,
+                "https://maps.googleapis.com/maps/api/staticmap?size=140x140&zoom=13&path=weight:3%7Ccolor:blue%7Cenc:${activity.detailedActivity.map!.polyline!}&key=$googleMapsKey",
                 fit: BoxFit.fitWidth,
               ),
             ),

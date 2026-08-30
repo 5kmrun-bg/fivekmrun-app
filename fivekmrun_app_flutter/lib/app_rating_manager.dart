@@ -6,7 +6,7 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class AppRatingManager {
   AppRatingManager(BuildContext context) {
-    RateMyApp rateMyApp = new RateMyApp(
+    RateMyApp rateMyApp = RateMyApp(
         preferencesPrefix: "kmrun_",
         minDays: 0,
         minLaunches: 3,

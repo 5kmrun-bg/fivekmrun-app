@@ -190,7 +190,7 @@ void main() {
   group('loadFromLocalStore', () {
     test('loads an already-saved profile list', () async {
       final profiles = [
-        Profile(userId: 111, type: ProfileType.idOnly, name: 'A'),
+        const Profile(userId: 111, type: ProfileType.idOnly, name: 'A'),
         Profile(
             userId: 222,
             type: ProfileType.password,

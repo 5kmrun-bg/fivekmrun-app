@@ -17,7 +17,7 @@ class Avatar extends StatelessWidget {
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Theme.of(context).colorScheme.secondary),
-                padding: EdgeInsets.all(2),
+                padding: const EdgeInsets.all(2),
                 child: (url.isNotEmpty)
                     ? CircleAvatar(
                         radius: SIZE / 2, backgroundImage: NetworkImage(url))

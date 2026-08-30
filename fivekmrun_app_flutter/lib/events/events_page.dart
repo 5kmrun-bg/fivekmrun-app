@@ -12,7 +12,7 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
 
 class EventsPage extends StatefulWidget {
-  EventsPage({Key? key}) : super(key: key);
+  const EventsPage({Key? key}) : super(key: key);
 
   @override
   _EventsPage createState() => _EventsPage();
@@ -23,18 +23,18 @@ class _EventsPage extends State<EventsPage> {
 
   toggleEvents() {
     setState(() {
-      this.futureEventSelected = !this.futureEventSelected;
+      futureEventSelected = !futureEventSelected;
     });
   }
 
   Widget _buildEvents() {
-    if (!this.futureEventSelected) {
+    if (!futureEventSelected) {
       return RefreshIndicator(
         onRefresh: () => refreshAllData(context),
         child: Consumer<AllPastEventsResource>(
           builder: (context, eventsResource, child) {
             if (eventsResource.loading) {
-              return refreshableMessage(CircularProgressIndicator());
+              return refreshableMessage(const CircularProgressIndicator());
             } else {
               return PastEventsList(events: eventsResource.value);
             }
@@ -48,7 +48,7 @@ class _EventsPage extends State<EventsPage> {
       child: Consumer<AllFutureEventsResource>(
           builder: (context, eventsResource, child) {
         if (eventsResource.loading) {
-          return refreshableMessage(CircularProgressIndicator());
+          return refreshableMessage(const CircularProgressIndicator());
         } else {
           return FutureEventsList(events: eventsResource.value);
         }
@@ -67,17 +67,17 @@ class _EventsPage extends State<EventsPage> {
             children: <Widget>[
               SelectButton(
                 text: AppLocalizations.of(context)!.events_page_past_events,
-                onPressed: this.toggleEvents,
-                selected: !this.futureEventSelected,
+                onPressed: toggleEvents,
+                selected: !futureEventSelected,
               ),
               SelectButton(
                 text: AppLocalizations.of(context)!.events_page_upcoming_events,
-                onPressed: this.toggleEvents,
-                selected: this.futureEventSelected,
+                onPressed: toggleEvents,
+                selected: futureEventSelected,
               ),
             ],
           ),
-          Expanded(child: this._buildEvents())
+          Expanded(child: _buildEvents())
         ])));
   }
 }
