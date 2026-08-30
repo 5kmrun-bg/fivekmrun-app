@@ -15,7 +15,7 @@ class RunsChart extends StatefulWidget {
   const RunsChart({key, required this.runs}) : super(key: key);
 
   @override
-  _RunsChartState createState() => _RunsChartState();
+  State<RunsChart> createState() => _RunsChartState();
 }
 
 class _RunsChartState extends State<RunsChart> {
@@ -43,7 +43,7 @@ class _RunsChartState extends State<RunsChart> {
         time = selectedDatum.first.datum.time;
 
         setState(() => dataPointLabel =
-            "${AppLocalizations.of(context)!.runs_chart_date}${DateFormat(Constants.DATE_FORMAT).format(date)}${AppLocalizations.of(context)!.runs_chart_time}$time");
+            "${AppLocalizations.of(context)!.runs_chart_date}${DateFormat(Constants.dateFormat).format(date)}${AppLocalizations.of(context)!.runs_chart_time}$time");
       }
     }
 

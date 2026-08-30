@@ -24,7 +24,7 @@ class OfflineChartPage extends StatefulWidget {
   final OfflineResultsResource thisWeekResource;
 
   @override
-  _OfflineChartPageState createState() => _OfflineChartPageState();
+  State<OfflineChartPage> createState() => _OfflineChartPageState();
 }
 
 class _OfflineChartPageState extends State<OfflineChartPage> {
@@ -264,7 +264,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   Widget _buildResults() {
     if (results == null) {
       return refreshableMessage(const CircularProgressIndicator());
-    } else if (results?.length == 0) {
+    } else if (results?.isEmpty ?? false) {
       return refreshableMessage(
           Text(AppLocalizations.of(context)!.offline_chart_page_no_results));
     } else {

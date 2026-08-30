@@ -14,7 +14,7 @@ class ResultsList extends StatefulWidget {
   const ResultsList({Key? key, required this.results}) : super(key: key);
 
   @override
-  _ResultsListState createState() => _ResultsListState();
+  State<ResultsList> createState() => _ResultsListState();
 }
 
 class _ResultsListState extends State<ResultsList> {
@@ -213,7 +213,7 @@ class _ResultsListState extends State<ResultsList> {
                                 iconColor: shirtColor),
                             ListTileRow(
                               icon: (res.isPatreon)
-                                  ? CustomIcons.hand_holding_heart
+                                  ? CustomIcons.handHoldingHeart
                                   : Icons.person,
                               text: (!res.isAnonymous)
                                   ? res.name

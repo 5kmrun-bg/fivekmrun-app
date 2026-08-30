@@ -21,7 +21,7 @@ class LocalStorageResource extends ChangeNotifier {
   /// Null on a fresh install: nothing has been acknowledged yet.
   Future<String?> get lastSeenWhatsNewVersion async {
     final SharedPreferences storage = await _storage;
-    return storage.getString(constants.key_lastSeenWhatsNewVersion);
+    return storage.getString(constants.keyLastSeenWhatsNewVersion);
   }
 
   /// Awaited (unlike [isSubscrubedForGeneral]'s fire-and-forget setter) so
@@ -29,6 +29,6 @@ class LocalStorageResource extends ChangeNotifier {
   /// the what's-new popup again on a following launch.
   Future<void> setLastSeenWhatsNewVersion(String version) async {
     final storage = await _storage;
-    await storage.setString(constants.key_lastSeenWhatsNewVersion, version);
+    await storage.setString(constants.keyLastSeenWhatsNewVersion, version);
   }
 }

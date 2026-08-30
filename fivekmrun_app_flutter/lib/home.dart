@@ -27,7 +27,7 @@ class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class TabNavigationHelper {
@@ -39,12 +39,15 @@ class TabNavigationHelper {
     AppTab.donate: GlobalKey<NavigatorState>(),
   };
 
-  final _HomeState _home;
+  /// Set by the owning `Home` state. Held as a callback rather than a
+  /// reference to the private state class so this public helper does not
+  /// expose a private type in its API.
+  final ValueSetter<int> _onTabSelected;
 
-  TabNavigationHelper(this._home);
+  TabNavigationHelper(this._onTabSelected);
 
   void selectTab(AppTab tab) {
-    _home.selectedIndex = tab.index;
+    _onTabSelected(tab.index);
   }
 
   pushToTab(AppTab tab, String routeName, {Object? arguments}) {
@@ -58,7 +61,7 @@ class TabNavigator extends StatelessWidget {
   final Map<String, WidgetBuilder> routes;
   final GlobalKey<NavigatorState> navigatorKey;
   const TabNavigator(
-      {Key? key, @required required this.routes, required this.navigatorKey})
+      {Key? key, required this.routes, required this.navigatorKey})
       : super(key: key);
 
   @override
@@ -110,7 +113,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
         Provider.of<AllPastEventsResource>(context, listen: false).getAll(),
         "past events");
 
-    _tabHelper = TabNavigationHelper(this);
+    _tabHelper = TabNavigationHelper((index) => selectedIndex = index);
     _widgetOptions = <Widget>[
       TabNavigator(
         navigatorKey: _tabHelper.navigatorKeys[AppTab.profile]!,
@@ -165,7 +168,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
         Provider.of<LocalStorageResource>(context, listen: false);
     final manager = WhatsNewManager(localStorage: localStorage);
     final shown = await manager.maybeShowPopup(context);
-    if (!mounted) return;
+    if (!context.mounted) return;
     if (!shown) {
       AppRatingManager(context);
     }
@@ -204,7 +207,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
               label: AppLocalizations.of(context)!.home_label_events,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(CustomIcons.hand_holding_heart),
+              icon: const Icon(CustomIcons.handHoldingHeart),
               label: AppLocalizations.of(context)!.home_label_support,
             ),
           ],

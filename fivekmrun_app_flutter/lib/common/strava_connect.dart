@@ -6,7 +6,7 @@ class StravaConnect extends StatefulWidget {
   const StravaConnect({Key? key}) : super(key: key);
 
   @override
-  _StravaConnectState createState() => _StravaConnectState();
+  State<StravaConnect> createState() => _StravaConnectState();
 }
 
 class _StravaConnectState extends State<StravaConnect> {

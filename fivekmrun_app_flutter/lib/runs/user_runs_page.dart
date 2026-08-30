@@ -22,7 +22,7 @@ class UserRunsPage extends StatelessWidget {
             if (runsResource.loading) {
               return refreshableMessage(const CircularProgressIndicator());
             } else if (runsResource.value == null ||
-                runsResource.value?.length == 0) {
+                (runsResource.value?.isEmpty ?? false)) {
               return refreshableMessage(Text(l10n.no_runs));
             } else {
               return UserRunsList(runs: runsResource.value!);

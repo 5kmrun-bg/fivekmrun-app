@@ -1,3 +1,3 @@
 class Constants {
-  static const String DATE_FORMAT = "dd.MM.yyyy";
+  static const String dateFormat = "dd.MM.yyyy";
 }

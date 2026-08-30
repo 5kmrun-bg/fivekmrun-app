@@ -11,7 +11,6 @@ class PushNotificationsManager {
   PushNotificationsManager._();
 
   factory PushNotificationsManager() => _instance;
-  static const int _lastOnResumeCall = 0;
   static final PushNotificationsManager _instance =
       PushNotificationsManager._();
   static PushNotificationsManager getInstance() {
@@ -25,7 +24,7 @@ class PushNotificationsManager {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     if (!_initialized) {
       // For iOS request permission first.
-      NotificationSettings setting = await messaging.requestPermission(
+      await messaging.requestPermission(
         alert: true,
         announcement: false,
         badge: true,
@@ -96,9 +95,6 @@ class PushNotificationsManager {
 
   Future<void> showNotification(
       BuildContext context, String title, String body) async {
-    //Dirty hack - FCM calls us twice
-    // if ((DateTime.now().microsecondsSinceEpoch - _lastOnResumeCall) > 1000000) {
-    //   _lastOnResumeCall = DateTime.now().microsecondsSinceEpoch;
     switch (await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(

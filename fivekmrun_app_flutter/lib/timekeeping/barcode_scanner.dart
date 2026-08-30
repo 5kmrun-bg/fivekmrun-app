@@ -372,7 +372,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.white.withValues(alpha: 0.5),
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(12),
@@ -393,7 +393,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                               color: Colors.red,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.red.withOpacity(0.8),
+                                  color: Colors.red.withValues(alpha: 0.8),
                                   blurRadius: 4,
                                   spreadRadius: 2,
                                 ),

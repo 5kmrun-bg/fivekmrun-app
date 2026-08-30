@@ -5,7 +5,7 @@ import 'package:fivekmrun_flutter/donate/donate_page.dart';
 import 'package:fivekmrun_flutter/home.dart';
 import 'package:fivekmrun_flutter/login/helpers.dart';
 import 'package:fivekmrun_flutter/login/login.dart';
-import 'package:fivekmrun_flutter/login/loginPreview.dart';
+import 'package:fivekmrun_flutter/login/login_preview.dart';
 import 'package:fivekmrun_flutter/manage_profiles_page.dart';
 import 'package:fivekmrun_flutter/push_notifications_manager.dart';
 import 'package:fivekmrun_flutter/settings_page.dart';

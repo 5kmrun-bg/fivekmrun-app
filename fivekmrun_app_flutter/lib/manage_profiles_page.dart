@@ -34,7 +34,7 @@ class ManageProfilesPage extends StatelessWidget {
       ),
     );
 
-    if (confirmed == true) {
+    if (confirmed == true && context.mounted) {
       await removeProfileFromSwitcher(context, profile.userId);
     }
   }

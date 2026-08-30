@@ -16,7 +16,7 @@ class BarcodePage extends StatefulWidget {
   const BarcodePage({super.key});
 
   @override
-  _BarcodePageState createState() => _BarcodePageState();
+  State<BarcodePage> createState() => _BarcodePageState();
 }
 
 class _BarcodePageState extends State<BarcodePage> {
@@ -120,8 +120,7 @@ class _BarcodePageState extends State<BarcodePage> {
                 FirebaseAnalytics.instance
                     .logEvent(name: "button_add_to_apple_wallet_clicked");
               } catch (e) {
-                print("Error: ");
-                print(e);
+                debugPrint("Error adding pass to Google Wallet: $e");
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -162,7 +161,7 @@ class _BarcodePageState extends State<BarcodePage> {
                       end: Alignment.bottomRight,
                       colors: [
                         accentColor,
-                        accentColor.withOpacity(0.8),
+                        accentColor.withValues(alpha: 0.8),
                       ],
                     ),
                   ),
@@ -191,7 +190,7 @@ class _BarcodePageState extends State<BarcodePage> {
                         Text(
                           userStatus,
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(alpha: 0.8),
                             fontSize: 16,
                           ),
                         ),

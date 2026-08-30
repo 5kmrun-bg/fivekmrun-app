@@ -19,7 +19,7 @@ class LoginWithUsername extends StatefulWidget {
       : super(key: key);
 
   @override
-  _LoginWithUsernameState createState() => _LoginWithUsernameState();
+  State<LoginWithUsername> createState() => _LoginWithUsernameState();
 }
 
 class _LoginWithUsernameState extends State<LoginWithUsername> {
@@ -52,12 +52,11 @@ class _LoginWithUsernameState extends State<LoginWithUsername> {
       } catch (_) {}
 
       if (isAuthenticated) {
-        if (mounted) {
-          setState(() {
-            loginError = false;
-            maxProfilesError = false;
-          });
-        }
+        if (!mounted) return;
+        setState(() {
+          loginError = false;
+          maxProfilesError = false;
+        });
         if (widget.addingProfile) {
           try {
             FirebaseAnalytics.instance.logEvent(

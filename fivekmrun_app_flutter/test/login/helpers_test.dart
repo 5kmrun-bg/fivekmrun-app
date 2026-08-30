@@ -88,7 +88,7 @@ void main() {
     test('builds a MaterialColor whose value matches the input color', () {
       const color = Color(0xFF336699);
       final materialColor = getColor(color);
-      expect(materialColor.value, color.value);
+      expect(materialColor.toARGB32(), color.toARGB32());
     });
 
     test('exposes the same swatch getSwatch would produce', () {

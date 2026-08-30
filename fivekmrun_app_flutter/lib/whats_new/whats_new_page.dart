@@ -25,7 +25,7 @@ class WhatsNewPage extends StatefulWidget {
         super(key: key);
 
   @override
-  _WhatsNewPageState createState() => _WhatsNewPageState();
+  State<WhatsNewPage> createState() => _WhatsNewPageState();
 }
 
 class _WhatsNewPageState extends State<WhatsNewPage> {

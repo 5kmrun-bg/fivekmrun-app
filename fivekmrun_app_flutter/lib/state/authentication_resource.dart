@@ -209,13 +209,13 @@ class AuthenticationResource extends ChangeNotifier {
     _setCrashlyticsUser(null);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(constants.key_profiles);
-    await prefs.remove(constants.key_activeProfileId);
+    await prefs.remove(constants.keyProfiles);
+    await prefs.remove(constants.keyActiveProfileId);
     // Pre-multi-profile keys — removed too so a stale copy can't resurrect
     // itself on the next migration check.
-    await prefs.remove(constants.key_userId);
-    await prefs.remove(constants.key_token);
-    await prefs.remove(constants.key_tokenTimestamp);
+    await prefs.remove(constants.keyUserId);
+    await prefs.remove(constants.keyToken);
+    await prefs.remove(constants.keyTokenTimestamp);
 
     notifyListeners();
     _logCrashlytics("logout() completed");
@@ -271,29 +271,29 @@ class AuthenticationResource extends ChangeNotifier {
 
   Future<void> _persistProfiles() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(constants.key_profiles,
+    await prefs.setString(constants.keyProfiles,
         jsonEncode(_profiles.map((p) => p.toJson()).toList()));
   }
 
   Future<void> _persistActiveProfileId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_activeProfileId != null) {
-      await prefs.setInt(constants.key_activeProfileId, _activeProfileId!);
+      await prefs.setInt(constants.keyActiveProfileId, _activeProfileId!);
     } else {
-      await prefs.remove(constants.key_activeProfileId);
+      await prefs.remove(constants.keyActiveProfileId);
     }
   }
 
   Future<void> loadFromLocalStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final profilesJson = prefs.getString(constants.key_profiles);
+    final profilesJson = prefs.getString(constants.keyProfiles);
     if (profilesJson != null) {
       final List<dynamic> decoded = jsonDecode(profilesJson);
       _profiles = decoded
           .map((e) => Profile.fromJson(e as Map<String, dynamic>))
           .toList();
-      _activeProfileId = prefs.getInt(constants.key_activeProfileId);
+      _activeProfileId = prefs.getInt(constants.keyActiveProfileId);
     } else {
       await _migrateSingleAccount(prefs);
     }
@@ -305,11 +305,11 @@ class AuthenticationResource extends ChangeNotifier {
   /// wraps the old single `{userId, token, timestamp}` keys into a one-item
   /// profile list, so an existing user is never signed out by the upgrade.
   Future<void> _migrateSingleAccount(SharedPreferences prefs) async {
-    final userId = prefs.getInt(constants.key_userId);
+    final userId = prefs.getInt(constants.keyUserId);
     if (userId == null) return;
 
-    final token = prefs.getString(constants.key_token);
-    final tokenTimestamp = prefs.getInt(constants.key_tokenTimestamp);
+    final token = prefs.getString(constants.keyToken);
+    final tokenTimestamp = prefs.getInt(constants.keyTokenTimestamp);
 
     _profiles = <Profile>[
       Profile(

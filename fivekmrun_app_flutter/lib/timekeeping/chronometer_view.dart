@@ -157,36 +157,6 @@ class _ChronometerViewState extends State<ChronometerView> {
     }
   }
 
-  Future<void> _deleteLap(int index) async {
-    final bool? shouldDelete = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        final l10n = AppLocalizations.of(context)!;
-        return AlertDialog(
-          title: Text(l10n.chronometer_delete_lap_title),
-          content: Text(l10n.chronometer_delete_lap_content),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.cancel),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.chronometer_delete),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (shouldDelete == true) {
-      setState(() {
-        _laps.removeAt(index);
-        _saveState();
-      });
-    }
-  }
-
   List<int> _breakDownTime(int ms) {
     final hours = ms ~/ 3600000;
     final minutes = (ms % 3600000) ~/ 60000;
@@ -260,11 +230,14 @@ class _ChronometerViewState extends State<ChronometerView> {
       await file.writeAsString(content);
 
       // Share the file
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        subject: 'Chronometer Results - $dateStr',
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          subject: 'Chronometer Results - $dateStr',
+        ),
       );
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.chronometer_share_error(e.toString()))),
       );

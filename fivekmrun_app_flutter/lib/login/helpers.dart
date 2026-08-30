@@ -55,5 +55,5 @@ Map<int, Color> getSwatch(Color color) {
 }
 
 MaterialColor getColor(Color color) {
-  return MaterialColor(color.value, getSwatch(color));
+  return MaterialColor(color.toARGB32(), getSwatch(color));
 }

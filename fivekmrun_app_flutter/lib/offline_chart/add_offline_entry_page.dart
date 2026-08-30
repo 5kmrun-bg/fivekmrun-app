@@ -26,7 +26,7 @@ import 'package:geocoding/geocoding.dart';
 
 import 'no_results_component.dart';
 
-final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
+final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 
 typedef ActivityPressedCB = void Function(StravaSummaryRun activity);
 
@@ -34,7 +34,7 @@ class AddOfflineEntryPage extends StatefulWidget {
   const AddOfflineEntryPage({Key? key}) : super(key: key);
 
   @override
-  _AddOfflineEntryPageState createState() => _AddOfflineEntryPageState();
+  State<AddOfflineEntryPage> createState() => _AddOfflineEntryPageState();
 }
 
 class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
@@ -181,6 +181,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           model, authResource.getToken() ?? "");
     } on Exception catch (e) {
       FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
+      if (!mounted) return;
       showDialog(
           context: context,
           useRootNavigator: true,
@@ -200,6 +201,8 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
           });
       return;
     }
+
+    if (!mounted) return;
 
     if (result["errors"] != null && result["errors"].length > 0) {
       setState(() {
@@ -233,6 +236,7 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
                       .add_offline_entry_page_login),
                   onPressed: () async {
                     await authResource.logout();
+                    if (!context.mounted) return;
                     Provider.of<UserResource>(context, listen: false).clear();
                     Provider.of<RunsResource>(context, listen: false).clear();
 

@@ -9,13 +9,13 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
-final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
+final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 
 class EventsPage extends StatefulWidget {
   const EventsPage({Key? key}) : super(key: key);
 
   @override
-  _EventsPage createState() => _EventsPage();
+  State<EventsPage> createState() => _EventsPage();
 }
 
 class _EventsPage extends State<EventsPage> {

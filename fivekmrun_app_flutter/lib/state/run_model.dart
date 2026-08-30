@@ -1,7 +1,7 @@
 import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:intl/intl.dart';
 
-final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
+final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 
 /// Official (regular 5kmrun), selfie, and XL runs are mutually exclusive —
 /// this used to be modeled as two independent bools (isSelfie, isXL), which

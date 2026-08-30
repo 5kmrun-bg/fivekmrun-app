@@ -1,7 +1,7 @@
 import 'package:fivekmrun_flutter/common/constants.dart';
 import 'package:intl/intl.dart';
 
-final DateFormat dateFromat = DateFormat(Constants.DATE_FORMAT);
+final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 
 class RunSimple {
   final int id;

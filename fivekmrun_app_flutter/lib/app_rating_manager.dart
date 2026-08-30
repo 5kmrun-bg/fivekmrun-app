@@ -16,6 +16,7 @@ class AppRatingManager {
         googlePlayIdentifier: "bg.fivekmpark.fivekmrun");
 
     rateMyApp.init().then((_) {
+      if (!context.mounted) return;
       if (rateMyApp.shouldOpenDialog) {
         FirebaseAnalytics.instance.logEvent(name: "review_dialog_open");
         rateMyApp.showRateDialog(context,

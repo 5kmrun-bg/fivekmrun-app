@@ -16,7 +16,7 @@ class LoginWithId extends StatefulWidget {
   const LoginWithId({Key? key, this.addingProfile = false}) : super(key: key);
 
   @override
-  _LoginWithIdState createState() => _LoginWithIdState();
+  State<LoginWithId> createState() => _LoginWithIdState();
 }
 
 class _LoginWithIdState extends State<LoginWithId> {
@@ -61,6 +61,7 @@ class _LoginWithIdState extends State<LoginWithId> {
 
     await Provider.of<AuthenticationResource>(context, listen: false)
         .authenticateWithUserId(userId);
+    if (!mounted) return;
     Provider.of<UserResource>(context, listen: false).currentUserId = userId;
 
     Navigator.pushNamed(context, 'loginPreview');

@@ -69,7 +69,7 @@ void main() {
 
   testWidgets('same-version relaunch: no popup', (tester) async {
     SharedPreferences.setMockInitialValues(
-        {constants.key_lastSeenWhatsNewVersion: '3.18.0'});
+        {constants.keyLastSeenWhatsNewVersion: '3.18.0'});
     final context = await pumpContext(tester);
     final manager = WhatsNewManager(
       localStorage: LocalStorageResource(),
@@ -86,7 +86,7 @@ void main() {
 
   testWidgets('downgrade / debug build: no popup', (tester) async {
     SharedPreferences.setMockInitialValues(
-        {constants.key_lastSeenWhatsNewVersion: '3.18.0'});
+        {constants.keyLastSeenWhatsNewVersion: '3.18.0'});
     final context = await pumpContext(tester);
     final manager = WhatsNewManager(
       localStorage: LocalStorageResource(),
@@ -104,7 +104,7 @@ void main() {
       'upgrade to a version with no archive entry: no popup, version still advances',
       (tester) async {
     SharedPreferences.setMockInitialValues(
-        {constants.key_lastSeenWhatsNewVersion: '3.18.0'});
+        {constants.keyLastSeenWhatsNewVersion: '3.18.0'});
     final context = await pumpContext(tester);
     final manager = WhatsNewManager(
       localStorage: LocalStorageResource(),
@@ -124,7 +124,7 @@ void main() {
       'upgrade with an entry shows the sheet and advances the stored version',
       (tester) async {
     SharedPreferences.setMockInitialValues(
-        {constants.key_lastSeenWhatsNewVersion: '3.9.0'});
+        {constants.keyLastSeenWhatsNewVersion: '3.9.0'});
     final context = await pumpContext(tester);
     final manager = WhatsNewManager(
       localStorage: LocalStorageResource(),
@@ -146,7 +146,7 @@ void main() {
     // A naive string compare puts "3.9.0" after "3.18.0" and would suppress
     // this upgrade's popup.
     SharedPreferences.setMockInitialValues(
-        {constants.key_lastSeenWhatsNewVersion: '3.9.0'});
+        {constants.keyLastSeenWhatsNewVersion: '3.9.0'});
     final context = await pumpContext(tester);
     final manager = WhatsNewManager(
       localStorage: LocalStorageResource(),
@@ -163,7 +163,7 @@ void main() {
   testWidgets('falls back to bg when the active locale has no bullets',
       (tester) async {
     SharedPreferences.setMockInitialValues(
-        {constants.key_lastSeenWhatsNewVersion: '3.9.0'});
+        {constants.keyLastSeenWhatsNewVersion: '3.9.0'});
     late BuildContext captured;
     await tester.pumpWidget(localizedApp(
       Builder(builder: (context) {
