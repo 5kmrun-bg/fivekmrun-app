@@ -1,0 +1,22 @@
+{
+  "id": 1003,
+  "resource_state": 2,
+  "name": "Indoor Track Run",
+  "distance": 5100.0,
+  "moving_time": 1400,
+  "elapsed_time": 1410,
+  "total_elevation_gain": 0,
+  "type": "Run",
+  "sport_type": "Run",
+  "start_date": "2026-06-03T06:00:00Z",
+  "start_date_local": "2026-06-03T09:00:00Z",
+  "start_latlng": [],
+  "end_latlng": [],
+  "trainer": false,
+  "commute": false,
+  "manual": false,
+  "private": false,
+  "average_speed": 3.64,
+  "max_speed": 4.1,
+  "calories": 310.0
+}
