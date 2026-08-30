@@ -24,7 +24,7 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 enum AppTab { profile, runs, events, offlineChart, donate }
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -50,7 +50,7 @@ class TabNavigationHelper {
     _onTabSelected(tab.index);
   }
 
-  pushToTab(AppTab tab, String routeName, {Object? arguments}) {
+  void pushToTab(AppTab tab, String routeName, {Object? arguments}) {
     navigatorKeys[tab]!.currentState!.pushNamedAndRemoveUntil(
         routeName, ModalRoute.withName('/'),
         arguments: arguments);
@@ -61,8 +61,7 @@ class TabNavigator extends StatelessWidget {
   final Map<String, WidgetBuilder> routes;
   final GlobalKey<NavigatorState> navigatorKey;
   const TabNavigator(
-      {Key? key, required this.routes, required this.navigatorKey})
-      : super(key: key);
+      {super.key, required this.routes, required this.navigatorKey});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +82,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
   late TabNavigationHelper _tabHelper;
   late List<Widget> _widgetOptions;
 
-  set selectedIndex(value) {
+  set selectedIndex(int value) {
     if (value != _selectedIndex) {
       setState(() {
         _selectedIndex = value;

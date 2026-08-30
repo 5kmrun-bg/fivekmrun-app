@@ -13,12 +13,11 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 class OfflineChartPage extends StatefulWidget {
   /// Injectable for tests; defaults to real resources in production.
   OfflineChartPage({
-    Key? key,
+    super.key,
     OfflineResultsResource? lastWeekResource,
     OfflineResultsResource? thisWeekResource,
   })  : lastWeekResource = lastWeekResource ?? OfflineResultsResource(),
-        thisWeekResource = thisWeekResource ?? OfflineResultsResource(),
-        super(key: key);
+        thisWeekResource = thisWeekResource ?? OfflineResultsResource();
 
   final OfflineResultsResource lastWeekResource;
   final OfflineResultsResource thisWeekResource;
@@ -31,7 +30,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
   bool thisWeekSelected = true;
   List<Result>? results;
 
-  selectThisWeek() {
+  void selectThisWeek() {
     if (thisWeekSelected) {
       return;
     }
@@ -42,7 +41,7 @@ class _OfflineChartPageState extends State<OfflineChartPage> {
     _loadThisWeekResult();
   }
 
-  selectLastWeek() {
+  void selectLastWeek() {
     if (!thisWeekSelected) {
       return;
     }

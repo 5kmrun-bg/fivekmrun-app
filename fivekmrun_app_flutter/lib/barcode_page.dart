@@ -245,7 +245,7 @@ class _AddToAppleWalletButton extends StatelessWidget {
       child: Image.asset(
         'assets/add_to_apple_wallet.png',
         height: 48,
-        errorBuilder: (_, __, ___) => ElevatedButton.icon(
+        errorBuilder: (_, _, _) => ElevatedButton.icon(
           onPressed: onPressed,
           icon: const Icon(Icons.wallet),
           label: Text(

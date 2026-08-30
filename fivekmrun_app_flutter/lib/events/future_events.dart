@@ -12,9 +12,9 @@ final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 
 class FutureEventsList extends StatelessWidget {
   const FutureEventsList({
-    Key? key,
+    super.key,
     required this.events,
-  }) : super(key: key);
+  });
 
   final List<Event> events;
 
@@ -98,8 +98,7 @@ class FutureEventsList extends StatelessWidget {
 /// header, with one button per distance tier. Each button opens that tier's
 /// registration page in an in-app webview.
 class XLRegistrationSection extends StatelessWidget {
-  const XLRegistrationSection({Key? key, required this.links, this.subtitle})
-      : super(key: key);
+  const XLRegistrationSection({super.key, required this.links, this.subtitle});
 
   final List<XLRegistrationLink> links;
 

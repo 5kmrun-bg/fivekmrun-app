@@ -8,8 +8,7 @@ class WhatsNewSheet extends StatelessWidget {
   final String version;
   final List<String> bullets;
 
-  const WhatsNewSheet({Key? key, required this.version, required this.bullets})
-      : super(key: key);
+  const WhatsNewSheet({super.key, required this.version, required this.bullets});
 
   @override
   Widget build(BuildContext context) {

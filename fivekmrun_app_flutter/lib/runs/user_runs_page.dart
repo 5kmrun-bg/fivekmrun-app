@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UserRunsPage extends StatelessWidget {
-  const UserRunsPage({Key? key}) : super(key: key);
+  const UserRunsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +34,9 @@ class UserRunsPage extends StatelessWidget {
 
 class UserRunsList extends StatelessWidget {
   const UserRunsList({
-    Key? key,
+    super.key,
     required this.runs,
-  }) : super(key: key);
+  });
 
   final List<Run> runs;
 
@@ -85,7 +85,7 @@ class UserRunsList extends StatelessWidget {
 /// color, which read badly for XL against the app's dark theme — a solid
 /// color chip is clearer than a thin colored outline.
 class RunTypePill extends StatelessWidget {
-  const RunTypePill({Key? key, required this.runType}) : super(key: key);
+  const RunTypePill({super.key, required this.runType});
 
   final RunType runType;
 

@@ -8,8 +8,7 @@ class RunCard extends StatelessWidget {
   final Run run;
   final String title;
 
-  const RunCard({Key? key, required this.run, required this.title})
-      : super(key: key);
+  const RunCard({super.key, required this.run, required this.title});
 
   @override
   Widget build(BuildContext context) {

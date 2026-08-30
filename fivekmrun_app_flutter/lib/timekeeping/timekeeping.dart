@@ -9,7 +9,7 @@ import 'chronometer_view.dart';
 import 'barcode_scanner.dart';
 
 class Timekeeping extends StatelessWidget {
-  const Timekeeping({Key? key}) : super(key: key);
+  const Timekeeping({super.key});
 
   Future<bool> _isUserAuthorized(String userId) async {
     try {

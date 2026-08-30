@@ -4,7 +4,7 @@ const double size = 150;
 
 class Avatar extends StatelessWidget {
   final String url;
-  const Avatar({Key? key, required this.url}) : super(key: key);
+  const Avatar({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {

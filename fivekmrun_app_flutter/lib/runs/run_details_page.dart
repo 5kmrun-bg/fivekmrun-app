@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class RunDetailsPage extends StatelessWidget {
-  const RunDetailsPage({Key? key}) : super(key: key);
+  const RunDetailsPage({super.key});
 
   Widget buildPositionGauge(Run run) {
     // XL runs are scored against the xlrun results endpoint, not the regular
@@ -191,8 +191,7 @@ class CircleWidget extends StatelessWidget {
 class IconText extends StatelessWidget {
   final IconData icon;
   final String text;
-  const IconText({Key? key, required this.icon, required this.text})
-      : super(key: key);
+  const IconText({super.key, required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -218,8 +217,7 @@ class IconText extends StatelessWidget {
 class CompareTime extends StatelessWidget {
   final int time;
   final String text;
-  const CompareTime({Key? key, required this.time, required this.text})
-      : super(key: key);
+  const CompareTime({super.key, required this.time, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -249,8 +247,7 @@ class CompareTime extends StatelessWidget {
 class RunDetail extends StatelessWidget {
   final String value;
   final String label;
-  const RunDetail({Key? key, required this.value, required this.label})
-      : super(key: key);
+  const RunDetail({super.key, required this.value, required this.label});
 
   @override
   Widget build(BuildContext context) {

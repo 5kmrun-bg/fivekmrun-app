@@ -119,7 +119,7 @@ class Run {
     return result;
   }
 
-  /// The xlrun/user/<id> endpoint carries the user's own XL results in two
+  /// The `xlrun/user/<id>` endpoint carries the user's own XL results in two
   /// places — the top-level "runners" (observed to be the current year) and
   /// per-year breakdowns under "years"[].results. Which one is authoritative
   /// for older results isn't confirmed, so both are merged and de-duplicated
@@ -142,7 +142,7 @@ class Run {
   static final RegExp _xlNameDistancePattern =
       RegExp(r'^(.*?)\s+([\d]+(?:\.[\d]+)?)\s*км\.?$', caseSensitive: false);
 
-  /// XLrun's n_name is "<place> <distance> км" (e.g. "Сеславци 7.6 км")
+  /// XLrun's n_name is `"<place> <distance> км"` (e.g. "Сеславци 7.6 км")
   /// instead of a clean location string — strip the distance suffix off.
   /// Falls back to the raw text if it doesn't match the expected pattern.
   static String _xlLocationFromName(String nName) {

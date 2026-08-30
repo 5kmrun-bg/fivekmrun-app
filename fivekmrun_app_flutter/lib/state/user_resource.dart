@@ -48,7 +48,7 @@ class UserResource extends ChangeNotifier {
     }
   }
 
-  clear() {
+  void clear() {
     currentUserId = null;
     value = null;
     loading = true;

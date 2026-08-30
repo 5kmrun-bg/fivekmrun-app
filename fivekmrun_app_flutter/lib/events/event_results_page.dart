@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class EventResultsPage extends StatefulWidget {
-  const EventResultsPage({Key? key}) : super(key: key);
+  const EventResultsPage({super.key});
 
   @override
   State<EventResultsPage> createState() => _EventResultsPageState();

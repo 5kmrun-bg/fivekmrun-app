@@ -80,7 +80,7 @@ class Result {
         officialPosition = 0,
         stravaLink = json["s_strava_link"];
 
-  static bool checkPatreonship(json) {
+  static bool checkPatreonship(dynamic json) {
     return json["p_id"] != null ||
         (json["u_daritel"] ?? 0) * 1000 >=
             DateTime.now().millisecondsSinceEpoch;

@@ -15,8 +15,7 @@ class LoginWithUsername extends StatefulWidget {
   /// navigation stack with "home".
   final bool addingProfile;
 
-  const LoginWithUsername({Key? key, this.addingProfile = false})
-      : super(key: key);
+  const LoginWithUsername({super.key, this.addingProfile = false});
 
   @override
   State<LoginWithUsername> createState() => _LoginWithUsernameState();

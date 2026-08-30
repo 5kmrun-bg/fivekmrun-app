@@ -7,11 +7,10 @@ class MilestoneTile extends StatelessWidget {
   final int milestone;
   final String title;
   const MilestoneTile(
-      {Key? key,
+      {super.key,
       required this.value,
       required this.milestone,
-      required this.title})
-      : super(key: key);
+      required this.title});
 
   @override
   Widget build(BuildContext context) {

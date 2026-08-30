@@ -31,7 +31,7 @@ final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 typedef ActivityPressedCB = void Function(StravaSummaryRun activity);
 
 class AddOfflineEntryPage extends StatefulWidget {
-  const AddOfflineEntryPage({Key? key}) : super(key: key);
+  const AddOfflineEntryPage({super.key});
 
   @override
   State<AddOfflineEntryPage> createState() => _AddOfflineEntryPageState();
@@ -429,11 +429,10 @@ class StravaActivityList extends StatelessWidget {
   final ActivityPressedCB onActivityTap;
 
   const StravaActivityList(
-      {Key? key,
+      {super.key,
       required this.activities,
       required this.selectedActivity,
-      required this.onActivityTap})
-      : super(key: key);
+      required this.onActivityTap});
 
   @override
   Widget build(BuildContext context) {

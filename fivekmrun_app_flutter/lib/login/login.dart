@@ -13,7 +13,7 @@ class Login extends StatefulWidget {
   /// widgets add a profile instead of starting the one and only session.
   final bool addingProfile;
 
-  const Login({Key? key, this.addingProfile = false}) : super(key: key);
+  const Login({super.key, this.addingProfile = false});
 
   @override
   State<Login> createState() => _LoginState();
@@ -22,7 +22,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool loginWithId = false;
 
-  _toggleLogin() {
+  void _toggleLogin() {
     setState(() => loginWithId = !loginWithId);
   }
 
@@ -107,7 +107,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  _loadRegistrationScreen() async {
+  Future<void> _loadRegistrationScreen() async {
     FirebaseAnalytics.instance.logEvent(name: "open_registration_link");
     await launchUrl(Uri.parse("https://5kmrun.bg/register"));
   }

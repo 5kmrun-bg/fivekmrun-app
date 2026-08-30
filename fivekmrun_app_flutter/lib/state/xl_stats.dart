@@ -19,7 +19,7 @@ XLEvent? nextUpcomingXLEvent(List<Event> events, {DateTime? now}) {
 
 /// Aggregate XLrun engagement stats for the profile page, derived from the
 /// user's already-fetched runs list (RunsResource) rather than a second
-/// fetch against xlrun/user/<id> — RunsResource already hits that endpoint
+/// fetch against `xlrun/user/<id>` — RunsResource already hits that endpoint
 /// to build "Твоите бягания" (#179), so calling it again here would just
 /// duplicate the same request for data already in memory.
 ///

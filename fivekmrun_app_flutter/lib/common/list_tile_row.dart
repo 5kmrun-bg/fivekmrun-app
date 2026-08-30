@@ -6,12 +6,11 @@ class ListTileRow extends StatelessWidget {
   final Color? iconColor;
   final int iconSize;
   const ListTileRow(
-      {Key? key,
+      {super.key,
       required this.icon,
       required this.text,
       this.iconColor,
-      this.iconSize = 18})
-      : super(key: key);
+      this.iconSize = 18});
 
   @override
   Widget build(BuildContext context) {

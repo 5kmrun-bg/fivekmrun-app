@@ -9,9 +9,9 @@ final DateFormat dateFromat = DateFormat(Constants.dateFormat);
 
 class PastEventsList extends StatelessWidget {
   const PastEventsList({
-    Key? key,
+    super.key,
     required this.events,
-  }) : super(key: key);
+  });
 
   final List<Event> events;
 

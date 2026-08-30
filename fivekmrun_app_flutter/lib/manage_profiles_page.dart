@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 /// Lists every saved profile with a remove action. Reordering is out of
 /// scope for #184 — the acceptance criteria only call for add/switch/remove.
 class ManageProfilesPage extends StatelessWidget {
-  const ManageProfilesPage({Key? key}) : super(key: key);
+  const ManageProfilesPage({super.key});
 
   Future<void> _confirmAndRemove(
       BuildContext context, Profile profile, AppLocalizations l10n) async {
