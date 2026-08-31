@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
@@ -30,13 +30,13 @@ jobs:
           architecture: x64
           cache: true
       - name: Cache pub dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.pub-cache
           key: pub-${{ hashFiles('fivekmrun_app_flutter/pubspec.lock') }}
           restore-keys: pub-
       - name: Cache Gradle
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.gradle/caches
           key: gradle-${{ hashFiles('fivekmrun_app_flutter/android/build.gradle', 'fivekmrun_app_flutter/android/app/build.gradle') }}
@@ -67,7 +67,7 @@ jobs:
           jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore /tmp/keystore.jks -storepass '${{ secrets.KEYSTORE_PASSWORD }}' -keypass '${{ secrets.KEYSTORE_PASSWORD }}' ./fivekmrun_app_flutter/build/app/outputs/flutter-apk/app-release.apk ${{ secrets.KEYSTORE_ALIAS }}
 
       - name: Publish Android Artefacts to GitHub
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-android
           path: ./fivekmrun_app_flutter/build/app/outputs/flutter-apk/
