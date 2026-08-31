@@ -3,16 +3,27 @@ import Flutter
 import PassKit
 
 @main
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    GeneratedPluginRegistrant.register(with: self)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
 
-    let controller = window?.rootViewController as! FlutterViewController
-    let channel = FlutterMethodChannel(name: "bg.fivekmpark.5kmrun/wallet",
-                                       binaryMessenger: controller.binaryMessenger)
+  /// Under the UIScene lifecycle the implicit engine is created before any scene
+  /// connects, and `UIApplicationDelegate.window` is nil — so the old
+  /// `window?.rootViewController as! FlutterViewController` lookup in
+  /// `didFinishLaunchingWithOptions` would have crashed on launch. Plugin
+  /// registration and the application-level wallet channel move here instead,
+  /// taking the binary messenger from the engine bridge rather than from a view
+  /// controller.
+  func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+    GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+
+    let channel = FlutterMethodChannel(
+      name: "bg.fivekmpark.5kmrun/wallet",
+      binaryMessenger: engineBridge.applicationRegistrar.messenger())
 
     channel.setMethodCallHandler { [weak self] call, result in
       switch call.method {
@@ -34,8 +45,6 @@ import PassKit
         result(FlutterMethodNotImplemented)
       }
     }
-
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
   private func presentWalletPass(userId: Int, userName: String, userStatus: String,
@@ -54,12 +63,28 @@ import PassKit
       passVC.delegate = self
 
       DispatchQueue.main.async {
-        self.window?.rootViewController?.present(passVC, animated: true)
+        AppDelegate.topViewController()?.present(passVC, animated: true)
       }
       flutterResult(true)
     } catch {
       flutterResult(FlutterError(code: "PASS_ERROR", message: error.localizedDescription, details: "\(error)"))
     }
+  }
+
+  /// Windows belong to scenes under the UIScene lifecycle, so the presenting
+  /// controller is resolved through the active window scene instead of the old
+  /// `self.window?.rootViewController`, which is now always nil.
+  private static func topViewController() -> UIViewController? {
+    let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+    let scene = windowScenes.first { $0.activationState == .foregroundActive } ?? windowScenes.first
+    guard let window = scene?.windows.first(where: \.isKeyWindow) ?? scene?.windows.first else {
+      return nil
+    }
+    var top = window.rootViewController
+    while let presented = top?.presentedViewController {
+      top = presented
+    }
+    return top
   }
 }
 
