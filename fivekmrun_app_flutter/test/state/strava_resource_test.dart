@@ -361,5 +361,17 @@ void main() {
           isEligibleWeeklyRun(summaryFromFixture('run_ultra_multilap')),
           isTrue);
     });
+
+    test('rejects a manual run that has GPS on both ends', () {
+      expect(
+          isEligibleWeeklyRun(summaryFromFixture('run_manual_with_gps')),
+          isFalse);
+    });
+
+    test('rejects a run with a start latlng but no end latlng', () {
+      expect(
+          isEligibleWeeklyRun(summaryFromFixture('run_partial_gps')),
+          isFalse);
+    });
   });
 }
