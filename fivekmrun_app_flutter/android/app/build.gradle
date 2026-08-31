@@ -27,7 +27,7 @@ if (flutterVersionName == null) {
 
 android {
     compileSdk 36
-    ndkVersion flutter.ndkVersion
+    ndkVersion = flutter.ndkVersion
 
     lint {
         disable 'InvalidPackage'
@@ -40,7 +40,7 @@ android {
 
     defaultConfig {
         applicationId "bg.fivekmpark.fivekmrun"
-        namespace "bg.fivekmpark.fivekmrun"
+        namespace = "bg.fivekmpark.fivekmrun"
         minSdk 26
         targetSdk 36
 
@@ -49,9 +49,20 @@ android {
     }
 
     // Release builds are signed outside Gradle: the CI workflow runs jarsigner
-    // over the built .aab/.apk with the keystore from repository secrets. There
-    // is deliberately no signingConfig here, so `flutter run --release` locally
-    // falls back to the debug keys.
+    // over the built .aab/.apk with the keystore from repository secrets, so
+    // there is deliberately no release signingConfig here.
+    //
+    // Consequence for local work: release artifacts come out UNSIGNED. They
+    // cannot be installed directly -- `flutter run --release` and `adb install`
+    // both fail with INSTALL_PARSE_FAILED_NO_CERTIFICATES. To try a release
+    // build on a device or emulator, sign it with the debug key first:
+    //
+    //   apksigner sign --ks ~/.android/debug.keystore --ks-pass pass:android \
+    //     --key-pass pass:android --ks-key-alias androiddebugkey app-release.apk
+    //
+    // Do not add a debug-keyed release signingConfig to make this easier: CI
+    // signs the artifact it is given, and a pre-signed one risks a debug key
+    // reaching the stores.
 }
 
 kotlin {
@@ -61,7 +72,7 @@ kotlin {
 }
 
 flutter {
-    source '../..'
+    source = '../..'
 }
 
 dependencies {
