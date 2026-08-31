@@ -1,4 +1,20 @@
 {
+  "3.19.0": {
+    "bg": [
+      "Няколко профила — добави близките си и превключвай между тях мигновено",
+      "Членска карта в Apple Wallet за iPhone",
+      "XLrun: резултати, класирания и записване",
+      "KidsRun: резултати",
+      "Приложението вече е и на английски"
+    ],
+    "en": [
+      "Multiple profiles — add family and friends, and switch between them instantly",
+      "Apple Wallet membership pass on iPhone",
+      "XLrun: results, leaderboards and registration",
+      "KidsRun: results",
+      "The app is now available in English"
+    ]
+  },
   "3.18.0": {
     "bg": [
       "Дръпни надолу, за да опресниш профила, бяганията и събитията",
