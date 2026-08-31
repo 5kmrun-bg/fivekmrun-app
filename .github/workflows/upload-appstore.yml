@@ -174,7 +174,20 @@ jobs:
               print(f'Draft version {version} created: {version_id}')
           except ApiError as e:
               body = e.body
-              if 'VERSION_ALREADY_EXIST' in body or 'already exists' in body.lower():
+              # Apple reports a re-used version string as
+              # ENTITY_ERROR.ATTRIBUTE.INVALID.DUPLICATE / "The version number
+              # has been previously used." -- it never sends the
+              # VERSION_ALREADY_EXIST / "already exists" wording this branch
+              # originally looked for, so the recovery never fired. Match the
+              # codes Apple actually returns, keeping the old strings as a
+              # belt-and-braces fallback.
+              already_exists = (
+                  'INVALID.DUPLICATE' in body
+                  or 'previously used' in body.lower()
+                  or 'VERSION_ALREADY_EXIST' in body
+                  or 'already exists' in body.lower()
+              )
+              if already_exists:
                   print(f'Version {version} already exists, fetching id...')
                   existing = api('GET', f'/v1/apps/{app_id}/appStoreVersions?filter[versionString]={version}&filter[platform]=IOS')
                   version_id = existing['data'][0]['id']
