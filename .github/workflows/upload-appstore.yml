@@ -205,10 +205,22 @@ jobs:
                   }})
                   print(f'Updated whatsNew for {locale}')
               else:
-                  api('POST', '/v1/appStoreVersionLocalizations', {'data': {
-                      'type': 'appStoreVersionLocalizations',
-                      'attributes': {'locale': locale, 'whatsNew': text},
-                      'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': version_id}}}
-                  }})
-                  print(f'Created whatsNew for {locale}')
+                  try:
+                      api('POST', '/v1/appStoreVersionLocalizations', {'data': {
+                          'type': 'appStoreVersionLocalizations',
+                          'attributes': {'locale': locale, 'whatsNew': text},
+                          'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': version_id}}}
+                      }})
+                      print(f'Created whatsNew for {locale}')
+                  except ApiError as e:
+                      # A locale the App Store listing does not offer cannot be
+                      # added through this endpoint. That is a listing-level
+                      # setting, not a release problem -- warn and carry on
+                      # rather than failing the upload after the build is
+                      # already in TestFlight.
+                      if 'not listed for localization' in e.body:
+                          print(f'::warning::Locale {locale} is not enabled for this app in '
+                                f'App Store Connect; skipping its release notes.')
+                      else:
+                          raise
           EOF
