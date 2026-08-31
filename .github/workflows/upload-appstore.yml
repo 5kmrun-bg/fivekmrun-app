@@ -158,7 +158,7 @@ jobs:
                   raise
 
           # Look up app by bundle ID
-          apps = api('GET', '/v1/apps?filter[bundleId]=bg.5kmpark.5kmrun&fields[apps]=id,name')
+          apps = api('GET', '/v1/apps?filter[bundleId]=bg.5kmpark.5kmrun&fields[apps]=name')
           app_id = apps['data'][0]['id']
           print(f'App ID: {app_id}')
 
