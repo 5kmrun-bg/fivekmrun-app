@@ -1,0 +1,22 @@
+{
+  "id": 1004,
+  "resource_state": 2,
+  "name": "Manual GPS Run",
+  "distance": 5050.0,
+  "moving_time": 1450,
+  "elapsed_time": 1450,
+  "total_elevation_gain": 0,
+  "type": "Run",
+  "sport_type": "Run",
+  "start_date": "2026-06-04T18:00:00Z",
+  "start_date_local": "2026-06-04T21:00:00Z",
+  "start_latlng": [42.6977, 23.3219],
+  "end_latlng": [42.6981, 23.3225],
+  "trainer": false,
+  "commute": false,
+  "manual": true,
+  "private": false,
+  "average_speed": 3.48,
+  "max_speed": 0,
+  "calories": 0
+}

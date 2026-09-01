@@ -1,0 +1,22 @@
+{
+  "id": 1005,
+  "resource_state": 2,
+  "name": "Partial GPS Run",
+  "distance": 5080.0,
+  "moving_time": 1420,
+  "elapsed_time": 1430,
+  "total_elevation_gain": 5.0,
+  "type": "Run",
+  "sport_type": "Run",
+  "start_date": "2026-06-05T06:00:00Z",
+  "start_date_local": "2026-06-05T09:00:00Z",
+  "start_latlng": [42.6977, 23.3219],
+  "end_latlng": [],
+  "trainer": false,
+  "commute": false,
+  "manual": false,
+  "private": false,
+  "average_speed": 3.58,
+  "max_speed": 4.2,
+  "calories": 315.0
+}
