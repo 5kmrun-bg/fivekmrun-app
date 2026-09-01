@@ -6,6 +6,7 @@ import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
 import 'package:fivekmrun_flutter/common/badges.dart';
 import 'package:fivekmrun_flutter/common/legioner_status_helper.dart';
+import 'package:fivekmrun_flutter/common/profile_header_actions.dart';
 import 'package:fivekmrun_flutter/common/profile_switcher_sheet.dart';
 import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
@@ -24,7 +25,6 @@ import 'package:fivekmrun_flutter/timekeeping/timekeeping.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'charts/runs_chart.dart';
@@ -165,26 +165,13 @@ class ProfileDashboard extends StatelessWidget {
                       flex: 3,
                       child: Column(
                         children: <Widget>[
-                          Row(children: <Widget>[
-                            if (DateTime.now().month == 1 ||
-                                (DateTime.now().month == 12 &&
-                                    DateTime.now().day >= 15))
-                              ShakeWidget(
-                                  shakeConstant: ShakeSlowConstant1(),
-                                  autoPlay: true,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.redeem),
-                                    color: Colors.red,
-                                    onPressed: () => launchUrl(
-                                        Uri.parse(
-                                            wrapUrl + user!.id.toString()),
-                                        mode: LaunchMode.externalApplication),
-                                  )),
-                            IconButton(
-                              icon: const Icon(Icons.settings),
-                              onPressed: goToSettings,
-                            ),
-                          ]),
+                          ProfileHeaderActions(
+                            showWrapIcon: isWrapSeasonActive(),
+                            onSettings: goToSettings,
+                            onWrapTap: () => launchUrl(
+                                Uri.parse(wrapUrl + user!.id.toString()),
+                                mode: LaunchMode.externalApplication),
+                          ),
                           MilestoneTile(
                               value: runsRes.value
                                       ?.where(
