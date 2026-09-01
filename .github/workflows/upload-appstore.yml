@@ -129,17 +129,36 @@ jobs:
           )
           headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
 
+          class ApiError(Exception):
+              """Carries the App Store Connect response body, which is where the
+              actual reason lives -- urllib's HTTPError stringifies to just the
+              status code, so an uncaught one tells you nothing."""
+
+              def __init__(self, code, body):
+                  super().__init__(f'HTTP {code}')
+                  self.code = code
+                  self.body = body
+
           def api(method, path, body=None):
               req = urllib.request.Request(
                   f'https://api.appstoreconnect.apple.com{path}',
                   data=json.dumps(body).encode() if body else None,
                   headers=headers, method=method
               )
-              with urllib.request.urlopen(req) as r:
-                  return json.loads(r.read())
+              try:
+                  with urllib.request.urlopen(req) as r:
+                      return json.loads(r.read())
+              except urllib.error.HTTPError as e:
+                  detail = e.read().decode(errors='replace')
+                  print(f'::error::App Store Connect {method} {path} -> HTTP {e.code} {e.reason}')
+                  print(f'Response body: {detail}')
+                  raise ApiError(e.code, detail) from None
+              except urllib.error.URLError as e:
+                  print(f'::error::App Store Connect {method} {path} unreachable: {e.reason}')
+                  raise
 
           # Look up app by bundle ID
-          apps = api('GET', '/v1/apps?filter[bundleId]=bg.5kmpark.5kmrun&fields[apps]=id,name')
+          apps = api('GET', '/v1/apps?filter[bundleId]=bg.5kmpark.5kmrun&fields[apps]=name')
           app_id = apps['data'][0]['id']
           print(f'App ID: {app_id}')
 
@@ -153,9 +172,22 @@ jobs:
               }})
               version_id = result['data']['id']
               print(f'Draft version {version} created: {version_id}')
-          except urllib.error.HTTPError as e:
-              body = e.read().decode()
-              if 'VERSION_ALREADY_EXIST' in body or 'already exists' in body.lower():
+          except ApiError as e:
+              body = e.body
+              # Apple reports a re-used version string as
+              # ENTITY_ERROR.ATTRIBUTE.INVALID.DUPLICATE / "The version number
+              # has been previously used." -- it never sends the
+              # VERSION_ALREADY_EXIST / "already exists" wording this branch
+              # originally looked for, so the recovery never fired. Match the
+              # codes Apple actually returns, keeping the old strings as a
+              # belt-and-braces fallback.
+              already_exists = (
+                  'INVALID.DUPLICATE' in body
+                  or 'previously used' in body.lower()
+                  or 'VERSION_ALREADY_EXIST' in body
+                  or 'already exists' in body.lower()
+              )
+              if already_exists:
                   print(f'Version {version} already exists, fetching id...')
                   existing = api('GET', f'/v1/apps/{app_id}/appStoreVersions?filter[versionString]={version}&filter[platform]=IOS')
                   version_id = existing['data'][0]['id']
@@ -186,10 +218,22 @@ jobs:
                   }})
                   print(f'Updated whatsNew for {locale}')
               else:
-                  api('POST', '/v1/appStoreVersionLocalizations', {'data': {
-                      'type': 'appStoreVersionLocalizations',
-                      'attributes': {'locale': locale, 'whatsNew': text},
-                      'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': version_id}}}
-                  }})
-                  print(f'Created whatsNew for {locale}')
+                  try:
+                      api('POST', '/v1/appStoreVersionLocalizations', {'data': {
+                          'type': 'appStoreVersionLocalizations',
+                          'attributes': {'locale': locale, 'whatsNew': text},
+                          'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': version_id}}}
+                      }})
+                      print(f'Created whatsNew for {locale}')
+                  except ApiError as e:
+                      # A locale the App Store listing does not offer cannot be
+                      # added through this endpoint. That is a listing-level
+                      # setting, not a release problem -- warn and carry on
+                      # rather than failing the upload after the build is
+                      # already in TestFlight.
+                      if 'not listed for localization' in e.body:
+                          print(f'::warning::Locale {locale} is not enabled for this app in '
+                                f'App Store Connect; skipping its release notes.')
+                      else:
+                          raise
           EOF
