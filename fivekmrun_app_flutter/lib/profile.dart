@@ -30,6 +30,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'charts/runs_chart.dart';
 import 'common/milestone.dart';
 
+/// The runs shown in the "trend from the last N runs" chart. XL runs are
+/// excluded because they aren't 5k-comparable and would distort the y-axis
+/// viewport for the rest of the runs.
+@visibleForTesting
+List<Run> runsForTrendChart(List<Run> runs) =>
+    runs.where((r) => r.runType != RunType.xl).take(30).toList();
+
 class ProfileDashboard extends StatelessWidget {
   const ProfileDashboard({super.key});
 
@@ -48,6 +55,8 @@ class ProfileDashboard extends StatelessWidget {
         runs.where((r) => r.runType == RunType.official).isNotEmpty;
     final hasSelfieRuns = runs != null &&
         runs.where((r) => r.runType == RunType.selfie).isNotEmpty;
+    final hasTrendChartRuns =
+        runs != null && runs.any((r) => r.runType != RunType.xl);
     final xlStats = XLStats.fromRuns(runs ?? <Run>[]);
     // Promote the next XL event to anyone who has ever run one. The events
     // are already fetched for the events tab (AllFutureEventsResource is
@@ -217,7 +226,7 @@ class ProfileDashboard extends StatelessWidget {
                       runsRes.lastSelfieRun!, "selfie"),
                 if (xlStats != null)
                   buildXLStatsCard(xlStats, nextXLEvent),
-                if (hasAnyRuns) buildRunsChartCard(runs),
+                if (hasTrendChartRuns) buildRunsChartCard(runs),
                 if (!runsRes.loading && !hasAnyRuns)
                   Row(
                     children: <Widget>[
@@ -420,7 +429,7 @@ class ProfileDashboard extends StatelessWidget {
     return Card(
       child: SizedBox(
         height: 200,
-        child: RunsChart(runs: runs.take(30).toList()),
+        child: RunsChart(runs: runsForTrendChart(runs)),
       ),
     );
   }
