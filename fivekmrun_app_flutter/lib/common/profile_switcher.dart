@@ -9,6 +9,7 @@ import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:fivekmrun_flutter/state/user_resource.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 /// Clears and reloads every *per-user* resource for whichever profile is now
@@ -156,6 +157,17 @@ class _ReauthDialogState extends State<_ReauthDialog> {
   bool get _needsUsername => widget.profile.username == null;
 
   @override
+  void initState() {
+    super.initState();
+    // Not shown when the username is already known, but still carries the
+    // OS `username` autofill hint so the platform can match the saved
+    // credential to the right account for the password field below.
+    if (!_needsUsername) {
+      _usernameController.text = widget.profile.username!;
+    }
+  }
+
+  @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
@@ -178,6 +190,7 @@ class _ReauthDialogState extends State<_ReauthDialog> {
     if (!mounted) return;
 
     if (success) {
+      TextInput.finishAutofillContext();
       Navigator.of(context).pop(true);
     } else {
       setState(() {
@@ -196,33 +209,49 @@ class _ReauthDialogState extends State<_ReauthDialog> {
 
     return AlertDialog(
       title: Text(l10n.profile_switcher_reauth_title(label)),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (_error)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Text(
-                l10n.profile_switcher_reauth_error,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
+      content: AutofillGroup(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            if (_error)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  l10n.profile_switcher_reauth_error,
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
               ),
-            ),
-          if (_needsUsername)
+            if (_needsUsername) ...[
+              TextField(
+                controller: _usernameController,
+                keyboardType: TextInputType.emailAddress,
+                autofillHints: const [AutofillHints.username],
+                decoration: InputHelpers.decoration("email"),
+              ),
+              const SizedBox(height: 10),
+            ] else
+              // The username is already known and not shown as a visible
+              // field, but the OS still needs a `username`-hinted field in
+              // the group to match the saved credential to the password
+              // field below — otherwise autofill may not offer it at all.
+              Offstage(
+                child: TextField(
+                  controller: _usernameController,
+                  autofillHints: const [AutofillHints.username],
+                ),
+              ),
             TextField(
-              controller: _usernameController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputHelpers.decoration("email"),
+              controller: _passwordController,
+              obscureText: true,
+              autofillHints: const [AutofillHints.password],
+              decoration: InputHelpers.decoration(
+                  l10n.login_with_username_widget_password),
+              onSubmitted: (_) => _submitting ? null : _submit(),
             ),
-          if (_needsUsername) const SizedBox(height: 10),
-          TextField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: InputHelpers.decoration(
-                l10n.login_with_username_widget_password),
-            onSubmitted: (_) => _submitting ? null : _submit(),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: <Widget>[
         TextButton(

@@ -187,6 +187,117 @@ void main() {
       await tester.tap(find.text('Отказ'));
       await tester.pumpAndSettle();
     });
+
+    testWidgets(
+        'the reauth dialog offers OS password autofill for a profile with '
+        'a known username', (tester) async {
+      final expiredTimestamp = DateTime.now()
+          .subtract(const Duration(days: 31))
+          .millisecondsSinceEpoch;
+      SharedPreferences.setMockInitialValues({
+        '5kmrun_Profiles': '['
+            '{"userId":222,"type":"password","token":"stale",'
+            '"tokenTimestamp":$expiredTimestamp,'
+            '"username":"kid@example.com","name":"Kid","avatarUrl":""}'
+            ']',
+        '5kmrun_ActiveProfileId': 222,
+      });
+      final authRes = AuthenticationResource();
+      await authRes.loadFromLocalStore();
+
+      final userRes = UserResource(client: _offlineFallbackClient);
+      final runsRes = RunsResource(client: _offlineFallbackClient);
+      final stravaRes = _NoOpStravaResource();
+      final localStorage = LocalStorageResource();
+
+      late BuildContext ctx;
+      await tester.pumpWidget(_harness(
+        authRes: authRes,
+        userRes: userRes,
+        runsRes: runsRes,
+        stravaRes: stravaRes,
+        localStorage: localStorage,
+        captureContext: (c) => ctx = c,
+      ));
+      await tester.pump();
+
+      switchToProfile(ctx, 222);
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(find.byType(AutofillGroup), findsOneWidget);
+
+      final passwordField = tester.widget<TextField>(
+          find.byType(TextField, skipOffstage: false).last);
+      expect(passwordField.autofillHints, contains(AutofillHints.password));
+
+      // A hidden (offstage) field still carries the username hint so the OS
+      // can match the saved credential to the right account, even though
+      // this profile already has its username and the dialog shows no
+      // visible email field for it. skipOffstage: false is needed since the
+      // default finder ignores it precisely because it isn't painted.
+      final usernameFields = tester
+          .widgetList<TextField>(find.byType(TextField, skipOffstage: false))
+          .where((f) =>
+              f.autofillHints?.contains(AutofillHints.username) ?? false);
+      expect(usernameFields, isNotEmpty);
+
+      await tester.tap(find.text('Отказ'));
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets(
+        'the reauth dialog offers OS autofill hints for a profile with no '
+        'stored username', (tester) async {
+      final expiredTimestamp = DateTime.now()
+          .subtract(const Duration(days: 31))
+          .millisecondsSinceEpoch;
+      SharedPreferences.setMockInitialValues({
+        '5kmrun_Profiles': '['
+            '{"userId":222,"type":"password","token":"stale",'
+            '"tokenTimestamp":$expiredTimestamp,'
+            '"username":null,"name":"Kid","avatarUrl":""}'
+            ']',
+        '5kmrun_ActiveProfileId': 222,
+      });
+      final authRes = AuthenticationResource();
+      await authRes.loadFromLocalStore();
+
+      final userRes = UserResource(client: _offlineFallbackClient);
+      final runsRes = RunsResource(client: _offlineFallbackClient);
+      final stravaRes = _NoOpStravaResource();
+      final localStorage = LocalStorageResource();
+
+      late BuildContext ctx;
+      await tester.pumpWidget(_harness(
+        authRes: authRes,
+        userRes: userRes,
+        runsRes: runsRes,
+        stravaRes: stravaRes,
+        localStorage: localStorage,
+        captureContext: (c) => ctx = c,
+      ));
+      await tester.pump();
+
+      switchToProfile(ctx, 222);
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(find.byType(AutofillGroup), findsOneWidget);
+
+      final fields = tester.widgetList<TextField>(find.byType(TextField));
+      final usernameField =
+          fields.firstWhere((f) => f.keyboardType == TextInputType.emailAddress);
+      expect(
+          usernameField.autofillHints, contains(AutofillHints.username));
+      final passwordField = fields.firstWhere((f) => f.obscureText);
+      expect(passwordField.autofillHints, contains(AutofillHints.password));
+
+      await tester.tap(find.text('Отказ'));
+      await tester.pumpAndSettle();
+    });
   });
 
   group('removeProfileFromSwitcher', () {
