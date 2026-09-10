@@ -221,6 +221,17 @@ void main() {
         MethodChannel('plugins.flutter.io/path_provider');
     const shareChannel = MethodChannel('dev.fluttercommunity.plus/share');
 
+    // BarcodeScanner starts a live MobileScanner camera preview in initState.
+    // Its channels are unhandled in tests; fake-async silently never resolves
+    // them, but once real time is allowed to pass (runAsync, below) the
+    // pending camera-init call throws a MissingPluginException. Stub it out.
+    const scannerMethodChannel =
+        MethodChannel('dev.steenbakker.mobile_scanner/scanner/method');
+    const scannerEventChannel =
+        MethodChannel('dev.steenbakker.mobile_scanner/scanner/event');
+    const scannerOrientationChannel = MethodChannel(
+        'dev.steenbakker.mobile_scanner/scanner/deviceOrientation');
+
     testWidgets(
         'writes MM/DD/YY dates, CRLF line endings, and zero-padded place '
         'codes', (tester) async {
@@ -257,10 +268,33 @@ void main() {
         shared = true;
         return null;
       });
+      messenger.setMockMethodCallHandler(scannerMethodChannel, (call) async {
+        switch (call.method) {
+          case 'start':
+            return <String, Object?>{
+              'textureId': 0,
+              'size': {'width': 100.0, 'height': 100.0},
+              'currentTorchState': 0,
+              'numberOfCameras': 1,
+            };
+          default:
+            return null;
+        }
+      });
+      // EventChannel.receiveBroadcastStream subscribes via a 'listen' method
+      // call on a channel of the same name — acking it with null is enough;
+      // no barcode/orientation events are needed for this test.
+      messenger.setMockMethodCallHandler(
+          scannerEventChannel, (call) async => null);
+      messenger.setMockMethodCallHandler(
+          scannerOrientationChannel, (call) async => null);
 
       addTearDown(() {
         messenger.setMockMethodCallHandler(pathProviderChannel, null);
         messenger.setMockMethodCallHandler(shareChannel, null);
+        messenger.setMockMethodCallHandler(scannerMethodChannel, null);
+        messenger.setMockMethodCallHandler(scannerEventChannel, null);
+        messenger.setMockMethodCallHandler(scannerOrientationChannel, null);
         tempDir.deleteSync(recursive: true);
       });
 
