@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:fivekmrun_flutter/timekeeping/barcode_scanner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -209,5 +211,84 @@ void main() {
     // Only one pair left, renumbered to 1.
     expect(find.text('1'), findsOneWidget);
     expect(find.text('2'), findsNothing);
+  });
+
+  // The exported file is what actually gets submitted to the race's results
+  // system, and its formatting is independent of what's shown on screen —
+  // asserting on the generated content is the only thing that pins it.
+  group('export file content', () {
+    const pathProviderChannel =
+        MethodChannel('plugins.flutter.io/path_provider');
+    const shareChannel = MethodChannel('dev.fluttercommunity.plus/share');
+
+    testWidgets(
+        'writes MM/DD/YY dates, CRLF line endings, and zero-padded place '
+        'codes', (tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{
+        'barcode_scanner_values': jsonEncode([
+          ScannedBarcode(
+                  value: '0000012440',
+                  timestamp: DateTime(2026, 9, 5, 10, 11, 0))
+              .toJson(),
+          // A short, unpadded place token — the real case that got a
+          // generated file rejected by the results system.
+          ScannedBarcode(
+                  value: 'J13',
+                  timestamp: DateTime(2026, 9, 5, 10, 14, 19))
+              .toJson(),
+        ]),
+      });
+
+      // Sync: real async I/O never completes inside the fake-async zone.
+      final tempDir =
+          Directory.systemTemp.createTempSync('barcode_export_test');
+      final messenger =
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+
+      var shared = false;
+      messenger.setMockMethodCallHandler(
+        pathProviderChannel,
+        (call) async =>
+            call.method == 'getTemporaryDirectory' ? tempDir.path : null,
+      );
+      // Returning null makes share_plus fall back to its "unavailable"
+      // sentinel, which parses cleanly — the sharing itself isn't under test.
+      messenger.setMockMethodCallHandler(shareChannel, (call) async {
+        shared = true;
+        return null;
+      });
+
+      addTearDown(() {
+        messenger.setMockMethodCallHandler(pathProviderChannel, null);
+        messenger.setMockMethodCallHandler(shareChannel, null);
+        tempDir.deleteSync(recursive: true);
+      });
+
+      await pumpScanner(tester);
+
+      await tester.tap(find.byTooltip('Save'));
+      await tester.pump();
+
+      // The export chains three real-I/O awaits (temp dir -> write -> share),
+      // none of which advance inside testWidgets' fake-async zone. runAsync
+      // lets real time pass; the pump after it flushes the continuations.
+      for (var i = 0; i < 10 && !shared; i++) {
+        await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 50)));
+        await tester.pump();
+      }
+
+      expect(shared, isTrue, reason: 'the share sheet should be invoked');
+
+      final written = tempDir.listSync().whereType<File>().toList();
+      expect(written, hasLength(1));
+      final content = written.single.readAsStringSync();
+
+      // MM/DD/YY (not the app's old YY/MM/DD), CRLF line endings, and the
+      // place token zero-padded to the fixed 8-digit width real chip reads
+      // use — all three needed to match the old, accepted format.
+      expect(content, contains('09/05/26,10:11:00,01,0000012440\r\n'));
+      expect(content, contains('09/05/26,10:14:19,01,J00000013\r\n'));
+    });
   });
 }

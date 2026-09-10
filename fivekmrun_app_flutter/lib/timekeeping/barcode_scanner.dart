@@ -102,6 +102,16 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     }
   }
 
+  /// Zero-pads a place token's digits to the fixed 8-digit width real chip
+  /// reads use (e.g. "J13" -> "J00000013"). A short token — whether typed by
+  /// a marshal or read off a misprinted barcode — otherwise breaks the
+  /// results system's fixed-width parsing of the exported file. Runner-ID
+  /// values are already fixed-width and left untouched.
+  String _paddedExportValue(String value) {
+    if (!value.startsWith('J')) return value;
+    return 'J${value.substring(1).padLeft(8, '0')}';
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -178,7 +188,8 @@ class _BarcodeScannerState extends State<BarcodeScanner>
       final hh = t.hour.toString().padLeft(2, '0');
       final min = t.minute.toString().padLeft(2, '0');
       final ss = t.second.toString().padLeft(2, '0');
-      content += '$yy/$mm/$dd,$hh:$min:$ss,01,${entry.value}\n';
+      content +=
+          '$mm/$dd/$yy,$hh:$min:$ss,01,${_paddedExportValue(entry.value)}\r\n';
     }
 
     try {
