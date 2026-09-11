@@ -42,6 +42,27 @@ Use flutter cli to run the app on a simulator or a real device:
 - Android: `flutter build appbundle --release --no-shrink`
 - iOS: `flutter build ios --release`
 
+## Troubleshooting
+
+### iOS build fails with "has different definitions in different modules"
+
+If an incremental iOS build fails with an error like:
+
+```
+'FlutterWebAuth2Plugin' has different definitions in different modules
+Definition of 'FlutterWebAuth2Plugin' must be imported from module
+'flutter_web_auth_2.Swift' before it is required
+```
+
+this means a native iOS dependency (e.g. `flutter_web_auth_2`) changed major
+version and your local `build/ios/` still has stale module headers from the
+old version conflicting with the new ones. CI is unaffected because it always
+builds from a fresh checkout. Fix it locally with a clean rebuild:
+
+```
+flutter clean && rm -rf ios/Pods ios/.symlinks && flutter pub get && pod install
+```
+
 ## Contribution Guidelines
 - PRs are most welcome!
 - We aim to have 100% parity between iOS and Android applications. Exceptions are acceptable for OS specific functionalities that doesn't have alternatives or have changed in the behavior. If you don't have access to macos and ios devices - reach out to a team member to assist you with testing and making sure the app works as expected.
