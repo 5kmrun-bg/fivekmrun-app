@@ -6,12 +6,12 @@ import 'package:fivekmrun_flutter/charts/runs_by_route_chart.dart';
 import 'package:fivekmrun_flutter/common/avatar.dart';
 import 'package:fivekmrun_flutter/common/badges.dart';
 import 'package:fivekmrun_flutter/common/legioner_status_helper.dart';
+import 'package:fivekmrun_flutter/common/profile_barcode_action.dart';
 import 'package:fivekmrun_flutter/common/profile_header_actions.dart';
 import 'package:fivekmrun_flutter/common/profile_switcher_sheet.dart';
 import 'package:fivekmrun_flutter/common/refresh_helper.dart';
 import 'package:fivekmrun_flutter/common/run_card.dart';
 import 'package:fivekmrun_flutter/constants.dart';
-import 'package:fivekmrun_flutter/custom_icons.dart';
 import 'package:fivekmrun_flutter/events/future_events.dart'
     show XLRegistrationSection;
 import 'package:fivekmrun_flutter/home.dart';
@@ -111,10 +111,7 @@ class ProfileDashboard extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          IconButton(
-                            icon: const Icon(CustomIcons.barcode),
-                            onPressed: goToBarcode,
-                          ),
+                          ProfileBarcodeAction(onPressed: goToBarcode),
                           MilestoneTile(
                               value: runsRes.value
                                       ?.where(
