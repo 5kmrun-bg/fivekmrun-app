@@ -1,7 +1,5 @@
-• Multiple profiles — add family and friends, and switch between them instantly
-• Apple Wallet membership pass on iPhone
-• XLrun: results, leaderboards, registration and stats on your profile
-• KidsRun results and leaderboards
-• The app is now available in English, with a language switcher
-• Manual barcode entry when timekeeping
+• Fixed the profile trend chart so XLrun times no longer skew your 5k results
+• Password autofill now works when re-confirming your login for Selfie runs
+• Fixed the barcode export format
+• Fixed icon alignment on the profile page
 • Bug fixes and stability improvements
