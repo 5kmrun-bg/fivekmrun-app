@@ -77,14 +77,12 @@ class RunCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Text(
-                                run.pace ??
-                                    "" " ${AppLocalizations.of(context)!.min_km}",
+                                "${run.pace ?? ""} ${AppLocalizations.of(context)!.min_km}",
                                 style: valueStyle,
                                 overflow: TextOverflow.ellipsis),
                           ),
                           Text(
-                              run.time ??
-                                  "" " ${AppLocalizations.of(context)!.min}",
+                              "${run.time ?? ""} ${AppLocalizations.of(context)!.min}",
                               style: valueStyle,
                               overflow: TextOverflow.ellipsis),
                         ],
