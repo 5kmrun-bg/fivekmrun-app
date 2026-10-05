@@ -1,5 +1,4 @@
-• Fixed the profile trend chart so XLrun times no longer skew your 5k results
-• Password autofill now works when re-confirming your login for Selfie runs
-• Fixed the barcode export format
-• Fixed icon alignment on the profile page
+• Connecting to Strava now tells you when it fails, instead of silently doing nothing
+• On iPhone, Strava sign-in now uses the Strava app when it is installed
+• Pace and time units are now shown on run cards, charts and lists
 • Bug fixes and stability improvements
