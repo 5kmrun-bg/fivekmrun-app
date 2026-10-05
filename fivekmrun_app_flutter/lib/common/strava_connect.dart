@@ -1,9 +1,19 @@
+import 'dart:async';
+
+import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'package:fivekmrun_flutter/state/strava_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StravaConnect extends StatefulWidget {
-  const StravaConnect({super.key});
+  const StravaConnect({
+    super.key,
+    this.authTimeout = const Duration(minutes: 5),
+  });
+
+  /// How long [StravaResource.authenticate] may take before the attempt is
+  /// abandoned.
+  final Duration authTimeout;
 
   @override
   State<StravaConnect> createState() => _StravaConnectState();
@@ -41,9 +51,29 @@ class _StravaConnectState extends State<StravaConnect> {
       }
       setState(() => isLoading = true);
 
-      final result = await strava.authenticate();
+      // authenticate() can wait forever: on iOS it hands over to the Strava
+      // app and only completes when the redirect comes back, so a user who
+      // backs out would otherwise be left with a permanent spinner.
+      var result = false;
+      try {
+        result = await strava.authenticate().timeout(widget.authTimeout);
+      } on TimeoutException {
+        strava.recordAuthTimeout(widget.authTimeout);
+      }
 
       if (!mounted) return;
+
+      if (!result) {
+        ScaffoldMessenger.of(this.context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(
+                this.context,
+              )!.settings_page_strava_connect_failed,
+            ),
+          ),
+        );
+      }
 
       setState(() {
         isLoading = false;
@@ -75,14 +105,11 @@ class _StravaConnectState extends State<StravaConnect> {
       child: isLoading
           ? const CircularProgressIndicator()
           : isConnectedToStrava
-              ? ElevatedButton(
-                  onPressed: disconnect,
-                  child: const Text("disconnect"),
-                )
-              : ElevatedButton(
-                  onPressed: connect,
-                  child: const Text("connect"),
-                ),
+          ? ElevatedButton(
+              onPressed: disconnect,
+              child: const Text("disconnect"),
+            )
+          : ElevatedButton(onPressed: connect, child: const Text("connect")),
     );
   }
 }

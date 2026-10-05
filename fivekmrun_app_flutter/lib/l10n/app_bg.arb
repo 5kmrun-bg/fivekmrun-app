@@ -11,6 +11,7 @@
   "settings_page_notifications": "Известия",
   "settings_page_settings": "Настройки",
   "settings_page_strava": "Strava интеграция",
+  "settings_page_strava_connect_failed": "Свързването със Strava не успя. Опитайте отново. Ако проблемът продължи, проверете дали имате Strava приложението или уеб браузър и дали няма ограничения за тях.",
   "settings_page_language": "Език",
   "locale_switcher_semantics_label": "Смяна на езика",
   "settings_page_exit": "Изход",

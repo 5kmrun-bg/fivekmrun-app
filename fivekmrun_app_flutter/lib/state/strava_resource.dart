@@ -1,9 +1,17 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/constants.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:fivekmrun_flutter/state/strava_activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:strava_client/strava_client.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+/// The URL strava_client probes (via `canLaunchUrlString`) to decide whether
+/// the Strava app is installed. Needs `strava` in `LSApplicationQueriesSchemes`.
+const stravaAppAuthUrl = "strava://oauth/mobile/authorize";
 
 typedef StravaCallback<T> = Future<T> Function(StravaClient strava);
 
@@ -16,9 +24,13 @@ typedef StravaCallback<T> = Future<T> Function(StravaClient strava);
 String describeStravaError(Object error) {
   if (error is Fault) {
     final codes = (error.errors ?? [])
-        .map((e) => [e.resource, e.field, e.code]
-            .where((part) => part != null)
-            .join(":"))
+        .map(
+          (e) => [
+            e.resource,
+            e.field,
+            e.code,
+          ].where((part) => part != null).join(":"),
+        )
         .where((s) => s.isNotEmpty)
         .join(", ");
     final message = error.message ?? "no message";
@@ -40,11 +52,14 @@ bool isEligibleWeeklyRun(SummaryActivity activity) {
 
 /// Reports an error/stackTrace pair with a human-readable [reason], e.g. to
 /// Crashlytics. Injected so callers can be unit-tested without Firebase.
-typedef StravaErrorReporter = void Function(
-    Object error, StackTrace stackTrace, String reason);
+typedef StravaErrorReporter =
+    void Function(Object error, StackTrace stackTrace, String reason);
 
 void _reportStravaErrorToCrashlytics(
-    Object error, StackTrace stackTrace, String reason) {
+  Object error,
+  StackTrace stackTrace,
+  String reason,
+) {
   FirebaseCrashlytics.instance.recordError(error, stackTrace, reason: reason);
 }
 
@@ -63,8 +78,11 @@ Future<DetailedAthlete?> fetchAuthenticatedAthleteWithRetry(
   try {
     return await getAthlete();
   } catch (error, stackTrace) {
-    reportError(error, stackTrace,
-        "Strava getAuthenticatedAthlete failed: ${describeStravaError(error)}");
+    reportError(
+      error,
+      stackTrace,
+      "Strava getAuthenticatedAthlete failed: ${describeStravaError(error)}",
+    );
   }
 
   await reAuthenticate();
@@ -72,8 +90,11 @@ Future<DetailedAthlete?> fetchAuthenticatedAthleteWithRetry(
   try {
     return await getAthlete();
   } catch (error, stackTrace) {
-    reportError(error, stackTrace,
-        "Strava getAuthenticatedAthlete retry failed: ${describeStravaError(error)}");
+    reportError(
+      error,
+      stackTrace,
+      "Strava getAuthenticatedAthlete retry failed: ${describeStravaError(error)}",
+    );
     return null;
   }
 }
@@ -91,7 +112,8 @@ class StravaResource extends ChangeNotifier {
   Future<bool> isAuthenticated() async {
     return _withStrava((strava) async {
       final token = await strava.getStravaAuthToken();
-      final hasValidToken = token != null &&
+      final hasValidToken =
+          token != null &&
           token.accessToken != "null" &&
           !_isTokenExpired(token);
 
@@ -119,42 +141,84 @@ class StravaResource extends ChangeNotifier {
     }
 
     FirebaseCrashlytics.instance.setCustomKey("stravaUserID", athlete.id);
-    FirebaseCrashlytics.instance
-        .log("Strava get activities - atheleteID: ${athlete.id}");
+    FirebaseCrashlytics.instance.log(
+      "Strava get activities - atheleteID: ${athlete.id}",
+    );
     return true;
   }
 
+  /// Reports that [authenticate] never completed within [timeout], as a
+  /// non-fatal so it shows up in Crashlytics (breadcrumb logs alone only
+  /// surface attached to a report).
+  void recordAuthTimeout(Duration timeout) {
+    FirebaseCrashlytics.instance.recordError(
+      TimeoutException("Strava authenticate timed out after $timeout"),
+      StackTrace.current,
+      reason: "Strava authenticate timed out after $timeout",
+    );
+  }
+
   Future<bool> authenticate() async {
-    FirebaseCrashlytics.instance.log("Strava authenticate started");
+    final stopwatch = Stopwatch()..start();
+    FirebaseCrashlytics.instance.log(
+      "Strava authenticate started - "
+      "platform: ${Platform.operatingSystem} ${Platform.operatingSystemVersion}",
+    );
 
     return _withStrava((strava) async {
+      if (Platform.isIOS) {
+        // strava_client opens the Strava app instead of the web sign-in sheet
+        // when it is installed; log which path this device takes.
+        try {
+          final installed = await canLaunchUrlString(stravaAppAuthUrl);
+          FirebaseCrashlytics.instance.log(
+            "Strava authenticate - Strava app detected: $installed",
+          );
+        } catch (e) {
+          FirebaseCrashlytics.instance.log(
+            "Strava authenticate - Strava app check failed: $e",
+          );
+        }
+      }
+
       final scopes = [
         AuthenticationScope.read_all,
         AuthenticationScope.activity_read_all,
-        AuthenticationScope.profile_read_all
+        AuthenticationScope.profile_read_all,
       ];
       final isAuthOk = await strava.authentication
           .authenticate(
-              scopes: scopes,
-              redirectUrl: "fivekmrun://redirect/",
-              callbackUrlScheme: "fivekmrun")
+            scopes: scopes,
+            redirectUrl: "fivekmrun://redirect/",
+            callbackUrlScheme: "fivekmrun",
+          )
           .then((t) => true)
           .onError((error, stackTrace) async {
-        FirebaseCrashlytics.instance.recordError(error, stackTrace,
-            reason: "Strava authenticate failed: "
-                "${describeStravaError(error!)}");
-        try {
-          await strava.authentication.deAuthorize();
-        } catch (deAuthorizeError, deAuthorizeStackTrace) {
-          FirebaseCrashlytics.instance.recordError(
-              deAuthorizeError, deAuthorizeStackTrace,
-              reason: "Strava deAuthorize after failed authenticate failed: "
-                  "${describeStravaError(deAuthorizeError)}");
-        }
-        return false;
-      });
+            FirebaseCrashlytics.instance.recordError(
+              error,
+              stackTrace,
+              reason:
+                  "Strava authenticate failed: "
+                  "${describeStravaError(error!)}",
+            );
+            try {
+              await strava.authentication.deAuthorize();
+            } catch (deAuthorizeError, deAuthorizeStackTrace) {
+              FirebaseCrashlytics.instance.recordError(
+                deAuthorizeError,
+                deAuthorizeStackTrace,
+                reason:
+                    "Strava deAuthorize after failed authenticate failed: "
+                    "${describeStravaError(deAuthorizeError)}",
+              );
+            }
+            return false;
+          });
 
-      FirebaseCrashlytics.instance.log("Strava authenticate result: $isAuthOk");
+      FirebaseCrashlytics.instance.log(
+        "Strava authenticate result: $isAuthOk "
+        "after ${stopwatch.elapsedMilliseconds}ms",
+      );
 
       return isAuthOk;
     });
@@ -194,8 +258,10 @@ class StravaResource extends ChangeNotifier {
       }
     }
 
-    FastestSplitSummary summary =
-        FastestSplitSummary(elapsedTime: bestTime, distance: bestDistance);
+    FastestSplitSummary summary = FastestSplitSummary(
+      elapsedTime: bestTime,
+      distance: bestDistance,
+    );
     return StravaSummaryRun(detailedActivity: activity, fastestSplit: summary);
   }
 
@@ -205,8 +271,9 @@ class StravaResource extends ChangeNotifier {
     return _withStrava((strava) async {
       final authOK = await authenticate();
       if (!authOK) {
-        FirebaseCrashlytics.instance
-            .log("Strava get activities - authOK: false");
+        FirebaseCrashlytics.instance.log(
+          "Strava get activities - authOK: false",
+        );
         return null;
       }
 
@@ -218,25 +285,32 @@ class StravaResource extends ChangeNotifier {
 
       final now = DateTime.now();
       DateTime before = now;
-      DateTime after = now.subtract(Duration(
+      DateTime after = now.subtract(
+        Duration(
           //days: 90,
           days: now.weekday - 1,
           hours: now.hour,
           minutes: now.minute,
-          seconds: now.second));
+          seconds: now.second,
+        ),
+      );
       try {
         final activities = await strava.activities
             .listLoggedInAthleteActivities(before, after, 1, 100);
 
-        FirebaseCrashlytics.instance
-            .log("Strava get activities results: ${activities.length}");
+        FirebaseCrashlytics.instance.log(
+          "Strava get activities results: ${activities.length}",
+        );
 
-        final runActivites = await Future.wait(activities
-            .where(isEligibleWeeklyRun)
-            .map((a) => strava.activities.getActivity(a.id!)));
+        final runActivites = await Future.wait(
+          activities
+              .where(isEligibleWeeklyRun)
+              .map((a) => strava.activities.getActivity(a.id!)),
+        );
 
         FirebaseCrashlytics.instance.log(
-            "Strava get filtered activities results: ${runActivites.length}");
+          "Strava get filtered activities results: ${runActivites.length}",
+        );
 
         final summaryActivites = runActivites
             .where((a) => a.manual == false)
