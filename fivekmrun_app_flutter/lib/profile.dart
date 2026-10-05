@@ -225,7 +225,7 @@ class ProfileDashboard extends StatelessWidget {
                     ],
                   ),
                 if (hasOfficialRuns) buildRunsByRouteCard(runs),
-                if (hasOfficialRuns) buildBestTimesCard(runs),
+                if (hasOfficialRuns) buildBestTimesCard(context, runs),
               ],
             )));
   }
@@ -427,11 +427,12 @@ class ProfileDashboard extends StatelessWidget {
     );
   }
 
-  Widget buildBestTimesCard(List<Run> runs) {
+  Widget buildBestTimesCard(BuildContext context, List<Run> runs) {
     return Card(
       child: SizedBox(
         height: 350,
-        child: BestTimesByRouteChart.withRuns(runs),
+        child: BestTimesByRouteChart.withRuns(runs,
+            minutesUnit: AppLocalizations.of(context)!.min),
       ),
     );
   }

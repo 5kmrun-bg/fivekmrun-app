@@ -216,6 +216,20 @@ void main() {
     });
   });
 
+  group('result time', () {
+    testWidgets('shows the time with its unit', (tester) async {
+      final results = <Result>[
+        _result(name: "Ivan Ivanov", userId: 111),
+      ];
+      final authRes = AuthenticationResource();
+
+      await tester.pumpWidget(_harness(results, authRes));
+      await tester.pumpAndSettle();
+
+      expect(find.text("00:20:00 мин"), findsOneWidget);
+    });
+  });
+
   group('anonymous results', () {
     testWidgets('shows the localized "anonymous" label instead of the name',
         (tester) async {

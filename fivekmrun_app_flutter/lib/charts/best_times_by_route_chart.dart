@@ -13,9 +13,13 @@ class BestTimesByRouteChart extends StatelessWidget {
 
   const BestTimesByRouteChart(this.seriesList, {super.key, this.animate});
 
-  factory BestTimesByRouteChart.withRuns(List<Run> runs) {
+  /// [minutesUnit] is the localized unit appended to each time label (e.g.
+  /// "мин"). It's passed in because the labels are built here, before
+  /// `build` has a `BuildContext` to look up translations.
+  factory BestTimesByRouteChart.withRuns(List<Run> runs,
+      {required String minutesUnit}) {
     return BestTimesByRouteChart(
-      _createData(runs),
+      _createData(runs, minutesUnit),
     );
   }
 
@@ -48,7 +52,7 @@ class BestTimesByRouteChart extends StatelessWidget {
   }
 
   static List<charts.Series<BestTimeByRouteEntry, String>> _createData(
-      List<Run> runs) {
+      List<Run> runs, String minutesUnit) {
     List<BestTimeByRouteEntry> series = groupBy<Run, String>(
             runs.where((r) => r.runType == RunType.official),
             (r) => r.location!)
@@ -68,7 +72,7 @@ class BestTimesByRouteChart extends StatelessWidget {
         domainFn: (BestTimeByRouteEntry run, _) => run.location,
         measureFn: (BestTimeByRouteEntry run, _) => run.timeInSeconds,
         labelAccessorFn: (BestTimeByRouteEntry run, _) =>
-            "${run.location}: ${run.timeInSeconds.parseSecondsToTimestamp()}",
+            "${run.location}: ${run.timeInSeconds.parseSecondsToTimestamp()} $minutesUnit",
         data: series,
       )
     ];
