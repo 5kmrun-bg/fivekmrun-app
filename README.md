@@ -13,6 +13,8 @@ The official mobile application for **[5kmrun.bg](https://5kmrun.bg)** — Bulga
 [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" height="48" alt="Download on the App Store">](https://apps.apple.com/bg/app/5kmrun-bg/id1299888204)
 &nbsp;&nbsp;
 [<img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" height="48" alt="Get it on Google Play">](https://play.google.com/store/apps/details?id=bg.fivekmpark.fivekmrun&hl=bg)
+&nbsp;&nbsp;
+[<img src="https://img.shields.io/badge/Explore_it_on-AppGallery-C7000B?style=for-the-badge&logo=huawei&logoColor=white" height="48" alt="Explore it on AppGallery">](https://appgallery.huawei.com/app/C109680919)
 
 ---
 
