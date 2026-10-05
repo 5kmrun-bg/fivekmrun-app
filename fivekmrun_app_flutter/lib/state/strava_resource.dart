@@ -1,9 +1,17 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fivekmrun_flutter/constants.dart';
 import 'package:fivekmrun_flutter/private/secrets.dart';
 import 'package:fivekmrun_flutter/state/strava_activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:strava_client/strava_client.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+/// The URL strava_client probes (via `canLaunchUrlString`) to decide whether
+/// the Strava app is installed. Needs `strava` in `LSApplicationQueriesSchemes`.
+const stravaAppAuthUrl = "strava://oauth/mobile/authorize";
 
 typedef StravaCallback<T> = Future<T> Function(StravaClient strava);
 
@@ -124,10 +132,36 @@ class StravaResource extends ChangeNotifier {
     return true;
   }
 
+  /// Reports that [authenticate] never completed within [timeout], as a
+  /// non-fatal so it shows up in Crashlytics (breadcrumb logs alone only
+  /// surface attached to a report).
+  void recordAuthTimeout(Duration timeout) {
+    FirebaseCrashlytics.instance.recordError(
+        TimeoutException("Strava authenticate timed out after $timeout"),
+        StackTrace.current,
+        reason: "Strava authenticate timed out after $timeout");
+  }
+
   Future<bool> authenticate() async {
-    FirebaseCrashlytics.instance.log("Strava authenticate started");
+    final stopwatch = Stopwatch()..start();
+    FirebaseCrashlytics.instance.log("Strava authenticate started - "
+        "platform: ${Platform.operatingSystem} "
+        "${Platform.operatingSystemVersion}");
 
     return _withStrava((strava) async {
+      if (Platform.isIOS) {
+        // strava_client opens the Strava app instead of the web sign-in sheet
+        // when it is installed; log which path this device takes.
+        try {
+          final installed = await canLaunchUrlString(stravaAppAuthUrl);
+          FirebaseCrashlytics.instance
+              .log("Strava authenticate - Strava app detected: $installed");
+        } catch (e) {
+          FirebaseCrashlytics.instance
+              .log("Strava authenticate - Strava app check failed: $e");
+        }
+      }
+
       final scopes = [
         AuthenticationScope.read_all,
         AuthenticationScope.activity_read_all,
@@ -154,7 +188,8 @@ class StravaResource extends ChangeNotifier {
         return false;
       });
 
-      FirebaseCrashlytics.instance.log("Strava authenticate result: $isAuthOk");
+      FirebaseCrashlytics.instance.log("Strava authenticate result: $isAuthOk "
+          "after ${stopwatch.elapsedMilliseconds}ms");
 
       return isAuthOk;
     });

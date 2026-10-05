@@ -11,6 +11,7 @@
     "settings_page_notifications":"Notifications",
     "settings_page_settings":"Settings",
     "settings_page_strava":"Strava integration",
+    "settings_page_strava_connect_failed": "Could not connect to Strava. Please try again. If it keeps failing, check that you have the Strava app or a web browser available and no restrictions on them.",
     "settings_page_language":"Language",
     "locale_switcher_semantics_label": "Switch language",
     "settings_page_exit":"Exit",
