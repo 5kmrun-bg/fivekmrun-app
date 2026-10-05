@@ -70,10 +70,8 @@ class _FakeStravaResource extends StravaResource {
   }
 }
 
-Widget _harness(
-  StravaResource strava, {
-  Duration authTimeout = const Duration(minutes: 5),
-}) {
+Widget _harness(StravaResource strava,
+    {Duration authTimeout = const Duration(minutes: 5)}) {
   return ChangeNotifierProvider<StravaResource>.value(
     value: strava,
     child: localizedApp(StravaConnect(authTimeout: authTimeout)),
@@ -82,42 +80,35 @@ Widget _harness(
 
 void main() {
   group('StravaConnect', () {
-    testWidgets('shows a spinner while isAuthenticated is resolving', (
-      tester,
-    ) async {
+    testWidgets('shows a spinner while isAuthenticated is resolving',
+        (tester) async {
       await tester.pumpWidget(_harness(_FakeStravaResource()));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('shows a connect button once isAuthenticated resolves false', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        _harness(_FakeStravaResource(initiallyAuthenticated: false)),
-      );
+    testWidgets('shows a connect button once isAuthenticated resolves false',
+        (tester) async {
+      await tester
+          .pumpWidget(_harness(_FakeStravaResource(initiallyAuthenticated: false)));
       await tester.pumpAndSettle();
 
       expect(find.text('connect'), findsOneWidget);
       expect(find.text('disconnect'), findsNothing);
     });
 
-    testWidgets(
-      'shows a disconnect button once isAuthenticated resolves true',
-      (tester) async {
-        await tester.pumpWidget(
-          _harness(_FakeStravaResource(initiallyAuthenticated: true)),
-        );
-        await tester.pumpAndSettle();
+    testWidgets('shows a disconnect button once isAuthenticated resolves true',
+        (tester) async {
+      await tester
+          .pumpWidget(_harness(_FakeStravaResource(initiallyAuthenticated: true)));
+      await tester.pumpAndSettle();
 
-        expect(find.text('disconnect'), findsOneWidget);
-        expect(find.text('connect'), findsNothing);
-      },
-    );
+      expect(find.text('disconnect'), findsOneWidget);
+      expect(find.text('connect'), findsNothing);
+    });
 
-    testWidgets('tapping connect calls authenticate and flips to disconnect', (
-      tester,
-    ) async {
+    testWidgets('tapping connect calls authenticate and flips to disconnect',
+        (tester) async {
       final strava = _FakeStravaResource(initiallyAuthenticated: false);
       await tester.pumpWidget(_harness(strava));
       await tester.pumpAndSettle();
@@ -144,16 +135,13 @@ void main() {
       await tester.pumpAndSettle();
 
       final l10n = AppLocalizations.of(tester.element(find.byType(Scaffold)))!;
-      expect(
-        find.text(l10n.settings_page_strava_connect_failed),
-        findsOneWidget,
-      );
+      expect(find.text(l10n.settings_page_strava_connect_failed),
+          findsOneWidget);
       expect(find.text('connect'), findsOneWidget);
     });
 
-    testWidgets('does not show the failure message when connecting succeeds', (
-      tester,
-    ) async {
+    testWidgets('does not show the failure message when connecting succeeds',
+        (tester) async {
       await tester.pumpWidget(_harness(_FakeStravaResource()));
       await tester.pumpAndSettle();
 
@@ -167,15 +155,12 @@ void main() {
     // When the user is bounced to the Strava app (or a browser) and never
     // comes back with a redirect, authenticate() never completes and the
     // spinner would stay up forever.
-    testWidgets('gives up, reports and recovers when authenticate hangs', (
-      tester,
-    ) async {
-      final strava = _FakeStravaResource(
-        authenticateCompleter: Completer<bool>(),
-      );
+    testWidgets('gives up, reports and recovers when authenticate hangs',
+        (tester) async {
+      final strava =
+          _FakeStravaResource(authenticateCompleter: Completer<bool>());
       await tester.pumpWidget(
-        _harness(strava, authTimeout: const Duration(milliseconds: 200)),
-      );
+          _harness(strava, authTimeout: const Duration(milliseconds: 200)));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('connect'));
@@ -188,40 +173,36 @@ void main() {
       final l10n = AppLocalizations.of(tester.element(find.byType(Scaffold)))!;
       expect(find.byType(CircularProgressIndicator), findsNothing);
       expect(find.text('connect'), findsOneWidget);
-      expect(
-        find.text(l10n.settings_page_strava_connect_failed),
-        findsOneWidget,
-      );
+      expect(find.text(l10n.settings_page_strava_connect_failed),
+          findsOneWidget);
       expect(strava.authTimeoutCount, 1);
     });
 
     testWidgets(
-      'tapping disconnect calls deAuthenticate and flips to connect',
-      (tester) async {
-        final strava = _FakeStravaResource(initiallyAuthenticated: true);
-        await tester.pumpWidget(_harness(strava));
-        await tester.pumpAndSettle();
+        'tapping disconnect calls deAuthenticate and flips to connect',
+        (tester) async {
+      final strava = _FakeStravaResource(initiallyAuthenticated: true);
+      await tester.pumpWidget(_harness(strava));
+      await tester.pumpAndSettle();
 
-        // deAuthenticate() is awaited, so there is a real loading frame before
-        // the flip — the button must not claim "connect" until the
-        // deauthorization has actually completed.
-        await tester.tap(find.text('disconnect'));
-        await tester.pump();
+      // deAuthenticate() is awaited, so there is a real loading frame before
+      // the flip — the button must not claim "connect" until the
+      // deauthorization has actually completed.
+      await tester.tap(find.text('disconnect'));
+      await tester.pump();
 
-        expect(find.byType(ElevatedButton), findsNothing);
-        expect(strava.deAuthenticateCallCount, 1);
+      expect(find.byType(ElevatedButton), findsNothing);
+      expect(strava.deAuthenticateCallCount, 1);
 
-        await tester.pumpAndSettle();
-        expect(find.text('connect'), findsOneWidget);
-      },
-    );
+      await tester.pumpAndSettle();
+      expect(find.text('connect'), findsOneWidget);
+    });
 
     // Named for what this actually asserts: while the call is in flight the
     // button is replaced by the spinner, so a second tap is unreachable
     // through the UI. It does not exercise connect()'s isLoading guard.
-    testWidgets('hides the button while authenticate is in flight', (
-      tester,
-    ) async {
+    testWidgets('hides the button while authenticate is in flight',
+        (tester) async {
       final strava = _FakeStravaResource(initiallyAuthenticated: false);
       await tester.pumpWidget(_harness(strava));
       await tester.pumpAndSettle();
@@ -239,12 +220,10 @@ void main() {
     // Backing out of Settings (which hosts this widget) while the call is
     // still in flight tears the State down first, so setState lands on a
     // defunct State and throws unless guarded by `mounted`.
-    testWidgets('does not setState when disposed during isAuthenticated', (
-      tester,
-    ) async {
+    testWidgets('does not setState when disposed during isAuthenticated',
+        (tester) async {
       final strava = _FakeStravaResource(
-        isAuthenticatedDelay: const Duration(milliseconds: 50),
-      );
+          isAuthenticatedDelay: const Duration(milliseconds: 50));
       await tester.pumpWidget(_harness(strava));
       await tester.pump(); // mounted; isAuthenticated still pending
 
@@ -254,9 +233,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('does not setState when disposed during authenticate', (
-      tester,
-    ) async {
+    testWidgets('does not setState when disposed during authenticate',
+        (tester) async {
       final strava = _FakeStravaResource(initiallyAuthenticated: false);
       await tester.pumpWidget(_harness(strava));
       await tester.pumpAndSettle();
@@ -270,9 +248,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('does not setState when disposed during deAuthenticate', (
-      tester,
-    ) async {
+    testWidgets('does not setState when disposed during deAuthenticate',
+        (tester) async {
       final strava = _FakeStravaResource(initiallyAuthenticated: true);
       await tester.pumpWidget(_harness(strava));
       await tester.pumpAndSettle();

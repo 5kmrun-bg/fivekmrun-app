@@ -64,15 +64,10 @@ class _StravaConnectState extends State<StravaConnect> {
       if (!mounted) return;
 
       if (!result) {
-        ScaffoldMessenger.of(this.context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(
-                this.context,
-              )!.settings_page_strava_connect_failed,
-            ),
-          ),
-        );
+        final message = AppLocalizations.of(this.context)!
+            .settings_page_strava_connect_failed;
+        ScaffoldMessenger.of(this.context)
+            .showSnackBar(SnackBar(content: Text(message)));
       }
 
       setState(() {
@@ -105,11 +100,14 @@ class _StravaConnectState extends State<StravaConnect> {
       child: isLoading
           ? const CircularProgressIndicator()
           : isConnectedToStrava
-          ? ElevatedButton(
-              onPressed: disconnect,
-              child: const Text("disconnect"),
-            )
-          : ElevatedButton(onPressed: connect, child: const Text("connect")),
+              ? ElevatedButton(
+                  onPressed: disconnect,
+                  child: const Text("disconnect"),
+                )
+              : ElevatedButton(
+                  onPressed: connect,
+                  child: const Text("connect"),
+                ),
     );
   }
 }
