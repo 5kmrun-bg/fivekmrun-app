@@ -423,6 +423,13 @@ class _AddOfflineEntryPageState extends State<AddOfflineEntryPage> {
   }
 }
 
+/// The "fastest 5 km / total time" line on each Strava run in the Selfie
+/// picker. Top-level so it can be tested without rendering the whole page.
+String stravaActivityTimesLabel(
+    AppLocalizations l10n, String fastestSplitTime, String totalTime) {
+  return "$fastestSplitTime / $totalTime ${l10n.min}";
+}
+
 class StravaActivityList extends StatelessWidget {
   final List<StravaSummaryRun> activities;
   final StravaSummaryRun? selectedActivity;
@@ -481,7 +488,8 @@ class StravaActivityList extends StatelessWidget {
                           "$fastestSplitDistance / $totalDistance ${AppLocalizations.of(context)!.km}",
                       icon: Icons.map),
                   ListTileRow(
-                      text: "$fastestSplitTime / $totalTime",
+                      text: stravaActivityTimesLabel(AppLocalizations.of(context)!,
+                          fastestSplitTime, totalTime),
                       icon: Icons.timer),
                 ],
               ),

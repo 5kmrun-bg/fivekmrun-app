@@ -9,6 +9,13 @@ import 'package:intl/intl.dart';
 import '../common/int_extensions.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
+/// The "Date: … / Time: …" text shown above the trend chart for the point the
+/// user taps. Top-level so it can be tested without driving chart gestures.
+String runsChartSelectionLabel(
+    AppLocalizations l10n, DateTime date, String time) {
+  return "${l10n.runs_chart_date}${DateFormat(Constants.dateFormat).format(date)}${l10n.runs_chart_time}$time ${l10n.min}";
+}
+
 class RunsChart extends StatefulWidget {
   final List<Run> runs;
 
@@ -43,7 +50,7 @@ class _RunsChartState extends State<RunsChart> {
         time = selectedDatum.first.datum.time;
 
         setState(() => dataPointLabel =
-            "${AppLocalizations.of(context)!.runs_chart_date}${DateFormat(Constants.dateFormat).format(date)}${AppLocalizations.of(context)!.runs_chart_time}$time");
+            runsChartSelectionLabel(AppLocalizations.of(context)!, date, time));
       }
     }
 

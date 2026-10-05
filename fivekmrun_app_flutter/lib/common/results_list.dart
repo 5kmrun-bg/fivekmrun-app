@@ -184,7 +184,8 @@ class _ResultsListState extends State<ResultsList> {
                               ),
                               ListTileRow(
                                 icon: Icons.timer,
-                                text: res.time,
+                                text:
+                                    "${res.time} ${AppLocalizations.of(context)!.min}",
                                 iconColor: iconColor,
                               ),
                               if (res.isSelfie)
