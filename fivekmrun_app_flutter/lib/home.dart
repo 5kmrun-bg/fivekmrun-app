@@ -23,6 +23,13 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 enum AppTab { profile, runs, events, offlineChart, donate }
 
+/// The screens reachable inside the Profile tab. Top-level so tests can check
+/// that every screen the profile links to is actually registered here.
+final Map<String, WidgetBuilder> profileTabRoutes = {
+  '/': (context) => const ProfileDashboard(),
+  '/event-results': (context) => const EventResultsPage(),
+};
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -116,9 +123,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
     _widgetOptions = <Widget>[
       TabNavigator(
         navigatorKey: _tabHelper.navigatorKeys[AppTab.profile]!,
-        routes: {
-          '/': (context) => const ProfileDashboard(),
-        },
+        routes: profileTabRoutes,
       ),
       TabNavigator(
         navigatorKey: _tabHelper.navigatorKeys[AppTab.runs]!,

@@ -37,6 +37,27 @@ import 'common/milestone.dart';
 List<Run> runsForTrendChart(List<Run> runs) =>
     runs.where((r) => r.runType != RunType.xl).take(30).toList();
 
+/// The event whose full results open when a best-time bar is tapped, or null
+/// when the run has no event id to look the results up by.
+///
+/// The results page only reads the event's id (and its subtype, to pick the
+/// XL/kids endpoint), so a plain [Event] is enough: best times only cover
+/// official 5kmRun courses.
+@visibleForTesting
+Event? eventForBestTimeRun(Run run) {
+  final eventId = run.eventId;
+  if (eventId == null) return null;
+  return Event(
+    id: eventId,
+    title: "",
+    date: run.date ?? DateTime.now(),
+    time: "",
+    imageUrl: "",
+    location: run.location ?? "",
+    detailsUrl: "",
+  );
+}
+
 class ProfileDashboard extends StatelessWidget {
   const ProfileDashboard({super.key});
 
@@ -225,7 +246,7 @@ class ProfileDashboard extends StatelessWidget {
                     ],
                   ),
                 if (hasOfficialRuns) buildRunsByRouteCard(runs),
-                if (hasOfficialRuns) buildBestTimesCard(context, runs),
+                if (hasOfficialRuns) BestTimesCard(runs: runs),
               ],
             )));
   }
@@ -426,13 +447,26 @@ class ProfileDashboard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget buildBestTimesCard(BuildContext context, List<Run> runs) {
+/// The "records on official routes" card. Tapping a bar opens the full
+/// results of the event where that best time was set.
+class BestTimesCard extends StatelessWidget {
+  final List<Run> runs;
+
+  const BestTimesCard({super.key, required this.runs});
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       child: SizedBox(
         height: 350,
         child: BestTimesByRouteChart.withRuns(runs,
-            minutesUnit: AppLocalizations.of(context)!.min),
+            minutesUnit: AppLocalizations.of(context)!.min, onRunTap: (run) {
+          final event = eventForBestTimeRun(run);
+          if (event == null) return;
+          Navigator.of(context).pushNamed("/event-results", arguments: event);
+        }),
       ),
     );
   }
