@@ -11,16 +11,32 @@ class BestTimesByRouteChart extends StatelessWidget {
   final List<charts.Series<dynamic, String>> seriesList;
   final bool? animate;
 
-  const BestTimesByRouteChart(this.seriesList, {super.key, this.animate});
+  /// Called with the run behind a bar when the user taps it. The chart
+  /// already selects the nearest bar on tap (that's the darker hue); this
+  /// turns the selection into an action.
+  final ValueChanged<Run>? onRunTap;
+
+  const BestTimesByRouteChart(this.seriesList,
+      {super.key, this.animate, this.onRunTap});
 
   /// [minutesUnit] is the localized unit appended to each time label (e.g.
   /// "мин"). It's passed in because the labels are built here, before
   /// `build` has a `BuildContext` to look up translations.
   factory BestTimesByRouteChart.withRuns(List<Run> runs,
-      {required String minutesUnit}) {
+      {required String minutesUnit, ValueChanged<Run>? onRunTap}) {
     return BestTimesByRouteChart(
       _createData(runs, minutesUnit),
+      onRunTap: onRunTap,
     );
+  }
+
+  // `updatedListener` rather than `changedListener`: the bar stays selected
+  // after a tap, so tapping it again (e.g. after coming back from the
+  // results) doesn't change the selection, but should still open it.
+  void _onSelectionUpdated(charts.SelectionModel<String> model) {
+    if (model.selectedDatum.isEmpty) return;
+    final entry = model.selectedDatum.first.datum as BestTimeByRouteEntry;
+    onRunTap!(entry.run);
   }
 
   @override
@@ -40,6 +56,12 @@ class BestTimesByRouteChart extends StatelessWidget {
                 child: charts.BarChart(seriesList,
                     animate: animate,
                     vertical: false,
+                    selectionModels: [
+                      if (onRunTap != null)
+                        charts.SelectionModelConfig(
+                            type: charts.SelectionModelType.info,
+                            updatedListener: _onSelectionUpdated),
+                    ],
                     barRendererDecorator:
                         charts.BarLabelDecorator<String>(),
                     // Hide domain axis.
@@ -57,12 +79,10 @@ class BestTimesByRouteChart extends StatelessWidget {
             runs.where((r) => r.runType == RunType.official),
             (r) => r.location!)
         .entries
-        .map((e) => BestTimeByRouteEntry(
-            e.key,
-            minBy<Run, int>(e.value, (r) => r.timeInSeconds ?? 0)
-                    ?.timeInSeconds ??
-                0))
-        .toList();
+        .map((e) {
+      final best = minBy<Run, int>(e.value, (r) => r.timeInSeconds ?? 0)!;
+      return BestTimeByRouteEntry(e.key, best.timeInSeconds ?? 0, best);
+    }).toList();
 
     return [
       charts.Series<BestTimeByRouteEntry, String>(
@@ -83,5 +103,8 @@ class BestTimeByRouteEntry {
   final String location;
   final int timeInSeconds;
 
-  BestTimeByRouteEntry(this.location, this.timeInSeconds);
+  /// The run that set this best time, so a tap can open its event.
+  final Run run;
+
+  BestTimeByRouteEntry(this.location, this.timeInSeconds, this.run);
 }
