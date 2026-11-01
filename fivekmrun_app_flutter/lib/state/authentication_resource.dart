@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:fivekmrun_flutter/state/profile_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +20,27 @@ class MaxProfilesReachedException implements Exception {}
 void _logCrashlytics(String message) {
   try {
     FirebaseCrashlytics.instance.log(message);
+  } catch (_) {}
+}
+
+/// Remote Config can't be wiped, so overwrite its cached values with a fresh
+/// fetch (bypassing the 12h throttle) and then restore the throttle.
+/// Best-effort for the same reasons as [_logCrashlytics].
+Future<void> _refreshRemoteConfig() async {
+  try {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: const Duration(seconds: 30),
+      minimumFetchInterval: Duration.zero,
+    ));
+    try {
+      await remoteConfig.fetchAndActivate();
+    } finally {
+      await remoteConfig.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: const Duration(seconds: 60),
+        minimumFetchInterval: const Duration(hours: 12),
+      ));
+    }
   } catch (_) {}
 }
 
@@ -216,6 +239,8 @@ class AuthenticationResource extends ChangeNotifier {
     await prefs.remove(constants.keyUserId);
     await prefs.remove(constants.keyToken);
     await prefs.remove(constants.keyTokenTimestamp);
+
+    unawaited(_refreshRemoteConfig());
 
     notifyListeners();
     _logCrashlytics("logout() completed");

@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -9,8 +10,14 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 import 'dart:io';
 
+/// Plays the named asset from `assets/`. Injectable so tests can observe which
+/// sound is requested without touching the audio plugin.
+typedef SoundPlayer = void Function(String asset);
+
 class ChronometerView extends StatefulWidget {
-  const ChronometerView({super.key});
+  const ChronometerView({super.key, this.playSound});
+
+  final SoundPlayer? playSound;
 
   @override
   State<ChronometerView> createState() => _ChronometerViewState();
@@ -23,6 +30,16 @@ class _ChronometerViewState extends State<ChronometerView> {
   List<int> _laps = [];
   int? _startTimeMillis; // When the timer was started
   int? _pausedAtMillis; // When the timer was paused
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  void _playSound(String asset) {
+    final override = widget.playSound;
+    if (override != null) {
+      override(asset);
+    } else {
+      _audioPlayer.play(AssetSource(asset));
+    }
+  }
 
   @override
   void initState() {
@@ -85,6 +102,8 @@ class _ChronometerViewState extends State<ChronometerView> {
   void _toggleTimer() {
     setState(() {
       _isRunning = !_isRunning;
+      HapticFeedback.mediumImpact();
+      _playSound(_isRunning ? 'chrono_start.wav' : 'chrono_stop.wav');
       if (_isRunning) {
         _startTimeMillis =
             DateTime.now().millisecondsSinceEpoch - _milliseconds;
@@ -150,6 +169,7 @@ class _ChronometerViewState extends State<ChronometerView> {
   void _markLap() {
     if (_isRunning) {
       HapticFeedback.mediumImpact();
+      _playSound('beep.wav');
       setState(() {
         _laps.add(_milliseconds);
         _saveState();
@@ -247,6 +267,7 @@ class _ChronometerViewState extends State<ChronometerView> {
   @override
   void dispose() {
     _stopTimer();
+    _audioPlayer.dispose();
     WakelockPlus.disable();
     super.dispose();
   }
