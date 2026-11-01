@@ -19,8 +19,9 @@ const _wakelockChannels = <String>[
   'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.isEnabled',
 ];
 
-Widget _harness() =>
-    localizedApp(const ChronometerView(), locale: const Locale('en'));
+Widget _harness({SoundPlayer? playSound}) => localizedApp(
+    ChronometerView(playSound: playSound),
+    locale: const Locale('en'));
 
 // ElevatedButton.icon returns a private `_ElevatedButtonWithIcon` subtype, so
 // `find.widgetWithText(ElevatedButton, ...)`'s exact-type match misses it —
@@ -33,8 +34,42 @@ Finder _lapButton() => find.byIcon(Icons.flag);
 Finder _mainResetButton() => find.byIcon(Icons.refresh);
 
 void main() {
+  final playedSounds = <String>[];
+
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
+    playedSounds.clear();
+  });
+
+  group('sounds', () {
+    testWidgets('Start and Stop each play their own sound', (tester) async {
+      await tester.pumpWidget(_harness(playSound: playedSounds.add));
+      await tester.pumpAndSettle();
+
+      await tester.tap(_startStopButton());
+      await tester.pump();
+      expect(playedSounds, ['chrono_start.wav']);
+
+      await tester.tap(_stopButton());
+      await tester.pump();
+      expect(playedSounds, ['chrono_start.wav', 'chrono_stop.wav']);
+    });
+
+    testWidgets('marking a lap plays the beep, a stopped lap tap is silent',
+        (tester) async {
+      await tester.pumpWidget(_harness(playSound: playedSounds.add));
+      await tester.pumpAndSettle();
+
+      await tester.tap(_lapButton());
+      await tester.pump();
+      expect(playedSounds, isEmpty);
+
+      await tester.tap(_startStopButton());
+      await tester.pump();
+      await tester.tap(_lapButton());
+      await tester.pump();
+      expect(playedSounds.last, 'beep.wav');
+    });
   });
 
   group('initial state', () {
