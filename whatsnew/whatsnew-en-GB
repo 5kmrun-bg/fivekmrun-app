@@ -1,4 +1,3 @@
-• Connecting to Strava now tells you when it fails, instead of silently doing nothing
-• On iPhone, Strava sign-in now uses the Strava app when it is installed
-• Pace and time units are now shown on run cards, charts and lists
+• Tap a best time in your profile to open that run's full details
+• The chronometer now beeps to help with timekeeping
 • Bug fixes and stability improvements
