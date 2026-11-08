@@ -225,7 +225,7 @@ class ProfileDashboard extends StatelessWidget {
                     ],
                   ),
                 if (hasOfficialRuns) buildRunsByRouteCard(runs),
-                if (hasOfficialRuns) buildBestTimesCard(context, runs),
+                if (hasOfficialRuns) BestTimesCard(runs: runs),
               ],
             )));
   }
@@ -426,13 +426,27 @@ class ProfileDashboard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget buildBestTimesCard(BuildContext context, List<Run> runs) {
+/// The "records on official routes" card. Tapping a bar opens the details of
+/// the run that set that best time, the same way the run tiles do.
+class BestTimesCard extends StatelessWidget {
+  final List<Run> runs;
+
+  const BestTimesCard({super.key, required this.runs});
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       child: SizedBox(
         height: 350,
         child: BestTimesByRouteChart.withRuns(runs,
-            minutesUnit: AppLocalizations.of(context)!.min),
+            minutesUnit: AppLocalizations.of(context)!.min, onRunTap: (run) {
+          final tabHelper =
+              Provider.of<TabNavigationHelper>(context, listen: false);
+          tabHelper.selectTab(AppTab.runs);
+          tabHelper.pushToTab(AppTab.runs, "/run-details", arguments: run);
+        }),
       ),
     );
   }
