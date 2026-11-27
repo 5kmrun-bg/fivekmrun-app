@@ -85,6 +85,7 @@
     "run_details_page_pace": "Pace",
     "run_details_page_time": "Time",
     "run_details_page_speed": "Speed",
+    "run_details_page_full_results": "Full results",
 
     "offline_chart_details_page_date": "date",
     "offline_chart_details_page_position": "position",

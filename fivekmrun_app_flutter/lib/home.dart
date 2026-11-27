@@ -23,6 +23,13 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 enum AppTab { profile, runs, events, offlineChart, donate }
 
+/// The Runs tab's screens (top-level so tests can use them).
+final Map<String, WidgetBuilder> runsTabRoutes = {
+  '/': (context) => const UserRunsPage(),
+  '/run-details': (context) => const RunDetailsPage(),
+  '/event-results': (context) => const EventResultsPage(),
+};
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -122,10 +129,7 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home> {
       ),
       TabNavigator(
         navigatorKey: _tabHelper.navigatorKeys[AppTab.runs]!,
-        routes: {
-          '/': (context) => const UserRunsPage(),
-          '/run-details': (context) => const RunDetailsPage(),
-        },
+        routes: runsTabRoutes,
       ),
       TabNavigator(
           navigatorKey: _tabHelper.navigatorKeys[AppTab.offlineChart]!,

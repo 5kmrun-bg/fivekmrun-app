@@ -1,4 +1,5 @@
 import 'package:fivekmrun_flutter/common/milestone_gauge.dart';
+import 'package:fivekmrun_flutter/state/event_model.dart';
 import 'package:fivekmrun_flutter/state/result_model.dart';
 import 'package:fivekmrun_flutter/state/results_resource.dart';
 import 'package:fivekmrun_flutter/state/run_model.dart';
@@ -7,6 +8,36 @@ import 'package:fivekmrun_flutter/l10n/app_localizations.dart';
 
 class RunDetailsPage extends StatelessWidget {
   const RunDetailsPage({super.key});
+
+  /// The event to show full results for, or null for selfie runs, which have
+  /// no event. The results page only reads the id, and uses the XL results
+  /// for an [XLEvent].
+  Event? _eventFor(Run run) {
+    final id = run.eventId;
+    if (id == null) return null;
+    if (run.runType == RunType.xl) {
+      return XLEvent(
+        id: id,
+        title: "",
+        date: run.date!,
+        time: "",
+        imageUrl: "",
+        location: "",
+        detailsUrl: "",
+        distances: const [],
+        registrationLinks: const [],
+      );
+    }
+    return Event(
+      id: id,
+      title: "",
+      date: run.date!,
+      time: "",
+      imageUrl: "",
+      location: "",
+      detailsUrl: "",
+    );
+  }
 
   Widget buildPositionGauge(Run run) {
     // XL runs are scored against the xlrun results endpoint, not the regular
@@ -45,10 +76,12 @@ class RunDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Run run = ModalRoute.of(context)?.settings.arguments as Run;
     final theme = Theme.of(context);
+    final Event? event = _eventFor(run);
 
     return Scaffold(
       appBar: AppBar(title: Text(run.displayDate)),
-      body: Padding(
+      // Scrollable so the button stays reachable on short screens.
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
@@ -144,6 +177,17 @@ class RunDetailsPage extends StatelessWidget {
                 ],
               ),
             const SizedBox(height: 20),
+            if (event != null)
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  icon: const Icon(Icons.leaderboard),
+                  label: Text(AppLocalizations.of(context)!
+                      .run_details_page_full_results),
+                  onPressed: () => Navigator.of(context)
+                      .pushNamed("/event-results", arguments: event),
+                ),
+              ),
             // if (!run.isSelfie)
             //   CompareTime(
             //     text: "Предишно бягане: ",
